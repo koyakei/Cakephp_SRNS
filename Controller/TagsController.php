@@ -7,7 +7,21 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class TagsController extends AppController {
+/*    // 登録済ユーザーは投稿できる
+    if ($this->action === 'add') {
+        return true;
+    }
 
+    // 投稿のオーナーは編集や削除ができる
+    if (in_array($this->action, array('edit', 'delete'))) {
+        $postId = $this->request->params['pass'][0];
+        if ($this->Post->isOwnedBy($postId, $user['id'])) {
+            return true;
+        }
+    }
+
+    return parent::isAuthorized($user);
+}*/
 	   public $presetVars = array(
         'owner_id' => array('type' => 'value'),
         'keyword' => array('type' => 'value'),
@@ -17,8 +31,12 @@ class TagsController extends AppController {
     );
 	 public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('add','logout','delete','edit');
-    }
+        $this->Auth->allow('logout');
+	$this->Auth->authenticate = array(
+		'Basic' => array('user' => 'admin'),
+		//'Form' => array('user' => 'Member')
+		);
+	}
 	public $components = array('Search.Prg','Paginator');
 //	public $presetVars = true;
  
@@ -93,11 +111,14 @@ class TagsController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Tag->create();
+			$this->request->data['Tag']['owner_id'] = $this->Auth->user('ID');
 			if ($this->Tag->save($this->request->data)) {//セーブすることに成功したら、
-				$this->Session->setFlash(__('The tag has been saved.'));
+				$this->Session->setFlash(__('success.',$this->request->data));
 				return $this->redirect(array('action' => 'index'));
 			} else {
+				print_r($this->request->data);
 				$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
+					
 			}
 		}
 	}

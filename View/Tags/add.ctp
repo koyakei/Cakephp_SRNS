@@ -4,7 +4,6 @@
 		<legend><?php echo __('Add Tag'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
-		echo $this->Form->input('owner_id');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

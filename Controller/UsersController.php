@@ -12,7 +12,7 @@ class UsersController extends AppController {
 		$this->Auth->allow('logout');
 		$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
-	//		'Form' => array('userModel' => 'Member')
+			//'Form' => array('user' => 'Member')
 		);
 	}
 /**

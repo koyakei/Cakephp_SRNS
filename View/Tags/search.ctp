@@ -1,0 +1,91 @@
+<div class="row-fluid">
+    <div class="span9">
+        <h2><?php echo $this->Html->link('SRNS', array('action' => 'index')); ?></h2>
+	<div class="span3">
+		<div class="well" style="margin-top:20px;">
+			<?php echo $this->Form->create('Tag', array('action' => 'search')); ?>
+			<!--<fieldset>
+				<legend>検索</legend>				
+					<div class="controls">
+						<?php echo $this->Form->input('name'); ?>
+					</div>
+			</fieldset>-->
+			    <div class="control-group">
+			        <?php echo $this->Form->label('keyword', 'キーワード', array('class' => 'control-label')); ?>
+			        <div class="controls">
+			        <?php echo $this->Form->text('keyword', array('class' => 'span12', 'placeholder' => 'タイトル、本文を対象に検索')); ?>
+			        <?php
+			            $options = array('and' => 'AND', 'or' => 'OR');
+			            $attributes = array('default' => 'and', 'class' => 'radio inline');
+			            echo $this->Form->radio('andor', $options, $attributes);
+			        ?>
+			        </div>
+			    </div>
+			<?php echo $this->Form->end('検索'); ?>
+		</div>
+	</div>
+        <p><?php echo $this->Paginator->counter(array('format' => __('total: {:count}, page: {:page}/{:pages}')));?></p>
+        <table class="table">
+            <tr>
+ 			<th><?php echo $this->Paginator->sort('ID'); ?></th>
+			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo $this->Paginator->sort('owner_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('created'); ?></th>
+			<th><?php echo $this->Paginator->sort('modified'); ?></th>
+			<th class="actions"><?php echo __('Actions'); ?></th>
+	</tr>
+            </tr>
+        <?php foreach ($tags as $tag): ?>
+            <tr>
+		<td><?php echo h($tag['Tag']['ID']); ?>&nbsp;</td>
+		<td><?php echo h($tag['Tag']['name']); ?>&nbsp;</td>
+		<td><?php echo h($tag['Tag']['owner_id']); ?>&nbsp;</td>
+		<td><?php echo h($tag['Tag']['created']); ?>&nbsp;</td>
+		<td><?php echo h($tag['Tag']['modified']); ?>&nbsp;</td>
+            </tr>
+        <?php endforeach; ?>
+        </table>
+        <?php echo $this->Paginator->pagination(); ?>
+    </div>
+
+</div>
+
+
+<?php
+$this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', null, array('block' => 'css'));
+$this->Html->script(
+	array('http://code.jquery.com/ui/1.9.1/jquery-ui.js',
+		'http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js'),
+	array('block' => 'script')
+);
+?>
+<?php $this->start('script'); ?>
+<script>
+	$(function() {
+		$("#PostFrom").datepicker({
+			defaultDate: "+1w",
+			changeMonth: false,
+			numberOfMonths: 2,
+			dateFormat: "yy-mm-dd",
+			showOtherMonths: true,
+			selectOtherMonths: true,
+			onClose: function(s) {
+				if (s) {
+					$("#PostTo").datepicker("option", "minDate", s).focus();
+				}
+			}
+		});
+		$("#PostTo").datepicker({
+			defaultDate: "+1w",
+			changeMonth: false,
+			numberOfMonths: 2,
+			dateFormat: "yy-mm-dd",
+			showOtherMonths: true,
+			selectOtherMonths: true,
+			onClose: function(s) {
+				$("#PostFrom").datepicker("option", "maxDate", s);
+			}
+		});
+	});
+</script>
+<?php $this->end(); ?>

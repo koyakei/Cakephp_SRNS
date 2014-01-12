@@ -57,37 +57,58 @@ class TagsController extends AppController {
 	public function index() {
 		$this->Tag->recursive = 0;
 		$this->set('tags', $this->Paginator->paginate());
-
 	}
 	public function search() {
 	$this->Prg->commonProcess();
-	/*    $this->paginate = array(
-	        'Tag' =>
-	    array(
-	        'conditions' => array(
-	            $this->Tag->parseCriteria($this->passedArgs)//ここで帰ってきた文字を検索している
-	        )
-	    ));        
-	$this->set('tags', $this->Paginator->paginate());*/
         $req = $this->passedArgs;
         if (!empty($this->request->data['Tag']['keyword'])) {
             $andor = !empty($this->request->data['Tag']['andor']) ? $this->request->data['Tag']['andor'] : null;
             $word = $this->Tag->multipleKeywords($this->request->data['Tag']['keyword'], $andor);
             $req = array_merge($req, array("word" => $word));
         }
+        /*$this->paginate = array(
+            'conditions' => $this->Tag->parseCriteria($req),
+        );*/
+	
 	$this->paginate = array(
 	        'Tag' =>
 	    array(
 	        'conditions' => array(
 	            $this->Tag->parseCriteria($req),//ここで帰ってきた文字を検索している
 	        )
-	    ));
-        /*$this->paginate = array(
-            'conditions' => $this->Tag->parseCriteria($req),
-        );*/
+		
+	    )
+	);
 	$this->set('tags', $this->Paginator->paginate());
+	debug($this->paginate);
 	}
 
+
+	public function result($tagID) {
+	if (!$this->Tag->exists($tagID)) {
+		throw new NotFoundException(__('関連タグが存在しない'));
+	}
+	$sql = "SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` =$tagID AND `tagLink`.`LFrom` =2146  AND `article` . `ID` = `LINK` . `LTo`";
+	$sqlres = $this->Tag->query($sql);
+	/*$this->paginate = array(
+	        'article' =>
+	    array(
+	        'conditions' => 
+	            $sqlres
+		
+	    )
+	);*/
+	$this->set('results', $sqlres);
+	}
+
+	public function reply($articleID) {
+	if (!$this->Tag->exists($tagID)) {
+		throw new NotFoundException(__('関連タグが存在しない'));
+	}
+	$sql = "SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` =$tagID AND `tagLink`.`LFrom` =2138  AND `article` . `ID` = `LINK` . `LTo`";
+	$sqlres = $this->Tag->query($sql);
+	$this->set('results', $sqlres);
+	}
 /**
  * view method
  *
@@ -166,4 +187,8 @@ class TagsController extends AppController {
 			$this->Session->setFlash(__('The tag could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
-	}}
+	}
+	public function articleview($id) {
+	$this->redirect(array('controller' => 'articles','action'=>'view',$id));
+	}
+}

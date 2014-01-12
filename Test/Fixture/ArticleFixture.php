@@ -39,8 +39,8 @@ class ArticleFixture extends CakeTestFixture {
 			'ID' => 1,
 			'name' => 'Lorem ipsum dolor sit amet',
 			'owner_id' => 1,
-			'created' => 1389335036,
-			'modified' => '2014-01-10 07:23:56'
+			'created' => 1389508261,
+			'modified' => '2014-01-12 07:31:01'
 		),
 	);
 

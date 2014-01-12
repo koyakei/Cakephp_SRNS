@@ -1,6 +1,5 @@
 <?php
 App::uses('AppController', 'Controller');
-
 /**
  * Articles Controller
  *
@@ -8,27 +7,14 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class ArticlesController extends AppController {
-public function isAuthorized($user) {
-    // “o˜^Ïƒ†[ƒU[‚Í“Še‚Å‚«‚é
-    if ($this->action === 'add') {
-        return true;
-    }
-
-    // “Še‚ÌƒI[ƒi[‚Í•ÒW‚âíœ‚ª‚Å‚«‚é
-    if (in_array($this->action, array('edit', 'delete'))) {
-        $postId = $this->request->params['pass'][0];
-        if ($this->Post->isOwnedBy($postId, $user['id'])) {
-            return true;
-        }
-    }
-
-    return parent::isAuthorized($user);
-}
-
 	 public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('add','logout');
-    }
+        $this->Auth->allow();
+	$this->Auth->authenticate = array(
+		'Basic' => array('user' => 'admin'),
+		//'Form' => array('user' => 'Member')
+		);
+	}
 /**
  * Components
  *
@@ -58,7 +44,14 @@ public function isAuthorized($user) {
 			throw new NotFoundException(__('Invalid article'));
 		}
 		$options = array('conditions' => array('Article.' . $this->Article->primaryKey => $id));
+	$tagID = $id;
 		$this->set('article', $this->Article->find('first', $options));
+$relpyID = tagConst()['replyID'];
+	/*	$sql = "SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` =$tagID AND `tagLink`.`LFrom` =  AND `article` . `ID` = `LINK` . `LTo`";*/
+	$sqlres = $this->Article->query("SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` = $tagID AND `tagLink`.`LFrom` = $relpyID  AND `article` . `ID` = `LINK` . `LTo`;");
+	$this->set('results', $sqlres);
+	//debug($sqlres);
+	
 	}
 
 /**
@@ -69,7 +62,6 @@ public function isAuthorized($user) {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Article->create();
-			$this->request->data['Post']['owner_id'] = $this->Auth->user('id'); //Added this line
 			if ($this->Article->save($this->request->data)) {
 				$this->Session->setFlash(__('The article has been saved.'));
 				return $this->redirect(array('action' => 'index'));

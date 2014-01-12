@@ -106,3 +106,12 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+function tagConst(){
+    return array(
+	'tagSSugID' => 2143,
+	'replyID' => 2138,//コメント　返信
+	'ownerID' => 1,//一人の時に管理者用に固定する
+	'searchID' => 2146,
+);
+}
+//Search 検索用タグ

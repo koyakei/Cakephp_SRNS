@@ -8,15 +8,6 @@ App::uses('Article', 'Model');
 class ArticleTest extends CakeTestCase {
 
 /**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-		'app.article'
-	);
-
-/**
  * setUp method
  *
  * @return void

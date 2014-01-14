@@ -8,7 +8,7 @@ App::uses('Link','Model');
  * @property PaginatorComponent $Paginator
  */
 class ArticlesController extends AppController {
-	public $uses = array('link'j
+	public $uses = array('Link','Article');
 	public $paginate = array( 'limit' => 25);
 	 public function beforeFilter() {
         parent::beforeFilter();
@@ -48,6 +48,12 @@ class ArticlesController extends AppController {
 			$this->request->data['article']['owner_id'] = $this->Auth->user('ID');
 			if ($this->Article->save($this->request->data)) {
 				$last_id = $this->Article->getLastInsertID();
+				$this->data['link'] = array(
+					'owner_id' => $this->Auth->user('ID'),
+					'LFrom' => tagConst()['relyID'],
+					'LTo' => $last_id
+					);
+				$this->Link->create();
 				if ($this->Link->save($this->data)) {
 					
 					$this->Session->setFlash(__('The article has been saved.'));

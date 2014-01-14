@@ -120,8 +120,40 @@ class Link extends AppModel {
  * hasMany associations
  *
  * @var array
- */
+ *//*
+    public $hasMany= array(
+        'AI_LT' => array(
+		'className' => 'Article',
+		'foreignKey' => 'ID',
+		'dependent' => false,
+		'conditions' => 'Article.ID = link.LTo',
+		//'type' => 'inner'
+        )
+    );*/
+/*public $hasAndBelongsToMany= array(
+        'LinkTo_ArticleID' => array(
+		'className' => 'article',
+		'foreignKey' => 'LTo',
+		'dependent' => false,
+		'conditions' => '',
+        )
+    );*/
+
+/*
 	public $hasMany = array(
+		'LinkTo_ArticleID' => array(
+			'className' => 'LinkTo_ArticleID',
+			'foreignKey' => 'to_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 		'LinkID_LinkTo' => array(
 			'className' => 'LinkID_LinkTo',
 			'foreignKey' => 'to_id',
@@ -148,6 +180,6 @@ class Link extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		)
-	);
+	);*/
 
 }

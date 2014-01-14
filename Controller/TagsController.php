@@ -80,7 +80,8 @@ class TagsController extends AppController {
 	    )
 	);
 	$this->set('tags', $this->Paginator->paginate());
-	debug($this->paginate);
+	//debug($this->paginate);
+	debug($this->Paginator->paginate());
 	}
 
 

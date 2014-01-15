@@ -39,15 +39,15 @@
 	</tr>
 	<?php foreach ($results  as $result): ?>
 	<tr>
-		<td><?php echo h($result['article']['ID']); ?>&nbsp;</td>
-		<td><?php echo h($result['article']['name']); ?>&nbsp;</td>
-		<td><?php echo h($result['article']['owner_id']); ?>&nbsp;</td
-		<td><?php echo h($result['article']['created']); ?>&nbsp;</td>
-		<td><?php echo h($result['article']['modified']); ?>&nbsp;</td>
+		<td><?php echo h($result['Article']['ID']); ?>&nbsp;</td>
+		<td><?php echo h($result['Article']['name']); ?>&nbsp;</td>
+		<td><?php echo h($result['Article']['owner_id']); ?>&nbsp;</td
+		<td><?php echo h($result['Article']['created']); ?>&nbsp;</td>
+		<td><?php echo h($result['Article']['modified']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $result['article']['ID'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $result['article']['ID'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $result['article']['ID']), null, __('Are you sure you want to delete # %s?', $result['article']['ID'])); ?>
+			<?php echo $this->Html->link(__('View'), array('action' => 'view', $result['Article']['ID'])); ?>
+			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $result['Article']['ID'])); ?>
+			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $result['Article']['ID']), null, __('Are you sure you want to delete # %s?', $result['Article']['ID'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -70,6 +70,8 @@
 		<legend><?php echo __('Reply'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
+		//echo $form->hidden('id', array('value'=>'$this->params['pass'][0]'));
+		debug($this->params['pass'][0]);
 	?>
 	</fieldset>
 	<?php echo $this->Form->end(__('Submit')); ?>

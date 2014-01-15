@@ -12,7 +12,7 @@ class ArticlesController extends AppController {
 	public $paginate = array( 'limit' => 25);
 	 public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow();
+        $this->Auth->allow('view');
 	$this->Auth->authenticate = array(
 		'Basic' => array('user' => 'admin'),
 		//'Form' => array('user' => 'Member')
@@ -45,22 +45,41 @@ class ArticlesController extends AppController {
 	public function view($id = null) {
 		if ($this->request->is('post')) {
 			$this->Article->create();
-			$this->request->data['article']['owner_id'] = $this->Auth->user('ID');
+			$this->userID = $this->Auth->user('ID');
+			debug($this->Auth->user());
+			$this->request->data['article']['owner_id'] = $this->userID;
+			debug($this->userID);
 			if ($this->Article->save($this->request->data)) {
-				$last_id = $this->Article->getLastInsertID();
-				$this->data['link'] = array(
-					'owner_id' => $this->Auth->user('ID'),
-					'LFrom' => tagConst()['relyID'],
-					'LTo' => $last_id
-					);
+				$this->last_id = $this->Article->getLastInsertID();
+				debug($this->userID);
+				$this->request->data = null;
+				$this->request->data['Link'] = array(
+					'owner_id' => 1,
+					'LFrom' => $id,//2138
+					'LTo' => $this->last_id,
+					'quant' => 1,
+					'created' => date("Y-m-d H:i:s"),
+					'modified' => date("Y-m-d H:i:s"),
+				);
 				$this->Link->create();
-				if ($this->Link->save($this->data)) {
+				if ($this->Link->save($this->request->data)) {
+				$this->last_id = $this->Link->getLastInsertID();
+				$this->request->data = null;
+				$this->request->data['Link'] = array(
+					'owner_id' => 1,
+					'LFrom' => 2138,//
+					'LTo' => $this->last_id,
+					'quant' => 1,
+					'created' => date("Y-m-d H:i:s"),
+					'modified' => date("Y-m-d H:i:s"),
+				);
+				$this->Link->create();
+					if ($this->Link->save($this->request->data)) {
+						$this->Session->setFlash(__('The article has been saved.'));
 					
-					$this->Session->setFlash(__('The article has been saved.'));
-					return $this->redirect(array('action' => 'index'));
-				
-				} else {
-					$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
+					} else {
+						$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
+					}
 				}
 			}
 		}
@@ -72,33 +91,33 @@ class ArticlesController extends AppController {
 	$options = array('conditions' => array('Article.' . $this->Article->primaryKey => $id));
 	$this->Article->read(null,$id);
 	$targetID = $id;
+	$trikeyID = tagConst()['replyID'];
 	$this->set('article', $this->Article->find('first', $options));
 	$this->Paginator->settings = array(
 		'conditions'=> array(
 		        	"link.LFrom = $targetID"
 	        	 ),
-		'fields' => array('article.*', 'link.*'),
+		'fields' => array('Article.*', 'Link.*'),
 		'joins'
 		 => array(
 		array(
-                     'table' => 'link',
-                    //'alias' => 'usr',
+                     'table' => 'Article',
+                    //'alias' => 'Link',
                     'type' => 'INNER',
-                    'conditions' => array("link.LTo = Article.ID")
+                    'conditions' => array("Link.LTo = Article.ID")
                 ),
 		array(
-                    'table' => 'link',
+                    'table' => 'Link',
                     'alias' => 'taglink',
                     'type' => 'INNER',
                     'conditions' => array(
-			array("link.ID = taglink.LTo"),
-			array("tagConst()['relyID'] = taglink.LFrom")
+			array("Link.ID = taglink.LTo"),
+			array("$trikeyID = taglink.LFrom")
 			)
                 ),
 		)
 	);
 	$this->set('results',$this->Paginator->paginate());
-debug($this->Paginator->paginate());
 	}
 
 /**

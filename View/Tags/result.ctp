@@ -8,6 +8,10 @@
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
+			<!--<?php foreach ($taghash as $key => $tagValue); ?>
+			<th><?php echo $this->Html->link(__('Edit'), array('controller' => 'tags','action' => 'edit', $tagValue[1])); ?></a><br>owner<?php $tagValue[3] ?></th>
+			<th></th>
+			<?php endforeach; ?>-->
 	</tr>
 	<?php foreach ($results  as $result): ?>
 	<tr>

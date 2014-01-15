@@ -34,7 +34,6 @@
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
             </tr>
-	<?php print_r($tags); ?>
         <?php foreach ($tags as $tag): ?>
             <tr>
 		<td><?php echo h($tag['Tag']['ID']); ?>&nbsp;</td>

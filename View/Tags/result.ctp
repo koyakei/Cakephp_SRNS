@@ -6,25 +6,36 @@
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('owner_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('modified'); ?></th>
+			<th>$this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
-			<!--<?php foreach ($taghash as $key => $tagValue); ?>
-			<th><?php echo $this->Html->link(__('Edit'), array('controller' => 'tags','action' => 'edit', $tagValue[1])); ?></a><br>owner<?php $tagValue[3] ?></th>
-			<th></th>
-			<?php endforeach; ?>-->
+			<?php foreach ($taghashes  as $hash): ?>
+			<th><?php echo $hash['name']; ?></th>
+			<?php endforeach; ?>
 	</tr>
 	<?php foreach ($results  as $result): ?>
 	<tr>
-		<td><?php echo h($result['article']['ID']); ?>&nbsp;</td>
-		<td><?php echo h($result['article']['name']); ?>&nbsp;</td>
-		<td><?php echo h($result['article']['owner_id']); ?>&nbsp;</td
-		<td><?php echo h($result['article']['created']); ?>&nbsp;</td>
-		<td><?php echo h($result['article']['modified']); ?>&nbsp;</td>
+		<td><?php echo h($result['Article']['ID']); ?>&nbsp;</td>
+		<td><?php echo h($result['Article']['name']); ?>&nbsp;</td>
+		<td><?php echo h($result['Article']['owner_id']); ?>&nbsp;</td>
+		<td><?php echo h($result['Article']['created']); ?>&nbsp;</td>
+		<td><?php echo h($result['Article']['modified']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('controller' => 'articles','action' => 'view', $result['article']['ID'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('controller' => 'articles','action' => 'articleedit', $result['article']['ID'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'articles','action' => 'articledelete', $result['article']['ID']), null, __('Are you sure you want to delete # %s?', $result['article']['ID'])); ?>
+			<?php echo $this->Html->link(__('View'), array('controller' => 'articles','action' => 'view', $result['Article']['ID'])); ?>
+			<?php echo $this->Html->link(__('Edit'), array('controller' => 'articles','action' => 'articleedit', $result['Article']['ID'])); ?>
+			<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'articles','action' => 'articledelete', $result['Article']['ID']), null, __('Are you sure you want to delete # %s?', $result['Article']['ID'])); ?>
 		</td>
+		<?php foreach ($taghashes  as $key => $hash): ?>
+			<?php $b = 0; ?>
+		<?php foreach ($result['subtag']  as $subtag): ?>
+		<?php if ($hash['ID'] == $subtag['Tag']['ID']){ ?>
+					<td><?php echo $subtag['Tag']['name']; ?><?php echo $subtag['Link']['quant']; ?></td>
+				<?php $b = 1; ?>
+				<?php } ?>
+			<?php endforeach; ?>
+				<?php if ($b == 0){ ?>
+					<td></td>
+				<?php } ?>
+		<?php endforeach; ?>
 	</tr>
 <?php endforeach; ?>
 	</table>

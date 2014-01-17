@@ -58,7 +58,7 @@ class Article extends AppModel {
 public $base_sql = null;
 
  
-        public function paginate($conditions,$fields,$order,$limit,$page=1,$recursive=null,$extra=array()){
+        /*public function paginate($conditions,$fields,$order,$limit,$page=1,$recursive=null,$extra=array()){
 	$this->replyID = tagConst()['replyID'];
             if($page==0){$page = 1;}
             $recursive = -1;
@@ -72,10 +72,10 @@ public $base_sql = null;
             $this->recursive = $recursive;
             $results = $this->query($this->base_sql);
             return count($results);
-        }
-
+        }*/
+/*
 	
-	public $hasMany = array(/*
+	public $hasMany = array(
 		'AI_LF' => array(//ここの名前がこのモデルのAS　なんとかになる
 			'className' => 'Link',
 			'foreignKey' => 'LFrom',
@@ -89,8 +89,8 @@ public $base_sql = null;
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),*/
-		
-	);/*
+	/*	
+	);
 	public $belongsTo = array(
 		'AI_LT' => array(//ここの名前がこのモデルのAS　なんとかになる
 			'className' => 'Link',

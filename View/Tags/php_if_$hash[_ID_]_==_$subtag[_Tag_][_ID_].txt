@@ -1,0 +1,27 @@
+<?php if ($hash['ID'] == $subtag['Tag']['ID']): ?>
+					<td><?php echo $subtag['Tag']['name']; ?><?php echo $subtag['Link']['quant']; ?></td>
+				<?php endif; ?>
+
+<?php foreach ($result['subtag']  as $subtag): ?>
+		<td><?php print_r ($hash); ?></td>
+				
+			<?php endforeach; ?>
+
+
+
+<?php foreach ($result['subtag']  as $subtag); ?>
+				<?php if ($hash['ID'] == $subtag['Tag']['ID']){ ?>
+					<td><?php echo $subtag['Tag']['name']; ?><?php echo $subtag['Link']['quant']; ?></td>
+				<?php $b = 1; ?>
+				<?php } ?>
+		<?php endforeach; ?>
+
+
+
+		<?php foreach ($taghashes  as $key => $hash); ?>
+			<?php $bl = 0; print_r($result['subtag']);?>
+		
+				<?php if ($bl == 0){ ?>
+					<td></td>
+				<?php } ?>
+		<?php endforeach; ?>

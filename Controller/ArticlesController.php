@@ -1,6 +1,5 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('Link','Model');
 /**
  * Articles Controller
  *
@@ -8,7 +7,7 @@ App::uses('Link','Model');
  * @property PaginatorComponent $Paginator
  */
 class ArticlesController extends AppController {
-	public $uses = array('Link','Article');
+	public $uses = array('Article');
 	public $paginate = array( 'limit' => 25);
 	 public function beforeFilter() {
         parent::beforeFilter();
@@ -95,13 +94,13 @@ class ArticlesController extends AppController {
 	$this->set('article', $this->Article->find('first', $options));
 	$this->Paginator->settings = array(
 		'conditions'=> array(
-		        	"link.LFrom = $targetID"
+		        	"Link.LFrom = $targetID"
 	        	 ),
 		'fields' => array('Article.*', 'Link.*'),
 		'joins'
 		 => array(
 		array(
-                     'table' => 'Article',
+                     'table' => 'Link',
                     //'alias' => 'Link',
                     'type' => 'INNER',
                     'conditions' => array("Link.LTo = Article.ID")

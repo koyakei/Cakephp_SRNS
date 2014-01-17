@@ -1,7 +1,8 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('Article', 'Model');
+/*App::uses('Article', 'Model');
 App::uses('Link', 'Model');
+App::uses('User', 'Model');*/
 /**
  * Tags Controller
  *
@@ -9,7 +10,8 @@ App::uses('Link', 'Model');
  * @property PaginatorComponent $Paginator
  */
 class TagsController extends AppController {
-	public $uses = array('Link','Article');
+	public $uses = array(//'Tag','Article','Link','User'
+			);
 /*    // 登録済ユーザーは投稿できる
     if ($this->action === 'add') {
         return true;
@@ -58,8 +60,21 @@ class TagsController extends AppController {
  * @return void
  */
         public function index() {
-                $this->Tag->recursive = 0;
-                $this->set('tags', $this->Paginator->paginate());
+                //$this->Tag->recursive = 0;
+		$parms = array(
+		'joins'=> array(
+				array(
+		                     'table' => 'Tag',
+		                    //'alias' => 'Link',
+		                    'type' => 'INNER',
+		                    'conditions' => array("Link.LFrom = Tag.ID")
+		                ),
+			)
+		)
+		;
+		debug($this->Paginator->paginate());
+                //$this->set('tags', $this->Paginator->paginate());
+		$this->set('tags', $this->Tag->find('all',$parms));
         }
         public function search() {
         $this->Prg->commonProcess();
@@ -77,7 +92,7 @@ class TagsController extends AppController {
                 'Tag' =>
             array(
                 'conditions' => array(
-                    $this->Tag->parseCriteria($req),//ここで帰ってきた文字を検索している
+                    $this->Tag->parseCriteria($req),
                 )
                 
             )
@@ -93,18 +108,22 @@ class TagsController extends AppController {
 		throw new NotFoundException(__('関連タグが存在しない'));
 	}*/
 	$trikeyID = tagConst()['searchID'];
+	$this->loadModel('Article');
+	
 	$this->Paginator->settings = array(
 		'conditions'=> array(
-		        	"link.LFrom = $id"
+		        	"Link.LTo = Article.ID"
 	        	 ),
-		'fields' => array('Article.*', 'Link.*'),
+		'fields' => array('Link.*','taglink.*','Article.*'
+			),
 		'joins'
 		 => array(
 		array(
-                     'table' => 'Article',
-                    //'alias' => 'Link',
+                    'table' => 'Link',
                     'type' => 'INNER',
-                    'conditions' => array("Link.LTo = Article.ID")
+                    'conditions' => array(
+			array("$id = Link.LFrom")
+			)
                 ),
 		array(
                     'table' => 'Link',
@@ -117,22 +136,28 @@ class TagsController extends AppController {
                 ),
 		)
 	);
-	$this->set('results',$this->Paginator->paginate());
+	$parentres = $this->Paginator->paginate('Article');
+
 	$k = 0;
 	$j = 0;
-	foreach ($results  as $result){
+	$i = 0;
+	foreach ($parentres as $result){
+		$res = $result['Article']['ID'];
+		$this->loadModel('Tag');
 		$this->Paginator->settings = array(
 			'conditions'=> array(
-			        	"link.LTo = $result[article][ID]"
+			        	"Link.LTo = $res"
 		        	 ),
-			'fields' => array('Tag.name'),
+			'fields' => array('Tag.*','Link.quant','Link.owner_id'//,'User.username'
+			),
 			'joins'
 			 => array(
 				array(
-		                     'table' => 'Tag',
-		                    //'alias' => 'Link',
+		                    'table' => 'Link',
 		                    'type' => 'INNER',
-		                    'conditions' => array("Link.LFrom = Article.ID")
+		                    'conditions' => array(
+					array("Tag.ID = Link.LFrom")
+					)
 		                ),
 				array(
 		                    'table' => 'Link',
@@ -142,18 +167,24 @@ class TagsController extends AppController {
 					array("Link.ID = taglink.LTo"),
 					array("$trikeyID = taglink.LFrom")
 					)
-		                ),
-			)
+		                ),			)
 		);
-		$result["STag"][$j] = $this->Paginator->paginate();
-		
-$j++;
-		if ($taghash[$subTagID] == null) {
-			$taghash[$subTagID] = array( $k++, $tagName, $subTagID, $Pname);
+		//$tag[$j] = $this->Paginator->paginate();
+
+		$taghashgen = $this->Paginator->paginate('Tag');
+		//debug($taghashgen);
+		$i++;
+		foreach ($taghashgen as $tag){
+			$subtagID = $tag['Tag']['ID'];
+			$parentres[$i]['subtag'][$subtagID] = $tag;
+			if ($taghash[$subtagID] == null) {
+				$taghash[$subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
+			}
 		}
 	}
-	debug($result["STag"]);
-	//debug($result);
+	debug($taghash);
+	$this->set('taghashes', $taghash);
+	$this->set('results', $parentres);
 	}
 	public function reply($articleID) {
 	if (!$this->Tag->exists($tagID)) {

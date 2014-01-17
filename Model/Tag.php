@@ -1,17 +1,20 @@
 <?php
 App::uses('AppModel', 'Model');
+App::uses('Link', 'Model');
+App::uses('User', 'Model');
 /**
  * Tag Model
  *
  * @property Owner $Owner
  */
 class Tag extends AppModel {
+public $uses = array('Article','Link','User','Tag');
 	public $order = array('Post.id DESC');
 	public $actsAs = array('Search.Searchable');
 	public $filterArgs = array(
 	        'word' => array(
 //'name' => 'name',
- 'type' => 'value'
+ 'type' => 'like'
 , 'field' => array('tag.name')
 , 'connectorAnd' => '+', 'connectorOr' => ','
 ),
@@ -42,6 +45,7 @@ class Tag extends AppModel {
  * @var string
  */
 	public $primaryKey = 'ID';
+	public $displayField = 'name';
 
 /**
  * Validation rules

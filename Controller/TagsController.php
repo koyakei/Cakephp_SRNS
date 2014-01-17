@@ -100,10 +100,35 @@ class TagsController extends AppController {
         $this->set('tags', $this->Paginator->paginate());
         }
 
-
+public function quant($id = null) {
+	debug($this->request->data['tag']['idre']);
+	if ($this->request->is('post')) {
+		$this->userID = $this->Auth->user('ID');
+		if($this->request->data['Link']['owner_id'] == $this->userID){
+			$this->loadModel('Link');
+			if ($this->Link->save($this->request->data)) {
+				$this->Session->setFlash(__('The article has been saved.'));
+			} else {
+				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
+			}
+		}
+	}
+	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+}
 
 public function result($id = null) {
 	$this->Tag->recursive = 6;
+	if ($this->request->is('post')) {
+		$this->userID = $this->Auth->user('ID');
+		if($this->request->data['Link']['owner_id'] == $this->userID){
+			$this->loadModel('Link');
+			if ($this->Link->save($this->request->data)) {
+				$this->Session->setFlash(__('The article has been saved.'));
+			} else {
+				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
+			}
+		}
+	}
 	$id = $this->request['pass'][0];
 	$trikeyID = tagConst()['searchID'];
 	$this->loadModel('Article');
@@ -183,6 +208,7 @@ public function result($id = null) {
 	debug($taghash);
 	$this->set('taghashes', $taghash);
 	$this->set('results', $parentres);
+	$this->set('idre', $id);
 	}
 	public function reply($articleID) {
 	if (!$this->Tag->exists($tagID)) {

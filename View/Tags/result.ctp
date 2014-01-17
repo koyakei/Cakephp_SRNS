@@ -30,13 +30,15 @@
 		<?php foreach ($result['subtag'] as $subtag): ?>
 		<?php if ($hash['ID'] == $subtag['Tag']['ID']){ ?>
 					<td><?php echo $subtag['Link']['quant']; ?></td>
-					<td>
+					<td
 					<!--<?php echo $subtag['Tag']['name']; ?>-->
-					<?php echo $this->Form->create('q'); ?>
-					<?php echo $this->Form->input('Link.quant',array('default'=>$subtag['Link']['quant']
-					)); ?>
-					<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>
-					<?php echo $this->Form->end('q'); ?>
+					<?php echo $this->Form->create('tag',array('controller' => 'tags','action'=>'quant')); ?>
+						<?php echo $this->Form->input('Link.quant',array('default'=>$subtag['Link']['quant']
+						)); ?>
+						<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>
+	<?php echo $this->Form->hidden('Link.owner_id', array('value'=>$subtag['Link']['owner_id'])); ?>
+	<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
+					<?php echo $this->Form->end('tag'); ?>
 					</td>
 				<?php $b = 1; ?>
 				<?php } ?>

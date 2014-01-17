@@ -102,11 +102,9 @@ class TagsController extends AppController {
 
 
 
-	public function result($id = null) {
+public function result($id = null) {
+	$this->Tag->recursive = 6;
 	$id = $this->request['pass'][0];
-	/*if (!$this->Tag->exists($id)) {
-		throw new NotFoundException(__('ŠÖ˜Aƒ^ƒO‚ª‘¶İ‚µ‚È‚¢'));
-	}*/
 	$trikeyID = tagConst()['searchID'];
 	$this->loadModel('Article');
 	
@@ -148,7 +146,7 @@ class TagsController extends AppController {
 			'conditions'=> array(
 			        	"Link.LTo = $res"
 		        	 ),
-			'fields' => array('Tag.*','Link.quant','Link.owner_id'//,'User.username'
+			'fields' => array('Tag.*','Link.ID','Link.quant','Link.owner_id'//,'User.username'
 			),
 			'joins'
 			 => array(
@@ -169,11 +167,10 @@ class TagsController extends AppController {
 					)
 		                ),			)
 		);
-		//$tag[$j] = $this->Paginator->paginate();
-
 		$taghashgen = $this->Paginator->paginate('Tag');
 		//debug($taghashgen);
-		$i++;
+		
+		
 		foreach ($taghashgen as $tag){
 			$subtagID = $tag['Tag']['ID'];
 			$parentres[$i]['subtag'][$subtagID] = $tag;
@@ -181,6 +178,7 @@ class TagsController extends AppController {
 				$taghash[$subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
 			}
 		}
+		$i++;
 	}
 	debug($taghash);
 	$this->set('taghashes', $taghash);

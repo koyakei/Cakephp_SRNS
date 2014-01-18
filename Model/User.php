@@ -91,4 +91,20 @@ class User extends AppModel {
 			),
 		),
 	);
+	public $hasMany= array(
+        'AO' => array(
+		'className' => 'Article',
+		'foreignKey' => 'user_id',
+		'dependent' => false,
+		'conditions' => 'AO.ID = Article.user_id',
+		//'type' => 'inner'
+	        ),
+        'LO' => array(
+		'className' => 'Link',
+		'foreignKey' => 'user_id',
+		'dependent' => false,
+		'conditions' => 'user.ID = Link.user_id',
+		//'type' => 'inner'
+	        )
+	 );
 }

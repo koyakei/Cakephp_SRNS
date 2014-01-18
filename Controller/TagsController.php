@@ -12,12 +12,12 @@ App::uses('User', 'Model');*/
 class TagsController extends AppController {
 	public $uses = array(//'Tag','Article','Link','User'
 			);
-/*    // “o˜^Ïƒ†[ƒU[‚Í“Še‚Å‚«‚é
+/*    // ç™»éŒ²æ¸ˆãƒ¦ãƒ¼ã‚¶ãƒ¼ã¯æŠ•ç¨¿ã§ãã‚‹
     if ($this->action === 'add') {
         return true;
     }
 
-    // “Še‚ÌƒI[ƒi[‚Í•ÒW‚âíœ‚ª‚Å‚«‚é
+    // æŠ•ç¨¿ã®ã‚ªãƒ¼ãƒŠãƒ¼ã¯ç·¨é›†ã‚„å‰Šé™¤ãŒã§ãã‚‹
     if (in_array($this->action, array('edit', 'delete'))) {
         $postId = $this->request->params['pass'][0];
         if ($this->Post->isOwnedBy($postId, $user['id'])) {
@@ -28,7 +28,7 @@ class TagsController extends AppController {
     return parent::isAuthorized($user);
 }*/
            public $presetVars = array(
-        'owner_id' => array('type' => 'value'),
+        'user_id' => array('type' => 'value'),
         'keyword' => array('type' => 'value'),
         'andor' => array('type' => 'value'),
         'from' => array('type' => 'value'),
@@ -104,7 +104,7 @@ public function quant($id = null) {
 	debug($this->request->data['tag']['idre']);
 	if ($this->request->is('post')) {
 		$this->userID = $this->Auth->user('ID');
-		if($this->request->data['Link']['owner_id'] == $this->userID){
+		if($this->request->data['Link']['user_id'] == $this->userID){
 			$this->loadModel('Link');
 			if ($this->Link->save($this->request->data)) {
 				$this->Session->setFlash(__('The article has been saved.'));
@@ -116,11 +116,124 @@ public function quant($id = null) {
 	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
 }
 
+public function tagRadd($id = null) {
+	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+	//$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
+	$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
+	$this->request->data['Link']['user_id'] = $this->request->data['tag']['userid'];
+	$LinkLTo=$this->request->data['Link']['LTo'];
+	debug($this->request->data);
+	if ($this->request->is('post')) {
+		if (!empty($this->request->data['Tag']['name'])) {
+			//$this->request->data['Tag']['user_id'] = $this->Auth->user('ID');
+			$this->loadModel('Tag');
+			$tagID = $this->Tag->find('first',
+				array(
+			        'conditions' => array('name' => $this->request->data['Tag']['name'],'user_id' => $this->request->data['Tag']['user_id']),
+			        'fields' => array('Tag.ID'),
+				'order' => 'Tag.ID'
+				)
+			);
+			debug($tagID);
+			if($tagID == null){
+				$this->Tag->create();
+				$this->Tag->save($this->request->data);
+				$this->last_id = $this->Tag->getLastInsertID();
+				$this->request->data['Link'] = array(
+					'user_id' => $this->request->data['tag']['userid'],
+					'LFrom' => $tagID['Tag']['ID'],//
+					//'LTo' => $this->last_id,
+					'quant' => 1,
+					'created' => date("Y-m-d H:i:s"),
+					'modified' => date("Y-m-d H:i:s"),
+				);
+				$this->loadModel('Link');
+				
+				$this->Link->create();
+				$this->Link->save($this->request->data);
+				$this->request->data['Link'] = array(
+					'user_id' => $this->request->data['tag']['userid'],
+					'LFrom' => 2146,//
+					'LTo' => $this->last_id,
+					'quant' => 1,
+					'created' => date("Y-m-d H:i:s"),
+					'modified' => date("Y-m-d H:i:s"),
+				);
+				$this->Link->create();
+				$this->Link->save($this->request->data);
+				$this->Session->setFlash(__('ã‚¿ã‚°ãŒãªã‹ã£ãŸ.'));
+				
+				}else {
+			$this->loadModel('Link');
+				$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+				$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
+				$trikeyID = 2146;
+				$LE = $this->Link->find('first',
+					array(
+					        'conditions' => array('Link.LTo' => $LinkLTo,'Link.LFrom' => $tagID['Tag']['ID'] ),
+					        'fields' => array('Link.ID'),
+						'order' => 'Link.ID',
+						'joins' => array(
+							/*array(
+					                     'table' => 'Link',
+					                    //'alias' => 'Link',
+					                    'type' => 'INNER',
+					                    'conditions' => array('Link.LTo' => $this->request->data['Link']['LTo'])
+					                ),*/
+							array(
+					                    'table' => 'Link',
+					                    'alias' => 'taglink',
+					                    'type' => 'INNER',
+					                    'conditions' => array(
+								array("Link.ID = taglink.LTo"),
+								array("$trikeyID = taglink.LFrom")
+								
+					                ))
+						)
+					)
+				);
+				if(null == $LE){
+					$this->loadModel('Link');
+					$this->Link->create();
+					$tagIDd = $tagID['Tag']['ID'];
+					$this->request->data['Link'] = array(
+						'user_id' => $this->request->data['tag']['userid'],
+						'LFrom' => $tagIDd,//
+						'LTo' => $LinkLTo,
+						'quant' => 1,
+						'created' => date("Y-m-d H:i:s"),
+						'modified' => date("Y-m-d H:i:s"),
+					);
+					$this->Link->save($this->request->data);
+					$searchID = tagConst()['searchID'];
+					debug($searchID);
+					$this->last_id = $this->Link->getLastInsertID();
+					$this->request->data['Link'] = array(
+						'user_id' => $this->request->data['tag']['userid'],
+						'LFrom' => 2146,//
+						'LTo' => $this->last_id,
+						'quant' => 1,
+						'created' => date("Y-m-d H:i:s"),
+						'modified' => date("Y-m-d H:i:s"),
+					);
+					$this->Link->create();
+					$this->Link->save($this->request->data);
+					$this->Session->setFlash(__('ã‚¿ã‚°æ—¢å­˜ãƒªãƒ³ã‚¯è¿½åŠ '));
+					
+				}else{
+					$this->Session->setFlash(__('é–¢é€£ä»˜ã‘æ¸ˆã¿'));
+				}
+			} 
+		}
+	}
+	//$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+}
+
 public function result($id = null) {
 	$this->Tag->recursive = 6;
 	if ($this->request->is('post')) {
 		$this->userID = $this->Auth->user('ID');
-		if($this->request->data['Link']['owner_id'] == $this->userID){
+		if($this->request->data['Link']['user_id'] == $this->userID){
 			$this->loadModel('Link');
 			if ($this->Link->save($this->request->data)) {
 				$this->Session->setFlash(__('The article has been saved.'));
@@ -164,6 +277,9 @@ public function result($id = null) {
 	$k = 0;
 	$j = 0;
 	$i = 0;
+	$taghash = array();
+	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+	//$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
 	foreach ($parentres as $result){
 		$res = $result['Article']['ID'];
 		$this->loadModel('Tag');
@@ -171,7 +287,7 @@ public function result($id = null) {
 			'conditions'=> array(
 			        	"Link.LTo = $res"
 		        	 ),
-			'fields' => array('Tag.*','Link.ID','Link.quant','Link.owner_id'//,'User.username'
+			'fields' => array('Tag.*','Link.ID','Link.quant','Link.user_id'//,'User.username'
 			),
 			'joins'
 			 => array(
@@ -206,13 +322,15 @@ public function result($id = null) {
 		$i++;
 	}
 	debug($taghash);
+	$this->loadModel('User');
+	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 	$this->set('taghashes', $taghash);
 	$this->set('results', $parentres);
 	$this->set('idre', $id);
 	}
 	public function reply($articleID) {
 	if (!$this->Tag->exists($tagID)) {
-		throw new NotFoundException(__('ŠÖ˜Aƒ^ƒO‚ª‘¶İ‚µ‚È‚¢'));
+		throw new NotFoundException(__('é–¢é€£ã‚¿ã‚°ãŒå­˜åœ¨ã—ãªã„'));
 	}
 	$sql = "SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` =$tagID AND `tagLink`.`LFrom` =2138  AND `article` . `ID` = `LINK` . `LTo`";
 	$sqlres = $this->Tag->query($sql);
@@ -241,8 +359,8 @@ public function result($id = null) {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Tag->create();
-			$this->request->data['Tag']['owner_id'] = $this->Auth->user('ID');
-			if ($this->Tag->save($this->request->data)) {//ƒZ[ƒu‚·‚é‚±‚Æ‚É¬Œ÷‚µ‚½‚çA
+			$this->request->data['Tag']['user_id'] = $this->Auth->user('ID');
+			if ($this->Tag->save($this->request->data)) {//ã‚»ãƒ¼ãƒ–ã™ã‚‹ã“ã¨ã«æˆåŠŸã—ãŸã‚‰ã€
 				$this->Session->setFlash(__('success.',$this->request->data));
 				return $this->redirect(array('action' => 'index'));
 			} else {

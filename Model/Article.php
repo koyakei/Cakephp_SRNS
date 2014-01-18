@@ -73,6 +73,15 @@ public $base_sql = null;
             $results = $this->query($this->base_sql);
             return count($results);
         }*/
+    public $hasOne= array(
+        'AO' => array(
+		'className' => 'User',
+		'foreignKey' => 'ID',
+		'dependent' => false,
+		'conditions' => 'AO.ID = Article.user_id',
+		//'type' => 'inner'
+        )
+    );
 /*
 	
 	public $hasMany = array(

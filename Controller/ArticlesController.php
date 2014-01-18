@@ -46,14 +46,13 @@ class ArticlesController extends AppController {
 			$this->Article->create();
 			$this->userID = $this->Auth->user('ID');
 			debug($this->Auth->user());
-			$this->request->data['article']['owner_id'] = $this->userID;
+			$this->request->data['article']['user_id'] = $this->userID;
 			debug($this->userID);
 			if ($this->Article->save($this->request->data)) {
 				$this->last_id = $this->Article->getLastInsertID();
-				debug($this->userID);
 				$this->request->data = null;
 				$this->request->data['Link'] = array(
-					'owner_id' => 1,
+					'user_id' => 1,
 					'LFrom' => $id,//2138
 					'LTo' => $this->last_id,
 					'quant' => 1,
@@ -65,7 +64,7 @@ class ArticlesController extends AppController {
 				$this->last_id = $this->Link->getLastInsertID();
 				$this->request->data = null;
 				$this->request->data['Link'] = array(
-					'owner_id' => 1,
+					'user_id' => 1,
 					'LFrom' => 2138,//
 					'LTo' => $this->last_id,
 					'quant' => 1,

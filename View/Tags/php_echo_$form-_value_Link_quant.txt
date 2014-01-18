@@ -1,0 +1,2 @@
+<?php echo $form->value('Link.quant'); ?>
+<?php echo $form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>

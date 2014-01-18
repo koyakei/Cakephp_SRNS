@@ -82,7 +82,7 @@ class Link extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'owner_id' => array(
+		'user_id' => array(
 			'naturalNumber' => array(
 				'rule' => array('naturalNumber'),
 				//'message' => 'Your custom message here',
@@ -120,7 +120,16 @@ class Link extends AppModel {
  * hasMany associations
  *
  * @var array
- *//*
+ */
+    public $hasOne= array(
+        'LO' => array(
+		'className' => 'User',
+		'foreignKey' => 'ID',
+		'dependent' => false,
+		'conditions' => 'User.ID = Link.user_id',
+		//'type' => 'inner'
+        )
+    );/*
     public $hasMany= array(
         'AI_LT' => array(
 		'className' => 'Article',

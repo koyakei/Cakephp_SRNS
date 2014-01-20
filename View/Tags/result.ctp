@@ -1,19 +1,92 @@
+<head>
+<meta charset="UTF-8">
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
+<?php $this -> Html -> script( 'jquery.js', array( 'inline' => false ) ); ?>
+<?php //$this -> Html -> script( 'jquery.quicksearch.js', array( 'inline' => false ) ); ?>
+<?php $this -> Html -> script( 'jquery.tablesorter.js', array( 'inline' => false ) ); ?>
+<?php //$this -> Html -> script( 'sorttable.js', array( 'inline' => false ) ); ?>
+<script type="text/javascript">
+$(document).ready(function() 
+    { 
+        $("#myTable").tablesorter(); 
+    } 
+); 
+</script>
+<script type="text/javascript">
+$(document).ready(function() 
+    { 
+        $("#myTable2").tablesorter(); 
+    } 
+); 
+$(function () {
+    $('input#search').quicksearch('table#myTable tbody tr', {
+    'delay':300,
+    'selector':'th',
+    'stripeRows':['odd','even'],
+    'loader':'span.loading',
+    'bind':'keyup click',
+    'show':function () {
+        this.style.color = '';
+    },
+    'hide': function () {
+        this.style.color = '#ccc';
+    },
+    'prepareQuery': function (val) {
+        return new RegExp(val, "i");
+    },
+    'testQuery': function (query, txt, _row) {
+        return query.test(txt);
+    }
+    });
+    });
+</script>
+	<style type="text/css">
+            table { border:1px solid #ccc; border-spacing:0; border-collapse:collapse; margin:1em 0; padding:0; }
+            thead th { background-color:#333; color:#fff; }
+            th, td { border-bottom:1px solid #ccc; text-align:left; }
+            .right { text-align:right; }
+            .odd { background-color:#fff; }
+            .even { background-color:#eee; }
+        </style>
+</head>
 <div class="tags index">
-	<h2><?php echo __('Articles'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
+<h2><?php echo __('Articles'); ?></h2>
+<table id="myTable2" class="tablesorter">
+<thead>
+  <tr><th>Person</th><th>Monthly pay</th></tr>
+</thead>
+<tbody>
+  <tr><td>Jan Molby</td><td>£12,000</td></tr>
+  <tr><td>Steve Nicol</td><td>£8,500</td></tr>
+  <tr><td>Steve McMahon</td><td>£9,200</td></tr>
+  <tr><td>John Barnes</td><td>£15,300</td></tr>
+</tbody>
+<tfoot>
+  <tr><td>TOTAL</td><td>£45,000</td></tr>
+</tfoot>
+</table>
+<form>
+	<input type="text" name="search" value="" id="search">
+</form>
+	<!--<table id="myTable" class="tablesorter">
+	<thead>
 	<tr>
 			<th><?php echo $this->Paginator->sort('ID'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
+			<th><?php echo __('Actions'); ?></th>
 			<th></th>
 			<?php foreach ($taghashes  as $hash): ?>
+			<th>quant</th>
 			<th><?php echo $hash['name']; ?></th>
-			<th></th>
 			<?php endforeach; ?>
 	</tr>
+	</thead>
+	<tbody>
 	<?php foreach ($results  as $result): ?>
 	<tr>
 		<td><?php echo h($result['Article']['ID']); ?>&nbsp;</td>
@@ -33,12 +106,12 @@
     'type' => 'select', 
     'multiple'=> false,
     'options' => $ulist
-//  'selected' => $selected  // �K��l�́Avalue��z��ɂ�������
+//  'selected' => $selected  // 規定値は、valueを配列にしたもの
 )); ?>
 				<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
 				<?php echo $this->Form->hidden('Link.LTo', array('value'=>$result['Article']['ID'])); ?>
 			<?php echo $this->Form->end('tag'); ?>
-		</td>
+
 		<?php foreach ($taghashes as $key => $hash): ?>
 			<?php $b = 0; ?>
 		<?php foreach ($result['subtag'] as $subtag): ?>
@@ -52,6 +125,12 @@
 	<?php echo $this->Form->hidden('Link.user_id', array('value'=>$subtag['Link']['user_id'])); ?>
 	<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
 					<?php echo $this->Form->end('tag'); ?>
+					<?php echo $this->Form->create('tag',array('controller' => 'tags','action'=>'tagdel')); ?>
+						<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>
+						<?php echo $this->Form->hidden('Link.user_id', array('value'=>$subtag['Link']['user_id'])); ?>
+						<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
+					<?php echo $this->Form->end('tag'); ?>
+		</td>
 					</td>
 				<?php $b = 1; ?>
 				<?php } ?>
@@ -62,7 +141,8 @@
 		<?php endforeach; ?>
 	</tr>
 <?php endforeach; ?>
-	</table>
+</tbody>
+	</table>-->
 
 </div>
 <div class="actions">

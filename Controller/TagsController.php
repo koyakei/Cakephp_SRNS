@@ -116,6 +116,18 @@ public function quant($id = null) {
 	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
 }
 
+public function tagdel($id = null) {
+	if ($this->request->is('post') and $this->request->data['Link']['user_id'] == $this->Auth->user('ID')) {
+		$this->loadModel('Link');
+		if ($this->Link->delete($this->request->data('Link.ID'))){
+			$this->Session->setFlash(__('削除完了.'));
+		} else {
+			$this->Session->setFlash(__('削除失敗.'));
+		}
+	}
+	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+}
+
 public function tagRadd($id = null) {
 	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 	//$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
@@ -226,7 +238,7 @@ public function tagRadd($id = null) {
 			} 
 		}
 	}
-	//$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
 }
 
 public function result($id = null) {

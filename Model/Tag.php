@@ -93,4 +93,13 @@ public $uses = array('Article','Link','User','Tag');
 		)
 	);
 */
+   public $hasOne= array(
+        'TO' => array(
+		'className' => 'User',
+		'foreignKey' => 'ID',
+		'dependent' => false,
+		'conditions' => 'TO.ID = Tag.user_id',
+		//'type' => 'inner'
+        )
+    );
 }

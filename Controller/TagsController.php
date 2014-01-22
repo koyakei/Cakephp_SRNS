@@ -10,6 +10,7 @@ App::uses('User', 'Model');*/
  * @property PaginatorComponent $Paginator
  */
 class TagsController extends AppController {
+
 	public $uses = array(//'Tag','Article','Link','User'
 			);
 /*    // 登録済ユーザーは投稿できる
@@ -42,7 +43,7 @@ class TagsController extends AppController {
                 //'Form' => array('user' => 'Member')
                 );
         }
-        public $components = array('Search.Prg','Paginator');
+        public $components = array('Search.Prg','Paginator','Common');
 //        public $presetVars = true;
  
 
@@ -77,6 +78,7 @@ class TagsController extends AppController {
 		$this->set('tags', $this->Tag->find('all',$parms));
         }
         public function search() {
+
         $this->Prg->commonProcess();
         $req = $this->passedArgs;
         if (!empty($this->request->data['Tag']['keyword'])) {
@@ -348,6 +350,10 @@ public function result($id = null) {
 	$sqlres = $this->Tag->query($sql);
 	$this->set('results', $sqlres);
 	}
+	
+	public function replytagadd($id = null) {
+		
+	}
 /**
  * view method
  *
@@ -356,11 +362,44 @@ public function result($id = null) {
  * @return void
  */
 	public function view($id = null) {
+		if($this->request->data != null){
+			$this->Common->replyarticleAdd($this);
+		}
 		if (!$this->Tag->exists($id)) {
 			throw new NotFoundException(__('Invalid tag'));
 		}
-		$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id));
+		$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
+		$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		$this->set('tag', $this->Tag->find('first', $options));
+		//$this->Article->read(null,$id);
+		$targetID = $id;
+		$trikeyID = tagConst()['replyID'];
+		$this->loadModel('Article');
+		$this->Paginator->settings = array(
+		'conditions'=> array(
+		        	"Link.LFrom = $targetID"
+	        	 ),
+		'fields' => array('Article.*', 'Link.*'),
+		'joins'
+		 => array(
+		array(
+                     'table' => 'Link',
+                    //'alias' => 'Link',
+                    'type' => 'INNER',
+                    'conditions' => array("Link.LTo = Article.ID")
+                ),
+		array(
+                    'table' => 'Link',
+                    'alias' => 'taglink',
+                    'type' => 'INNER',
+                    'conditions' => array(
+			array("Link.ID = taglink.LTo"),
+			array("$trikeyID = taglink.LFrom")
+			)
+                ),
+		)
+	);
+	$this->set('results',$this->Paginator->paginate('Article'));
 	}
 
 /**

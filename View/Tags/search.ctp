@@ -28,7 +28,7 @@
             <tr>
  			<th><?php echo $this->Paginator->sort('ID'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('owner_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -38,7 +38,7 @@
             <tr>
 		<td><?php echo h($tag['Tag']['ID']); ?>&nbsp;</td>
 		<td><?php echo h($tag['Tag']['name']); ?>&nbsp;</td>
-		<td><?php echo h($tag['Tag']['owner_id']); ?>&nbsp;</td>
+		<td><?php echo h($tag['Tag']['user_id']); ?>&nbsp;</td>
 		<td><?php echo h($tag['Tag']['created']); ?>&nbsp;</td>
 		<td><?php echo h($tag['Tag']['modified']); ?>&nbsp;</td>
 		<td class="actions">

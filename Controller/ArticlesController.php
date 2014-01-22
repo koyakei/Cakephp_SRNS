@@ -45,9 +45,7 @@ class ArticlesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Article->create();
 			$this->userID = $this->Auth->user('ID');
-			debug($this->Auth->user());
 			$this->request->data['article']['user_id'] = $this->userID;
-			debug($this->userID);
 			if ($this->Article->save($this->request->data)) {
 				$this->last_id = $this->Article->getLastInsertID();
 				$this->request->data = null;
@@ -59,6 +57,7 @@ class ArticlesController extends AppController {
 					'created' => date("Y-m-d H:i:s"),
 					'modified' => date("Y-m-d H:i:s"),
 				);
+				$this->loadModel('Link');
 				$this->Link->create();
 				if ($this->Link->save($this->request->data)) {
 				$this->last_id = $this->Link->getLastInsertID();
@@ -125,6 +124,10 @@ class ArticlesController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
+			$this->request->data['Article'] = array(
+				'created' => date("Y-m-d H:i:s"),
+				'modified' => date("Y-m-d H:i:s"),
+			);
 			$this->Article->create();
 			if ($this->Article->save($this->request->data)) {
 				$this->Session->setFlash(__('The article has been saved.'));
@@ -177,5 +180,6 @@ class ArticlesController extends AppController {
 		} else {
 			$this->Session->setFlash(__('The article could not be deleted. Please, try again.'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		//return $this->redirect(array('action' => 'index'));
+		return $this->redirect($this->referer());
 	}}

@@ -4,7 +4,7 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('ID'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('owner_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -13,7 +13,7 @@
 	<tr>
 		<td><?php echo h($article['Article']['ID']); ?>&nbsp;</td>
 		<td><?php echo h($article['Article']['name']); ?>&nbsp;</td>
-		<td><?php echo h($article['Article']['owner_id']); ?>&nbsp;</td>
+		<td><?php echo h($article['Article']['user_id']); ?>&nbsp;</td>
 		<td><?php echo h($article['Article']['created']); ?>&nbsp;</td>
 		<td><?php echo h($article['Article']['modified']); ?>&nbsp;</td>
 		<td class="actions">
@@ -42,5 +42,6 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Article'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('Tag search'), array('controller' =>'Tags', 'action' => 'search')); ?></li>
 	</ul>
 </div>

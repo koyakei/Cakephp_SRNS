@@ -13,7 +13,7 @@
 		</dd>
 		<dt><?php echo __('Owner Id'); ?></dt>
 		<dd>
-			<?php echo h($article['Article']['owner_id']); ?>
+			<?php echo h($article['Article']['user_id']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Created'); ?></dt>
@@ -32,7 +32,7 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('ID'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('owner_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -41,7 +41,7 @@
 	<tr>
 		<td><?php echo h($result['Article']['ID']); ?>&nbsp;</td>
 		<td><?php echo h($result['Article']['name']); ?>&nbsp;</td>
-		<td><?php echo h($result['Article']['owner_id']); ?>&nbsp;</td
+		<td><?php echo h($result['Article']['user_id']); ?>&nbsp;</td
 		<td><?php echo h($result['Article']['created']); ?>&nbsp;</td>
 		<td><?php echo h($result['Article']['modified']); ?>&nbsp;</td>
 		<td class="actions">
@@ -70,7 +70,7 @@
 		<legend><?php echo __('Reply'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
-		//echo $form->hidden('id', array('value'=>'$this->params['pass'][0]'));
+		//echo $this->Form->hidden('id', array('value'=>'$this->params['pass'][0]'));
 		debug($this->params['pass'][0]);
 	?>
 	</fieldset>

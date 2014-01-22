@@ -1,23 +1,13 @@
 <head>
 <meta charset="UTF-8">
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
-<?php $this -> Html -> script( 'jquery.js', array( 'inline' => false ) ); ?>
-<?php //$this -> Html -> script( 'jquery.quicksearch.js', array( 'inline' => false ) ); ?>
-<?php $this -> Html -> script( 'jquery.tablesorter.js', array( 'inline' => false ) ); ?>
-<?php //$this -> Html -> script( 'sorttable.js', array( 'inline' => false ) ); ?>
+
+z
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() 
     { 
         $("#myTable").tablesorter(); 
-    } 
-); 
-</script>
-<script type="text/javascript">
-$(document).ready(function() 
-    { 
-        $("#myTable2").tablesorter(); 
     } 
 ); 
 $(function () {
@@ -42,35 +32,11 @@ $(function () {
     });
     });
 </script>
-	<style type="text/css">
-            table { border:1px solid #ccc; border-spacing:0; border-collapse:collapse; margin:1em 0; padding:0; }
-            thead th { background-color:#333; color:#fff; }
-            th, td { border-bottom:1px solid #ccc; text-align:left; }
-            .right { text-align:right; }
-            .odd { background-color:#fff; }
-            .even { background-color:#eee; }
-        </style>
 </head>
 <div class="tags index">
-<h2><?php echo __('Articles'); ?></h2>
-<table id="myTable2" class="tablesorter">
-<thead>
-  <tr><th>Person</th><th>Monthly pay</th></tr>
-</thead>
-<tbody>
-  <tr><td>Jan Molby</td><td>£12,000</td></tr>
-  <tr><td>Steve Nicol</td><td>£8,500</td></tr>
-  <tr><td>Steve McMahon</td><td>£9,200</td></tr>
-  <tr><td>John Barnes</td><td>£15,300</td></tr>
-</tbody>
-<tfoot>
-  <tr><td>TOTAL</td><td>£45,000</td></tr>
-</tfoot>
-</table>
-<form>
-	<input type="text" name="search" value="" id="search">
-</form>
-	<!--<table id="myTable" class="tablesorter">
+
+	<h2><?php echo __('Articles'); ?></h2>
+	<table id="myTable" class="tablesorter">
 	<thead>
 	<tr>
 			<th><?php echo $this->Paginator->sort('ID'); ?></th>
@@ -142,7 +108,7 @@ $(function () {
 	</tr>
 <?php endforeach; ?>
 </tbody>
-	</table>-->
+	</table>
 
 </div>
 <div class="actions">

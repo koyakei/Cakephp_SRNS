@@ -78,7 +78,6 @@ class TagsController extends AppController {
 		$this->set('tags', $this->Tag->find('all',$parms));
         }
         public function search() {
-
         $this->Prg->commonProcess();
         $req = $this->passedArgs;
         if (!empty($this->request->data['Tag']['keyword'])) {
@@ -103,7 +102,6 @@ class TagsController extends AppController {
         }
 
 public function quant($id = null) {
-	debug($this->request->data['tag']['idre']);
 	if ($this->request->is('post')) {
 		$this->userID = $this->Auth->user('ID');
 		if($this->request->data['Link']['user_id'] == $this->userID){
@@ -115,7 +113,8 @@ public function quant($id = null) {
 			}
 		}
 	}
-	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+//	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+	$this->redirect($this->referer());
 }
 
 public function tagdel($id = null) {
@@ -127,7 +126,8 @@ public function tagdel($id = null) {
 			$this->Session->setFlash(__('削除失敗.'));
 		}
 	}
-	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+//	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+	$this->redirect($this->referer());
 }
 
 public function tagRadd($id = null) {
@@ -240,108 +240,17 @@ public function tagRadd($id = null) {
 			} 
 		}
 	}
-	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+	//$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+	$this->redirect($this->referer());
 }
 
 public function result($id = null) {
-	$this->Tag->recursive = 6;
-	if ($this->request->is('post')) {
-		$this->userID = $this->Auth->user('ID');
-		if($this->request->data['Link']['user_id'] == $this->userID){
-			$this->loadModel('Link');
-			if ($this->Link->save($this->request->data)) {
-				$this->Session->setFlash(__('The article has been saved.'));
-			} else {
-				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
-			}
-		}
-	}
-	$id = $this->request['pass'][0];
-	$trikeyID = tagConst()['searchID'];
-	$this->loadModel('Article');
-	
-	$this->Paginator->settings = array(
-		'conditions'=> array(
-		        	"Link.LTo = Article.ID"
-	        	 ),
-		'fields' => array('Link.*','taglink.*','Article.*'
-			),
-		'joins'
-		 => array(
-		array(
-                    'table' => 'Link',
-                    'type' => 'INNER',
-                    'conditions' => array(
-			array("$id = Link.LFrom")
-			)
-                ),
-		array(
-                    'table' => 'Link',
-                    'alias' => 'taglink',
-                    'type' => 'INNER',
-                    'conditions' => array(
-			array("Link.ID = taglink.LTo"),
-			array("$trikeyID = taglink.LFrom")
-			)
-                ),
-		)
-	);
-	$parentres = $this->Paginator->paginate('Article');
+	$this->Common->trifinder($this);
 
-	$k = 0;
-	$j = 0;
-	$i = 0;
-	$taghash = array();
-	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
-	//$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
-	foreach ($parentres as $result){
-		$res = $result['Article']['ID'];
-		$this->loadModel('Tag');
-		$this->Paginator->settings = array(
-			'conditions'=> array(
-			        	"Link.LTo = $res"
-		        	 ),
-			'fields' => array('Tag.*','Link.ID','Link.quant','Link.user_id'//,'User.username'
-			),
-			'joins'
-			 => array(
-				array(
-		                    'table' => 'Link',
-		                    'type' => 'INNER',
-		                    'conditions' => array(
-					array("Tag.ID = Link.LFrom")
-					)
-		                ),
-				array(
-		                    'table' => 'Link',
-		                    'alias' => 'taglink',
-		                    'type' => 'INNER',
-		                    'conditions' => array(
-					array("Link.ID = taglink.LTo"),
-					array("$trikeyID = taglink.LFrom")
-					)
-		                ),			)
-		);
-		$taghashgen = $this->Paginator->paginate('Tag');
-		//debug($taghashgen);
-		
-		
-		foreach ($taghashgen as $tag){
-			$subtagID = $tag['Tag']['ID'];
-			$parentres[$i]['subtag'][$subtagID] = $tag;
-			if ($taghash[$subtagID] == null) {
-				$taghash[$subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
-			}
-		}
-		$i++;
-	}
-	debug($taghash);
-	$this->loadModel('User');
-	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-	$this->set('taghashes', $taghash);
-	$this->set('results', $parentres);
 	$this->set('idre', $id);
 	}
+
+	
 	public function reply($articleID) {
 	if (!$this->Tag->exists($tagID)) {
 		throw new NotFoundException(__('関連タグが存在しない'));
@@ -365,41 +274,16 @@ public function result($id = null) {
 		if($this->request->data != null){
 			$this->Common->replyarticleAdd($this);
 		}
+
+		$this->set('idre', $id);
 		if (!$this->Tag->exists($id)) {
 			throw new NotFoundException(__('Invalid tag'));
 		}
 		$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
 		$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		$this->set('tag', $this->Tag->find('first', $options));
-		//$this->Article->read(null,$id);
-		$targetID = $id;
-		$trikeyID = tagConst()['replyID'];
-		$this->loadModel('Article');
-		$this->Paginator->settings = array(
-		'conditions'=> array(
-		        	"Link.LFrom = $targetID"
-	        	 ),
-		'fields' => array('Article.*', 'Link.*'),
-		'joins'
-		 => array(
-		array(
-                     'table' => 'Link',
-                    //'alias' => 'Link',
-                    'type' => 'INNER',
-                    'conditions' => array("Link.LTo = Article.ID")
-                ),
-		array(
-                    'table' => 'Link',
-                    'alias' => 'taglink',
-                    'type' => 'INNER',
-                    'conditions' => array(
-			array("Link.ID = taglink.LTo"),
-			array("$trikeyID = taglink.LFrom")
-			)
-                ),
-		)
-	);
-	$this->set('results',$this->Paginator->paginate('Article'));
+		$this->Common->trireplyfinder($this);
+
 	}
 
 /**

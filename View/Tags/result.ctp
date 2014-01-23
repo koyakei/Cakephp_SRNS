@@ -80,30 +80,33 @@ $(function () {
 
 		<?php foreach ($taghashes as $key => $hash): ?>
 			<?php $b = 0; ?>
-		<?php foreach ($result['subtag'] as $subtag): ?>
-		<?php if ($hash['ID'] == $subtag['Tag']['ID']){ ?>
-					<td><?php echo $subtag['Link']['quant']; ?></td>
-					<td
-					<!--<?php echo $subtag['Tag']['name']; ?>-->
-					<?php echo $this->Form->create('tag',array('controller' => 'tags','action'=>'quant')); ?>
-						<?php echo $this->Form->input('Link.quant',array('default'=>$subtag['Link']['quant'])); ?>
-						<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>
-	<?php echo $this->Form->hidden('Link.user_id', array('value'=>$subtag['Link']['user_id'])); ?>
-	<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
-					<?php echo $this->Form->end('tag'); ?>
-					<?php echo $this->Form->create('tag',array('controller' => 'tags','action'=>'tagdel')); ?>
-						<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>
+		
+			<?php if($result['subtag'] != null) { ?>
+				<?php foreach ($result['subtag'] as $subtag): ?>
+					<?php if ($hash['ID'] == $subtag['Tag']['ID']){ ?></td>
+						<td><?php echo $subtag['Link']['quant']; ?></td>
+						<td>
+						<!--<?php echo $subtag['Tag']['name']; ?>-->
+						<?php echo $this->Form->create('tag',array('controller' => 'tags','action'=>'quant')); ?>
+							<?php echo $this->Form->input('Link.quant',array('default'=>$subtag['Link']['quant'])); ?>
+							<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>
 						<?php echo $this->Form->hidden('Link.user_id', array('value'=>$subtag['Link']['user_id'])); ?>
 						<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
-					<?php echo $this->Form->end('tag'); ?>
-		</td>
-					</td>
-				<?php $b = 1; ?>
-				<?php } ?>
-			<?php endforeach; ?>
-				<?php if ($b == 0){ ?>
-					<td></td><td></td>
-				<?php } ?>
+						<?php echo $this->Form->end('tag'); ?>
+						<?php echo $this->Form->create('tag',array('controller' => 'tags','action'=>'tagdel')); ?>
+							<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>
+							<?php echo $this->Form->hidden('Link.user_id', array('value'=>$subtag['Link']['user_id'])); ?>
+							<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
+						<?php echo $this->Form->end('tag'); ?>
+						</td>
+						</td>
+						<?php $b = 1; ?>
+					<?php } ?>
+				<?php endforeach; ?>
+			<?php } ?>
+			<?php if ($b == 0){ ?>
+				<td></td><td></td>
+			<?php } ?>
 		<?php endforeach; ?>
 	</tr>
 <?php endforeach; ?>

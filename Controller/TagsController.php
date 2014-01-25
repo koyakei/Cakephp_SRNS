@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+//App::uses('BasicComponent', 'Controller/Component');
 /*App::uses('Article', 'Model');
 App::uses('Link', 'Model');
 App::uses('User', 'Model');*/
@@ -43,9 +44,9 @@ class TagsController extends AppController {
                 //'Form' => array('user' => 'Member')
                 );
         }
-        public $components = array('Search.Prg','Paginator','Common');
+        public $components = array('Search.Prg','Paginator','Common','Basic');
 //        public $presetVars = true;
- 
+
 
 
 /**
@@ -87,14 +88,14 @@ class TagsController extends AppController {
         /*$this->paginate = array(
             'conditions' => $this->Tag->parseCriteria($req),
         );*/
-        
+
         $this->paginate = array(
                 'Tag' =>
             array(
                 'conditions' => array(
                     $this->Tag->parseCriteria($req),
                 )
-                
+
             )
         );
         $this->set('tags', $this->Paginator->paginate());
@@ -136,6 +137,7 @@ public function tagRadd($id = null) {
 	$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
 	$this->request->data['Link']['user_id'] = $this->request->data['tag']['userid'];
 	$LinkLTo=$this->request->data['Link']['LTo'];
+	debug($LinkLTo);
 	//if ($this->request->is('post')) {
 		if (!empty($this->request->data['Tag']['name'])) {
 			//$this->request->data['Tag']['user_id'] = $this->Auth->user('ID');
@@ -161,12 +163,12 @@ public function tagRadd($id = null) {
 					'modified' => date("Y-m-d H:i:s"),
 				);
 				$this->loadModel('Link');
-				
+
 				$this->Link->create();
 				$this->Link->save($this->request->data);
 				$this->request->data['Link'] = array(
 					'user_id' => $this->request->data['tag']['userid'],
-					'LFrom' => 2146,//
+					'LFrom' => 21,//
 					'LTo' => $this->last_id,
 					'quant' => 1,
 					'created' => date("Y-m-d H:i:s"),
@@ -175,33 +177,34 @@ public function tagRadd($id = null) {
 				$this->Link->create();
 				$this->Link->save($this->request->data);
 				$this->Session->setFlash(__('タグがなかった.'));
-				
+
 				}else {
 			$this->loadModel('Link');
 				$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 				$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
 				$trikeyID = 2146;
+			/*	$this->Basic->tribasicfiderbyid($this, 2146,"Tag","Tag.ID",$LinkLTo);
+				$LE = $that->returntrybasic;*/
 				$LE = $this->Link->find('first',
 					array(
-					        'conditions' => array('Link.LTo' => $LinkLTo,'Link.LFrom' => $tagID['Tag']['ID'] ),
-					        'fields' => array('Link.ID'),
+				        'conditions' => array('Link.LTo' => $LinkLTo,'Link.LFrom' => $LinkLTo),
+				        'fields' => array('Link.ID'),
 						'order' => 'Link.ID',
 						'joins' => array(
 							/*array(
-					                     'table' => 'Link',
-					                    //'alias' => 'Link',
-					                    'type' => 'INNER',
-					                    'conditions' => array('Link.LTo' => $this->request->data['Link']['LTo'])
-					                ),*/
+			                    'table' => 'Link',
+			                    'type' => 'INNER',
+			                    'conditions' => array($LinkLTo = Link.LFrom)
+							),*/
 							array(
-					                    'table' => 'Link',
-					                    'alias' => 'taglink',
-					                    'type' => 'INNER',
-					                    'conditions' => array(
-								array("Link.ID = taglink.LTo"),
-								array("$trikeyID = taglink.LFrom")
-								
-					                ))
+			                    'table' => 'Link',
+			                    'alias' => 'taglink',
+			                    'type' => 'INNER',
+			                    'conditions' => array(
+									array("Link.ID = taglink.LTo"),
+									array("$trikeyID = taglink.LFrom")
+						        )
+							)
 						)
 					)
 				);
@@ -223,7 +226,7 @@ public function tagRadd($id = null) {
 					$this->last_id = $this->Link->getLastInsertID();
 					$this->request->data['Link'] = array(
 						'user_id' => $this->request->data['tag']['userid'],
-						'LFrom' => 2146,//
+						'LFrom' => 2138,//
 						'LTo' => $this->last_id,
 						'quant' => 1,
 						'created' => date("Y-m-d H:i:s"),
@@ -232,11 +235,11 @@ public function tagRadd($id = null) {
 					$this->Link->create();
 					$this->Link->save($this->request->data);
 					$this->Session->setFlash(__('タグ既存リンク追加'));
-					
+
 				}else{
 					$this->Session->setFlash(__('関連付け済み'));
 				}
-			} 
+			}
 	//	}
 	}
 	//$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
@@ -249,7 +252,7 @@ public function result($id = null) {
 	$this->set('idre', $id);
 	}
 
-	
+
 	public function reply($articleID) {
 	if (!$this->Tag->exists($tagID)) {
 		throw new NotFoundException(__('関連タグが存在しない'));
@@ -258,9 +261,9 @@ public function result($id = null) {
 	$sqlres = $this->Tag->query($sql);
 	$this->set('results', $sqlres);
 	}
-	
+
 	public function replytagadd($id = null) {
-		
+
 	}
 /**
  * view method
@@ -273,9 +276,8 @@ public function result($id = null) {
 		$this->Common->triarticleAdd($this);
 		$this->redirect($this->referer());
 	}
-	
+
 	public function view($id = null) {
-		debug($this->request->data);
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
 			$this->Common->triarticleAdd($this);
@@ -308,7 +310,7 @@ public function result($id = null) {
 			} else {
 				print_r($this->request->data);
 				$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
-					
+
 			}
 		}
 	}

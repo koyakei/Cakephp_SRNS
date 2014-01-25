@@ -275,7 +275,7 @@ public function result($id = null) {
 	}
 	
 	public function view($id = null) {
-		debug($this->Auth->user('ID'));
+		debug($this->request->data);
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
 			$this->Common->triarticleAdd($this);
@@ -288,8 +288,9 @@ public function result($id = null) {
 		$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
 		$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		$this->set('tag', $this->Tag->find('first', $options));
-		$this->Common->trireplyfinder($this);
-
+		//$this->keyid = $this->request->data['keyid']['keyid'];
+//		$this->Common->trireplyfinder($this);
+		$this->Common->trifinderbyid($this);
 	}
 
 /**

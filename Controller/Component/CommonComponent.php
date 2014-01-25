@@ -154,4 +154,34 @@ class CommonComponent extends Component {
 		$that->set('taghashes', $that->taghash);
 		$that->set('results', $that->parentres);
 	}
+	public function trifinderbyid(&$that = null) {
+		$id = $that->request['pass'][0];
+		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Article","Article.ID",$id);
+		$that->parentres = $that->returntrybasic;
+		$that->k = 0;
+		$that->j = 0;
+		$that->i = 0;
+		$that->taghash = array();
+		$trikeyID = tagConst()['searchID'];
+		//$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+		foreach ($that->parentres as $result){
+			$res = $result['Article']['ID'];				
+			$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Tag",$res,"Tag.ID");
+			$that->taghashgen = $that->returntrybasic;
+			foreach ($that->taghashgen as $tag){
+				$that->subtagID = $tag['Tag']['ID'];
+				$that->parentres[$that->i]['subtag'][$that->subtagID] = $tag;
+				if ($that->taghash[$that->subtagID] == null) {
+					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
+				}
+			}
+			$that->i++;
+		}
+		$that->loadModel('User');
+		$that->loadModel('Key');
+		$that->set( 'keylist', $that->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
+		$that->set( 'ulist', $that->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+		$that->set('taghashes', $that->taghash);
+		$that->set('results', $that->parentres);
+	}
 }

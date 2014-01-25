@@ -81,7 +81,7 @@ $(function () {
 	'options' => $keylist
 	//  'selected' => $selected  // ‹K’è’l‚ÍAvalue‚ð”z—ñ‚É‚µ‚½‚à‚Ì
 	)); ?>
-	<?php echo $this->Form->end(__('')); ?>
+	<?php echo $this->Form->end(__('keyselect')); ?>
 	<?php foreach ($results  as $result): ?>
 	<tr>
 		<td><?php echo h($result['Article']['ID']); ?>&nbsp;</td>
@@ -109,7 +109,6 @@ $(function () {
 
 		<?php foreach ($taghashes as $key => $hash): ?>
 			<?php $b = 0; ?>
-		
 			<?php if($result['subtag'] != null) { ?>
 				<?php foreach ($result['subtag'] as $subtag): ?>
 					<?php if ($hash['ID'] == $subtag['Tag']['ID']){ ?></td>

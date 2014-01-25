@@ -73,7 +73,6 @@ class TagsController extends AppController {
 			)
 		)
 		;
-		debug($this->Paginator->paginate());
                 //$this->set('tags', $this->Paginator->paginate());
 		$this->set('tags', $this->Tag->find('all',$parms));
         }
@@ -99,6 +98,7 @@ class TagsController extends AppController {
             )
         );
         $this->set('tags', $this->Paginator->paginate());
+        $this->set('Auth', $this->Auth->user('ID'));
         }
 
 public function quant($id = null) {
@@ -136,8 +136,7 @@ public function tagRadd($id = null) {
 	$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
 	$this->request->data['Link']['user_id'] = $this->request->data['tag']['userid'];
 	$LinkLTo=$this->request->data['Link']['LTo'];
-	debug($this->request->data);
-	if ($this->request->is('post')) {
+	//if ($this->request->is('post')) {
 		if (!empty($this->request->data['Tag']['name'])) {
 			//$this->request->data['Tag']['user_id'] = $this->Auth->user('ID');
 			$this->loadModel('Tag');
@@ -238,7 +237,7 @@ public function tagRadd($id = null) {
 					$this->Session->setFlash(__('関連付け済み'));
 				}
 			} 
-		}
+	//	}
 	}
 	//$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
 	$this->redirect($this->referer());
@@ -270,9 +269,16 @@ public function result($id = null) {
  * @param string $id
  * @return void
  */
+	public function triarticleadd($id = null) {
+		$this->Common->triarticleAdd($this);
+		$this->redirect($this->referer());
+	}
+	
 	public function view($id = null) {
-		if($this->request->data != null){
-			$this->Common->replyarticleAdd($this);
+		debug($this->Auth->user('ID'));
+		if($this->request->data['Article']['name'] != null){
+			$this->keyid = $this->request->data['Article']['keyid'];
+			$this->Common->triarticleAdd($this);
 		}
 
 		$this->set('idre', $id);
@@ -314,6 +320,7 @@ public function result($id = null) {
  * @return void
  */
 	public function edit($id = null) {
+		$this->set('userinfo', array('ID' => $this->Auth->user('ID')));
 		if (!$this->Tag->exists($id)) {
 			throw new NotFoundException(__('Invalid tag'));
 		}
@@ -325,7 +332,7 @@ public function result($id = null) {
 				$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
 			}
 		} else {
-			$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id));
+			$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id),'order'=>'Tag.ID');
 			$this->request->data = $this->Tag->find('first', $options);
 		}
 	}

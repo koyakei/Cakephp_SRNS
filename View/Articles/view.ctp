@@ -1,3 +1,36 @@
+<head>
+<meta charset="UTF-8">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() 
+    { 
+        $("#myTable").tablesorter(); 
+    } 
+); 
+$(function () {
+    $('input#search').quicksearch('table#myTable tbody tr', {
+    'delay':300,
+    'selector':'th',
+    'stripeRows':['odd','even'],
+    'loader':'span.loading',
+    'bind':'keyup click',
+    'show':function () {
+        this.style.color = '';
+    },
+    'hide': function () {
+        this.style.color = '#ccc';
+    },
+    'prepareQuery': function (val) {
+        return new RegExp(val, "i");
+    },
+    'testQuery': function (query, txt, _row) {
+        return query.test(txt);
+    }
+    });
+    });
+</script>
+</head>
 <div class="articles view">
 <h2><?php echo __('Article'); ?></h2>
 	<dl>
@@ -29,6 +62,8 @@
 	</dl>
 
 	<table cellpadding="0" cellspacing="0">
+	<table id="myTable" class="tablesorter">
+	<thead>
 	<tr>
 			<th><?php echo $this->Paginator->sort('ID'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
@@ -36,12 +71,19 @@
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
+			<th></th>
+			<?php foreach ($taghashes  as $hash): ?>
+			<th>quant</th>
+			<th><?php echo $hash['name']; ?></th>
+			<?php endforeach; ?>
 	</tr>
-	<?php debug($results);foreach ($results  as $result): ?>
+	</thead>
+	<tbody>
+	<?php foreach ($results as $result): ?>
 	<tr>
 		<td><?php echo h($result['Article']['ID']); ?>&nbsp;</td>
 		<td><?php echo h($result['Article']['name']); ?>&nbsp;</td>
-		<td><?php echo h($result['Article']['user_id']); ?>&nbsp;</td
+		<td><?php echo h($result['Article']['user_id']); ?>&nbsp;</td>
 		<td><?php echo h($result['Article']['created']); ?>&nbsp;</td>
 		<td><?php echo h($result['Article']['modified']); ?>&nbsp;</td>
 		<td class="actions">
@@ -94,6 +136,7 @@
 		<?php endforeach; ?>
 	</tr>
 <?php endforeach; ?>
+</tbody>
 	</table>
 		<p>
 	<?php
@@ -114,7 +157,6 @@
 	<?php
 		echo $this->Form->input('name');
 		//echo $this->Form->hidden('id', array('value'=>'$this->params['pass'][0]'));
-		debug($this->params['pass'][0]);
 	?>
 	</fieldset>
 	<?php echo $this->Form->end(__('Submit')); ?>
@@ -128,5 +170,6 @@
 		<li><?php echo $this->Form->postLink(__('Delete Article'), array('action' => 'delete', $article['Article']['ID']), null, __('Are you sure you want to delete # %s?', $article['Article']['ID'])); ?> </li>
 		<li><?php echo $this->Html->link(__('List Articles'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Article'), array('action' => 'add')); ?> </li>
+	<li><?php echo $this->Html->link(__('Tag search'), array('controller' => 'tags','action' => 'search')); ?> </li>
 	</ul>
 </div>

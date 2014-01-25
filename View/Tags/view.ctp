@@ -1,7 +1,5 @@
 <head>
-<meta charset="UTF-8">
-
-z
+<?php $this->Html->loadConfig('html5_tags'); ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
@@ -76,6 +74,14 @@ $(function () {
 			<th><?php echo $hash['name']; ?></th>
 			<?php endforeach; ?>
 	</tr>
+	<?php echo $this->Form->create('keyid'); ?>
+	<?php echo $this->Form->input('keyid', array( 
+	'type' => 'select', 
+	'multiple'=> false,
+	'options' => $keylist
+	//  'selected' => $selected  // 規定値は、valueを配列にしたもの
+	)); ?>
+	<?php echo $this->Form->end(__('')); ?>
 	<?php foreach ($results  as $result): ?>
 	<tr>
 		<td><?php echo h($result['Article']['ID']); ?>&nbsp;</td>
@@ -148,6 +154,12 @@ $(function () {
 	?>
 	</div>
 	<?php echo $this->Form->create('Article'); ?>
+	<?php echo $this->Form->input('keyid', array( 
+	'type' => 'select', 
+	'multiple'=> false,
+	'options' => $keylist
+	//  'selected' => $selected  // 規定値は、valueを配列にしたもの
+	)); ?>
 	<fieldset>
 		<legend><?php echo __('Reply'); ?></legend>
 	<?php
@@ -162,11 +174,15 @@ $(function () {
 
 </div>
 <div class="actions">
+<?php 
+
+?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Tag'), array('action' => 'edit', $tag['Tag']['ID'])); ?> </li>
 		<li><?php echo $this->Form->postLink(__('Delete Tag'), array('action' => 'delete', $tag['Tag']['ID']), null, __('Are you sure you want to delete # %s?', $tag['Tag']['ID'])); ?> </li>
 		<li><?php echo $this->Html->link(__('List Tags'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('Tag search'), array('action' => 'search')); ?> </li>
 	</ul>
 </div>

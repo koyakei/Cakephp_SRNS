@@ -1,8 +1,59 @@
+<?php echo $this->Html->css('cake.generic'); ?> 
+<?php
+$this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', null, array('block' => 'css'));
+$this->Html->script(
+	array('http://code.jquery.com/ui/1.9.1/jquery-ui.js',
+		'http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js'),
+	array('block' => 'script')
+);
+?>
+<?php $this->start('script'); ?>
+<script>
+	$(function() {
+		$("#PostFrom").datepicker({
+			defaultDate: "+1w",
+			changeMonth: false,
+			numberOfMonths: 2,
+			dateFormat: "yy-mm-dd",
+			showOtherMonths: true,
+			selectOtherMonths: true,
+			onClose: function(s) {
+				if (s) {
+					$("#PostTo").datepicker("option", "minDate", s).focus();
+				}
+			}
+		});
+		$("#PostTo").datepicker({
+			defaultDate: "+1w",
+			changeMonth: false,
+			numberOfMonths: 2,
+			dateFormat: "yy-mm-dd",
+			showOtherMonths: true,
+			selectOtherMonths: true,
+			onClose: function(s) {
+				$("#PostFrom").datepicker("option", "maxDate", s);
+			}
+		});
+	});
+</script>
+<?php $this->end(); ?>
+
+
+	<div class="actions">
+		<h3><?php echo __('Actions'); ?></h3>
+		<ul>
+			
+			<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
+		</ul>
+	</div>
+
+
 <div class="row-fluid">
     <div class="span9">
         <h2><?php echo $this->Html->link('SRNS', array('action' => 'index')); ?></h2>
 	<div class="span3">
 		<div class="well" style="margin-top:20px;">
+			<div class="rightcontainer">
 			<?php echo $this->Form->create('Tag', array('action' => 'search')); ?>
 			<!--<fieldset>
 				<legend>検索</legend>				
@@ -22,6 +73,7 @@
 			        </div>
 			    </div>
 			<?php echo $this->Form->end('検索'); ?>
+			</div>
 		</div>
 	</div>
         <table class="table">
@@ -64,43 +116,3 @@
 	?>
 	</div>
 </div>
-
-
-<?php
-$this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', null, array('block' => 'css'));
-$this->Html->script(
-	array('http://code.jquery.com/ui/1.9.1/jquery-ui.js',
-		'http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js'),
-	array('block' => 'script')
-);
-?>
-<?php $this->start('script'); ?>
-<script>
-	$(function() {
-		$("#PostFrom").datepicker({
-			defaultDate: "+1w",
-			changeMonth: false,
-			numberOfMonths: 2,
-			dateFormat: "yy-mm-dd",
-			showOtherMonths: true,
-			selectOtherMonths: true,
-			onClose: function(s) {
-				if (s) {
-					$("#PostTo").datepicker("option", "minDate", s).focus();
-				}
-			}
-		});
-		$("#PostTo").datepicker({
-			defaultDate: "+1w",
-			changeMonth: false,
-			numberOfMonths: 2,
-			dateFormat: "yy-mm-dd",
-			showOtherMonths: true,
-			selectOtherMonths: true,
-			onClose: function(s) {
-				$("#PostFrom").datepicker("option", "maxDate", s);
-			}
-		});
-	});
-</script>
-<?php $this->end(); ?>

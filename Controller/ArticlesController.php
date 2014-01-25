@@ -22,7 +22,7 @@ class ArticlesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Paginator','Common');
 
 /**
  * index method
@@ -41,7 +41,7 @@ class ArticlesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function view($id = null) {
+	public function view($id = null) {/*
 		if ($this->request->is('post')) {
 			$this->Article->create();
 			$this->userID = $this->Auth->user('ID');
@@ -79,42 +79,45 @@ class ArticlesController extends AppController {
 					}
 				}
 			}
+		}*/
+		if($this->request->data != null){
+			$this->Common->replyarticleAdd($this);
 		}
-	$this->Article->recursive = 3;
-
 		if (!$this->Article->exists($id)) {
 			throw new NotFoundException(__('Invalid article'));
 		}
-	$options = array('conditions' => array('Article.' . $this->Article->primaryKey => $id));
-	$this->Article->read(null,$id);
-	$targetID = $id;
-	$trikeyID = tagConst()['replyID'];
-	$this->set('article', $this->Article->find('first', $options));
-	$this->Paginator->settings = array(
-		'conditions'=> array(
-		        	"Link.LFrom = $targetID"
-	        	 ),
-		'fields' => array('Article.*', 'Link.*'),
-		'joins'
-		 => array(
-		array(
-                     'table' => 'Link',
-                    //'alias' => 'Link',
-                    'type' => 'INNER',
-                    'conditions' => array("Link.LTo = Article.ID")
-                ),
-		array(
-                    'table' => 'Link',
-                    'alias' => 'taglink',
-                    'type' => 'INNER',
-                    'conditions' => array(
-			array("Link.ID = taglink.LTo"),
-			array("$trikeyID = taglink.LFrom")
+		$options = array('conditions' => array('Article.' . $this->Article->primaryKey => $id));
+		$this->Article->read(null,$id);
+		$this->set('idre', $id);
+		$this->set('article', $this->Article->find('first', $options));
+		$targetID = $id;
+		$this->Common->trireplyfinder($this);/*
+		$trikeyID = tagConst()['replyID'];
+		$this->Paginator->settings = array(
+			'conditions'=> array(
+			        	"Link.LFrom = $targetID"
+		        	 ),
+			'fields' => array('Article.*', 'Link.*'),
+			'joins'
+			 => array(
+				array(
+		                     'table' => 'Link',
+		                    //'alias' => 'Link',
+		                    'type' => 'INNER',
+		                    'conditions' => array("Link.LTo = Article.ID")
+		                ),
+				array(
+		                    'table' => 'Link',
+		                    'alias' => 'taglink',
+		                    'type' => 'INNER',
+		                    'conditions' => array(
+					array("Link.ID = taglink.LTo"),
+					array("$trikeyID = taglink.LFrom")
+					)
+		                ),
 			)
-                ),
-		)
-	);
-	$this->set('results',$this->Paginator->paginate());
+		);
+	$this->set('results',$this->Paginator->paginate());*/
 	}
 
 /**

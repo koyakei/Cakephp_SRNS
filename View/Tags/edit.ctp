@@ -11,6 +11,8 @@
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <div class="actions">
+<?php echo $this->element('userinfo',$userinfo); ?>
+<?php //echo $userinfo['ID']; ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 

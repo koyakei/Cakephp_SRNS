@@ -9,7 +9,7 @@ App::uses('User', 'Model');
  */
 class Tag extends AppModel {
 public $uses = array('Article','Link','User','Tag');
-	public $order = array('Post.id DESC');
+//	public $order = array('Article.id DESC');
 	public $actsAs = array('Search.Searchable');
 	public $filterArgs = array(
 	        'word' => array(

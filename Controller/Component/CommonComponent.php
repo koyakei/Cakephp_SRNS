@@ -48,20 +48,19 @@ class CommonComponent extends Component {
 		}
 	}
 
-	public function triarticleAdd(&$that = null) {
+	public function triarticleAdd(&$that = null,$model,$userID) {
 		if ($that->keyid == null){
 			$this->Session->setFlash(__('no that->keyid'));
 			}else{
 			if ($that->request->params['pass'][0] != null) {
-				$Article = new Article();
+				$Article = new $model();
 				$Article->create();
-				$that->userID = $that->Auth->user('ID');
 				if ($Article->save($that->request->data)) {
 					$that->last_id = $Article->getLastInsertID();
 					//debug($Article->getLastInsertID());
 					$that->request->data = null;
 					$that->request->data['Link'] = array(
-						'user_id' => 1,
+						'user_id' => $userID,
 						'LFrom' => $that->request->params['pass'][0],//2138
 						'LTo' => $that->last_id,
 						'quant' => 1,
@@ -74,7 +73,7 @@ class CommonComponent extends Component {
 					$that->last_id = $Link->getLastInsertID();
 					$that->request->data = null;
 					$that->request->data['Link'] = array(
-						'user_id' => 1,
+						'user_id' => $userID,
 						'LFrom' => $that->keyid,//
 						'LTo' => $that->last_id,
 						'quant' => 1,
@@ -157,20 +156,37 @@ class CommonComponent extends Component {
 	public function trifinderbyid(&$that = null) {
 		$id = $that->request['pass'][0];
 		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Article","Article.ID",$id);
-		$that->parentres = $that->returntrybasic;
-		$that->k = 0;
-		$that->j = 0;
+		$that->articleparentres = $that->returntrybasic;
 		$that->i = 0;
 		$that->taghash = array();
 		$trikeyID = tagConst()['searchID'];
 		//$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
-		foreach ($that->parentres as $result){
+		foreach ($that->articleparentres as $result){
 			$res = $result['Article']['ID'];
-			$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Tag",$res,"Tag.ID");
+			$this->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$res,"Tag.ID");
 			$that->taghashgen = $that->returntrybasic;
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];
 				$that->parentres[$that->i]['subtag'][$that->subtagID] = $tag;
+				if ($that->taghash[$that->subtagID] == null) {
+					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
+				}
+			}
+			$that->i++;
+		}
+		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Tag","Tag.ID",$id);
+		$that->tagparentres = $that->returntrybasic;
+		$that->i = 0;
+		$that->taghash = array();
+		$trikeyID = tagConst()['searchID'];
+		//$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+		foreach ($that->tagparentres as $result){
+			//$res = $result['Tag']['ID'];
+			$this->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$result['Tag']['ID'],"Tag.ID");
+			$that->taghashgen = $that->returntrybasic;
+			foreach ($that->tagtaghashgen as $tag){
+				$that->subtagID = $tag['Tag']['ID'];
+				$that->tagparentres[$that->i]['subtag'][$that->subtagID] = $tag;
 				if ($that->taghash[$that->subtagID] == null) {
 					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
 				}
@@ -182,7 +198,7 @@ class CommonComponent extends Component {
 		$that->set( 'keylist', $that->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
 		$that->set( 'ulist', $that->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		$that->set('taghashes', $that->taghash);
-		$that->set('results', $that->parentres);
-
+		$that->set('articleresults', $that->articleparentres);
+		$that->set('tagresults', $that->tagparentres);
 	}
 }

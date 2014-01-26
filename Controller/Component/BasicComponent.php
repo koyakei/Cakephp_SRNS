@@ -36,7 +36,7 @@ class BasicComponent extends Component {
 		$that->returntrybasic = $that->Paginator->paginate($modelSe);
 		return $that->returntrybasic;
 	}
-	
+
 	public function tribasicfind(&$that = null,$trykeyname,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
 		$trikeyID = tagConst()[$trykeyname];
@@ -106,4 +106,56 @@ class BasicComponent extends Component {
 		$that->returntrybasic = $that->$modelSe->find('all',$option);
 		return $that->returntrybasic;
 	}
-}
+	public function tribasicfixverifybyid(&$that = null,$trikeyID,$LinkLTo) {
+		$that->loadModel('Link');
+		//$trikeyID = tagConst()[$trykeyname];
+		if($trikeyID == null) {
+			$trikeyID = tagConst()['replyID'];
+		}
+		$option = array(
+			'order' => '',
+	        'conditions' => array('Link.LTo' => $LinkLTo,'Link.LFrom' => $LinkLTo),
+	        'fields' => array('Link.ID'),
+			'order' => 'Link.ID',
+			'joins' => array(
+				array(
+                    'table' => 'Link',
+                    'alias' => 'taglink',
+                    'type' => 'INNER',
+                    'conditions' => array(
+						array("Link.ID = taglink.LTo"),
+						array("$trikeyID = taglink.LFrom")
+			        )
+				)
+			)
+		);
+
+		$that->returntribasic = $that->Link->find('first',$option);
+		return $that->returntribasic;
+	}
+	public function trilinkAdd(&$that,$FromID,$ToID,$keyID) {
+			$that->loadModel('Link');
+			$that->request->data['Link'] = array(
+				'user_id' => $that->request->data['tag']['userid'],
+				'LFrom' => $FromID,
+				'LTo' => $ToID,//リンク先記事or タグ
+				'quant' => 1,
+				'created' => date("Y-m-d H:i:s"),
+				'modified' => date("Y-m-d H:i:s"),
+			);
+			$that->loadModel('Link');
+			$that->Link->create();
+			$that->Link->save($that->request->data);
+			$that->last_id = $that->Link->getLastInsertID();
+			$that->request->data['Link'] = array(
+				'user_id' => $that->request->data['tag']['userid'],
+				'LFrom' => $keyID,//
+				'LTo' => $that->last_id,
+				'quant' => 1,
+				'created' => date("Y-m-d H:i:s"),
+				'modified' => date("Y-m-d H:i:s"),
+			);
+			$that->Link->create();
+			$that->Link->save($that->request->data);
+		}
+	}

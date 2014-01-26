@@ -132,6 +132,8 @@ public function tagdel($id = null) {
 }
 
 public function tagRadd($id = null) {
+
+	$searchID = tagConst()['searchID'];
 	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 	//$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
 	$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
@@ -144,7 +146,8 @@ public function tagRadd($id = null) {
 			$this->loadModel('Tag');
 			$tagID = $this->Tag->find('first',
 				array(
-			        'conditions' => array('name' => $this->request->data['Tag']['name'],'user_id' => $this->request->data['Tag']['user_id']),
+			        'conditions' => array('name' => $this->request->data['Tag']['name'],
+			        		'user_id' => $this->request->data['Tag']['user_id']),
 			        'fields' => array('Tag.ID'),
 				'order' => 'Tag.ID'
 				)
@@ -153,87 +156,20 @@ public function tagRadd($id = null) {
 			if($tagID == null){
 				$this->Tag->create();
 				$this->Tag->save($this->request->data);
-				$this->last_id = $this->Tag->getLastInsertID();
-				$this->request->data['Link'] = array(
-					'user_id' => $this->request->data['tag']['userid'],
-					'LFrom' => $tagID['Tag']['ID'],//
-					//'LTo' => $this->last_id,
-					'quant' => 1,
-					'created' => date("Y-m-d H:i:s"),
-					'modified' => date("Y-m-d H:i:s"),
-				);
-				$this->loadModel('Link');
-
-				$this->Link->create();
-				$this->Link->save($this->request->data);
-				$this->request->data['Link'] = array(
-					'user_id' => $this->request->data['tag']['userid'],
-					'LFrom' => 21,//
-					'LTo' => $this->last_id,
-					'quant' => 1,
-					'created' => date("Y-m-d H:i:s"),
-					'modified' => date("Y-m-d H:i:s"),
-				);
-				$this->Link->create();
-				$this->Link->save($this->request->data);
+				$last_id = $this->Tag->getLastInsertID();
+				$this->Basic->trilinkAdd($this,$last_id,$LinkLTo,tagConst()['searchID']);
 				$this->Session->setFlash(__('タグがなかった.'));
 
 				}else {
 			$this->loadModel('Link');
 				$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 				$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
-				$trikeyID = 2146;
-			/*	$this->Basic->tribasicfiderbyid($this, 2146,"Tag","Tag.ID",$LinkLTo);
-				$LE = $that->returntrybasic;*/
-				$LE = $this->Link->find('first',
-					array(
-				        'conditions' => array('Link.LTo' => $LinkLTo,'Link.LFrom' => $LinkLTo),
-				        'fields' => array('Link.ID'),
-						'order' => 'Link.ID',
-						'joins' => array(
-							/*array(
-			                    'table' => 'Link',
-			                    'type' => 'INNER',
-			                    'conditions' => array($LinkLTo = Link.LFrom)
-							),*/
-							array(
-			                    'table' => 'Link',
-			                    'alias' => 'taglink',
-			                    'type' => 'INNER',
-			                    'conditions' => array(
-									array("Link.ID = taglink.LTo"),
-									array("$trikeyID = taglink.LFrom")
-						        )
-							)
-						)
-					)
-				);
+				$trikeyID = tagConst()['searchID'];
+				$this->Basic->tribasicfixverifybyid($this,$trikeyID,$LinkLTo);
+				$LE = $this->returntribasic;
 				if(null == $LE){
-					$this->loadModel('Link');
-					$this->Link->create();
 					$tagIDd = $tagID['Tag']['ID'];
-					$this->request->data['Link'] = array(
-						'user_id' => $this->request->data['tag']['userid'],
-						'LFrom' => $tagIDd,//
-						'LTo' => $LinkLTo,
-						'quant' => 1,
-						'created' => date("Y-m-d H:i:s"),
-						'modified' => date("Y-m-d H:i:s"),
-					);
-					$this->Link->save($this->request->data);
-					$searchID = tagConst()['searchID'];
-					debug($searchID);
-					$this->last_id = $this->Link->getLastInsertID();
-					$this->request->data['Link'] = array(
-						'user_id' => $this->request->data['tag']['userid'],
-						'LFrom' => 2138,//
-						'LTo' => $this->last_id,
-						'quant' => 1,
-						'created' => date("Y-m-d H:i:s"),
-						'modified' => date("Y-m-d H:i:s"),
-					);
-					$this->Link->create();
-					$this->Link->save($this->request->data);
+					$this->Basic->trilinkAdd($this,$tagIDd,$LinkLTo,$trikeyID);
 					$this->Session->setFlash(__('タグ既存リンク追加'));
 
 				}else{
@@ -246,20 +182,19 @@ public function tagRadd($id = null) {
 	$this->redirect($this->referer());
 }
 
-public function result($id = null) {
-	$this->Common->trifinder($this);
-
-	$this->set('idre', $id);
+	public function result($id = null) {
+		$this->Common->trifinder($this);
+		$this->set('idre', $id);
 	}
 
 
 	public function reply($articleID) {
-	if (!$this->Tag->exists($tagID)) {
-		throw new NotFoundException(__('関連タグが存在しない'));
-	}
-	$sql = "SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` =$tagID AND `tagLink`.`LFrom` =2138  AND `article` . `ID` = `LINK` . `LTo`";
-	$sqlres = $this->Tag->query($sql);
-	$this->set('results', $sqlres);
+		if (!$this->Tag->exists($tagID)) {
+			throw new NotFoundException(__('関連タグが存在しない'));
+		}
+		$sql = "SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` =$tagID AND `tagLink`.`LFrom` =2138  AND `article` . `ID` = `LINK` . `LTo`";
+		$sqlres = $this->Tag->query($sql);
+		$this->set('results', $sqlres);
 	}
 
 	public function replytagadd($id = null) {
@@ -280,7 +215,11 @@ public function result($id = null) {
 	public function view($id = null) {
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
-			$this->Common->triarticleAdd($this);
+			$this->Common->triarticleAdd($this,'Article',1);
+		}
+		if($this->request->data['Tag']['name'] != null){
+			$this->keyid = $this->request->data['Tag']['keyid'];
+			$this->Common->triarticleAdd($this,"Tag",1);
 		}
 
 		$this->set('idre', $id);

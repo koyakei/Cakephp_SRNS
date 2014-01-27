@@ -242,12 +242,15 @@ public function tagRadd($id = null) {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Tag->create();
-			$this->request->data['Tag']['user_id'] = $this->Auth->user('ID');
+			$this->request->data['Tag'] += array(
+					'user_id' => $this->Auth->user('ID'),
+					'created' => date("Y-m-d H:i:s"),
+					'modified' => date("Y-m-d H:i:s"),
+				);
 			if ($this->Tag->save($this->request->data)) {//セーブすることに成功したら、
 				$this->Session->setFlash(__('success.',$this->request->data));
-				return $this->redirect(array('action' => 'index'));
+				//return $this->redirect(array('action' => 'search'));
 			} else {
-				print_r($this->request->data);
 				$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
 
 			}
@@ -267,6 +270,7 @@ public function tagRadd($id = null) {
 			throw new NotFoundException(__('Invalid tag'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
+			$this->Tag->id = $id;
 			if ($this->Tag->save($this->request->data)) {
 				$this->Session->setFlash(__('The tag has been saved.'));
 				return $this->redirect(array('action' => 'index'));

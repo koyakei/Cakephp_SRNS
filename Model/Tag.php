@@ -52,26 +52,37 @@ public $uses = array('Article','Link','User','Tag');
  *
  * @var array
  */
+ function checkUnique($data, $fields) {
+    if (!is_array($fields)) {
+        $fields = array($fields);
+    }
+    foreach($fields as $key) {
+        $tmp[$key] = $this->data[$this->name][$key];
+    }
+    return $this->isUnique($tmp, false);
+ }
 	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'rule' => array('notEmpty')
 			),
+			'unique' => array(
+				'rule' => array('checkUnique', array('name', 'user_id'),
+				'message' => 'A contact with that name already exists for that
+institution'
+				)
+			)
 		),
-		'owner_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+		'user_id' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty')
 			),
+			'unique' => array(
+				'rule' => array('checkUnique', array('name', 'user_id'),
+				'message' => 'A contact with that name already exists for that
+institution'
+				)
+			)
 		),
 	);
 
@@ -102,4 +113,5 @@ public $uses = array('Article','Link','User','Tag');
 		//'type' => 'inner'
         )
     );
+
 }

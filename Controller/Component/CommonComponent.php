@@ -57,7 +57,6 @@ class CommonComponent extends Component {
 				$Article->create();
 				if ($Article->save($that->request->data)) {
 					$that->last_id = $Article->getLastInsertID();
-					//debug($Article->getLastInsertID());
 					$that->request->data = null;
 					$that->request->data['Link'] = array(
 						'user_id' => $userID,
@@ -87,6 +86,59 @@ class CommonComponent extends Component {
 						} else {
 							$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
 						}
+					}
+				}
+			}
+		}
+	}
+
+	public function tritagAdd(&$that = null,$model,$userID) {
+
+		$tagID = $that->$model->find('first',
+			array(
+				'conditions' => array('name' => $that->request->data['Tag']['name']),
+				'user_id' => $userID,
+				'fields' => array('Tag.ID'),
+				'order' => 'Tag.ID'
+			)
+		);
+		print_r($tagID);
+		if($tagID['Tag']['ID'] == null){
+			$Article = new $model();
+			$Article->create();
+			$Article->save($that->request->data);
+			$that->last_id = $Article->getLastInsertID();
+		}else{
+			$that->last_id = $tagID['Tag']['ID'];
+			if ($that->request->params['pass'][0] != null) {
+				$that->request->data = null;
+				$that->request->data['Link'] = array(
+						'user_id' => $userID,
+						'LFrom' => $that->request->params['pass'][0],//2138
+						'LTo' => $that->last_id,
+						'quant' => 1,
+						'created' => date("Y-m-d H:i:s"),
+						'modified' => date("Y-m-d H:i:s"),
+				);
+				$Link = new Link();
+				$Link->create();
+				if ($Link->save($that->request->data)) {
+					$that->last_id = $Link->getLastInsertID();
+					$that->request->data = null;
+					$that->request->data['Link'] = array(
+							'user_id' => $userID,
+							'LFrom' => $that->keyid,//
+							'LTo' => $that->last_id,
+							'quant' => 1,
+							'created' => date("Y-m-d H:i:s"),
+							'modified' => date("Y-m-d H:i:s"),
+					);
+					$Link->create();
+					if ($Link->save($that->request->data)) {
+						$that->Session->setFlash(__('The article has been saved.'));
+
+					} else {
+						$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
 					}
 				}
 			}

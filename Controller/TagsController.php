@@ -132,17 +132,13 @@ public function tagdel($id = null) {
 }
 
 public function tagRadd($id = null) {
-
 	$searchID = tagConst()['searchID'];
 	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 	//$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
 	$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
 	$this->request->data['Link']['user_id'] = $this->request->data['tag']['userid'];
 	$LinkLTo=$this->request->data['Link']['LTo'];
-	debug($LinkLTo);
-	//if ($this->request->is('post')) {
 		if (!empty($this->request->data['Tag']['name'])) {
-			//$this->request->data['Tag']['user_id'] = $this->Auth->user('ID');
 			$this->loadModel('Tag');
 			$tagID = $this->Tag->find('first',
 				array(
@@ -152,14 +148,12 @@ public function tagRadd($id = null) {
 				'order' => 'Tag.ID'
 				)
 			);
-			debug($tagID);
 			if($tagID == null){
 				$this->Tag->create();
 				$this->Tag->save($this->request->data);
 				$last_id = $this->Tag->getLastInsertID();
 				$this->Basic->trilinkAdd($this,$last_id,$LinkLTo,tagConst()['searchID']);
 				$this->Session->setFlash(__('タグがなかった.'));
-
 				}else {
 			$this->loadModel('Link');
 				$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
@@ -219,7 +213,7 @@ public function tagRadd($id = null) {
 		}
 		if($this->request->data['Tag']['name'] != null){
 			$this->keyid = $this->request->data['Tag']['keyid'];
-			$this->Common->triarticleAdd($this,"Tag",1);
+			$this->Common->tritagAdd($this,"Tag",1);
 		}
 
 		$this->set('idre', $id);

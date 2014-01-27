@@ -20,7 +20,7 @@
 							//  'selected' => $selected  // �K��l�́Avalue��z��ɂ�������
 							)); ?>
 							<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
-							<?php echo $this->Form->hidden('Link.LTo', array('value'=>$result['Article']['ID'])); ?>
+							<?php echo $this->Form->hidden('Link.LTo', array('value'=>$result[$firstModel]['ID'])); ?>
 						<?php echo $this->Form->end('tag'); ?>
 						<?php foreach ($taghashes as $key => $hash): ?>
 						<?php $b = 0; ?>

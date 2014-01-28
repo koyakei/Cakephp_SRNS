@@ -13,5 +13,6 @@
 	<ul>
 
 		<li><?php echo $this->Html->link(__('List Tags'), array('action' => 'index')); ?></li>
+	<li><?php echo $this->Html->link(__('Tag search'), array('action' => 'search')); ?> </li>
 	</ul>
 </div>

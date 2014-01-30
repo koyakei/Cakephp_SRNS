@@ -8,7 +8,7 @@ App::uses('User', 'Model');
  * @property Owner $Owner
  */
 class Tag extends AppModel {
-public $uses = array('Article','Link','User','Tag');
+	public $uses = array('Article','Link','User','Tag');
 //	public $order = array('Article.id DESC');
 	public $actsAs = array('Search.Searchable');
 	public $filterArgs = array(

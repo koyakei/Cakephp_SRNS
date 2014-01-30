@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+
 /**
  * Links Controller
  *
@@ -7,13 +8,21 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class LinksController extends AppController {
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->Auth->allow('logout');
+		$this->Auth->authenticate = array(
+				'Basic' => array('user' => 'admin'),
+				//'Form' => array('user' => 'Member')
+		);
+	}
 
 /**
  * Components
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Search.Prg','Paginator','Common','Basic');
 
 /**
  * index method
@@ -55,6 +64,16 @@ class LinksController extends AppController {
 				$this->Session->setFlash(__('The link could not be saved. Please, try again.'));
 			}
 		}
+	}
+
+	public function linkdel($id = NULL){
+		$this->request->onlyAllow('post', 'linkdel');
+		if ($this->Link->delete()) {
+			$this->Session->setFlash(__('The link has been deleted.'));
+		} else {
+			$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
+		}
+		$this->redirect($this->referer());
 	}
 
 /**
@@ -99,5 +118,5 @@ class LinksController extends AppController {
 		} else {
 			$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		return $this->redirect($this->referer());
 	}}

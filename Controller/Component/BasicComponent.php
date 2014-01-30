@@ -134,28 +134,120 @@ class BasicComponent extends Component {
 		return $that->returntribasic;
 	}
 	public function trilinkAdd(&$that,$FromID,$ToID,$keyID) {
-			$that->loadModel('Link');
-			$that->request->data['Link'] = array(
-				'user_id' => $that->request->data['tag']['userid'],
-				'LFrom' => $FromID,
-				'LTo' => $ToID,//リンク先記事or タグ
-				'quant' => 1,
-				'created' => date("Y-m-d H:i:s"),
-				'modified' => date("Y-m-d H:i:s"),
-			);
-			$that->loadModel('Link');
-			$that->Link->create();
-			$that->Link->save($that->request->data);
-			$that->last_id = $that->Link->getLastInsertID();
-			$that->request->data['Link'] = array(
-				'user_id' => $that->request->data['tag']['userid'],
-				'LFrom' => $keyID,//
-				'LTo' => $that->last_id,
-				'quant' => 1,
-				'created' => date("Y-m-d H:i:s"),
-				'modified' => date("Y-m-d H:i:s"),
-			);
-			$that->Link->create();
-			$that->Link->save($that->request->data);
-		}
+		$that->loadModel('Link');
+		$that->request->data['Link'] = array(
+			'user_id' => $that->request->data['tag']['userid'],
+			'LFrom' => $FromID,
+			'LTo' => $ToID,//リンク先記事or タグ
+			'quant' => 1,
+			'created' => date("Y-m-d H:i:s"),
+			'modified' => date("Y-m-d H:i:s"),
+		);
+		$that->loadModel('Link');
+		$that->Link->create();
+		$that->Link->save($that->request->data);
+		$that->last_id = $that->Link->getLastInsertID();
+		$that->request->data['Link'] = array(
+			'user_id' => $that->request->data['tag']['userid'],
+			'LFrom' => $keyID,//
+			'LTo' => $that->last_id,
+			'quant' => 1,
+			'created' => date("Y-m-d H:i:s"),
+			'modified' => date("Y-m-d H:i:s"),
+		);
+		$that->Link->create();
+		$that->Link->save($that->request->data);
 	}
+
+	public function trisinglefind(&$that = null,$trikeyID,$modelSe,$Ltotarget) {
+		$that->loadModel($modelSe);
+		if($trikeyID == null) {
+			$trikeyID = tagConst()['replyID'];
+		}
+		$option = array(
+				'conditions'=> array(
+						"Link.LTo = $Ltotarget"
+				),
+				'fields' => array('Link.*',$modelSe .'.*'
+				),
+				'joins'
+				=> array(
+						array(
+							'table' => 'Link',
+							'type' => 'INNER',
+							'conditions'=> array(
+								"Link.LTo = $modelSe.ID"
+							)
+						),
+						array(
+								'table' => 'Link',
+								'alias' => 'taglink',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Link.ID = taglink.LTo"),
+										array($trikeyID . " = taglink.LFrom")
+								)
+						),
+				),
+				'order' => ''
+		);
+		$that->returntrybasic = $that->$modelSe->find('all',$option);
+		return $that->returntrybasic;
+	}
+
+	public function SecondDem(&$that,$model,$order,$keyID){
+		debug($keyID);
+		$that->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$id,$id);
+		$that->taghashgen = $that->returntrybasic;
+		debug($that->returntrybasic);
+			foreach ($that->taghashgen as $tag){
+				$that->subtagID = $id;
+				$that->taghashgen[$that->i]['subtag'][$that->subtagID] = $tag;
+				if ($that->taghash[$that->subtagID] == null) {
+					$that->taghash[$that->subtagID] = array( 'ID' => $id, 'name' =>  $this->taghashgen[0]['Tag']['name']);
+				}
+			}
+			$that->i++;
+
+		debug($that->returntrybasic);
+		return $that->taghash;
+		return $that->returntrybasic;
+	}
+	public function tribasicfiderbyida(&$that = null) {
+		$modelSe=$this->modelSe;
+		$that->loadModel($modelSe);
+		//$trikeyID = tagConst()[$trykeyname];
+		if($trikeyID == null) {
+			$trikeyID = tagConst()['replyID'];
+		}
+		$option = array(
+				'conditions'=> array(
+						"Link.LTo = $Ltotarget"
+				),
+				'fields' => array('Link.*',$modelSe .'.*'
+				),
+				'joins'
+				=> array(
+						array(
+								'table' => 'Link',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("$id = Link.LFrom")
+								)
+						),
+						array(
+								'table' => 'Link',
+								'alias' => 'taglink',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Link.ID = taglink.LTo"),
+										array($trikeyID . " = taglink.LFrom")
+								)
+						),
+				),
+				'order' => ''
+		);
+		$that->returntrybasic = $that->$modelSe->find('all',$option);
+		return $that->returntrybasic;
+	}
+}

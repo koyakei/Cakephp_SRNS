@@ -212,14 +212,13 @@ class CommonComponent extends Component {
 		$that->i = 0;
 		$that->taghash = array();
 		$trikeyID = tagConst()['searchID'];
-		//$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		foreach ($that->articleparentres as $result){
 			$res = $result['Article']['ID'];
 			$this->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$res,"Tag.ID");
 			$that->taghashgen = $that->returntrybasic;
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];
-				$that->parentres[$that->i]['subtag'][$that->subtagID] = $tag;
+				$that->articleparentres[$that->i]['subtag'][$that->subtagID] = $tag;
 				if ($that->taghash[$that->subtagID] == null) {
 					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
 				}
@@ -228,12 +227,9 @@ class CommonComponent extends Component {
 		}
 		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Tag","Tag.ID",$id);
 		$that->tagparentres = $that->returntrybasic;
-		$that->i = 0;
-		$that->taghash = array();
 		$trikeyID = tagConst()['searchID'];
 		//$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		foreach ($that->tagparentres as $result){
-			//$res = $result['Tag']['ID'];
 			$this->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$result['Tag']['ID'],"Tag.ID");
 			$that->taghashgen = $that->returntrybasic;
 			foreach ($that->tagtaghashgen as $tag){

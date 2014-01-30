@@ -63,6 +63,7 @@ $(function () {
 
 
 </div>
+
 <div class="actions">
 <?php echo $this->Form->create('keyid'); ?>
 			<?php echo $this->Form->input('keyid', array(
@@ -82,12 +83,8 @@ $(function () {
 	</ul>
 </div>
 <table id="myTable" cellpadding="0" cellspacing="0">
-
 		<?php echo $this->element('tablehead', Array('taghashes'=>$taghashes)); ?>
 		<tbody>
-
-
-
 		<?php echo $this->element('tablebody', Array('results' => $articleresults,'taghashes'=>$taghashes,'firstModel' => 'Article')); ?>
 		<?php echo $this->element('tablebody', Array('results' => $tagresults,'taghashes'=>$taghashes,'firstModel' => 'Tag'	)); ?>
 		</tbody>

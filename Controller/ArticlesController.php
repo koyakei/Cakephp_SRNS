@@ -1,5 +1,9 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('Tag', 'Model');
+App::uses('User', 'Model');
+App::uses('Link', 'Model');
+App::uses('Article', 'Model');
 /**
  * Articles Controller
  *
@@ -22,7 +26,7 @@ class ArticlesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator','Common');
+	public $components = array('Paginator','Common','Basic');
 
 /**
  * index method
@@ -41,83 +45,72 @@ class ArticlesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function view($id = null) {/*
-		if ($this->request->is('post')) {
-			$this->Article->create();
-			$this->userID = $this->Auth->user('ID');
-			$this->request->data['article']['user_id'] = $this->userID;
-			if ($this->Article->save($this->request->data)) {
-				$this->last_id = $this->Article->getLastInsertID();
-				$this->request->data = null;
-				$this->request->data['Link'] = array(
-					'user_id' => 1,
-					'LFrom' => $id,//2138
-					'LTo' => $this->last_id,
-					'quant' => 1,
-					'created' => date("Y-m-d H:i:s"),
-					'modified' => date("Y-m-d H:i:s"),
-				);
-				$this->loadModel('Link');
-				$this->Link->create();
-				if ($this->Link->save($this->request->data)) {
-				$this->last_id = $this->Link->getLastInsertID();
-				$this->request->data = null;
-				$this->request->data['Link'] = array(
-					'user_id' => 1,
-					'LFrom' => 2138,//
-					'LTo' => $this->last_id,
-					'quant' => 1,
-					'created' => date("Y-m-d H:i:s"),
-					'modified' => date("Y-m-d H:i:s"),
-				);
-				$this->Link->create();
-					if ($this->Link->save($this->request->data)) {
-						$this->Session->setFlash(__('The article has been saved.'));
-					
-					} else {
-						$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
-					}
-				}
-			}
-		}*/
-		if($this->request->data != null){
-			$this->Common->replyarticleAdd($this);
+	public function view($id = null) {
+		if($this->request->data['Article']['name'] != null){
+			$this->keyid = $this->request->data['Article']['keyid'];
+			$this->Common->triarticleAdd($this,'Article',1);
 		}
+		if($this->request->data['Tag']['name'] != null){
+			$this->keyid = $this->request->data['Tag']['keyid'];
+			$this->Common->tritagAdd($this,"Tag",1);
+		}
+
+		$this->set('idre', $id);
 		if (!$this->Article->exists($id)) {
-			throw new NotFoundException(__('Invalid article'));
+			throw new NotFoundException(__('Invalid tag'));
 		}
-		$options = array('conditions' => array('Article.' . $this->Article->primaryKey => $id));
+		$this->taghashgen = $this->Article->find('first',array('conditions' => array('Article.' . $this->Article->primaryKey => $id)));
 		$this->Article->read(null,$id);
 		$this->set('idre', $id);
-		$this->set('article', $this->Article->find('first', $options));
-		$targetID = $id;
-		$this->Common->trireplyfinder($this);/*
-		$trikeyID = tagConst()['replyID'];
-		$this->Paginator->settings = array(
-			'conditions'=> array(
-			        	"Link.LFrom = $targetID"
-		        	 ),
-			'fields' => array('Article.*', 'Link.*'),
-			'joins'
-			 => array(
-				array(
-		                     'table' => 'Link',
-		                    //'alias' => 'Link',
-		                    'type' => 'INNER',
-		                    'conditions' => array("Link.LTo = Article.ID")
-		                ),
-				array(
-		                    'table' => 'Link',
-		                    'alias' => 'taglink',
-		                    'type' => 'INNER',
-		                    'conditions' => array(
-					array("Link.ID = taglink.LTo"),
-					array("$trikeyID = taglink.LFrom")
-					)
-		                ),
-			)
+		$this->i = 0;
+		$trikeyID = tagConst()['seartch'];
+		$this->set('article',$this->taghashgen);
+		//$this->Basic->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
+		$modelSe = "Tag";
+		$Ltotarget = $id;
+		$this->loadModel($modelSe);
+		if($trikeyID == null) {
+			$trikeyID = tagConst()['replyID'];
+		}
+		$option = array(
+				'conditions'=> array(
+						"Link.LTo = $Ltotarget"
+				),
+				'fields' => array('Link.*',$modelSe .'.*'
+				),
+				'joins'
+				=> array(
+						array(
+								'table' => 'link',
+								'alias' => 'Link',
+								'type' => 'INNER',
+								'conditions'=> array(
+										"Link.LFrom = $modelSe.ID"
+								)
+						),
+						array(
+								'table' => 'link',
+								'alias' => 'taglink',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Link.ID = taglink.LTo"),
+										array($trikeyID . " = taglink.LFrom")
+								)
+						),
+				),
+				'order' => ''
 		);
-	$this->set('results',$this->Paginator->paginate());*/
+		$this->returntrybasic = $this->$modelSe->find('all',$option);
+		debug($this->returntrybasic);
+		$this->set('headresults', $this->returntrybasic);
+		$this->set('headtaghashes', $this->taghash);
+		$targetID = $id;
+		$this->Common->trifinderbyid($this);
+		$this->loadModel('User');
+		$this->loadModel('Key');
+		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
+		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+
 	}
 
 /**

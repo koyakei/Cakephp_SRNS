@@ -63,46 +63,10 @@ class ArticlesController extends AppController {
 		$this->Article->read(null,$id);
 		$this->set('idre', $id);
 		$this->i = 0;
-		$trikeyID = tagConst()['seartch'];
+		$trikeyID = tagConst()['searchID'];
 		$this->set('article',$this->taghashgen);
-		//$this->Basic->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
-		$modelSe = "Tag";
-		$Ltotarget = $id;
-		$this->loadModel($modelSe);
-		if($trikeyID == null) {
-			$trikeyID = tagConst()['replyID'];
-		}
-		$option = array(
-				'conditions'=> array(
-						"Link.LTo = $Ltotarget"
-				),
-				'fields' => array('Link.*',$modelSe .'.*'
-				),
-				'joins'
-				=> array(
-						array(
-								'table' => 'link',
-								'alias' => 'Link',
-								'type' => 'INNER',
-								'conditions'=> array(
-										"Link.LFrom = $modelSe.ID"
-								)
-						),
-						array(
-								'table' => 'link',
-								'alias' => 'taglink',
-								'type' => 'INNER',
-								'conditions' => array(
-										array("Link.ID = taglink.LTo"),
-										array($trikeyID . " = taglink.LFrom")
-								)
-						),
-				),
-				'order' => ''
-		);
-		$this->returntrybasic = $this->$modelSe->find('all',$option);
-		debug($this->returntrybasic);
-		$this->set('headresults', $this->returntrybasic);
+		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
+		$this->set('headresults', $this->returntribasic);
 		$this->set('headtaghashes', $this->taghash);
 		$targetID = $id;
 		$this->Common->trifinderbyid($this);

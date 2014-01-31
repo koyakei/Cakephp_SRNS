@@ -70,9 +70,9 @@ class BasicComponent extends Component {
 		$that->returntrybasic = $that->Tag->find('all',$option);
 		return $that->returntrybasic;
 	}
+
 	public function tribasicfiderbyid(&$that = null,$trikeyID,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
-		//$trikeyID = tagConst()[$trykeyname];
 		if($trikeyID == null) {
 			$trikeyID = tagConst()['replyID'];
 		}
@@ -103,8 +103,8 @@ class BasicComponent extends Component {
 				),
 				'order' => ''
 			);
-		$that->returntrybasic = $that->$modelSe->find('all',$option);
-		return $that->returntrybasic;
+		$that->returntribasic = $that->$modelSe->find('all',$option);
+		return $that->returntribasic;
 	}
 	public function tribasicfixverifybyid(&$that = null,$trikeyID,$LinkLTo) {
 		$that->loadModel('Link');
@@ -195,11 +195,11 @@ class BasicComponent extends Component {
 		return $that->returntrybasic;
 	}
 
-	public function SecondDem(&$that,$model,$order,$keyID){
-		debug($keyID);
-		$that->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$id,$id);
-		$that->taghashgen = $that->returntrybasic;
-		debug($that->returntrybasic);
+	public function SecondDem(&$that,$model,$order,$keyID,$id){
+		debug($id);
+		$that->Basic->tribasicfiderbyid($that,$keyID,$model,$order,$id);
+		$that->taghashgen = $that->returntribasic;
+		debug($that->taghashgen);
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $id;
 				$that->taghashgen[$that->i]['subtag'][$that->subtagID] = $tag;
@@ -209,9 +209,9 @@ class BasicComponent extends Component {
 			}
 			$that->i++;
 
-		debug($that->returntrybasic);
+		debug($that->returntribasic);
 		return $that->taghash;
-		return $that->returntrybasic;
+		return $that->returntribasic;
 	}
 	public function tribasicfiderbyida(&$that = null) {
 		$modelSe=$this->modelSe;

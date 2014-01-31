@@ -208,14 +208,14 @@ class CommonComponent extends Component {
 	public function trifinderbyid(&$that = null) {
 		$id = $that->request['pass'][0];
 		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Article","Article.ID",$id);
-		$that->articleparentres = $that->returntrybasic;
+		$that->articleparentres = $that->returntribasic;
 		$that->i = 0;
 		$that->taghash = array();
 		$trikeyID = tagConst()['searchID'];
 		foreach ($that->articleparentres as $result){
 			$res = $result['Article']['ID'];
 			$this->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$res,"Tag.ID");
-			$that->taghashgen = $that->returntrybasic;
+			$that->taghashgen = $that->returntribasic;
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];
 				$that->articleparentres[$that->i]['subtag'][$that->subtagID] = $tag;
@@ -225,14 +225,14 @@ class CommonComponent extends Component {
 			}
 			$that->i++;
 		}
+		$that->i = 0;
 		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Tag","Tag.ID",$id);
-		$that->tagparentres = $that->returntrybasic;
+		$that->tagparentres = $that->returntribasic;
 		$trikeyID = tagConst()['searchID'];
-		//$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		foreach ($that->tagparentres as $result){
 			$this->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$result['Tag']['ID'],"Tag.ID");
-			$that->taghashgen = $that->returntrybasic;
-			foreach ($that->tagtaghashgen as $tag){
+			$that->taghashgen = $that->returntribasic;
+			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];
 				$that->tagparentres[$that->i]['subtag'][$that->subtagID] = $tag;
 				if ($that->taghash[$that->subtagID] == null) {
@@ -248,5 +248,19 @@ class CommonComponent extends Component {
 		$that->set('taghashes', $that->taghash);
 		$that->set('articleresults', $that->articleparentres);
 		$that->set('tagresults', $that->tagparentres);
+	}
+	public function SecondDem(&$that,$model,$order,$keyID,$id){
+		$that->Basic->tribasicfiderbyid($that,$keyID,$model,$id,$order);
+		$that->taghashgen = $that->returntribasic;
+			foreach ($that->taghashgen as $tag){
+				$that->subtagID = $id;
+				$that->taghashgen[$that->i]['subtag'][$that->subtagID] = $tag;
+				if ($that->taghash[$that->subtagID] == null) {
+					$that->taghash[$that->subtagID] = array( 'ID' => $id, 'name' =>  $this->taghashgen[0]['Tag']['name']);
+				}
+			}
+			$that->i++;
+		return $that->taghash;
+		return $that->returntribasic;
 	}
 }

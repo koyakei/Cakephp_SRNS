@@ -220,8 +220,10 @@ public function tagRadd($id = null) {
 		if (!$this->Tag->exists($id)) {
 			throw new NotFoundException(__('Invalid tag'));
 		}
-		$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
-		$this->i = 0;
+		$trikeyID = tagConst()['searchID'];
+		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
+		$this->set('headresults', $this->returntribasic);
+		$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
 		$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		$this->set('tag', $this->Tag->find('first', $options));
 		$this->Common->trifinderbyid($this);

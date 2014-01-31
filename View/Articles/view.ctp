@@ -67,16 +67,8 @@ $(function () {
 		        </dd>
 		<?php endforeach; ?>
         </dl>
-
-	<table>
-	<thead>
-	<tr>
-	<?php echo $this->element('headtagrelation', Array('taghashes'=>$headtaghashes)); ?>
-	</tr>
-	</thead>
-	<tbody>
-	</tbody>
-	</table>
+<?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $article['Article']['ID'])); ?>
+	
 	<table cellpadding="0" cellspacing="0">
 	<table id="myTable" class="tablesorter">
 	<?php echo $this->element('tablehead', Array('taghashes'=>$taghashes)); ?>

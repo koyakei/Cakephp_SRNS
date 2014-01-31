@@ -59,8 +59,15 @@ $(function () {
 			<?php echo h($tag['Tag']['modified']); ?>
 			&nbsp;
 		</dd>
+		<?php foreach ($headresults as $headtaghash): ?>
+			<dt><?php echo __('Searchtagname'); ?></dt>
+		        <dd>
+		                <?php echo h($headtaghash['Tag']['name']); ?>
+		                &nbsp;
+		        </dd>
+		<?php endforeach; ?>
 	</dl>
-
+<?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $tag['Tag']['ID'])); ?>
 
 </div>
 

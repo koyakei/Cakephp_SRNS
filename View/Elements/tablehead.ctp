@@ -9,7 +9,7 @@
 				<th></th>
 				<?php foreach ($taghashes  as $hash): ?>
 				<th>quant</th>
-				<th><?php echo $hash['name']; ?></th>
+				<th><?php echo $hash['name']; ?><?php echo $this->Html->link(__('View'), array('controller'=> "tags",'action' => 'view', $hash['ID'])); ?></th>
 				<?php endforeach; ?>
 			</tr>
 		</thead>

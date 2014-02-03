@@ -77,7 +77,7 @@ class DATABASE_CONFIG {
 		'persistent' => false,
 		'host' => 'localhost',
 		'login' => 'root',
-		'password' => '',
+		'password' => 'koyakei',
 		'database' => 'db0tagplus',
 		'prefix' => '',
 		'encoding' => 'utf8',
@@ -85,7 +85,7 @@ class DATABASE_CONFIG {
     public function __construct()
     {
         $connection = Configure::read('database');
-         
+
         if (!empty($this->{$connection})) {
             $this->default = $this->{$connection};
         }

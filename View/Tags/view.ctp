@@ -68,7 +68,15 @@ $(function () {
 		<?php endforeach; ?>
 	</dl>
 <?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $tag['Tag']['ID'])); ?>
+<?php echo $this->Form->create('Link', array('url' => array('controller' => 'links', 'action' => 'singlelink'))); ?>
+	<?php
+		echo $this->Form->input('LTo');
+	?>
+	<?php
+		echo $this->Form->hidden('LFrom',array('value' => $this->request['pass'][0]));
+	?>
 
+<?php echo $this->Form->end(__('Single link')); ?>
 </div>
 
 <div class="actions">
@@ -76,8 +84,8 @@ $(function () {
 			<?php echo $this->Form->input('keyid', array(
 			'type' => 'select',
 			'multiple'=> false,
-			'options' => $keylist
-			//  'selected' => $selected  // �K��l�́Avalue��z��ɂ�������
+			'options' => $keylist,
+			'selected' => $this->Session->read('selected')['selected']  // �K��l�́Avalue��z��ɂ�������
 			)); ?>
 			<?php echo $this->Form->end(__('keyselect')); ?>
 	<h3><?php echo __('Actions'); ?></h3>

@@ -31,6 +31,13 @@ $(function () {
     });
 </script>
 </head>
+<div class="actions">
+<ul>
+		<li><?php echo $this->Html->link(__('List Tags'), array('action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('Tag search'), array('controller' => 'tags','action' => 'search')); ?> </li>
+	</ul>
+</div>
 <div class="articles view">
 <h2><?php echo __('Article'); ?></h2>
 	 <dl>

@@ -119,4 +119,20 @@ class LinksController extends AppController {
 			$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
 		}
 		return $this->redirect($this->referer());
-	}}
+	}
+
+	public function singlelink($id = NULL) {
+		$this->request->data['Link']['user_id'] = $this->Auth->user('ID');
+		$this->request->data['Link']['quant'] = 1;
+		$this->request->data['Link']['created'] = date("Y-m-d H:i:s");
+		$this->request->data['Link']['modified'] = date("Y-m-d H:i:s");
+		debug($this->request->data['Link']);
+		$this->Link->create();
+		if ($this->Link->save($this->request->data)) {
+			$this->Session->setFlash(__('Single link was created.'));
+		} else {
+			$this->Session->setFlash(__('Fail.'));
+		}
+		return $this->redirect($this->referer());
+	}
+}

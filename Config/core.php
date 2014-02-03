@@ -393,4 +393,9 @@ Cache::config('_cake_model_', array(
 ));
 
 Configure::write('database', 'test');
-
+/*Configure::write('Session', array(
+	'defaults' => 'php',
+	'ini' => array(
+		'session.auto_start' => false
+	)
+));*/

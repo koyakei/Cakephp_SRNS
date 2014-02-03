@@ -44,6 +44,8 @@ $this->Html->script(
 		<ul>
 			
 			<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('article index'), array('controller' => 'articles','action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('key index'), array('controller' => 'keys','action' => 'index')); ?> </li>
 		</ul>
 	</div>
 

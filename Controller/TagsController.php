@@ -213,7 +213,6 @@ public function tagRadd($id = null) {
 	}
 
 	public function view($id = null) {
-		debug($this->request);
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
 			$this->Common->triarticleAdd($this,'Article',1);
@@ -308,22 +307,5 @@ public function tagRadd($id = null) {
 	}
 	public function articleview($id) {
 	$this->redirect(array('controller' => 'articles','action'=>'view',$id));
-	}
-	public function singlelink($id = NULL) {
-		array_push($this->request->data['Link'],array(
-		 'user_id' => $this->Auth->user('ID'),
-				'quant' => 1,
-				'created' => date("Y-m-d H:i:s"),
-				'modified' => date("Y-m-d H:i:s"))
-		);
-
-		debug($this->request->data['Link']);
-		$this->Link->create();
-		if ($this->Link->save($this->request->data)) {
-		$this->Session->setFlash(__('Single link was created.'));
-		} else {
-		$this->Session->setFlash(__('Fail.'));
-		}
-		//return $this->redirect($this->referer());
 	}
 }

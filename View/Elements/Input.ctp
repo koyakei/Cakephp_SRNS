@@ -3,8 +3,8 @@
 	<?php echo $this->Form->input('keyid', array(
 	'type' => 'select',
 	'multiple'=> false,
-	'options' => $keylist
-	//  'selected' => $selected  
+	'options' => $keylist,
+	'selected' => $selected  
 	)); ?>
 	
 		<legend><?php echo __($model); ?></legend>

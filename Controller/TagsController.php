@@ -12,6 +12,11 @@ App::uses('User', 'Model');*/
  * @property Tag $Tag
  * @property PaginatorComponent $Paginator
  */
+class AppSession {
+	public $usermode = 1;
+	public $selected = 2138;
+
+}
 class TagsController extends AppController {
 
 	public $uses = array(//'Tag','Article','Link','User'
@@ -40,6 +45,20 @@ class TagsController extends AppController {
     );
          public function beforeFilter() {
         parent::beforeFilter();
+        /*if ($this->appSession == null){
+        $this->appSession = new AppSession();
+        //$this->Session->write('appSession',$appSession);
+        }*/
+        if ($this->request->data['keyid']['keyid'] != null){
+        	$_SESSION['selected'] = $this->request->data['keyid']['keyid'];
+        }elseif ($this->request->data['Tag']['keyid'] != null){
+        	$_SESSION['selected'] = $this->request->data['Tag']['keyid'];
+        }elseif ($this->request->data['Article']['keyid'] != null){
+        	$_SESSION['selected'] = $this->request->data['Article']['keyid'];
+        }elseif ($_SESSION['selected'] == null){
+        	$_SESSION['selected'] = 2138;
+        }
+        //$appSession = $this->Session->read('appSession');
         $this->Auth->allow('logout');
         $this->Auth->authenticate = array(
                 'Basic' => array('user' => 'admin'),
@@ -233,7 +252,15 @@ public function tagRadd($id = null) {
 		$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		$this->set('tag', $this->Tag->find('first', $options));
 		$this->Common->trifinderbyid($this);
-		$this->Session->write('selected',$this->request->data['keyid']['keyid'] );
+		/*debug($this->appSession);
+		if ($this->request->data['keyid']['keyid'] == null) {
+			$this->Session->write('selected',$this->appSession->selected);
+		}else {
+			$this->appSession->selected = $this->request->data['keyid']['keyid'];
+		$this->Session->write('selected',$this->appSession->selected);
+		}*/
+		//$_SESSION['appMode'] = $this->request->data['keyid']['keyid'];
+		$this->Session->write('userselected',$this->request->data['tag']['userid'] );
 		$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
 		$this->set('upperIdeas', $this->returntribasic);
 	}

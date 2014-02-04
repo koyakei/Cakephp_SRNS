@@ -31,6 +31,7 @@ $(function () {
     });
 </script>
 </head>
+<?php echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre)); ?>
 <div class="tags view">
 <h2><?php echo __('Tag'); ?></h2>
 	<dl>
@@ -62,8 +63,8 @@ $(function () {
 		<?php foreach ($headresults as $headtaghash): ?>
 			<dt><?php echo __('Searchtagname'); ?></dt>
 		        <dd>
-		                <?php echo h($headtaghash['Tag']['name']); ?>
-		                &nbsp;
+		                <?php 
+		                 echo $this->Html->link(__($headtaghash['Tag']['name']), array('controller'=> 'tags','action' => 'view', $headtaghash['Tag']['ID'])); ?>
 		        </dd>
 		<?php endforeach; ?>
 	</dl>
@@ -85,7 +86,7 @@ $(function () {
 			'type' => 'select',
 			'multiple'=> false,
 			'options' => $keylist,
-			'selected' => $this->Session->read('selected')['selected']  // �K��l�́Avalue��z��ɂ�������
+			'selected' => $_SESSION['selected']//$this->Session->read('selected')  // �K��l�́Avalue��z��ɂ�������
 			)); ?>
 			<?php echo $this->Form->end(__('keyselect')); ?>
 	<h3><?php echo __('Actions'); ?></h3>
@@ -101,12 +102,12 @@ $(function () {
 		<?php echo $this->element('tablehead', Array('taghashes'=>$taghashes)); ?>
 		<tbody>
 		<?php echo $this->element('tablebody', Array('results' => $articleresults,'taghashes'=>$taghashes,'firstModel' => 'Article')); ?>
-		<?php echo $this->element('tablebody', Array('results' => $tagresults,'taghashes'=>$taghashes,'firstModel' => 'Tag'	)); ?>
+		<?php echo $this->element('tablebody', Array('results' => $tagresults,'taghashes'=>$taghashes,'firstModel' => 'Tag')); ?>
 		</tbody>
 	</table>
 
 
 
-		<?php echo $this->element('Input', Array('keylist' => $keylist,'model' => 'Article')); ?>
-		<?php echo $this->element('Input', Array('keylist' => $keylist,'model' => 'Tag')); ?>
+		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $this->Session->read('selected'),'model' => 'Article')); ?>
+		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $this->Session->read('selected'),'model' => 'Tag')); ?>
 

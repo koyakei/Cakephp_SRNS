@@ -207,7 +207,7 @@ class CommonComponent extends Component {
 	}
 	public function trifinderbyid(&$that = null) {
 		$id = $that->request['pass'][0];
-		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Article","Article.ID",$id);
+		$this->Basic->tribasicfiderbyid($that,$_SESSION['selected'],"Article","Article.ID",$id);
 		$that->articleparentres = $that->returntribasic;
 		$that->i = 0;
 		$that->taghash = array();
@@ -230,7 +230,7 @@ class CommonComponent extends Component {
 		$that->tagparentres = $that->returntribasic;
 		$trikeyID = tagConst()['searchID'];
 		foreach ($that->tagparentres as $result){
-			$this->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$result['Tag']['ID'],"Tag.ID");
+			$this->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$result['Tag']['ID'],"Tag.ID");//ここのtribasicfinderbyidの使い方が大事
 			$that->taghashgen = $that->returntribasic;
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];

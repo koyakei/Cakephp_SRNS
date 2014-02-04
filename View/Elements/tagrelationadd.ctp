@@ -3,8 +3,8 @@
 							<?php echo $this->Form->input('userid', array(
 							    'type' => 'select',
 							    'multiple'=> false,
-							    'options' => $ulist
-							//  'selected' => $selected  // ・ｽK・ｽ・ｽl・ｽﾍ、value・ｽ・ｽz・ｽ・ｽﾉゑｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+							    'options' => $ulist,
+							  'selected' => $this->Session->read('userselected')['userselected']  
 							)); ?>
 							<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
 							<?php echo $this->Form->hidden('Link.LTo', array('value'=>$ToID)); ?>

@@ -11,7 +11,7 @@
 						<?php echo $this->Form->postLink(__('Delete'), array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID'])); ?>
 					</td>
 					<td>
-						<?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $result[$firstModel]['ID'])); ?>
+						<?php  echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $result[$firstModel]['ID'])); ?>
 						<?php foreach ($taghashes as $key => $hash): ?>
 						<?php $b = 0; ?>
 							<?php if($result['subtag'] != null) { ?>

@@ -234,8 +234,6 @@ public function tagRadd($id = null) {
 		$this->set('tag', $this->Tag->find('first', $options));
 		$this->Common->trifinderbyid($this);
 		$this->Session->write('selected',$this->request->data['keyid']['keyid'] );
-		$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
-		$this->set('upperIdeas', $this->returntribasic);
 	}
 
 /**

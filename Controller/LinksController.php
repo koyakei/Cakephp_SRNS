@@ -22,7 +22,7 @@ class LinksController extends AppController {
  *
  * @var array
  */
-	public $components = array('Search.Prg','Paginator','Common','Basic');
+	public $components = array('Search.Prg','Paginator','Common','Basic','Cookie','Session');
 
 /**
  * index method
@@ -47,6 +47,23 @@ class LinksController extends AppController {
 		}
 		$options = array('conditions' => array('Link.' . $this->Link->primaryKey => $id));
 		$this->set('link', $this->Link->find('first', $options));
+		if($this->request->data['Article']['name'] != null){
+			$this->keyid = $this->request->data['Article']['keyid'];
+			$this->Common->triarticleAdd($this,'Article',1);
+		}
+		if($this->request->data['Tag']['name'] != null){
+			$this->keyid = $this->request->data['Tag']['keyid'];
+			$this->Common->tritagAdd($this,"Tag",1);
+		}
+
+		$this->set('idre', $id);
+		$trikeyID = tagConst()['searchID'];
+		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
+		$this->set('headresults', $this->returntribasic);
+		$this->Common->trifinderbyid($this);
+		$this->Session->write('userselected',$this->request->data['tag']['userid'] );
+		$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
+		$this->set('upperIdeas', $this->returntribasic);
 	}
 
 /**

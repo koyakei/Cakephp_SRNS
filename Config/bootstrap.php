@@ -109,9 +109,15 @@ CakeLog::config('error', array(
 function tagConst(){
     return array(
 	'tagSSugID' => 2143,
-	'replyID' => 2138,//ƒRƒƒ“ƒg@•ÔM
-	'ownerID' => 1,//ˆêl‚ÌŽž‚ÉŠÇ—ŽÒ—p‚ÉŒÅ’è‚·‚é
+	'replyID' => 2138,//ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½@ï¿½ÔM
+	'ownerID' => 1,//ï¿½ï¿½lï¿½ÌŽï¿½ï¿½ÉŠÇ—ï¿½ï¿½Ò—pï¿½ÉŒÅ’è‚·ï¿½ï¿½
 	'searchID' => 2146,
 );
 }
-//Search ŒŸõ—pƒ^ƒO
+function AppSession(){
+	return array(
+			'selected' => 2143
+	);
+}
+
+//Search ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½^ï¿½O

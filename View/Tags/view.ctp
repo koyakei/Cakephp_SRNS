@@ -108,6 +108,6 @@ $(function () {
 
 
 
-		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $this->Session->read('selected'),'model' => 'Article')); ?>
-		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $this->Session->read('selected'),'model' => 'Tag')); ?>
+		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article')); ?>
+		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag')); ?>
 

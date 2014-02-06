@@ -126,7 +126,7 @@ class Link extends AppModel {
 		'className' => 'User',
 		'foreignKey' => 'ID',
 		'dependent' => false,
-		'conditions' => 'User.ID = Link.user_id',
+		'conditions' => 'LO.ID = Link.user_id',
 		//'type' => 'inner'
         )
     );/*

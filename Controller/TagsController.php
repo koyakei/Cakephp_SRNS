@@ -45,19 +45,38 @@ class TagsController extends AppController {
     );
          public function beforeFilter() {
         parent::beforeFilter();
+        //Configure::write('Session.start',true);
         /*if ($this->appSession == null){
         $this->appSession = new AppSession();
         //$this->Session->write('appSession',$appSession);
         }*/
+        //$this->Session->write('dummy','v');
+        /*debug($_COOKIE);
+        debug($this->Cookie->read("test"));
+        if ($this->Cookie->read("test") == null){
+        	$this->Cookie->write("test","test");
+        	debug("newed");
+        }
+        debug($this->Cookie->read("test"));
+        if ($_COOKIE["test"] == null){
+        	$_COOKIE["test"]= "test";
+        	debug("newd");
+        }*/
         if ($this->request->data['keyid']['keyid'] != null){
-        	$_SESSION['selected'] = $this->request->data['keyid']['keyid'];
-        }elseif ($this->request->data['Tag']['keyid'] != null){
-        	$_SESSION['selected'] = $this->request->data['Tag']['keyid'];
+        	$this->Session->write("selected",$this->request->data['keyid']['keyid']);
+        	debug("case1");
+        }/*elseif ($this->request->data['Tag']['keyid'] != null){
+        	$this->Session->write("selected",$this->request->data['Tag']['keyid']);
+        	echo "case2";
         }elseif ($this->request->data['Article']['keyid'] != null){
         	$_SESSION['selected'] = $this->request->data['Article']['keyid'];
+        	echo "case3";
         }elseif ($_SESSION['selected'] == null){
-        	$_SESSION['selected'] = 2138;
-        }
+        	$_SESSION['selected'] = '2138';
+        	echo "case4";
+        }*/
+
+
         //$appSession = $this->Session->read('appSession');
         $this->Auth->allow('logout');
         $this->Auth->authenticate = array(

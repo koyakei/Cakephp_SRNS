@@ -20,6 +20,7 @@
 										<td><?php echo $subtag['Link']['quant']; ?></td>
 										<!--<?php echo $subtag['Tag']['name']; ?>-->
 										<td>
+										<?php echo $this->Html->link(__('Link View'), array('controller'=> "links",'action' => 'view', $subtag['Link']['ID'])); ?>
 										<?php echo $this->Form->create('tag',array('controller' => 'tags','action'=>'quant')); ?>
 										<?php echo $this->Form->input('Link.quant',array('default'=>$subtag['Link']['quant'])); ?>
 										<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>

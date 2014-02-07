@@ -26,12 +26,13 @@
 										<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>
 										<?php echo $this->Form->hidden('Link.user_id', array('value'=>$subtag['Link']['user_id'])); ?>
 										<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
-										<?php echo $this->Form->end('tag'); ?>
+										<?php echo $this->Form->end('change quant'); ?>
 										<?php echo $this->Form->create('tag',array('controller' => 'tags','action'=>'tagdel')); ?>
 										<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>
 										<?php echo $this->Form->hidden('Link.user_id', array('value'=>$subtag['Link']['user_id'])); ?>
 											<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
-										<?php echo $this->Form->end('tag'); ?>
+										
+										<?php echo $this->Form->end('del'); ?>
 										</td>
 										<?php $b = 1; ?>
 									<?php } ?>

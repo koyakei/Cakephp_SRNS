@@ -2,6 +2,7 @@
 
 App::uses('AppController', 'Controller');
 App::uses('Link', 'Model');
+Configure::load("static");
 //App::uses('BasicComponent', 'Controller/Component');
 /*App::uses('Article', 'Model');
 App::uses('Link', 'Model');
@@ -176,7 +177,7 @@ public function tagdel($id = null) {
 }
 
 public function tagRadd($id = null) {
-	$searchID = tagConst()['searchID'];
+	$searchID = Configure::read('tagID.search');//tagConst()['searchID'];
 	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 	//$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
 	$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
@@ -196,13 +197,13 @@ public function tagRadd($id = null) {
 				$this->Tag->create();
 				$this->Tag->save($this->request->data);
 				$last_id = $this->Tag->getLastInsertID();
-				$this->Basic->trilinkAdd($this,$last_id,$LinkLTo,tagConst()['searchID']);
+				$this->Basic->trilinkAdd($this,$last_id,$LinkLTo,Configure::read('tagID.search'));
 				$this->Session->setFlash(__('タグがなかった.'));
 				}else {
 			$this->loadModel('Link');
 				$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 				$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
-				$trikeyID = tagConst()['searchID'];
+				$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
 				$this->Basic->tribasicfixverifybyid($this,$trikeyID,$LinkLTo);
 				$LE = $this->returntribasic;
 				if(null == $LE){
@@ -264,7 +265,7 @@ public function tagRadd($id = null) {
 		if (!$this->Tag->exists($id)) {
 			throw new NotFoundException(__('Invalid tag'));
 		}
-		$trikeyID = tagConst()['searchID'];
+		$trikeyID = $serchID;//tagConst()['searchID'];
 		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
 		$this->set('headresults', $this->returntribasic);
 		$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));

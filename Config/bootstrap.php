@@ -106,14 +106,14 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
-function tagConst(){
+/*function tagConst(){
     return array(
 	'tagSSugID' => 2143,
 	'replyID' => 2138,//�R�����g�@�ԐM
 	'ownerID' => 1,//��l�̎��ɊǗ��җp�ɌŒ肷��
 	'searchID' => 2146,
 );
-}
+}*/
 function AppSession(){
 	return array(
 			'selected' => 2143

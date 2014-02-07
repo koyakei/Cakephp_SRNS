@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+Configure::load("static");
 
 /**
  * Links Controller
@@ -57,7 +58,7 @@ class LinksController extends AppController {
 		}
 
 		$this->set('idre', $id);
-		$trikeyID = tagConst()['searchID'];
+		$trikeyID = Configure::read('tagID,search');//tagConst()['searchID'];
 		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
 		$this->set('headresults', $this->returntribasic);
 		$this->Common->trifinderbyid($this);

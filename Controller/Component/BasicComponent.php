@@ -3,10 +3,11 @@ App::uses('Tag', 'Model');
 App::uses('User', 'Model');
 App::uses('Link', 'Model');
 App::uses('Article', 'Model');
+Configure::load("static");
 class BasicComponent extends Component {
 	public function tribasic(&$that = null,$trykeyname,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
-		$trikeyID = tagConst()[$trykeyname];
+		$trikeyID = Configure::read('tagID.'.$trykeyname);//tagConst()[$trykeyname];
 		$that->Paginator->settings = array(
 			'conditions'=> array(
 			        	"Link.LTo = $Ltotarget"
@@ -39,7 +40,7 @@ class BasicComponent extends Component {
 
 	public function tribasicfind(&$that = null,$trykeyname,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
-		$trikeyID = tagConst()[$trykeyname];
+		$trikeyID = Configure::read('tagID.'.$trykeyname);//tagConst()[$trykeyname];
 		$option = array(
 				'conditions'=> array(
 				        	"Link.LTo = $Ltotarget"
@@ -74,7 +75,7 @@ class BasicComponent extends Component {
 	public function tribasicfiderbyid(&$that = null,$trikeyID,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
 		if($trikeyID == null) {
-			$trikeyID = tagConst()['replyID'];
+			$trikeyID = Configure::read('tagID.reply');//tagConst()['replyID'];
 		}
 		$option = array(
 				'conditions'=> array(
@@ -109,7 +110,7 @@ class BasicComponent extends Component {
 	public function triupperfiderbyid(&$that = null,$trikeyID,$modelSe,$id) {
 		$that->loadModel($modelSe);
 		if($trikeyID == null) {
-			$trikeyID = tagConst()['replyID'];
+			$trikeyID = Configure::read('tagID.reply');//tagConst()['replyID'];
 		}
 		$option = array(
 				'conditions'=> array(
@@ -145,7 +146,7 @@ class BasicComponent extends Component {
 		$that->loadModel('Link');
 		//$trikeyID = tagConst()[$trykeyname];
 		if($trikeyID == null) {
-			$trikeyID = tagConst()['replyID'];
+			$trikeyID = Configure::read('tagID.reply');//tagConst()['replyID'];
 		}
 		$option = array(
 			'order' => '',
@@ -197,7 +198,7 @@ class BasicComponent extends Component {
 	public function trisinglefind(&$that = null,$trikeyID,$modelSe,$Ltotarget) {
 		$that->loadModel($modelSe);
 		if($trikeyID == null) {
-			$trikeyID = tagConst()['replyID'];
+			$trikeyID = Configure::read('tagID.reply');
 		}
 		$option = array(
 				'conditions'=> array(

@@ -4,6 +4,7 @@ App::uses('Tag', 'Model');
 App::uses('User', 'Model');
 App::uses('Link', 'Model');
 App::uses('Article', 'Model');
+Configure::load("static");
 /**
  * Articles Controller
  *
@@ -63,7 +64,7 @@ class ArticlesController extends AppController {
 		$this->Article->read(null,$id);
 		$this->set('idre', $id);
 		$this->i = 0;
-		$trikeyID = tagConst()['searchID'];
+		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
 		$this->set('article',$this->taghashgen);
 		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
 		$this->set('headresults', $this->returntribasic);

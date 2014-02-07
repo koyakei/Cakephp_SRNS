@@ -1,5 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
+Configure::load("static");
 /**
  * Article Model
  *
@@ -7,9 +8,9 @@ App::uses('AppModel', 'Model');
 class Article extends AppModel {
 	function __construct(){
 		parent::__construct();
-		$this->replyID = tagConst()['replyID'];
+		$this->replyID = Configure::read('tagID.reply');//tagConst()['replyID'];
 	}
-	
+
 	public $actsAs = array('Search.Searchable');
 	public $filterArgs = array(
 	        'word' => array(
@@ -47,17 +48,17 @@ class Article extends AppModel {
  * @var string
  */
 	public $displayField = 'name';
-	
+
         //public $useTable = false;
 
-	
-	
+
+
 
 
 
 public $base_sql = null;
 
- 
+
         /*public function paginate($conditions,$fields,$order,$limit,$page=1,$recursive=null,$extra=array()){
 	$this->replyID = tagConst()['replyID'];
             if($page==0){$page = 1;}
@@ -67,7 +68,7 @@ public $base_sql = null;
             $sql = $this->base_sql . ' limit ' . $limit . ' offset ' . $offset;
             return $this->query($sql);
         }
- 
+
         public function paginateCount($conditions=null,$recursive=0,$extra=array()){
             $this->recursive = $recursive;
             $results = $this->query($this->base_sql);
@@ -83,9 +84,9 @@ public $base_sql = null;
         )
     );
 /*
-	
+
 	public $hasMany = array(
-		'AI_LF' => array(//‚±‚±‚Ì–¼‘O‚ª‚±‚Ìƒ‚ƒfƒ‹‚ÌAS@‚È‚ñ‚Æ‚©‚É‚È‚é
+		'AI_LF' => array(//ï¿½ï¿½ï¿½ï¿½ï¿½Ì–ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ASï¿½@ï¿½È‚ï¿½Æ‚ï¿½ï¿½É‚È‚ï¿½
 			'className' => 'Link',
 			'foreignKey' => 'LFrom',
 			'dependent' => false,
@@ -98,10 +99,10 @@ public $base_sql = null;
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),*/
-	/*	
+	/*
 	);
 	public $belongsTo = array(
-		'AI_LT' => array(//‚±‚±‚Ì–¼‘O‚ª‚±‚Ìƒ‚ƒfƒ‹‚ÌAS@‚È‚ñ‚Æ‚©‚É‚È‚é
+		'AI_LT' => array(//ï¿½ï¿½ï¿½ï¿½ï¿½Ì–ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ASï¿½@ï¿½È‚ï¿½Æ‚ï¿½ï¿½É‚È‚ï¿½
 			'className' => 'Link',
 			'foreignKey' => 'ID',
 			'dependent' => false,

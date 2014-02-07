@@ -4,6 +4,7 @@ App::uses('User', 'Model');
 App::uses('Link', 'Model');
 App::uses('Article', 'Model');
 App::uses('BasicComponent', 'Controller/Component');
+Configure::load("static");
 class CommonComponent extends Component {
         public $components = array('Basic');
 	public function replyarticleAdd(&$that = null) {
@@ -147,17 +148,17 @@ class CommonComponent extends Component {
 
 	public function trifinder(&$that = null) {
 		$id = $that->request['pass'][0];
-		$this->Basic->tribasic($that,"searchID","Article","Article.ID",$id);
+		$this->Basic->tribasic($that,"search","Article","Article.ID",$id);
 		$that->parentres = $that->returntrybasic;
 		$that->k = 0;
 		$that->j = 0;
 		$that->i = 0;
 		$that->taghash = array();
-		$trikeyID = tagConst()['searchID'];
+		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
 		$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		foreach ($that->parentres as $result){
 			$res = $result['Article']['ID'];
-			$this->Basic->tribasic($that,"searchID","Tag",$res,"Tag.ID");
+			$this->Basic->tribasic($that,"search","Tag",$res,"Tag.ID");
 			$that->taghashgen = $that->returntrybasic;
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];
@@ -177,17 +178,17 @@ class CommonComponent extends Component {
 	}
 	public function trireplyfinder(&$that = null) {
 		$id = $that->request['pass'][0];
-		$this->Basic->tribasic($that,"replyID","Article","Article.ID",$id);
+		$this->Basic->tribasic($that,"reply","Article","Article.ID",$id);
 		$that->parentres = $that->returntrybasic;
 		$that->k = 0;
 		$that->j = 0;
 		$that->i = 0;
 		$that->taghash = array();
-		$trikeyID = tagConst()['searchID'];
+		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
 		//$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		foreach ($that->parentres as $result){
 			$res = $result['Article']['ID'];
-			$this->Basic->tribasicfind($that,"searchID","Tag",$res,"Tag.ID");
+			$this->Basic->tribasicfind($that,"search","Tag",$res,"Tag.ID");
 			$that->taghashgen = $that->returntrybasic;
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];
@@ -211,10 +212,10 @@ class CommonComponent extends Component {
 		$that->articleparentres = $that->returntribasic;
 		$that->i = 0;
 		$that->taghash = array();
-		$trikeyID = tagConst()['searchID'];
+		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
 		foreach ($that->articleparentres as $result){
 			$res = $result['Article']['ID'];
-			$this->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$res,"Tag.ID");
+			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$res,"Tag.ID");
 			$that->taghashgen = $that->returntribasic;
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];
@@ -228,9 +229,9 @@ class CommonComponent extends Component {
 		$that->i = 0;
 		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Tag","Tag.ID",$id);
 		$that->tagparentres = $that->returntribasic;
-		$trikeyID = tagConst()['searchID'];
+		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
 		foreach ($that->tagparentres as $result){
-			$this->Basic->tribasicfiderbyid($that,tagConst()['searchID'],"Tag",$result['Tag']['ID'],"Tag.ID");//ここのtribasicfinderbyidの使い方が大事
+			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result['Tag']['ID'],"Tag.ID");//ここのtribasicfinderbyidの使い方が大事
 			$that->taghashgen = $that->returntribasic;
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];

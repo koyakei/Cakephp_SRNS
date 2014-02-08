@@ -123,7 +123,7 @@ class TagsController extends AppController {
         }
 
         public function search() {
-	        $this->Prg->commonProcess();
+	        //$this->Prg->commonProcess();
 	        $req = $this->passedArgs;
 	        if (!empty($this->request->data['Tag']['keyword'])) {
 	            $andor = !empty($this->request->data['Tag']['andor']) ? $this->request->data['Tag']['andor'] : null;
@@ -256,7 +256,6 @@ public function tagRadd($id = null) {
 			$this->keyid = $this->request->data['Tag']['keyid'];
 			$this->Common->tritagAdd($this,"Tag",1);
 		}
-
 		$this->set('idre', $id);
 		if (!$this->Tag->exists($id)) {
 			throw new NotFoundException(__('Invalid tag'));

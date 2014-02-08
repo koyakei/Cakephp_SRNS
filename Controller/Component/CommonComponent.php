@@ -211,7 +211,7 @@ class CommonComponent extends Component {
 			$_SESSION['selected'] = Configure::read('tagID.reply');
 		}
 		$id = $that->request['pass'][0];
-		debug($that->request->data['keyid']['keyid']);
+		//debug($that->request->data['keyid']['keyid']);
 		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Article","Article.ID",$id);
 		$that->articleparentres = $that->returntribasic;
 		$that->i = 0;

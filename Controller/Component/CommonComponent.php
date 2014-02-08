@@ -207,8 +207,12 @@ class CommonComponent extends Component {
 		$that->set('results', $that->parentres);
 	}
 	public function trifinderbyid(&$that = null) {
+		if ($_SESSION['selected'] == null) {
+			$_SESSION['selected'] = Configure::read('tagID.reply');
+		}
 		$id = $that->request['pass'][0];
-		$this->Basic->tribasicfiderbyid($that,$_SESSION['selected'],"Article","Article.ID",$id);
+		debug($that->request->data['keyid']['keyid']);
+		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Article","Article.ID",$id);
 		$that->articleparentres = $that->returntribasic;
 		$that->i = 0;
 		$that->taghash = array();

@@ -51,4 +51,15 @@ return false;
     public function beforeFilter() {
         $this->Auth->allow('index', 'view','search');
     }
+    public function restoreLoginFromCookie() {
+    	$this->Cookie->name = 'Users';
+    	$cookie = $this->Cookie->read('rememberMe');
+    	if (!empty($cookie) && !$this->Auth->user()) {
+    		$data['User'][$this->Auth->fields['username']] = $cookie
+    		[$this->Auth->fields['username']];
+    		$data['User'][$this->Auth->fields['password']] = $cookie
+    		[$this->Auth->fields['password']];
+    		$this->Auth->login($data);
+    	}
+    }
 }

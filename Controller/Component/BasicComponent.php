@@ -17,14 +17,15 @@ class BasicComponent extends Component {
 			'joins'
 			 => array(
 			array(
-	                    'table' => 'Link',
+	                    'table' => 'link',
+	                    'alias' => 'Link',
 	                    'type' => 'INNER',
 	                    'conditions' => array(
 				array("$id = Link.LFrom")
 				)
 	                ),
 			array(
-	                    'table' => 'Link',
+	                    'table' => 'link',
 	                    'alias' => 'taglink',
 	                    'type' => 'INNER',
 	                    'conditions' => array(
@@ -50,14 +51,15 @@ class BasicComponent extends Component {
 				'joins'
 				 => array(
 				array(
-		                    'table' => 'Link',
+		                    'table' => 'link',
+		                    'alias' => 'Link',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
 					array("$id = Link.LFrom")
 					)
 		                ),
 				array(
-		                    'table' => 'Link',
+		                    'table' => 'link',
 		                    'alias' => 'taglink',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
@@ -74,9 +76,6 @@ class BasicComponent extends Component {
 
 	public function tribasicfiderbyid(&$that = null,$trikeyID,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
-		if($trikeyID == null) {
-			$trikeyID = Configure::read('tagID.reply');//tagConst()['replyID'];
-		}
 		$option = array(
 				'conditions'=> array(
 				        	"Link.LTo = $Ltotarget"
@@ -86,19 +85,20 @@ class BasicComponent extends Component {
 				'joins'
 				 => array(
 				array(
-		                    'table' => 'Link',
+		                    'table' => 'link',
+		                    'alias' => 'Link',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
 					array("$id = Link.LFrom")
 					)
 		                ),
 				array(
-		                    'table' => 'Link',
+		                    'table' => 'link',
 		                    'alias' => 'taglink',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
 					array("Link.ID = taglink.LTo"),
-					array($trikeyID . " = taglink.LFrom")
+					array($trikeyID." = taglink.LFrom")//$trikeyID
 					)
 		                ),
 				),
@@ -109,9 +109,9 @@ class BasicComponent extends Component {
 	}
 	public function triupperfiderbyid(&$that = null,$trikeyID,$modelSe,$id) {
 		$that->loadModel($modelSe);
-		if($trikeyID == null) {
+		/*if($trikeyID == null) {
 			$trikeyID = Configure::read('tagID.reply');//tagConst()['replyID'];
-		}
+		}*/
 		$option = array(
 				'conditions'=> array(
 				        	"Link.LFrom =".$modelSe.".ID"
@@ -121,14 +121,15 @@ class BasicComponent extends Component {
 				'joins'
 				 => array(
 				array(
-		                    'table' => 'Link',
+		                    'table' => 'link',
+		                    'alias' => 'Link',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
 					array("$id = Link.LTo")
 					)
 		                ),
 				array(
-		                    'table' => 'Link',
+		                    'table' => 'link',
 		                    'alias' => 'taglink',
 		                    'type' => 'INNER',
 		                    'conditions' => array(

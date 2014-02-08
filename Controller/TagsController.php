@@ -122,29 +122,26 @@ class TagsController extends AppController {
                 //$this->set('tags', $this->Paginator->paginate());
 		$this->set('tags', $this->Tag->find('all',$parms));
         }
+
         public function search() {
-        $this->Prg->commonProcess();
-        $req = $this->passedArgs;
-        if (!empty($this->request->data['Tag']['keyword'])) {
-            $andor = !empty($this->request->data['Tag']['andor']) ? $this->request->data['Tag']['andor'] : null;
-            $word = $this->Tag->multipleKeywords($this->request->data['Tag']['keyword'], $andor);
-            $req = array_merge($req, array("word" => $word));
-        }
-        /*$this->paginate = array(
-            'conditions' => $this->Tag->parseCriteria($req),
-        );*/
+	        $this->Prg->commonProcess();
+	        $req = $this->passedArgs;
+	        if (!empty($this->request->data['Tag']['keyword'])) {
+	            $andor = !empty($this->request->data['Tag']['andor']) ? $this->request->data['Tag']['andor'] : null;
+	            $word = $this->Tag->multipleKeywords($this->request->data['Tag']['keyword'], $andor);
+	            $req = array_merge($req, array("word" => $word));
+	        }
+	        $this->paginate = array(
+	                'Tag' =>
+	            array(
+	                'conditions' => array(
+	                    $this->Tag->parseCriteria($req),
+	                )
 
-        $this->paginate = array(
-                'Tag' =>
-            array(
-                'conditions' => array(
-                    $this->Tag->parseCriteria($req),
-                )
-
-            )
-        );
-        $this->set('tags', $this->Paginator->paginate());
-        $this->set('Auth', $this->Auth->user('ID'));
+	            )
+	        );
+	        $this->set('tags', $this->Paginator->paginate());
+	        $this->set('Auth', $this->Auth->user('ID'));
         }
 
 public function quant($id = null) {
@@ -265,7 +262,7 @@ public function tagRadd($id = null) {
 		if (!$this->Tag->exists($id)) {
 			throw new NotFoundException(__('Invalid tag'));
 		}
-		$trikeyID = $serchID;//tagConst()['searchID'];
+		$trikeyID = Configure::read('tagID.search');//$serchID;//tagConst()['searchID'];
 		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
 		$this->set('headresults', $this->returntribasic);
 		$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));

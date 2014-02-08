@@ -1,5 +1,8 @@
+<!DOCTYPE html>
+<html>
 <head>
-<?php $this->Html->loadConfig('html5_tags'); ?>
+<?php //$this->Html->loadConfig('html5_tags'); ?>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
@@ -31,6 +34,7 @@ $(function () {
     });
 </script>
 </head>
+<body>
 <?php echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre)); ?>
 <div class="tags view">
 <h2><?php echo __('Tag'); ?></h2>
@@ -110,4 +114,5 @@ $(function () {
 
 		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article')); ?>
 		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag')); ?>
-
+</body>
+</html>

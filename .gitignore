@@ -215,6 +215,7 @@ pip-log.txt
 tmp/*
 Config/core.php
 Config/database.php
+Config/email.php
 app/tmp/*
 app/Config/core.php
 app/Config/database.php

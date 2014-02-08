@@ -6,10 +6,7 @@ Configure::load("static");
  *
  */
 class Article extends AppModel {
-	function __construct(){
-		parent::__construct();
-		$this->replyID = Configure::read('tagID.reply');//tagConst()['replyID'];
-	}
+	//public $replyID = Configure::read('tagID.reply');//tagConst()['replyID']
 
 	public $actsAs = array('Search.Searchable');
 	public $filterArgs = array(
@@ -73,7 +70,7 @@ public $base_sql = null;
             $this->recursive = $recursive;
             $results = $this->query($this->base_sql);
             return count($results);
-        }*/
+        }*//*
     public $hasOne= array(
         'AO' => array(
 		'className' => 'User',
@@ -82,7 +79,7 @@ public $base_sql = null;
 		'conditions' => 'AO.ID = Article.user_id',
 		//'type' => 'inner'
         )
-    );
+    );*/
 /*
 
 	public $hasMany = array(

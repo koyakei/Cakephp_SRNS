@@ -15,7 +15,7 @@ class Tag extends AppModel {
 	        'word' => array(
 //'name' => 'name',
  'type' => 'like'
-, 'field' => array('tag.name')
+, 'field' => array('Tag.name')
 , 'connectorAnd' => '+', 'connectorOr' => ','
 ),
 	);

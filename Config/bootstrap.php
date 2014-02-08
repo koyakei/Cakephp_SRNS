@@ -119,5 +119,6 @@ function AppSession(){
 			'selected' => 2143
 	);
 }
+Configure::write('App.defaultEmail', 'koyakeiaaaaa@gmail.com');
 
 //Search �����p�^�O

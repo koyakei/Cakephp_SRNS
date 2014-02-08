@@ -34,10 +34,13 @@ class AppController extends Controller {
 public $components = array(
     'Session',
     'Auth' => array(
-        'loginRedirect' => array('controller' => 'articles', 'action' => 'index'),
+        //'loginRedirect' => array('controller' => 'articles', 'action' => 'index'),
         'logoutRedirect' => array('controller' => 'articles', 'action' => 'index'),
         'authorize' => array('Controller')
-    )
+    ),
+	'Security' => array(
+	'csrfCheck' => false
+	)
 );
 public function isAuthorized($user) {
     if (isset($user['role']) && $user['role'] === 'admin') {
@@ -50,7 +53,7 @@ return false;
 
     public function beforeFilter() {
         $this->Auth->allow('index', 'view','search');
-    }
+    }/*
     public function restoreLoginFromCookie() {
     	$this->Cookie->name = 'Users';
     	$cookie = $this->Cookie->read('rememberMe');
@@ -61,5 +64,5 @@ return false;
     		[$this->Auth->fields['password']];
     		$this->Auth->login($data);
     	}
-    }
+    }*/
 }

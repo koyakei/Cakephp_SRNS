@@ -27,6 +27,8 @@ App::uses('UsersAppController', 'Users.Controller');
  */
 class UsersController extends UsersAppController {
 
+
+
 /**
  * Controller name
  *
@@ -159,6 +161,10 @@ class UsersController extends UsersAppController {
 		if (!Configure::read('App.defaultEmail')) {
 			Configure::write('App.defaultEmail', 'noreply@' . env('HTTP_HOST'));
 		}
+/*
+		$this->Security->validateOnce = false;
+		$this->Security->validatePost = false;*/
+		$this->Security->csrfCheck = false;
 	}
 
 /**
@@ -226,7 +232,7 @@ class UsersController extends UsersAppController {
 					$this->modelClass . '.active' => 1,
 					$this->modelClass . '.email_verified' => 1)));
 
-		$this->Auth->loginRedirect = '/';
+		$this->Auth->loginRedirect = '/tags/search';
 		$this->Auth->logoutRedirect = array('plugin' => Inflector::underscore($this->plugin), 'controller' => 'users', 'action' => 'login');
 		$this->Auth->loginAction = array('admin' => false, 'plugin' => Inflector::underscore($this->plugin), 'controller' => 'users', 'action' => 'login');
 	}
@@ -389,6 +395,7 @@ class UsersController extends UsersAppController {
  * @return void
  */
 	public function add() {
+		debug("koyakei");
 		if ($this->Auth->user()) {
 			$this->Session->setFlash(__d('users', 'You are already registered and logged in!'));
 			$this->redirect('/');

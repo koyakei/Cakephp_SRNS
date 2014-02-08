@@ -18,7 +18,11 @@ class AppSession {
 	public $selected = 2138;
 
 }
+
 class TagsController extends AppController {
+	public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session',
+			'Security',
+			'Search.Prg','Users.RememberMe');
 
 	public $uses = array(//'Tag','Article','Link','User'
 			);
@@ -44,48 +48,55 @@ class TagsController extends AppController {
         'from' => array('type' => 'value'),
         'to' => array('type' => 'value'),
     );
-         public function beforeFilter() {
-        parent::beforeFilter();
-        //Configure::write('Session.start',true);
-        /*if ($this->appSession == null){
-        $this->appSession = new AppSession();
-        //$this->Session->write('appSession',$appSession);
-        }*/
-        //$this->Session->write('dummy','v');
-        /*debug($_COOKIE);
-        debug($this->Cookie->read("test"));
-        if ($this->Cookie->read("test") == null){
-        	$this->Cookie->write("test","test");
-        	debug("newed");
+    	public function beforeFilter() {
+	        parent::beforeFilter();
+	        $this->Security->validateOnce = false;
+	        $this->Security->validatePost = false;
+	        $this->Security->csrfCheck = false;
+	        //Configure::write('Session.start',true);
+	        /*if ($this->appSession == null){
+	        $this->appSession = new AppSession();
+	        //$this->Session->write('appSession',$appSession);
+	        }*/
+	        //$this->Session->write('dummy','v');
+	        /*debug($_COOKIE);
+	        debug($this->Cookie->read("test"));
+	        if ($this->Cookie->read("test") == null){
+	        	$this->Cookie->write("test","test");
+	        	debug("newed");
+	        }
+	        debug($this->Cookie->read("test"));
+	        if ($_COOKIE["test"] == null){
+	        	$_COOKIE["test"]= "test";
+	        	debug("newd");
+	        }*/
+	        if ($this->request->data['keyid']['keyid'] != null){
+	        	$this->Session->write("selected",$this->request->data['keyid']['keyid']);
+	        	debug("case1");
+	        }/*elseif ($this->request->data['Tag']['keyid'] != null){
+	        	$this->Session->write("selected",$this->request->data['Tag']['keyid']);
+	        	echo "case2";
+	        }elseif ($this->request->data['Article']['keyid'] != null){
+	        	$_SESSION['selected'] = $this->request->data['Article']['keyid'];
+	        	echo "case3";
+	        }elseif ($_SESSION['selected'] == null){
+	        	$_SESSION['selected'] = '2138';
+	        	echo "case4";
+	        }*/
+	        if ($this->request->data['keyid']['keyid'] == null){
+	        	$this->request->data['keyid']['keyid'] = Configure::read('tagID.reply');
+	        }
+
+	        //$appSession = $this->Session->read('appSession');
+	        $this->Auth->allow('logout','');
+	        $this->Auth->authenticate = array(
+	                'Basic' => array('user' => 'admin'),
+	                //'Form' => array('user' => 'Member')
+	                );
         }
-        debug($this->Cookie->read("test"));
-        if ($_COOKIE["test"] == null){
-        	$_COOKIE["test"]= "test";
-        	debug("newd");
-        }*/
-        if ($this->request->data['keyid']['keyid'] != null){
-        	$this->Session->write("selected",$this->request->data['keyid']['keyid']);
-        	debug("case1");
-        }/*elseif ($this->request->data['Tag']['keyid'] != null){
-        	$this->Session->write("selected",$this->request->data['Tag']['keyid']);
-        	echo "case2";
-        }elseif ($this->request->data['Article']['keyid'] != null){
-        	$_SESSION['selected'] = $this->request->data['Article']['keyid'];
-        	echo "case3";
-        }elseif ($_SESSION['selected'] == null){
-        	$_SESSION['selected'] = '2138';
-        	echo "case4";
-        }*/
 
 
-        //$appSession = $this->Session->read('appSession');
-        $this->Auth->allow('logout');
-        $this->Auth->authenticate = array(
-                'Basic' => array('user' => 'admin'),
-                //'Form' => array('user' => 'Member')
-                );
-        }
-        public $components = array('Search.Prg','Paginator','Common','Basic','Cookie','Session');
+
         public $helpers = array(
         		'Html',
         		'Session'
@@ -107,20 +118,8 @@ class TagsController extends AppController {
  * @return void
  */
         public function index() {
-                //$this->Tag->recursive = 0;
-		$parms = array(
-		'joins'=> array(
-				array(
-		                     'table' => 'Tag',
-		                    //'alias' => 'Link',
-		                    'type' => 'INNER',
-		                    'conditions' => array("Link.LFrom = Tag.ID")
-		                ),
-			)
-		)
-		;
-                //$this->set('tags', $this->Paginator->paginate());
-		$this->set('tags', $this->Tag->find('all',$parms));
+		$this->Tag->recursive = 0;
+		$this->set('tags', $this->Paginator->paginate());
         }
 
         public function search() {
@@ -141,7 +140,7 @@ class TagsController extends AppController {
 	            )
 	        );
 	        $this->set('tags', $this->Paginator->paginate());
-	        $this->set('Auth', $this->Auth->user('ID'));
+	        //$this->set('Auth', $this->Auth->user('ID'));
         }
 
 public function quant($id = null) {

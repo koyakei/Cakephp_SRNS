@@ -7,14 +7,7 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class UsersController extends AppController {
-	public function beforeFilter() {
-		parent::beforeFilter();
-		$this->Auth->allow('logout');
-		$this->Auth->authenticate = array(
-			'Basic' => array('user' => 'admin'),
-			//'Form' => array('user' => 'Member')
-		);
-	}
+
 /**
  * Components
  *
@@ -27,6 +20,11 @@ class UsersController extends AppController {
  *
  * @return void
  */
+	public function beforeFilter(){
+		parent::beforeFilter();
+		$this->Security->validatePost = false;
+	}
+
 	public function index() {
 		$this->User->recursive = 0;
 		$this->set('users', $this->Paginator->paginate());
@@ -107,19 +105,4 @@ class UsersController extends AppController {
 			$this->Session->setFlash(__('The user could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
-	}
-	public function login() {
-	    if ($this->request->is('post')) {
-	        if ($this->Auth->login()) {
-	            $this->redirect($this->Auth->redirect());
-	        } else {
-	            $this->Session->setFlash(__('Invalid username or password, try again'));
-	        }
-	    }
-	}
-
-	public function logout() {
-	    $this->redirect($this->Auth->logout());
-	}
-
-}
+	}}

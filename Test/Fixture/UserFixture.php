@@ -6,29 +6,32 @@
 class UserFixture extends CakeTestFixture {
 
 /**
- * Table name
- *
- * @var string
- */
-	public $table = 'user';
-
-/**
  * Fields
  *
  * @var array
  */
 	public $fields = array(
-		'ID' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 128, 'key' => 'primary'),
-		'password' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 16, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'TLimit' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 16),
-		'profileID' => array('type' => 'integer', 'null' => false, 'default' => null),
-		'Created_time' => array('type' => 'timestamp', 'null' => false, 'default' => 'CURRENT_TIMESTAMP'),
-		'modified' => array('type' => 'datetime', 'null' => false, 'default' => 'CURRENT_TIMESTAMP'),
-		'username' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'role' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'id' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 36, 'key' => 'primary', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'username' => array('type' => 'string', 'null' => false, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'slug' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'password' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 128, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'password_token' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 128, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'email' => array('type' => 'string', 'null' => true, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'email_verified' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
+		'email_token' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'email_token_expires' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'tos' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
+		'active' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
+		'last_login' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'last_action' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'is_admin' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
+		'role' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(
-			'PRIMARY' => array('column' => 'ID', 'unique' => 1),
-			'ID' => array('column' => 'ID', 'unique' => 1)
+			'PRIMARY' => array('column' => 'id', 'unique' => 1),
+			'BY_USERNAME' => array('column' => 'username', 'unique' => 0),
+			'BY_EMAIL' => array('column' => 'email', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
@@ -40,14 +43,23 @@ class UserFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'ID' => 1,
-			'password' => 'Lorem ipsum do',
-			'TLimit' => 1,
-			'profileID' => 1,
-			'Created_time' => 1389229558,
-			'modified' => '2014-01-09 02:05:58',
+			'id' => '52f5d1e6-dae0-4b99-95b6-2204e0e4e673',
 			'username' => 'Lorem ipsum dolor sit amet',
-			'role' => 'Lorem ipsum dolor '
+			'slug' => 'Lorem ipsum dolor sit amet',
+			'password' => 'Lorem ipsum dolor sit amet',
+			'password_token' => 'Lorem ipsum dolor sit amet',
+			'email' => 'Lorem ipsum dolor sit amet',
+			'email_verified' => 1,
+			'email_token' => 'Lorem ipsum dolor sit amet',
+			'email_token_expires' => '2014-02-08 15:42:46',
+			'tos' => 1,
+			'active' => 1,
+			'last_login' => '2014-02-08 15:42:46',
+			'last_action' => '2014-02-08 15:42:46',
+			'is_admin' => 1,
+			'role' => 'Lorem ipsum dolor sit amet',
+			'created' => '2014-02-08 15:42:46',
+			'modified' => '2014-02-08 15:42:46'
 		),
 	);
 

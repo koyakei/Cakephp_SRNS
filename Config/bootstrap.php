@@ -92,6 +92,8 @@ Configure::write('Dispatcher.filters', array(
 ));
 CakePlugin::load('Migrations');
 CakePlugin::load('Search');
+CakePlugin::load('Users');;
+CakePlugin::load('Utils');
 /**
  * Configures default file logging options
  */

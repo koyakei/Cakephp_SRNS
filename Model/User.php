@@ -3,36 +3,14 @@ App::uses('AppModel', 'Model');
 /**
  * User Model
  *
+ * @property Article $Article
+ * @property Follow $Follow
+ * @property Link $Link
+ * @property Social $Social
+ * @property Tag $Tag
+ * @property UserDetail $UserDetail
  */
 class User extends AppModel {
-// �p�X���[�h�n�b�V����
-	public function beforeSave($options = array()) {
-    if (isset($this->data[$this->alias]['password'])) {
-        $passwordHasher = new SimplePasswordHasher();
-        $this->data[$this->alias]['password'] = $passwordHasher->hash($this->data[$this->alias]['password']);
-    }
-    return true;
-}
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'test';
-
-/**
- * Use table
- *
- * @var mixed False or table name
- */
-	public $useTable = 'user';
-
-/**
- * Primary key field
- *
- * @var string
- */
-	public $primaryKey = 'ID';
 
 /**
  * Validation rules
@@ -40,26 +18,6 @@ class User extends AppModel {
  * @var array
  */
 	public $validate = array(
-		'password' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'profileID' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
 		'username' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
@@ -70,7 +28,7 @@ class User extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'role' => array(
+		'slug' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
@@ -80,31 +38,94 @@ class User extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'email' => array(
-			'email' => array(
-				'rule' => array('email'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
 	);
-	public $hasMany= array(/*
-        'AO' => array(
-		'className' => 'Article',
-		'foreignKey' => 'user_id',
-		'dependent' => false,
-		'conditions' => 'AO.ID = Article.user_id',
-		//'type' => 'inner'
-	        ),
-        'LO' => array(
-		'className' => 'Link',
-		'foreignKey' => 'user_id',
-		'dependent' => false,
-		'conditions' => 'user.ID = Link.user_id',
-		//'type' => 'inner'
-	        )*/
-	 );
+
+	//The Associations below have been created with all possible keys, those that are not needed can be removed
+
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'Article' => array(
+			'className' => 'Article',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Follow' => array(
+			'className' => 'Follow',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Link' => array(
+			'className' => 'Link',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Social' => array(
+			'className' => 'Social',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Tag' => array(
+			'className' => 'Tag',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'UserDetail' => array(
+			'className' => 'UserDetail',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
+
 }

@@ -11,10 +11,10 @@
 	<tr>
 		<td><?php echo h($follow['Follow']['ID']); ?>&nbsp;</td>
 		<td>
-			<?php echo $this->Html->link($follow['User']['username'], array('controller' => 'users', 'action' => 'view', $follow['User']['ID'])); ?>
+			<?php echo $this->Html->link($follow['User']['username'], array('plugin' => 'users','controller' => 'users', 'action' => 'view', $follow['User']['id'])); ?>
 		</td>
 		<td>
-		<?php echo $this->Html->link($follow['target']['username'], array('controller' => 'users', 'action' => 'view', $follow['Follow']['target'])); ?></td>
+		<?php echo $this->Html->link($follow['target']['username'], array('plugin' => 'users','controller' => 'users', 'action' => 'view', $follow['Follow']['target'])); ?></td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $follow['Follow']['ID'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $follow['Follow']['ID'])); ?>
@@ -40,7 +40,7 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('My Follow'), array('action' => 'myfollow')); ?></li>
+		<li><?php echo $this->Html->link(__('My Follow'), array('controller' => 'follows','action' => 'myfollow')); ?></li>
 		<li><?php echo $this->Html->link(__('New Follow'), array('action' => 'add')); ?></li>
 		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>

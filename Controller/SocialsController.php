@@ -56,8 +56,7 @@ class SocialsController extends AppController {
 			}
 		}
 		$users = $this->Social->User->find('list');
-		$pages = $this->Social->Page->find('list');
-		$this->set(compact('users', 'pages'));
+		$this->set(compact('users'));
 	}
 
 /**
@@ -83,8 +82,7 @@ class SocialsController extends AppController {
 			$this->request->data = $this->Social->find('first', $options);
 		}
 		$users = $this->Social->User->find('list');
-		$pages = $this->Social->Page->find('list');
-		$this->set(compact('users', 'pages'));
+		$this->set(compact('users'));
 	}
 
 /**
@@ -106,4 +104,14 @@ class SocialsController extends AppController {
 			$this->Session->setFlash(__('The social could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
-	}}
+	}
+	public $belongsTo = array(
+		'User' => array(
+			'className' => 'User',
+			'foreignKey' => 'user_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
+	);
+}

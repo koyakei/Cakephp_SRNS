@@ -28,7 +28,6 @@ body {
 	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
 	font-size:90%;
 	margin: 0;
-	text-align:center;
 }
 a {
 	color: #003d4c;
@@ -740,15 +739,4 @@ pre {
 /** Elements **/
 #url-rewriting-warning {
 	display:none;
-}
-
-div.rightcontainer {
- float:right;
- margin-left:auto;
- margin-right:auto;
-}
-div.leftcontainer {
- float:left;
- margin-left:auto;
- margin-right:auto;
 }

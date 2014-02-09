@@ -4,6 +4,7 @@ App::uses('AppModel', 'Model');
  * Social Model
  *
  * @property User $User
+ * @property Page $Page
  */
 class Social extends AppModel {
 
@@ -34,19 +35,9 @@ class Social extends AppModel {
  * @var array
  */
 	public $validate = array(
-		'ID' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
 		'user_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -97,6 +88,13 @@ class Social extends AppModel {
 		'User' => array(
 			'className' => 'User',
 			'foreignKey' => 'user_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+		'Page' => array(
+			'className' => 'Page',
+			'foreignKey' => 'page_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

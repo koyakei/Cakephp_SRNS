@@ -71,12 +71,6 @@ class Follow extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'target' => array(
-				'className' => 'User',
-				'foreignKey' => 'target',
-				'conditions' => '',
-				'fields' => '',
-				'order' => ''
-		)
+
 	);
 }

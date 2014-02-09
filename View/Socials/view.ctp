@@ -8,7 +8,7 @@
 		</dd>
 		<dt><?php echo __('User'); ?></dt>
 		<dd>
-			<?php echo $this->Html->link($social['User']['ID'], array('controller' => 'users', 'action' => 'view', $social['User']['ID'])); ?>
+			<?php echo $this->Html->link($social['User']['id'], array('controller' => 'users', 'action' => 'view', $social['User']['id'])); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Ctrl'); ?></dt>
@@ -26,8 +26,31 @@
 			<?php echo h($social['Social']['page_id']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Created'); ?></dt>
+		<dd>
+			<?php echo h($social['Social']['created']); ?>
+			&nbsp;
+		</dd>
 	</dl>
 </div>
+<table>
+	<thead>
+		<th><?php echo $this->Paginator->sort('created'); ?>
+		</th>
+		<th>link
+		</th>
+	</thead>
+		<?php foreach ($socials as $social): ?>
+		<tr>
+			<td><?php echo h($social['Social']['created']); ?>&nbsp
+			</td>
+			<td><?php echo $this->Html->link(__('Edit'), array('plugin' =>$social['Social']['social'] 'action' => 'edit', $social['Social']['ID'])); ?></td>
+			
+		</tr>
+		<?php endforeach; ?>
+	<tbody>
+	</tbody>
+</table>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>

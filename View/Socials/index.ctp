@@ -7,17 +7,19 @@
 			<th><?php echo $this->Paginator->sort('ctrl'); ?></th>
 			<th><?php echo $this->Paginator->sort('view'); ?></th>
 			<th><?php echo $this->Paginator->sort('page_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($socials as $social): ?>
 	<tr>
 		<td><?php echo h($social['Social']['ID']); ?>&nbsp;</td>
 		<td>
-			<?php echo $this->Html->link($social['User']['ID'], array('controller' => 'users', 'action' => 'view', $social['User']['ID'])); ?>
+			<?php echo $this->Html->link($social['User']['id'], array('controller' => 'users', 'action' => 'view', $social['User']['id'])); ?>
 		</td>
 		<td><?php echo h($social['Social']['ctrl']); ?>&nbsp;</td>
 		<td><?php echo h($social['Social']['view']); ?>&nbsp;</td>
 		<td><?php echo h($social['Social']['page_id']); ?>&nbsp;</td>
+		<td><?php echo h($social['Social']['created']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $social['Social']['ID'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $social['Social']['ID'])); ?>

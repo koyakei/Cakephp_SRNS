@@ -15,7 +15,11 @@ class SocialsControllerTest extends ControllerTestCase {
 	public $fixtures = array(
 		'app.social',
 		'app.user',
-		'app.page'
+		'app.article',
+		'app.follow',
+		'app.link',
+		'app.tag',
+		'app.user_detail'
 	);
 
 /**

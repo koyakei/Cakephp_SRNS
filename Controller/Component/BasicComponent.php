@@ -5,6 +5,49 @@ App::uses('Link', 'Model');
 App::uses('Article', 'Model');
 Configure::load("static");
 class BasicComponent extends Component {
+	public function tagRadd(&$that) {
+		$searchID = Configure::read('tagID.search');//tagConst()['searchID'];
+		$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+		//$that->Link->unbindModel(array('hasOne'=>array('LO')), false);
+		$that->request->data['Tag']['user_id'] = $that->request->data['tag']['userid'];
+		$that->request->data['Link']['user_id'] = $that->request->data['tag']['userid'];
+		$LinkLTo=$that->request->data['Link']['LTo'];
+		if (!empty($that->request->data['Tag']['name'])) {
+			$that->loadModel('Tag');
+			$tagID = $that->Tag->find('first',
+					array(
+							'conditions' => array('name' => $that->request->data['Tag']['name'],
+									'user_id' => $that->request->data['Tag']['user_id']),
+							'fields' => array('Tag.ID'),
+							'order' => 'Tag.ID'
+					)
+			);
+			if($tagID == null){
+				$that->Tag->create();
+				$that->Tag->save($that->request->data);
+				$last_id = $that->Tag->getLastInsertID();
+				$that->Basic->trilinkAdd($that,$last_id,$LinkLTo,Configure::read('tagID.search'));
+				$that->Session->setFlash(__('タグがなかった.'));
+			}else {
+				$that->loadModel('Link');
+				$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+				$that->Link->unbindModel(array('hasOne'=>array('LO')), false);
+				$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
+				$that->Basic->tribasicfixverifybyid($that,$trikeyID,$LinkLTo);
+				$LE = $that->returntribasic;
+				if(null == $LE){
+					$tagIDd = $tagID['Tag']['ID'];
+					$that->Basic->trilinkAdd($that,$tagIDd,$LinkLTo,$trikeyID);
+					$that->Session->setFlash(__('タグ既存リンク追加'));
+
+				}else{
+					$that->Session->setFlash(__('関連付け済み'));
+				}
+			}
+		}
+		$that->redirect($that->referer());
+	}
+
 	public function tribasic(&$that = null,$trykeyname,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
 		$trikeyID = Configure::read('tagID.'.$trykeyname);//tagConst()[$trykeyname];
@@ -171,9 +214,11 @@ class BasicComponent extends Component {
 		return $that->returntribasic;
 	}
 	public function trilinkAdd(&$that,$FromID,$ToID,$keyID) {
+		debug($that->request->data['Tag']['user_id']);
+		debug($keyID);
 		$that->loadModel('Link');
 		$that->request->data['Link'] = array(
-			'user_id' => $that->request->data['tag']['userid'],
+			'user_id' => $that->request->data['Tag']['user_id'],
 			'LFrom' => $FromID,
 			'LTo' => $ToID,//リンク先記事or タグ
 			'quant' => 1,
@@ -182,18 +227,24 @@ class BasicComponent extends Component {
 		);
 		$that->loadModel('Link');
 		$that->Link->create();
-		$that->Link->save($that->request->data);
-		$that->last_id = $that->Link->getLastInsertID();
-		$that->request->data['Link'] = array(
-			'user_id' => $that->request->data['tag']['userid'],
-			'LFrom' => $keyID,//
-			'LTo' => $that->last_id,
-			'quant' => 1,
-			'created' => date("Y-m-d H:i:s"),
-			'modified' => date("Y-m-d H:i:s"),
-		);
-		$that->Link->create();
-		$that->Link->save($that->request->data);
+		if($that->Link->save($that->request->data)){
+			$that->last_id = $that->Link->getLastInsertID();
+			$that->request->data['Link'] = array(
+					'user_id' => $that->request->data['Tag']['user_id'],
+					'LFrom' => $keyID,//
+					'LTo' => $that->last_id,
+					'quant' => 1,
+					'created' => date("Y-m-d H:i:s"),
+					'modified' => date("Y-m-d H:i:s"),
+			);
+			$that->Link->create();
+			if($that->Link->save($that->request->data)==false){
+				debug("2nd step miss");
+			}
+		}else{
+			debug("1st step miss");
+		}
+
 	}
 
 	public function trisinglefind(&$that = null,$trikeyID,$modelSe,$Ltotarget) {

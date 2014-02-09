@@ -52,21 +52,21 @@ class Link extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'from_id' => array(
+		'LFrom' => array(
 			'naturalNumber' => array(
-				'rule' => array('naturalNumber'),
+				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
-				'allowEmpty' => true,
+				'allowEmpty' => FALSE,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'to_id' => array(
+		'LTo' => array(
 			'naturalNumber' => array(
-				'rule' => array('naturalNumber'),
+				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
-				'allowEmpty' => true,
+				'allowEmpty' => FALSE,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
@@ -84,9 +84,9 @@ class Link extends AppModel {
 		),
 		'user_id' => array(
 			'naturalNumber' => array(
-				'rule' => array('naturalNumber'),
+				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
-				'allowEmpty' => true,
+				'allowEmpty' => FALSE,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations

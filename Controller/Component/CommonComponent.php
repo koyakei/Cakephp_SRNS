@@ -50,27 +50,29 @@ class CommonComponent extends Component {
 	}
 
 	public function triarticleAdd(&$that = null,$model,$userID) {
-		if ($that->keyid == null){
-			$this->Session->setFlash(__('no that->keyid'));
-			}else{
-			if ($that->request->params['pass'][0] != null) {
-				$Article = new $model();
-				$Article->create();
-				if ($Article->save($that->request->data)) {
-					$that->last_id = $Article->getLastInsertID();
-					$that->request->data = null;
-					$that->request->data['Link'] = array(
-						'user_id' => $userID,
-						'LFrom' => $that->request->params['pass'][0],//2138
-						'LTo' => $that->last_id,
-						'quant' => 1,
-						'created' => date("Y-m-d H:i:s"),
-						'modified' => date("Y-m-d H:i:s"),
-					);
-					$Link = new Link();
-					$Link->create();
-					if ($Link->save($that->request->data)) {
-					$that->last_id = $Link->getLastInsertID();
+		if ($userID == null) {
+			$userID = Configure::read('acountID.admin');
+		}
+		debug($userID);
+		if ($that->request->params['pass'][0] != null) {
+			$Article = new $model();
+			$Article->create();
+			if ($Article->save($that->request->data)) {
+				$that->last_id = $Article->getLastInsertID();
+				$that->request->data = null;
+				$that->request->data['Link'] = array(
+					'user_id' => $userID,
+					'LFrom' => $that->request->params['pass'][0],//2138
+					'LTo' => $that->last_id,
+					'quant' => 1,
+					'created' => date("Y-m-d H:i:s"),
+					'modified' => date("Y-m-d H:i:s"),
+				);
+				debug($that->request->data);
+				$Link = new Link();
+				$Link->create();
+				if ($Link->save($that->request->data)) {
+					/*$that->last_id = $Link->getLastInsertID();
 					$that->request->data = null;
 					$that->request->data['Link'] = array(
 						'user_id' => $userID,
@@ -81,19 +83,24 @@ class CommonComponent extends Component {
 						'modified' => date("Y-m-d H:i:s"),
 					);
 					$Link->create();
-						if ($Link->save($that->request->data)) {
-							$that->Session->setFlash(__('The article has been saved.'));
+					if ($Link->save($that->request->data)) {
+						$that->Session->setFlash(__('The article has been saved.'));
 
-						} else {
-							$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
-						}
-					}
+					} else {
+						$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
+					}*/
+				}else {
+					debug("misslink1");
 				}
 			}
+
 		}
 	}
 
-	public function tritagAdd(&$that = null,$model,$userID) {
+	public function tritagAdd(&$that = null,$model,$userID,$targetFromID) {
+		if ($userID == null) {
+			$userID = Configure::read('acountID.admin');
+		}
 
 		$tagID = $that->$model->find('first',
 			array(
@@ -103,7 +110,6 @@ class CommonComponent extends Component {
 				'order' => 'Tag.ID'
 			)
 		);
-		print_r($tagID);
 		if($tagID['Tag']['ID'] == null){
 			$Article = new $model();
 			$Article->create();
@@ -115,12 +121,13 @@ class CommonComponent extends Component {
 				$that->request->data = null;
 				$that->request->data['Link'] = array(
 						'user_id' => $userID,
-						'LFrom' => $that->request->params['pass'][0],//2138
+						'LFrom' => $targetFromID,//$that->request->params['pass'][0],
 						'LTo' => $that->last_id,
 						'quant' => 1,
 						'created' => date("Y-m-d H:i:s"),
 						'modified' => date("Y-m-d H:i:s"),
 				);
+				debug($that->request->data['Link']);
 				$Link = new Link();
 				$Link->create();
 				if ($Link->save($that->request->data)) {
@@ -141,6 +148,8 @@ class CommonComponent extends Component {
 					} else {
 						$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
 					}
+				}else {
+					debug("miss");
 				}
 			}
 		}
@@ -209,6 +218,9 @@ class CommonComponent extends Component {
 	public function trifinderbyid(&$that = null) {
 		if ($_SESSION['selected'] == null) {
 			$_SESSION['selected'] = Configure::read('tagID.reply');
+		}
+		if ($that->request->data['keyid']['keyid'] == null) {
+			$that->request->data['keyid']['keyid'] = $_SESSION['selected'];
 		}
 		$id = $that->request['pass'][0];
 		//debug($that->request->data['keyid']['keyid']);

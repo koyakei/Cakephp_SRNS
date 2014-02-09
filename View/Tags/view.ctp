@@ -102,16 +102,13 @@ $(function () {
 		<li><?php echo $this->Html->link(__('Tag search'), array('action' => 'search')); ?> </li>
 	</ul>
 </div>
-<table id="myTable" cellpadding="0" cellspacing="0">
+	<table id="myTable" cellpadding="0" cellspacing="0">
 		<?php echo $this->element('tablehead', Array('taghashes'=>$taghashes)); ?>
 		<tbody>
 		<?php echo $this->element('tablebody', Array('results' => $articleresults,'taghashes'=>$taghashes,'firstModel' => 'Article')); ?>
 		<?php echo $this->element('tablebody', Array('results' => $tagresults,'taghashes'=>$taghashes,'firstModel' => 'Tag')); ?>
 		</tbody>
 	</table>
-
-
-
 		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article')); ?>
 		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag')); ?>
 </body>

@@ -232,7 +232,7 @@ class UsersController extends UsersAppController {
 					$this->modelClass . '.active' => 1,
 					$this->modelClass . '.email_verified' => 1)));
 
-		$this->Auth->loginRedirect = '/tags/search';
+		$this->Auth->loginRedirect = '/tags/search';//'/users/users/edit';
 		$this->Auth->logoutRedirect = array('plugin' => Inflector::underscore($this->plugin), 'controller' => 'users', 'action' => 'login');
 		$this->Auth->loginAction = array('admin' => false, 'plugin' => Inflector::underscore($this->plugin), 'controller' => 'users', 'action' => 'login');
 	}

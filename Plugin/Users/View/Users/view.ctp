@@ -45,9 +45,7 @@
 		<?php foreach ($socials as $social): ?>
 		<tr>
 			<td><?php echo $this->Html->link($social['User']['username'], array('plugin' => 'users','controller' => 'users', 'action' => 'view', $follow['User']['id'])); ?>&nbsp
-			</td>
-			<td><?php echo $this->Html->link($social['Social']['created'], array('plugin' =>$social['Social']['plugin'], 'action' => $social['Social']['action'] 'view'=>$social['Social']['view'], $social['Social']['ID'])); ?></td>
-			
+			</td>			
 		</tr>
 		<?php endforeach; ?>
 	<tbody>

@@ -2,6 +2,7 @@
 
 App::uses('AppController', 'Controller');
 App::uses('Link', 'Model');
+App::uses('User', 'Model');
 Configure::load("static");
 //App::uses('BasicComponent', 'Controller/Component');
 /*App::uses('Article', 'Model');
@@ -20,6 +21,8 @@ class AppSession {
 }
 
 class TagsController extends AppController {
+	public $actsAs = array('Srns');
+
 	public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session',
 			'Security',
 			'Search.Prg','Users.RememberMe');
@@ -88,7 +91,7 @@ class TagsController extends AppController {
 	        }
 
 	        //$appSession = $this->Session->read('appSession');
-	        $this->Auth->allow('logout','');
+	        $this->Auth->allow('logout');
 	        $this->Auth->authenticate = array(
 	                'Basic' => array('user' => 'admin'),
 	                //'Form' => array('user' => 'Member')
@@ -123,6 +126,7 @@ class TagsController extends AppController {
         }
 
         public function search() {
+        	debug($this->Auth->user);
 	        //$this->Prg->commonProcess();
 	        $req = $this->passedArgs;
 	        if (!empty($this->request->data['Tag']['keyword'])) {
@@ -143,42 +147,52 @@ class TagsController extends AppController {
 	        //$this->set('Auth', $this->Auth->user('ID'));
         }
 
-public function quant($id = null) {
-	if ($this->request->is('post')) {
-		$this->userID = $this->Auth->user('ID');
-		if($this->request->data['Link']['user_id'] == $this->userID){
-			$this->loadModel('Link');
-			if ($this->Link->save($this->request->data)) {
-				$this->Session->setFlash(__('The article has been saved.'));
-			} else {
-				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
+	public function quant($id = null) {
+
+		if ($this->request->is('post')) {
+			$this->userID = $this->Auth->user('id');
+			if ($this->userID == null) {
+				$this->userID = Configure::read('acountID.admin');
+			}
+			if($this->request->data['Link']['user_id'] == $this->userID){
+				$this->loadModel('Link');
+				if ($this->Link->save($this->request->data)) {
+					$this->Session->setFlash(__('The article has been saved.'));
+				} else {
+					$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
+				}
 			}
 		}
+		debug($this->referer());
+		$this->redirect($this->referer());
+		debug($this->referer());
 	}
-//	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
-	$this->redirect($this->referer());
-}
 
-public function tagdel($id = null) {
-	if ($this->request->is('post') and $this->request->data['Link']['user_id'] == $this->Auth->user('ID')) {
-		$this->loadModel('Link');
-		if ($this->Link->delete($this->request->data('Link.ID'))){
-			$this->Session->setFlash(__('削除完了.'));
-		} else {
-			$this->Session->setFlash(__('削除失敗.'));
+	public function tagdel($id = null) {
+		if ($this->request->is('post') and $this->request->data['Link']['user_id'] == $this->Auth->user('ID')) {
+			$this->loadModel('Link');
+			if ($this->Link->delete($this->request->data('Link.ID'))){
+				$this->Session->setFlash(__('削除完了.'));
+			} else {
+				$this->Session->setFlash(__('削除失敗.'));
+			}
 		}
+	//	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
+		$this->redirect($this->referer());
 	}
-//	$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
-	$this->redirect($this->referer());
-}
 
-public function tagRadd($id = null) {
-	$searchID = Configure::read('tagID.search');//tagConst()['searchID'];
-	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
-	//$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
-	$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
-	$this->request->data['Link']['user_id'] = $this->request->data['tag']['userid'];
-	$LinkLTo=$this->request->data['Link']['LTo'];
+	public function tagRadd($id = null) {
+		debug($this->request->data['Link']['LTo']);
+		debug($this->request->data['tag']['userid']
+	                );/*
+		$this->keyid = Configure::read('tagID.search');
+		$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->data['Link']['LTo']);*/
+		//$searchID = Configure::read('tagID.search');
+		//$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+		$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
+		$this->request->data['Link']['user_id'] = $this->request->data['tag']['userid'];
+			$this->Session->setFlash(__('ちぇｃｈ2.'));
+		$LinkLTo=$this->request->data['Link']['LTo'];
 		if (!empty($this->request->data['Tag']['name'])) {
 			$this->loadModel('Tag');
 			$tagID = $this->Tag->find('first',
@@ -189,6 +203,7 @@ public function tagRadd($id = null) {
 				'order' => 'Tag.ID'
 				)
 			);
+	debug($this->request->data['Tag']['user_id']);
 			if($tagID == null){
 				$this->Tag->create();
 				$this->Tag->save($this->request->data);
@@ -206,16 +221,16 @@ public function tagRadd($id = null) {
 					$tagIDd = $tagID['Tag']['ID'];
 					$this->Basic->trilinkAdd($this,$tagIDd,$LinkLTo,$trikeyID);
 					$this->Session->setFlash(__('タグ既存リンク追加'));
-
 				}else{
 					$this->Session->setFlash(__('関連付け済み'));
 				}
 			}
-	//	}
+		}else {
+			$this->Session->setFlash(__('データなし'));
+		}
+		//$this->redirect(array('controller' => 'tags','action'=>'view',$this->request->data['tag']['idre']));
+		//$this->redirect($this->referer());
 	}
-	//$this->redirect(array('controller' => 'tags','action'=>'result',$this->request->data['tag']['idre']));
-	$this->redirect($this->referer());
-}
 
 	public function result($id = null) {
 		$this->Common->trifinder($this);
@@ -248,13 +263,14 @@ public function tagRadd($id = null) {
 	}
 
 	public function view($id = null) {
+		$userID = $this->Auth->user('id');
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
-			$this->Common->triarticleAdd($this,'Article',1);
+			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
 		}
 		if($this->request->data['Tag']['name'] != null){
 			$this->keyid = $this->request->data['Tag']['keyid'];
-			$this->Common->tritagAdd($this,"Tag",1);
+			$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->params['pass'][0]);
 		}
 		$this->set('idre', $id);
 		if (!$this->Tag->exists($id)) {
@@ -275,7 +291,7 @@ public function tagRadd($id = null) {
 		$this->Session->write('selected',$this->appSession->selected);
 		}*/
 		//$_SESSION['appMode'] = $this->request->data['keyid']['keyid'];
-		$this->Session->write('userselected',$this->request->data['tag']['userid'] );
+		$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
 		$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
 		$this->set('upperIdeas', $this->returntribasic);
 	}

@@ -11,12 +11,12 @@
 						<?php echo $this->Form->postLink(__('Delete'), array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID'])); ?>
 					</td>
 					<td>
-						<?php  echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $result[$firstModel]['ID'])); ?>
+						<?php $ToID =$result[$firstModel]['ID']; echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $ToID)); ?></td>
 						<?php foreach ($taghashes as $key => $hash): ?>
 						<?php $b = 0; ?>
 							<?php if($result['subtag'] != null) { ?>
 								<?php foreach ($result['subtag'] as $subtag): ?>
-									<?php if ($hash['ID'] == $subtag['Tag']['ID']){ ?></td>
+									<?php if ($hash['ID'] == $subtag['Tag']['ID']){ ?>
 										<td><?php echo $subtag['Link']['quant']; ?></td>
 										<!--<?php echo $subtag['Tag']['name']; ?>-->
 										<td>

@@ -1,27 +1,23 @@
 <div class="follows index">
 	<h2><?php echo __('Follows'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th><?php echo $this->Paginator->sort('ID'); ?></th>
-			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('target'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	<?php foreach ($follows as $follow): ?>
-	<tr>
-		<td><?php echo h($follow['Follow']['ID']); ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($follow['User']['username'], array('controller' => 'users', 'action' => 'view', $follow['User']['ID'])); ?>
-		</td>
-		<td>
-		<?php echo $this->Html->link($follow['target']['username'], array('controller' => 'users', 'action' => 'view', $follow['Follow']['target'])); ?></td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $follow['Follow']['ID'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $follow['Follow']['ID'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $follow['Follow']['ID']), null, __('Are you sure you want to delete # %s?', $follow['Follow']['ID'])); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
+	<table>
+		<thead>
+			<th><?php echo $this->Paginator->sort('created'); ?>
+			</th>
+			<th>link
+			</th>
+		</thead>
+		<tbody>
+			<?php foreach ($socials as $social): ?>
+			<tr>
+				<td><?php echo h($social['Social']['created']); ?>&nbsp
+				</td>
+				<td><?php echo $this->Html->link(__('Edit'), array('plugin' =>$social['Social']['social'] 'action' => 'edit', $social['Social']['ID'])); ?></td>
+				
+			</tr>
+			<?php endforeach; ?>
+		
+		</tbody>
 	</table>
 	<p>
 	<?php

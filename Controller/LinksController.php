@@ -9,9 +9,12 @@ Configure::load("static");
  * @property PaginatorComponent $Paginator
  */
 class LinksController extends AppController {
+	/*public $actsAs = array(
+		'Srns'
+	);*/
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('logout');
+		$this->Auth->allow('logout','');
 		$this->Auth->authenticate = array(
 				'Basic' => array('user' => 'admin'),
 				//'Form' => array('user' => 'Member')

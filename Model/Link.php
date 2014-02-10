@@ -7,6 +7,7 @@ App::uses('AppModel', 'Model');
  * @property LinkID_LinkFrom $LinkID_LinkFrom
  */
 class Link extends AppModel {
+	public $actsAs = array('Search.Searchable','Srns');
 
 /**
  * Use database config

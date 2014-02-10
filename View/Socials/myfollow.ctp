@@ -1,4 +1,4 @@
-<div class="follows index">
+<div class="follows index"><?php debug($socials); ?>
 	<h2><?php echo __('Follows'); ?></h2>
 	<table>
 		<thead>
@@ -12,7 +12,7 @@
 			<tr>
 				<td><?php echo h($social['Social']['created']); ?>&nbsp
 				</td>
-				<td><?php echo $this->Html->link(__('Edit'), array('plugin' =>$social['Social']['social'] 'action' => 'edit', $social['Social']['ID'])); ?></td>
+				<td><?php echo $this->Html->link(($social['User']['username']), array('plugin' =>$social['Social']['vplugin'],'controller' => $social['Social']['vctrl'], 'action' => $social['Social']['vaction'], $social['Social']['page_id'])); ?></td>
 				
 			</tr>
 			<?php endforeach; ?>

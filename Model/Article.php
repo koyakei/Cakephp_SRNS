@@ -8,7 +8,7 @@ Configure::load("static");
 class Article extends AppModel {
 	//public $replyID = Configure::read('tagID.reply');//tagConst()['replyID']
 
-	public $actsAs = array('Search.Searchable');
+	public $actsAs = array('Search.Searchable','Srns');
 	public $filterArgs = array(
 	        'word' => array(
 //'name' => 'name',

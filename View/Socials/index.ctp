@@ -48,5 +48,6 @@
 		<li><?php echo $this->Html->link(__('New Social'), array('action' => 'add')); ?></li>
 		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('myfollow'), array('controller' => 'socials', 'action' => 'myfollow')); ?> </li>
 	</ul>
 </div>

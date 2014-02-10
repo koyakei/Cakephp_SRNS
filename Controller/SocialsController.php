@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+Configure::load('static');
 /**
  * Socials Controller
  *
@@ -7,13 +8,35 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class SocialsController extends AppController {
-
+	 public function beforeFilter(){
+	 	parent::beforeFilter();
+	 	$this->Auth->allow('logout');
+	 	$this->Auth->authenticate = array(
+	 			'Basic' => array('user' => 'admin'),
+	 			//'Form' => array('user' => 'Member')
+	 	);
+	 }
 /**
  * Components
  *
  * @var array
  */
 	public $components = array('Paginator');
+
+/**
+ * index method
+ *
+ * @return void
+ */
+	public function myfollow() {
+		$this->Social->recursive = 0;
+			$this->Paginator->settings = array(
+				'condition' => array(
+				"user_id = Configure::read('acountID.admin')"
+			)
+		);
+		$this->set('socials', $this->Paginator->paginate());
+	}
 
 /**
  * index method

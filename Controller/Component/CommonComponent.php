@@ -50,6 +50,8 @@ class CommonComponent extends Component {
 	}
 
 	public function triarticleAdd(&$that = null,$model,$userID) {
+		/*debug($that->name);
+		$that->Tag->setValue($that->plugin,$that->name.$that->action,$that->view);*/
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');
 		}
@@ -72,7 +74,7 @@ class CommonComponent extends Component {
 				$Link = new Link();
 				$Link->create();
 				if ($Link->save($that->request->data)) {
-					/*$that->last_id = $Link->getLastInsertID();
+					$that->last_id = $Link->getLastInsertID();
 					$that->request->data = null;
 					$that->request->data['Link'] = array(
 						'user_id' => $userID,
@@ -88,13 +90,14 @@ class CommonComponent extends Component {
 
 					} else {
 						$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
-					}*/
+					}
 				}else {
 					debug("misslink1");
 				}
 			}
 
 		}
+
 	}
 
 	public function tritagAdd(&$that = null,$model,$userID,$targetFromID) {

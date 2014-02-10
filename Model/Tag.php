@@ -7,17 +7,23 @@ App::uses('User', 'Model');
  *
  * @property Owner $Owner
  */
-class Tag extends AppModel {
+class Tag extends AppModel {/*
+	public function setValue($plugin = null,$name = null,$action = null,$view = null) {
+		debug($action);
+		debug($this->cachedName);
+		$aname = $this->cachedName;
+		debug($aname);
+	}*/
 	public $uses = array('Article','Link','User','Tag');
 //	public $order = array('Article.id DESC');
 	public $actsAs = array('Search.Searchable');
 	public $filterArgs = array(
-	        'word' => array(
-//'name' => 'name',
- 'type' => 'like'
-, 'field' => array('Tag.name')
-, 'connectorAnd' => '+', 'connectorOr' => ','
-),
+        'word' => array(
+		//'name' => 'name',
+		 'type' => 'like'
+		, 'field' => array('Tag.name')
+		, 'connectorAnd' => '+', 'connectorOr' => ','
+		),
 	);
 	public function multipleKeywords($keyword, $andor = null) {
 		$connector = ($andor === 'or') ? ',' : '+';

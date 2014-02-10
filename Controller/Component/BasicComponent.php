@@ -1,10 +1,45 @@
 <?php
+App::uses('Social', 'Model');
 App::uses('Tag', 'Model');
 App::uses('User', 'Model');
 App::uses('Link', 'Model');
 App::uses('Article', 'Model');
 Configure::load("static");
 class BasicComponent extends Component {
+	public function social(&$that){
+		debug($that->plugin);
+		debug($that->action);
+		debug($that->view);
+		debug($that->name);
+		debug($that->id);
+		$data['Social']['vaction'] = $that->action;
+		$data['Social']['vplugin'] = $that->plugin;
+		$data['Social']['vctrl'] = $that->name;
+		$data['Social']['vview'] = $that->view;
+		$data['Social']['page_id'] = $that->id;
+		debug($data);
+		$Social = new Social();
+		$Social->create();
+		$Social->Save($data);
+	}
+
+	public function quant(&$that) {
+		if ($that->request->is('post')) {
+			$that->userID = $that->Auth->user('id');
+			if ($that->userID == null) {
+				$that->userID = Configure::read('acountID.admin');
+			}
+			if($that->request->data['Link']['user_id'] == $that->userID){
+				$that->loadModel('Link');
+				if ($that->Link->save($that->request->data)) {
+					$that->Session->setFlash(__('The article has been saved.'));
+				} else {
+					$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
+				}
+			}
+		}
+	}
+
 	public function tagRadd(&$that) {
 		$searchID = Configure::read('tagID.search');//tagConst()['searchID'];
 		$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
@@ -15,12 +50,12 @@ class BasicComponent extends Component {
 		if (!empty($that->request->data['Tag']['name'])) {
 			$that->loadModel('Tag');
 			$tagID = $that->Tag->find('first',
-					array(
-							'conditions' => array('name' => $that->request->data['Tag']['name'],
-									'user_id' => $that->request->data['Tag']['user_id']),
-							'fields' => array('Tag.ID'),
-							'order' => 'Tag.ID'
-					)
+				array(
+					'conditions' => array('name' => $that->request->data['Tag']['name'],
+					'user_id' => $that->request->data['Tag']['user_id']),
+					'fields' => array('Tag.ID'),
+					'order' => 'Tag.ID'
+				)
 			);
 			if($tagID == null){
 				$that->Tag->create();

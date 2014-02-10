@@ -21,7 +21,6 @@ class AppSession {
 }
 
 class TagsController extends AppController {
-	public $actsAs = array('Srns');
 
 	public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session',
 			'Security',
@@ -98,8 +97,6 @@ class TagsController extends AppController {
 	                );
         }
 
-
-
         public $helpers = array(
         		'Html',
         		'Session'
@@ -163,9 +160,10 @@ class TagsController extends AppController {
 				}
 			}
 		}
+		$this->redirect();
 		debug($this->referer());
-		$this->redirect($this->referer());
-		debug($this->referer());
+		$this->redirect($this->referer());/*
+		debug($this->referer());*/
 	}
 
 	public function tagdel($id = null) {
@@ -184,14 +182,15 @@ class TagsController extends AppController {
 	public function tagRadd($id = null) {
 		debug($this->request->data['Link']['LTo']);
 		debug($this->request->data['tag']['userid']
-	                );/*
-		$this->keyid = Configure::read('tagID.search');
+	                );
+
+
+		$this->keyid = Configure::read('tagID.search');/*
 		$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->data['Link']['LTo']);*/
 		//$searchID = Configure::read('tagID.search');
 		//$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 		$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
 		$this->request->data['Link']['user_id'] = $this->request->data['tag']['userid'];
-			$this->Session->setFlash(__('ちぇｃｈ2.'));
 		$LinkLTo=$this->request->data['Link']['LTo'];
 		if (!empty($this->request->data['Tag']['name'])) {
 			$this->loadModel('Tag');
@@ -203,7 +202,6 @@ class TagsController extends AppController {
 				'order' => 'Tag.ID'
 				)
 			);
-	debug($this->request->data['Tag']['user_id']);
 			if($tagID == null){
 				$this->Tag->create();
 				$this->Tag->save($this->request->data);
@@ -228,6 +226,7 @@ class TagsController extends AppController {
 		}else {
 			$this->Session->setFlash(__('データなし'));
 		}
+
 		//$this->redirect(array('controller' => 'tags','action'=>'view',$this->request->data['tag']['idre']));
 		//$this->redirect($this->referer());
 	}
@@ -263,14 +262,25 @@ class TagsController extends AppController {
 	}
 
 	public function view($id = null) {
+		$this->id =$id;
+		$this->Tag->cachedName = $this->name;
+/*
+		$this->Tag->setValue($this->plugin,$this->name.$this->action,$this->view);
+		debug($this->Tag->cachedName);*/
 		$userID = $this->Auth->user('id');
+		if($this->request->data['Link']['quant'] != null){
+			$this->Basic->quant($this);
+			$this->Basic->social($this);
+		}
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
 			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
+			$this->Basic->social($this);
 		}
 		if($this->request->data['Tag']['name'] != null){
 			$this->keyid = $this->request->data['Tag']['keyid'];
 			$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->params['pass'][0]);
+			$this->Basic->social($this);
 		}
 		$this->set('idre', $id);
 		if (!$this->Tag->exists($id)) {

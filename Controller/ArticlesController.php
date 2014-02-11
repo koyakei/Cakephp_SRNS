@@ -50,10 +50,12 @@ class ArticlesController extends AppController {
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
 			$this->Common->triarticleAdd($this,'Article',1);
+			$this->Basic->social($this);
 		}
 		if($this->request->data['Tag']['name'] != null){
 			$this->keyid = $this->request->data['Tag']['keyid'];
 			$this->Common->tritagAdd($this,"Tag",1);
+			$this->Basic->social($this);
 		}
 
 		$this->set('idre', $id);

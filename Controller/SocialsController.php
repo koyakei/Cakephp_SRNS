@@ -8,6 +8,8 @@ Configure::load('static');
  * @property PaginatorComponent $Paginator
  */
 class SocialsController extends AppController {
+	public $uses = array(//'Tag','Article','Link','User'
+	);
 	 public function beforeFilter(){
 	 	parent::beforeFilter();
 	 	$this->Auth->allow('logout');
@@ -21,7 +23,9 @@ class SocialsController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session',
+			'Security',
+			'Search.Prg','Users.RememberMe');
 
 /**
  * index method
@@ -43,10 +47,15 @@ class SocialsController extends AppController {
  *
  * @return void
  */
+	public function test(){
+		//$this->redirect($this->referer());
+		$this->Basic->test($this);
+	}
 	public function index() {
 		$this->Social->recursive = 0;
 		$this->set('socials', $this->Paginator->paginate());
 	}
+
 
 /**
  * view method

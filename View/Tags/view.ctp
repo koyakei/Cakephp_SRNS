@@ -100,6 +100,7 @@ $(function () {
 		<li><?php echo $this->Html->link(__('List Tags'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('Tag search'), array('action' => 'search')); ?> </li>
+		<li><?php echo $this->Html->link(__('test'), array('action' => 'test')); ?> </li>
 	</ul>
 </div>
 	<table id="myTable" cellpadding="0" cellspacing="0">

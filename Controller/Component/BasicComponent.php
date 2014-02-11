@@ -7,17 +7,17 @@ App::uses('Article', 'Model');
 Configure::load("static");
 class BasicComponent extends Component {
 	public function social(&$that){
-		debug($that->plugin);
+		/*debug($that->plugin);
 		debug($that->action);
 		debug($that->view);
 		debug($that->name);
-		debug($that->id);
+		debug($that->id);*/
 		$data['Social']['vaction'] = $that->action;
 		$data['Social']['vplugin'] = $that->plugin;
 		$data['Social']['vctrl'] = $that->name;
 		$data['Social']['vview'] = $that->view;
 		$data['Social']['page_id'] = $that->id;
-		debug($data);
+		//debug($data);
 		$Social = new Social();
 		$Social->create();
 		$Social->Save($data);
@@ -80,9 +80,12 @@ class BasicComponent extends Component {
 				}
 			}
 		}
+		debug($that->referer());
+		//$that->redirect($that->referer());
+	}
+	public function test(&$that){
 		$that->redirect($that->referer());
 	}
-
 	public function tribasic(&$that = null,$trykeyname,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
 		$trikeyID = Configure::read('tagID.'.$trykeyname);//tagConst()[$trykeyname];

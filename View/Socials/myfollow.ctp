@@ -1,4 +1,4 @@
-<div class="follows index"><?php debug($socials); ?>
+<div class="follows index"><?php //debug($socials); ?>
 	<h2><?php echo __('Follows'); ?></h2>
 	<table>
 		<thead>

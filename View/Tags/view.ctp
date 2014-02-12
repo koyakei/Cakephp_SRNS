@@ -90,7 +90,7 @@ $(function () {
 			'type' => 'select',
 			'multiple'=> false,
 			'options' => $keylist,
-			'selected' => $_SESSION['selected']//$this->Session->read('selected')  // �K��l�́Avalue��z��ɂ�������
+			'selected' => $_SESSION['selected']//$this->Session->read('selected')  // ・ｽK・ｽ・ｽl・ｽﾍ、value・ｽ・ｽz・ｽ・ｽﾉゑｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
 			)); ?>
 			<?php echo $this->Form->end(__('keyselect')); ?>
 	<h3><?php echo __('Actions'); ?></h3>
@@ -110,7 +110,7 @@ $(function () {
 		<?php echo $this->element('tablebody', Array('results' => $tagresults,'taghashes'=>$taghashes,'firstModel' => 'Tag')); ?>
 		</tbody>
 	</table>
-		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article')); ?>
-		<?php echo $this->element('Input', Array('keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag')); ?>
+		<?php echo $this->element('Input', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article')); ?>
+		<?php echo $this->element('Input', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag')); ?>
 </body>
 </html>

@@ -1,4 +1,8 @@
+<html>
+<head>
+<?php echo $this->Html->charset("utf-8"); ?>
 <?php echo $this->Html->css('cake.generic'); ?> 
+
 <?php
 $this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', null, array('block' => 'css'));
 $this->Html->script(
@@ -38,7 +42,8 @@ $this->Html->script(
 </script>
 <?php $this->end(); ?>
 
-
+</head>
+<body>
 	<div class="actions">
 		<h3><?php echo __('Actions'); ?></h3>
 		<ul>
@@ -46,6 +51,7 @@ $this->Html->script(
 			<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('article index'), array('controller' => 'articles','action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('key index'), array('controller' => 'keys','action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('social my follow'), array('controller' => 'socials','action' => 'myfollow')); ?> </li>
 		</ul>
 	</div>
 
@@ -118,3 +124,5 @@ $this->Html->script(
 	?>
 	</div>
 </div>
+</body>
+</html>

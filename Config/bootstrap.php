@@ -89,11 +89,12 @@ CakePlugin::load('DebugKit'); //Loads a single plugin named DebugKit
 Configure::write('Dispatcher.filters', array(
 	'AssetDispatcher',
 	'CacheDispatcher'
-));
+));/*
 CakePlugin::load('Migrations');
 CakePlugin::load('Search');
 CakePlugin::load('Users');;
-CakePlugin::load('Utils');
+CakePlugin::load('Utils');*/
+CakePlugin::loadAll();
 /**
  * Configures default file logging options
  */

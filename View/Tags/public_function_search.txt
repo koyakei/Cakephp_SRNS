@@ -43,10 +43,10 @@
 		/*if ($this->request->is('post') and $this->request->data['Link']['user_id'] == Configure::read('acountID.admin')) {*/
 			$this->loadModel('Link');
 			if ($this->Link->delete($this->request->data('Link.ID'))){
-				$this->Session->setFlash(__('íœŠ®—¹.'));
+				$this->Session->setFlash(__('å‰Šé™¤å®Œäº†.'));
 				debug("sucsess");
 			} else {
-				$this->Session->setFlash(__('íœŽ¸”s.'));
+				$this->Session->setFlash(__('å‰Šé™¤å¤±æ•—.'));
 				debug("fail");
 			}
 		/*}else {
@@ -83,7 +83,7 @@
 				$this->Tag->save($this->request->data);
 				$last_id = $this->Tag->getLastInsertID();
 				$this->Basic->trilinkAdd($this,$last_id,$LinkLTo,Configure::read('tagID.search'));
-				$this->Session->setFlash(__('ƒ^ƒO‚ª‚È‚©‚Á‚½.'));
+				$this->Session->setFlash(__('ã‚¿ã‚°ãŒãªã‹ã£ãŸ.'));
 				}else {
 			$this->loadModel('Link');
 				$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
@@ -94,13 +94,13 @@
 				if(null == $LE){
 					$tagIDd = $tagID['Tag']['ID'];
 					$this->Basic->trilinkAdd($this,$tagIDd,$LinkLTo,$trikeyID);
-					$this->Session->setFlash(__('ƒ^ƒOŠù‘¶ƒŠƒ“ƒN’Ç‰Á'));
+					$this->Session->setFlash(__('ã‚¿ã‚°æ—¢å­˜ãƒªãƒ³ã‚¯è¿½åŠ '));
 				}else{
-					$this->Session->setFlash(__('ŠÖ˜A•t‚¯Ï‚Ý'));
+					$this->Session->setFlash(__('é–¢é€£ä»˜ã‘æ¸ˆã¿'));
 				}
 			}
 		}else {
-			$this->Session->setFlash(__('ƒf[ƒ^‚È‚µ'));
+			$this->Session->setFlash(__('ãƒ‡ãƒ¼ã‚¿ãªã—'));
 		}
 
 		//$this->redirect(array('controller' => 'tags','action'=>'view',$this->request->data['tag']['idre']));
@@ -115,7 +115,7 @@
 
 	public function reply($articleID) {
 		if (!$this->Tag->exists($tagID)) {
-			throw new NotFoundException(__('ŠÖ˜Aƒ^ƒO‚ª‘¶Ý‚µ‚È‚¢'));
+			throw new NotFoundException(__('é–¢é€£ã‚¿ã‚°ãŒå­˜åœ¨ã—ãªã„'));
 		}
 		$sql = "SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` =$tagID AND `tagLink`.`LFrom` =2138  AND `article` . `ID` = `LINK` . `LTo`";
 		$sqlres = $this->Tag->query($sql);
@@ -203,7 +203,7 @@
 					'created' => date("Y-m-d H:i:s"),
 					'modified' => date("Y-m-d H:i:s"),
 				);
-			if ($this->Tag->save($this->request->data)) {//ƒZ[ƒu‚·‚é‚±‚Æ‚É¬Œ÷‚µ‚½‚çA
+			if ($this->Tag->save($this->request->data)) {//ã‚»ãƒ¼ãƒ–ã™ã‚‹ã“ã¨ã«æˆåŠŸã—ãŸã‚‰ã€
 				$this->Session->setFlash(__('success.',$this->request->data));
 				//return $this->redirect(array('action' => 'search'));
 			} else {

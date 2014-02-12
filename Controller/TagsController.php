@@ -108,7 +108,7 @@ public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Coo
         }
 
         public function search() {
-        	debug($this->Auth->user);
+        	debug($this->Auth->user('id'));
         	//$this->Prg->commonProcess();
         	$req = $this->passedArgs;
         	if (!empty($this->request->data['Tag']['keyword'])) {
@@ -221,7 +221,7 @@ public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Coo
         	$this->set('idre', $id);
         }
 
-
+/*
         public function reply($articleID) {
         	if (!$this->Tag->exists($tagID)) {
         		throw new NotFoundException(__('関連タグが存在しない'));
@@ -230,7 +230,7 @@ public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Coo
         	$sqlres = $this->Tag->query($sql);
         	$this->set('results', $sqlres);
         }
-
+*/
         public function replytagadd($id = null) {
 
         }
@@ -247,6 +247,8 @@ public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Coo
         }
 
         public function view($id = null) {
+
+        	debug($this->Auth->user('id'));
         	$this->id =$id;
         	$this->Tag->cachedName = $this->name;
         	if($this->request->data['tagRadd']['add'] == true){
@@ -261,19 +263,16 @@ public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Coo
         	if($this->request->data['Link']['quant'] != null){
         		$this->Basic->quant($this);
         		$this->Basic->social($this);
-        		$this->redirect($this->referer());
         	}
         	if($this->request->data['Article']['name'] != null){
         		$this->keyid = $this->request->data['Article']['keyid'];
         		$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
         		$this->Basic->social($this);
-        		$this->redirect($this->referer());
         	}
         	if($this->request->data['Tag']['name'] != null){
         		$this->keyid = $this->request->data['Tag']['keyid'];
         		$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->params['pass'][0]);
         		$this->Basic->social($this);
-        		$this->redirect($this->referer());
         	}
         	$this->set('idre', $id);
         	if (!$this->Tag->exists($id)) {

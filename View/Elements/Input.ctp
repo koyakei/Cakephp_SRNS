@@ -6,6 +6,12 @@
 	'options' => $keylist,
 	'selected' => $selected  
 	)); ?>
+<?php echo $this->Form->input('userid', array(
+	    'type' => 'select',
+	    'multiple'=> false,
+	    'options' => $ulist,
+	  'selected' => $this->Session->read('userselected')//['userselected']  
+	)); ?>
 	
 		<legend><?php echo __($model); ?></legend>
 	<?php

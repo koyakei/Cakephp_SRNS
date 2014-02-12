@@ -83,5 +83,5 @@ $(function () {
 	<?php echo $this->element('tablebody', Array('results' => $articleresults,'taghashes'=>$taghashes,'firstModel' => 'Article')); ?>
 </tbody>
 	</table>
-	<?php echo $this->element('Input', Array('keylist' => $keylist,'model' => 'Article')); ?>
-	<?php echo $this->element('Input', Array('keylist' => $keylist,'model' => 'Tag')); ?>
+	<?php echo $this->element('Input', Array('ulist' => $ulist,'keylist' => $keylist,'model' => 'Article')); ?>
+	<?php echo $this->element('Input', Array('ulist' => $ulist,'keylist' => $keylist,'model' => 'Tag')); ?>

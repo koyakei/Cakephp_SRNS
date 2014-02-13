@@ -56,12 +56,12 @@ class ArticlesController extends AppController {
 		debug($this->Auth->user('id'));
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
-			$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id']);
+			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
 			$this->Basic->social($this);
 		}
 		if($this->request->data['Tag']['name'] != null){
 			$this->keyid = $this->request->data['Tag']['keyid'];
-			$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id']);
+			$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->data['Tag']['user_id']);
 			$this->Basic->social($this);
 		}
 

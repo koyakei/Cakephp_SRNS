@@ -91,10 +91,10 @@ public function beforeFilter() {
 
 }
 
-/*public $helpers = array(
+public $helpers = array(
  'Html',
-		'Session'
-);*/
+		'Session','auth'
+);
 //        public $presetVars = true;
 
         public function view($id = null) {
@@ -131,6 +131,7 @@ public function beforeFilter() {
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
         	$this->set('tag', $this->Tag->find('first', $options));
+        	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->Common->trifinderbyid($this);
         	/*debug($this->appSession);
         		if ($this->request->data['keyid']['keyid'] == null) {

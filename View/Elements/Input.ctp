@@ -10,7 +10,7 @@
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,
-	  'selected' => $this->Session->read('userselected')//['userselected']  
+	  'selected' => $currentUserID//['userselected']  
 	)); ?>
 	
 		<legend><?php echo __($model); ?></legend>

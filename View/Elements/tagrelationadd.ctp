@@ -4,7 +4,7 @@
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,
-	  'selected' => $this->Session->read('userselected')//['userselected']  
+	  'selected' => $currentUserID//['userselected']  
 	)); ?>
 	<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
 	<?php echo $this->Form->hidden('Link.LTo', array('value'=>$ToID)); ?>

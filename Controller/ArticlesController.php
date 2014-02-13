@@ -1,9 +1,9 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('Tag', 'Model');
+/*App::uses('Tag', 'Model');
 App::uses('User', 'Model');
 App::uses('Link', 'Model');
-App::uses('Article', 'Model');
+App::uses('Article', 'Model');*/
 Configure::load("static");
 /**
  * Articles Controller
@@ -12,11 +12,14 @@ Configure::load("static");
  * @property PaginatorComponent $Paginator
  */
 class ArticlesController extends AppController {
-	public $uses = array('Article');
+	//public $uses = array('Article');
 	public $paginate = array( 'limit' => 25);
 	 public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('view');
+        $this->Security->validateOnce = false;
+        $this->Security->validatePost = false;
+        $this->Security->csrfCheck = false;
+        $this->Auth->allow('logout');
 	$this->Auth->authenticate = array(
 		'Basic' => array('user' => 'admin'),
 		//'Form' => array('user' => 'Member')
@@ -27,7 +30,9 @@ class ArticlesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator','Common','Basic');
+	public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session',
+			'Security',
+			'Search.Prg','Users.RememberMe');
 
 /**
  * index method
@@ -35,6 +40,7 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function index() {
+		debug($this->Auth->user('id'));
 		$this->Article->recursive = 0;
 		$this->set('articles', $this->Paginator->paginate());
 	}
@@ -47,14 +53,15 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+		debug($this->Auth->user('id'));
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
-			$this->Common->triarticleAdd($this,'Article',1);
+			$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id']);
 			$this->Basic->social($this);
 		}
 		if($this->request->data['Tag']['name'] != null){
 			$this->keyid = $this->request->data['Tag']['keyid'];
-			$this->Common->tritagAdd($this,"Tag",1);
+			$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id']);
 			$this->Basic->social($this);
 		}
 

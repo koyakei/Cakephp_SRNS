@@ -1,8 +1,8 @@
 <?php
 
-App::uses('AppController', 'Controller');
+App::uses('AppController', 'Controller');/*
 App::uses('Link', 'Model');
-App::uses('User', 'Model');
+App::uses('User', 'Model');*/
 Configure::load("static");
 /*App::uses('Article', 'Model');
 /**
@@ -21,8 +21,8 @@ class TagsController extends AppController {
 
 
 
-	public $uses = array(//'Tag','Article','Link','User'
-			);
+	//public $uses = array(//'Tag','Article','Link','User'
+		//	);
 /*    // 登録済ユーザーは投稿できる
     if ($this->action === 'add') {
         return true;
@@ -38,49 +38,7 @@ class TagsController extends AppController {
 
     return parent::isAuthorized($user);
 }*/
-           public $presetVars = array(
-        'user_id' => array('type' => 'value'),
-        'keyword' => array('type' => 'value'),
-        'andor' => array('type' => 'value'),
-        'from' => array('type' => 'value'),
-        'to' => array('type' => 'value'),
-    );
-    	public function beforeFilter() {
-	        parent::beforeFilter();
-	        $this->Security->validateOnce = false;
-	        $this->Security->validatePost = false;
-	        $this->Security->csrfCheck = false;
 
-	        if ($this->request->data['keyid']['keyid'] != null){
-	        	$this->Session->write("selected",$this->request->data['keyid']['keyid']);
-	        	debug("case1");
-	        }/*elseif ($this->request->data['Tag']['keyid'] != null){
-	        	$this->Session->write("selected",$this->request->data['Tag']['keyid']);
-	        	echo "case2";
-	        }elseif ($this->request->data['Article']['keyid'] != null){
-	        	$_SESSION['selected'] = $this->request->data['Article']['keyid'];
-	        	echo "case3";
-	        }elseif ($_SESSION['selected'] == null){
-	        	$_SESSION['selected'] = '2138';
-	        	echo "case4";
-	        }*//*
-	        if ($this->request->data['keyid']['keyid'] == null){
-	        	$this->request->data['keyid']['keyid'] = Configure::read('tagID.reply');
-	        }
-*/
-	        //$appSession = $this->Session->read('appSession');
-	      $this->Auth->allow('logout');
-	        $this->Auth->authenticate = array(
-	                'Basic' => array('user' => 'admin'),
-	                //'Form' => array('user' => 'Member')
-	                );
-        }
-
-        public $helpers = array(
-        		'Html',
-        		'Session'
-        );
-//        public $presetVars = true;
 
 
 
@@ -92,19 +50,188 @@ class TagsController extends AppController {
 public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session',
 			'Security',
 			'Search.Prg','Users.RememberMe');
+public $presetVars = array(
+		'user_id' => array('type' => 'value'),
+		'keyword' => array('type' => 'value'),
+		'andor' => array('type' => 'value'),
+		'from' => array('type' => 'value'),
+		'to' => array('type' => 'value'),
+);
+public function beforeFilter() {
+	parent::beforeFilter();
+	$this->Auth->allow('logout');
+	$this->Auth->authenticate = array(
+			'Basic' => array('user' => 'admin'),
+			//'Form' => array('user' => 'Member')
+	);
+	$this->Security->validateOnce = false;
+	$this->Security->validatePost = false;
+	$this->Security->csrfCheck = false;
+	if ($this->request->data['keyid']['keyid'] == null){
+		$this->request->data['keyid']['keyid'] = Configure::read('tagID.reply');
+	}
+	if ($this->request->data['keyid']['keyid'] != null){
+		$this->Session->write("selected",$this->request->data['keyid']['keyid']);
+		debug("case1");
+	}/*elseif ($this->request->data['Tag']['keyid'] != null){
+	$this->Session->write("selected",$this->request->data['Tag']['keyid']);
+	echo "case2";
+	}elseif ($this->request->data['Article']['keyid'] != null){
+	$_SESSION['selected'] = $this->request->data['Article']['keyid'];
+	echo "case3";
+	}elseif ($_SESSION['selected'] == null){
+	$_SESSION['selected'] = '2138';
+	echo "case4";
+	}*//*
+	if ($this->request->data['keyid']['keyid'] == null){
+	$this->request->data['keyid']['keyid'] = Configure::read('tagID.reply');
+	}
+	*/
+	//$appSession = $this->Session->read('appSession');
 
-/**
- * index method
- *
- * @return void
- */
+}
+
+/*public $helpers = array(
+ 'Html',
+		'Session'
+);*/
+//        public $presetVars = true;
+
+        public function view($id = null) {
+        	debug($this->Auth->user('id'));
+        	$this->id =$id;
+        	$this->Tag->cachedName = $this->name;
+        	if($this->request->data['tagRadd']['add'] == true){
+        		$this->Basic->tagRadd($this);
+        		$this->Basic->social($this);
+        		$this->redirect($this->referer());
+        	}
+        	$userID = $this->Auth->user('id');
+        	if($this->request->data['Link']['quant'] != null){
+        		$this->Basic->quant($this);
+        		$this->Basic->social($this);
+        	}
+        	if($this->request->data['Article']['name'] != null){
+        		$this->keyid = $this->request->data['Article']['keyid'];
+        		$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
+        		$this->Basic->social($this);
+        	}
+        	if($this->request->data['Tag']['name'] != null){
+        		$this->keyid = $this->request->data['Tag']['keyid'];
+        		$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->params['pass'][0]);
+        		$this->Basic->social($this);
+        	}
+        	$this->set('idre', $id);
+        	if (!$this->Tag->exists($id)) {
+        		throw new NotFoundException(__('Invalid tag'));
+        	}
+        	$trikeyID = Configure::read('tagID.search');//$serchID;//tagConst()['searchID'];
+        	$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
+        	$this->set('headresults', $this->returntribasic);
+        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
+        	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+        	$this->set('tag', $this->Tag->find('first', $options));
+        	$this->Common->trifinderbyid($this);
+        	/*debug($this->appSession);
+        		if ($this->request->data['keyid']['keyid'] == null) {
+        	$this->Session->write('selected',$this->appSession->selected);
+        	}else {
+        	$this->appSession->selected = $this->request->data['keyid']['keyid'];
+        	$this->Session->write('selected',$this->appSession->selected);
+        	}*/
+        	//$_SESSION['appMode'] = $this->request->data['keyid']['keyid'];
+        	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
+        	$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
+        	$this->set('upperIdeas', $this->returntribasic);
+        }
+
+        /**
+         * add method
+         *
+         * @return void
+         */
+        public function add() {
+
+        	debug($this->Auth->user('id'));
+        	if ($this->request->is('post')) {
+        		$this->Tag->create();
+        		$this->request->data['Tag'] += array(
+        				'user_id' => $this->Auth->user('ID'),
+        				'created' => date("Y-m-d H:i:s"),
+        				'modified' => date("Y-m-d H:i:s"),
+        		);
+        		if ($this->Tag->save($this->request->data)) {//セーブすることに成功したら、
+        			$this->Session->setFlash(__('success.',$this->request->data));
+        			//return $this->redirect(array('action' => 'search'));
+        		} else {
+        			$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
+
+        		}
+        	}
+        }
+
+        /**
+         * edit method
+         *
+         * @throws NotFoundException
+         * @param string $id
+         * @return void
+         */
+        public function edit($id = null) {
+        	$this->set('userinfo', array('ID' => $this->Auth->user('ID')));
+        	if (!$this->Tag->exists($id)) {
+        		throw new NotFoundException(__('Invalid tag'));
+        	}
+        	if ($this->request->is(array('post', 'put'))) {
+        		$this->Tag->id = $id;
+        		if ($this->Tag->save($this->request->data)) {
+        			$this->Session->setFlash(__('The tag has been saved.'));
+        			return $this->redirect(array('action' => 'index'));
+        		} else {
+        			$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
+        		}
+        	} else {
+        		$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id),'order'=>'Tag.ID');
+        		$this->request->data = $this->Tag->find('first', $options);
+        	}
+        }
+
+        /**
+         * delete method
+         *
+         * @throws NotFoundException
+         * @param string $id
+         * @return void
+         */
+        public function delete($id = null) {
+        	$this->Tag->id = $id;
+        	if (!$this->Tag->exists()) {
+        		throw new NotFoundException(__('Invalid tag'));
+        	}
+        	$this->request->onlyAllow('post', 'delete');
+        	if ($this->Tag->delete()) {
+        		$this->Session->setFlash(__('The tag has been deleted.'));
+        	} else {
+        		$this->Session->setFlash(__('The tag could not be deleted. Please, try again.'));
+        	}
+        	return $this->redirect(array('action' => 'index'));
+        }
+        public function articleview($id) {
+        	//$this->redirect(array('controller' => 'articles','action'=>'view',$id));
+        	$this->redirect($this->referer());
+        }
+        /**
+         * index method
+         *
+         * @return void
+         */
         public function test(){
         	debug($this->referer());
         	$this->redirect($this->referer());
         }
         public function index() {
-		$this->Tag->recursive = 0;
-		$this->set('tags', $this->Paginator->paginate());
+        	$this->Tag->recursive = 0;
+        	$this->set('tags', $this->Paginator->paginate());
         }
 
         public function search() {
@@ -221,16 +348,16 @@ public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Coo
         	$this->set('idre', $id);
         }
 
-/*
-        public function reply($articleID) {
-        	if (!$this->Tag->exists($tagID)) {
-        		throw new NotFoundException(__('関連タグが存在しない'));
-        	}
-        	$sql = "SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` =$tagID AND `tagLink`.`LFrom` =2138  AND `article` . `ID` = `LINK` . `LTo`";
-        	$sqlres = $this->Tag->query($sql);
-        	$this->set('results', $sqlres);
+        /*
+         public function reply($articleID) {
+        if (!$this->Tag->exists($tagID)) {
+        throw new NotFoundException(__('関連タグが存在しない'));
         }
-*/
+        $sql = "SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` =$tagID AND `tagLink`.`LFrom` =2138  AND `article` . `ID` = `LINK` . `LTo`";
+        $sqlres = $this->Tag->query($sql);
+        $this->set('results', $sqlres);
+        }
+        */
         public function replytagadd($id = null) {
 
         }
@@ -246,128 +373,4 @@ public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Coo
         	$this->redirect($this->referer());
         }
 
-        public function view($id = null) {
-
-        	debug($this->Auth->user('id'));
-        	$this->id =$id;
-        	$this->Tag->cachedName = $this->name;
-        	if($this->request->data['tagRadd']['add'] == true){
-        		$this->Basic->tagRadd($this);
-        		$this->Basic->social($this);
-        		$this->redirect($this->referer());
-        	}
-        	/*
-        		$this->Tag->setValue($this->plugin,$this->name.$this->action,$this->view);
-        	debug($this->Tag->cachedName);*/
-        	$userID = $this->Auth->user('id');
-        	if($this->request->data['Link']['quant'] != null){
-        		$this->Basic->quant($this);
-        		$this->Basic->social($this);
-        	}
-        	if($this->request->data['Article']['name'] != null){
-        		$this->keyid = $this->request->data['Article']['keyid'];
-        		$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
-        		$this->Basic->social($this);
-        	}
-        	if($this->request->data['Tag']['name'] != null){
-        		$this->keyid = $this->request->data['Tag']['keyid'];
-        		$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->params['pass'][0]);
-        		$this->Basic->social($this);
-        	}
-        	$this->set('idre', $id);
-        	if (!$this->Tag->exists($id)) {
-        		throw new NotFoundException(__('Invalid tag'));
-        	}
-        	$trikeyID = Configure::read('tagID.search');//$serchID;//tagConst()['searchID'];
-        	$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
-        	$this->set('headresults', $this->returntribasic);
-        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
-        	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
-        	$this->set('tag', $this->Tag->find('first', $options));
-        	$this->Common->trifinderbyid($this);
-        	/*debug($this->appSession);
-        		if ($this->request->data['keyid']['keyid'] == null) {
-        	$this->Session->write('selected',$this->appSession->selected);
-        	}else {
-        	$this->appSession->selected = $this->request->data['keyid']['keyid'];
-        	$this->Session->write('selected',$this->appSession->selected);
-        	}*/
-        	//$_SESSION['appMode'] = $this->request->data['keyid']['keyid'];
-        	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
-        	$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
-        	$this->set('upperIdeas', $this->returntribasic);
-        }
-
-        /**
-         * add method
-         *
-         * @return void
-         */
-        public function add() {
-        	if ($this->request->is('post')) {
-        		$this->Tag->create();
-        		$this->request->data['Tag'] += array(
-        				'user_id' => $this->Auth->user('ID'),
-        				'created' => date("Y-m-d H:i:s"),
-        				'modified' => date("Y-m-d H:i:s"),
-        		);
-        		if ($this->Tag->save($this->request->data)) {//セーブすることに成功したら、
-        			$this->Session->setFlash(__('success.',$this->request->data));
-        			//return $this->redirect(array('action' => 'search'));
-        		} else {
-        			$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
-
-        		}
-        	}
-        }
-
-        /**
-         * edit method
-         *
-         * @throws NotFoundException
-         * @param string $id
-         * @return void
-         */
-        public function edit($id = null) {
-        	$this->set('userinfo', array('ID' => $this->Auth->user('ID')));
-        	if (!$this->Tag->exists($id)) {
-        		throw new NotFoundException(__('Invalid tag'));
-        	}
-        	if ($this->request->is(array('post', 'put'))) {
-        		$this->Tag->id = $id;
-        		if ($this->Tag->save($this->request->data)) {
-        			$this->Session->setFlash(__('The tag has been saved.'));
-        			return $this->redirect(array('action' => 'index'));
-        		} else {
-        			$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
-        		}
-        	} else {
-        		$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id),'order'=>'Tag.ID');
-        		$this->request->data = $this->Tag->find('first', $options);
-        	}
-        }
-
-        /**
-         * delete method
-         *
-         * @throws NotFoundException
-         * @param string $id
-         * @return void
-         */
-        public function delete($id = null) {
-        	$this->Tag->id = $id;
-        	if (!$this->Tag->exists()) {
-        		throw new NotFoundException(__('Invalid tag'));
-        	}
-        	$this->request->onlyAllow('post', 'delete');
-        	if ($this->Tag->delete()) {
-        		$this->Session->setFlash(__('The tag has been deleted.'));
-        	} else {
-        		$this->Session->setFlash(__('The tag could not be deleted. Please, try again.'));
-        	}
-        	return $this->redirect(array('action' => 'index'));
-        }
-        public function articleview($id) {
-        	$this->redirect(array('controller' => 'articles','action'=>'view',$id));
-        }
 }

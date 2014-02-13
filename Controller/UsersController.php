@@ -26,6 +26,7 @@ class UsersController extends AppController {
 	}
 
 	public function index() {
+		debug($this->Auth->user('id'));
 		$this->User->recursive = 0;
 		$this->set('users', $this->Paginator->paginate());
 	}
@@ -38,6 +39,8 @@ class UsersController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+
+		debug($this->Auth->user('id'));
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}

@@ -33,6 +33,8 @@ class SocialsController extends AppController {
  * @return void
  */
 	public function myfollow() {
+
+		debug($this->Auth->user('id'));
 		$this->Social->recursive = 0;
 			$this->Paginator->settings = array(
 				'condition' => array(

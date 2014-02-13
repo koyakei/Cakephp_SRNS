@@ -52,7 +52,7 @@ return false;
 
 
     public function beforeFilter() {
-        $this->Auth->allow('index', 'view','search');
+        $this->Auth->allow('login');
     }/*
     public function restoreLoginFromCookie() {
     	$this->Cookie->name = 'Users';

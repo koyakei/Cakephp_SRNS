@@ -1,7 +1,5 @@
 <?php
 App::uses('AppModel', 'Model');
-App::uses('Link', 'Model');
-App::uses('User', 'Model');
 /**
  * Tag Model
  *
@@ -14,7 +12,7 @@ class Tag extends AppModel {/*
 		$aname = $this->cachedName;
 		debug($aname);
 	}*/
-	public $uses = array('Article','Link','User','Tag');
+	//public $uses = array('Article','Link','User','Tag');
 //	public $order = array('Article.id DESC');
 	public $actsAs = array('Search.Searchable');
 	public $filterArgs = array(
@@ -51,7 +49,7 @@ class Tag extends AppModel {/*
  * @var string
  */
 	public $primaryKey = 'ID';
-	public $displayField = 'name';
+	//public $displayField = 'name';
 
 /**
  * Validation rules

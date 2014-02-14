@@ -35,7 +35,6 @@ $(function () {
 </script>
 </head>
 <body>
-<?php debug($articleresults); ?>
 <?php echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre)); ?>
 <div class="tags view">
 <h2><?php echo __('Tag'); ?></h2>

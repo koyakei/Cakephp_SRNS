@@ -19,29 +19,6 @@ Configure::load("static");
 
 class TagsController extends AppController {
 
-
-
-	//public $uses = array(//'Tag','Article','Link','User'
-		//	);
-/*    // 登録済ユーザーは投稿できる
-    if ($this->action === 'add') {
-        return true;
-    }
-
-    // 投稿のオーナーは編集や削除ができる
-    if (in_array($this->action, array('edit', 'delete'))) {
-        $postId = $this->request->params['pass'][0];
-        if ($this->Post->isOwnedBy($postId, $user['id'])) {
-            return true;
-        }
-    }
-
-    return parent::isAuthorized($user);
-}*/
-
-
-
-
 /**
  * Components
  *
@@ -97,7 +74,8 @@ public $helpers = array(
 );
 //        public $presetVars = true;
 
-        public function view($id = null) {
+        public function admin_view($id = null) {
+        	debug("admin view");
         	$this->id =$id;
         	$this->Tag->cachedName = $this->name;
         	if($this->request->data['tagRadd']['add'] == true){
@@ -133,14 +111,49 @@ public $helpers = array(
         	$this->set('tag', $this->Tag->find('first', $options));
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->Common->trifinderbyid($this);
-        	/*debug($this->appSession);
-        		if ($this->request->data['keyid']['keyid'] == null) {
-        	$this->Session->write('selected',$this->appSession->selected);
-        	}else {
-        	$this->appSession->selected = $this->request->data['keyid']['keyid'];
-        	$this->Session->write('selected',$this->appSession->selected);
-        	}*/
-        	//$_SESSION['appMode'] = $this->request->data['keyid']['keyid'];
+        	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
+        	$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
+        	$this->set('upperIdeas', $this->returntribasic);
+        }
+
+        public function view($id = null) {
+        	debug($this->Auth->user());
+        	debug("no admin view");
+        	$this->id =$id;
+        	$this->Tag->cachedName = $this->name;
+        	if($this->request->data['tagRadd']['add'] == true){
+        		$this->Basic->tagRadd($this);
+        		$this->Basic->social($this);
+        		$this->redirect($this->referer());
+        	}
+        	$userID = $this->Auth->user('id');
+        	if($this->request->data['Link']['quant'] != null){
+        		//$this->UserID = $this->request->data['Link']['user_id'];
+        		$this->Basic->quant($this);
+        		$this->Basic->social($this);
+        	}
+        	if($this->request->data['Article']['name'] != null){
+        		$this->keyid = $this->request->data['Article']['keyid'];
+        		$this->Common->triarticleAdd($this,'Article',$this->request->data['Tag']['user_id']);
+        		$this->Basic->social($this);
+        	}
+        	if($this->request->data['Tag']['name'] != null){
+        		$this->keyid = $this->request->data['Tag']['keyid'];
+        		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$this->request->params['pass'][0]);
+        		$this->Basic->social($this);
+        	}
+        	$this->set('idre', $id);
+        	if (!$this->Tag->exists($id)) {
+        		throw new NotFoundException(__('Invalid tag'));
+        	}
+        	$trikeyID = Configure::read('tagID.search');//$serchID;//tagConst()['searchID'];
+        	$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
+        	$this->set('headresults', $this->returntribasic);
+        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
+        	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+        	$this->set('tag', $this->Tag->find('first', $options));
+        	$this->set('currentUserID', $this->Auth->user('id'));
+        	$this->Common->trifinderbyid($this);
         	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
         	$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
         	$this->set('upperIdeas', $this->returntribasic);

@@ -28,7 +28,7 @@ App::uses('Social', 'Model');
  */
 class UsersController extends UsersAppController {
 
-	//public $uses = array('Social');
+	//public $uses = array('Users','Socials');
 
 
 /**
@@ -276,29 +276,13 @@ class UsersController extends UsersAppController {
 		try {
 			$this->set('user', $this->{$this->modelClass}->view($slug));
 			$tuserid = $this->{$this->modelClass}->view($slug)[$this->modelClass]['id'];
-			debug($tuserid);
-			/*
-			$this->set('socials', $this->paginate('Social',array(
-					'condition' => array(
-							"user_id =".$tuserid
-					)
-			)));*/
-
-			/*debug($this->paginate('Social',array(
-					'condition' => array(
-							"user_id =".$tuserid
-					)
-			)));*/
-			$this->loadModel('Social');
-			debug($this->Social->find('all',array(
-					'condition' => array(
-							"user_id =".$tuserid
-					))));
-			$this->set('socials',$this->Social->find('all',array(
-					'condition' => array(
-							"user_id =".$tuserid
-					))));
-			//$this->set('socials', $this->User->find('all',array('condition' => '')));
+		$this->loadModel('Social');
+			$this->Paginator->settings = array(
+				'condition' => array(
+				"user_id = $tuserid"
+			)
+		);
+			$this->set('socials',$this->Paginator->paginate('Social'));
 		} catch (Exception $e) {
 			$this->Session->setFlash($e->getMessage());
 			$this->redirect('/');

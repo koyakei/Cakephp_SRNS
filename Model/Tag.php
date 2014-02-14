@@ -108,12 +108,12 @@ institution'
 		)
 	);
 */
-   public $hasOne= array(
+   public $belongsTo= array(
         'TO' => array(
 		'className' => 'User',
-		'foreignKey' => 'ID',
+		'foreignKey' => 'user_id',
 		'dependent' => false,
-		'conditions' => 'TO.ID = Tag.user_id',
+		'conditions' => '',
 		//'type' => 'inner'
         )
     );

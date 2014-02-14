@@ -6,7 +6,7 @@
 	'options' => $keylist,
 	'selected' => $selected  
 	)); ?>
-<?php echo $this->Form->input('userid', array(
+<?php echo $this->Form->input('user_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,

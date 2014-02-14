@@ -114,5 +114,14 @@ public $base_sql = null;
 			'type' => 'INNER'
 		),
 	);*/
+	public $belongsTo= array(
+			'AO' => array(
+					'className' => 'User',
+					'foreignKey' => 'user_id',
+					'dependent' => false,
+					'conditions' => '',
+					//'type' => 'inner'
+			)
+	);
 
 }

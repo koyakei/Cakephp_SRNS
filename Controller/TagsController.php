@@ -93,12 +93,11 @@ public function beforeFilter() {
 
 public $helpers = array(
  'Html',
-		'Session','auth'
+		'Session'
 );
 //        public $presetVars = true;
 
         public function view($id = null) {
-        	debug($this->Auth->user('id'));
         	$this->id =$id;
         	$this->Tag->cachedName = $this->name;
         	if($this->request->data['tagRadd']['add'] == true){
@@ -108,17 +107,18 @@ public $helpers = array(
         	}
         	$userID = $this->Auth->user('id');
         	if($this->request->data['Link']['quant'] != null){
+        		//$this->UserID = $this->request->data['Link']['user_id'];
         		$this->Basic->quant($this);
         		$this->Basic->social($this);
         	}
         	if($this->request->data['Article']['name'] != null){
         		$this->keyid = $this->request->data['Article']['keyid'];
-        		$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
+        		$this->Common->triarticleAdd($this,'Article',$this->request->data['Tag']['user_id']);
         		$this->Basic->social($this);
         	}
         	if($this->request->data['Tag']['name'] != null){
         		$this->keyid = $this->request->data['Tag']['keyid'];
-        		$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->params['pass'][0]);
+        		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$this->request->params['pass'][0]);
         		$this->Basic->social($this);
         	}
         	$this->set('idre', $id);

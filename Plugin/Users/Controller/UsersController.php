@@ -11,6 +11,7 @@
 
 App::uses('CakeEmail', 'Network/Email');
 App::uses('UsersAppController', 'Users.Controller');
+App::uses('Social', 'Model');
 
 /**
  * Users Users Controller
@@ -27,6 +28,7 @@ App::uses('UsersAppController', 'Users.Controller');
  */
 class UsersController extends UsersAppController {
 
+	//public $uses = array('Social');
 
 
 /**
@@ -165,6 +167,11 @@ class UsersController extends UsersAppController {
 		$this->Security->validateOnce = false;
 		$this->Security->validatePost = false;*/
 		$this->Security->csrfCheck = false;
+		$this->Auth->allow('logout');
+		$this->Auth->authenticate = array(
+				'Basic' => array('user' => 'admin'),
+				//'Form' => array('user' => 'Member')
+		);
 	}
 
 /**
@@ -221,17 +228,20 @@ class UsersController extends UsersAppController {
 		if ($this->request->action == 'register') {
 			$this->Components->disable('Auth');
 		}
-
+		//$this->Auth->allow('logout');
+		/*
 		$this->Auth->authenticate = array(
-			'Form' => array(
+			'Basic' => array(
 				'fields' => array(
 					'username' => 'email',
 					'password' => 'password'),
 				'userModel' => $this->_pluginDot() . $this->modelClass,
 				'scope' => array(
 					$this->modelClass . '.active' => 1,
-					$this->modelClass . '.email_verified' => 1)));
-
+					$this->modelClass . '.email_verified' => 1
+				)
+			)
+		);*/
 		$this->Auth->loginRedirect = '/tags/search';//'/users/users/edit';
 		$this->Auth->logoutRedirect = array('plugin' => Inflector::underscore($this->plugin), 'controller' => 'users', 'action' => 'login');
 		$this->Auth->loginAction = array('admin' => false, 'plugin' => Inflector::underscore($this->plugin), 'controller' => 'users', 'action' => 'login');
@@ -265,6 +275,30 @@ class UsersController extends UsersAppController {
 	public function view($slug = null) {
 		try {
 			$this->set('user', $this->{$this->modelClass}->view($slug));
+			$tuserid = $this->{$this->modelClass}->view($slug)[$this->modelClass]['id'];
+			debug($tuserid);
+			/*
+			$this->set('socials', $this->paginate('Social',array(
+					'condition' => array(
+							"user_id =".$tuserid
+					)
+			)));*/
+
+			/*debug($this->paginate('Social',array(
+					'condition' => array(
+							"user_id =".$tuserid
+					)
+			)));*/
+			$this->loadModel('Social');
+			debug($this->Social->find('all',array(
+					'condition' => array(
+							"user_id =".$tuserid
+					))));
+			$this->set('socials',$this->Social->find('all',array(
+					'condition' => array(
+							"user_id =".$tuserid
+					))));
+			//$this->set('socials', $this->User->find('all',array('condition' => '')));
 		} catch (Exception $e) {
 			$this->Session->setFlash($e->getMessage());
 			$this->redirect('/');
@@ -662,7 +696,7 @@ class UsersController extends UsersAppController {
 				$this->Session->setFlash(__d('users', 'Password changed.'));
 				// we don't want to keep the cookie with the old password around
 				$this->RememberMe->destroyCookie();
-				$this->redirect('/');
+				$this->redirect('/users/users/index');
 			}
 		}
 	}

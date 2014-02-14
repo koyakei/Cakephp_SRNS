@@ -23,6 +23,11 @@ class UsersController extends AppController {
 	public function beforeFilter(){
 		parent::beforeFilter();
 		$this->Security->validatePost = false;
+		$this->Auth->allow('logout');
+		$this->Auth->authenticate = array(
+				'Basic' => array('user' => 'admin'),
+				//'Form' => array('user' => 'Member')
+		);
 	}
 
 	public function index() {
@@ -39,8 +44,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-
-		debug($this->Auth->user('id'));
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}

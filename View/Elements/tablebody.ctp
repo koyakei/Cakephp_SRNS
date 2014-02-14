@@ -1,8 +1,9 @@
 <?php foreach ($results  as $result): ?>
+<?php if($firstModel == Tag){$userCallAssosiation = 'TO';} else {$userCallAssosiation = 'AO';}?>
 				<tr>
 					<td><?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
 					<td><?php echo h($result[$firstModel]['name']); ?>&nbsp;</td>
-					<td><?php echo h($result[$firstModel]['user_id']); ?>&nbsp;</td>
+					<td><?php echo h($result[$userCallAssosiation]['username']); ?>&nbsp;</td>
 					<td><?php echo h($result["$firstModel"]['created']); ?>&nbsp;</td>
 					<td><?php echo h($result["$firstModel"]['modified']); ?>&nbsp;</td>
 					<td class="actions">

@@ -9,6 +9,7 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 ?>
+
 <div class="users view">
 <h2><?php echo __d('users', 'User'); ?></h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>
@@ -34,21 +35,5 @@
 		?>
 	</dl>
 </div>
-
-<table>
-	<thead>
-		<th><?php echo $this->Paginator->sort('created'); ?>
-		</th>
-		<th>link
-		</th>
-	</thead>
-		<?php foreach ($socials as $social): ?>
-		<tr>
-			<td><?php echo $this->Html->link($social['User']['username'], array('plugin' => 'users','controller' => 'users', 'action' => 'view', $follow['User']['id'])); ?>&nbsp
-			</td>			
-		</tr>
-		<?php endforeach; ?>
-	<tbody>
-	</tbody>
-</table>
+	<?php echo $this->element('timeline', Array('socials' => $socials)); ?>
 <?php echo $this->element('Users.Users/sidebar'); ?>

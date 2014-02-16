@@ -40,7 +40,41 @@ class BasicComponent extends Component {
 			}
 		}
 	}
-
+	public function taglimitcountup(&$that){
+		$that->loadModel('User');
+		if ($that->Auth->user('tlimit') > 0) {
+			if($that->Tag->save($that->request->data)){
+				$data['User']['id'] = $that->request->data['Tag']['user_id'];
+				$data['User']['tlimit'] = $that->Auth->user('tlimit')- 1;
+				if($that->User->save($data)){
+					$that->last_id = $that->Tag->getLastInsertID();
+					$that->Session->setFlash(__('タグ追加成功　残りタグ数'.$that->Auth->user('tlimit')));
+				}
+			}else {
+				$that->Session->setFlash(__('タグ追加失敗　'));
+			}
+		}else {
+			$that->Session->setFlash(__('タグ追加失敗　発行上限に達しています'));
+		}
+	}
+	public function tagLimitCountDel(&$that){
+		$that->loadModel('User');
+		if($that->Tag->save($that->request->data)){
+			if ($that->Tag->delete()) {
+				$data['User']['tlimit'] = $that->Auth->user('tlimit') + 1;
+				$data['User']['id'] = $that->request->data['Tag']['user_id'];
+				if($that->User->save($data)){
+					$that->Session->setFlash(__('The tag has been deleted.残りタグ数'.$that->Auth->user('tlimit')));
+				}else {
+					$that->Session->setFlash(__('deleted but can not count up..残りタグ数'.$that->Auth->user('tlimit')));
+				}
+        	} else {
+        		$that->Session->setFlash(__('The tag could not be deleted. Please, try again.残りタグ数'.$that->Auth->user('tlimit')));
+        	}
+		}else {
+			$that->Session->setFlash(__('タグ追加失敗　発行上限に達しています'));
+		}
+	}
 	public function tagRadd(&$that) {
 		$searchID = Configure::read('tagID.search');//tagConst()['searchID'];
 		$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
@@ -60,10 +94,8 @@ class BasicComponent extends Component {
 			);
 			if($tagID == null){
 				$that->Tag->create();
-				$that->Tag->save($that->request->data);
-				$last_id = $that->Tag->getLastInsertID();
-				$that->Basic->trilinkAdd($that,$last_id,$LinkLTo,Configure::read('tagID.search'));
-				$that->Session->setFlash(__('タグがなかった.'));
+				$that->Basic->taglimitcountup($that);
+				$that->Basic->trilinkAdd($that,$that->last_id,$LinkLTo,Configure::read('tagID.search'));
 			}else {
 				$that->loadModel('Link');
 				$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
@@ -82,7 +114,7 @@ class BasicComponent extends Component {
 			}
 		}
 		debug($that->referer());
-		//$that->redirect($that->referer());
+		$that->redirect($that->referer());
 	}
 	public function test(&$that){
 		$that->redirect($that->referer());
@@ -238,7 +270,7 @@ class BasicComponent extends Component {
 			'order' => 'Link.ID',
 			'joins' => array(
 				array(
-                    'table' => 'Link',
+                    'table' => 'link',
                     'alias' => 'taglink',
                     'type' => 'INNER',
                     'conditions' => array(

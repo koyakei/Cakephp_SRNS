@@ -4,8 +4,13 @@
 		<legend><?php echo __('Add Article'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
-		echo $this->Form->input('user_id');
 	?>
+<?php echo $this->Form->input('user_id', array(
+	    'type' => 'select',
+	    'multiple'=> false,
+	    'options' => $ulist,
+	  'selected' => $currentUserID//['userselected']  
+	)); ?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>

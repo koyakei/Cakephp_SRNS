@@ -84,7 +84,7 @@ class ArticlesController extends AppController {
 		$this->loadModel('Key');
 		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-
+		$this->set('currentUserID', $this->Auth->user('id'));
 	}
 
 /**
@@ -93,15 +93,18 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function add() {
+		$this->set('currentUserID', $this->Auth->user('id'));
+		$this->loadModel('User');
+		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		if ($this->request->is('post')) {
-			$this->request->data['Article'] = array(
+			$this->request->data['Article'] += array(
 				'created' => date("Y-m-d H:i:s"),
 				'modified' => date("Y-m-d H:i:s"),
 			);
-			$this->Article->create();
+			debug($this->request->data['Article']);
 			if ($this->Article->save($this->request->data)) {
 				$this->Session->setFlash(__('The article has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				//return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
 			}

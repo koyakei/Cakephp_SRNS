@@ -64,6 +64,7 @@ class Tag extends AppModel {/*
         $tmp[$key] = $this->data[$this->name][$key];
     }
     return $this->isUnique($tmp, false);
+
  }
 	public $validate = array(
 		'name' => array(
@@ -117,5 +118,7 @@ institution'
 		//'type' => 'inner'
         )
     );
-
+   public function isOwnedBy($post, $user) {
+   	return $this->field('id', array('id' => $post, 'user_id' => $user)) === $post;
+   }
 }

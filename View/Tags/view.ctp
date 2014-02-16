@@ -64,6 +64,11 @@ $(function () {
 			<?php echo h($tag['Tag']['modified']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('ID'); ?></dt>
+		<dd>
+			<?php echo h($tag['Tag']['max_quant']); ?>
+			&nbsp;
+		</dd>
 		<?php foreach ($headresults as $headtaghash): ?>
 			<dt><?php echo __('Searchtagname'); ?></dt>
 		        <dd>
@@ -99,6 +104,7 @@ $(function () {
 		<li><?php echo $this->Form->postLink(__('Delete Tag'), array('action' => 'delete', $tag['Tag']['ID']), null, __('Are you sure you want to delete # %s?', $tag['Tag']['ID'])); ?> </li>
 		<li><?php echo $this->Html->link(__('List Tags'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
+		<li><?php //echo $this->Html->link(__('test'), array('action' => 'test')); ?> </li>
 		<li><?php echo $this->Html->link(__('Tag search'), array('action' => 'search')); ?> </li>
 		<li><?php echo $this->Html->link(__('test'), array('action' => 'test')); ?> </li>
 	</ul>

@@ -47,11 +47,12 @@ $this->Html->script(
 	<div class="actions">
 		<h3><?php echo __('Actions'); ?></h3>
 		<ul>
-			
+		<li><?php echo $this->Html->link(__('test'), array('action' => 'test')); ?> </li>
 			<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('article index'), array('controller' => 'articles','action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('key index'), array('controller' => 'keys','action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('social my follow'), array('controller' => 'socials','action' => 'myfollow')); ?> </li>
+		<li><?php echo $this->Html->link(__('Article Add'), array('controller' => 'articles','action' => 'add')); ?> </li>
 		</ul>
 	</div>
 

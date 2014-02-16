@@ -1,0 +1,1 @@
+	<li><?php echo $this->Html->link(__('Tag search'), array('action' => 'search')); ?> </li>

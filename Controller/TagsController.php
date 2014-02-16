@@ -67,7 +67,21 @@ public function beforeFilter() {
 	//$appSession = $this->Session->read('appSession');
 
 }
+public function isAuthorized($user) {
+	if ($this->action === 'add') {
+		return true;
+	}
 
+	// 投稿のオーナーは編集や削除ができる
+	if (in_array($this->action, array('edit', 'delete'))) {
+		$postId = $this->request->params['pass'][0];
+		if ($this->Post->isOwnedBy($postId, $user['id'])) {
+			return true;
+		}
+	}
+
+	return parent::isAuthorized($user);
+}
 public $helpers = array(
  'Html',
 		'Session'
@@ -117,7 +131,6 @@ public $helpers = array(
         }
 
         public function view($id = null) {
-        	debug($this->Auth->user());
         	debug("no admin view");
         	$this->id =$id;
         	$this->Tag->cachedName = $this->name;
@@ -150,7 +163,6 @@ public $helpers = array(
         	$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
         	$this->set('headresults', $this->returntribasic);
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
-        	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
         	$this->set('tag', $this->Tag->find('first', $options));
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->Common->trifinderbyid($this);
@@ -165,22 +177,22 @@ public $helpers = array(
          * @return void
          */
         public function add() {
-
-        	debug($this->Auth->user('id'));
+        	$this->set('currentUserID', $this->Auth->user('id'));
+        	$this->loadModel('User');
+        	$max_quant = 1000;
+        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	if ($this->request->is('post')) {
         		$this->Tag->create();
         		$this->request->data['Tag'] += array(
-        				'user_id' => $this->Auth->user('ID'),
         				'created' => date("Y-m-d H:i:s"),
         				'modified' => date("Y-m-d H:i:s"),
+        				'max_quant' => $max_quant,
         		);
-        		if ($this->Tag->save($this->request->data)) {//セーブすることに成功したら、
-        			$this->Session->setFlash(__('success.',$this->request->data));
-        			//return $this->redirect(array('action' => 'search'));
-        		} else {
-        			$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
-
-        		}
+        		$this->Basic->taglimitcountup($this);
+        		$this->loadModel('Auth');
+        		$data['Auth'] =array('user_id' => $this->request->data['Tag']['user_id'],'tag_id' =>$this->last_id,'quant' => $max_quant);
+        		$this->Auth->create();
+        		$this->Auth->save($data);
         	}
         }
 
@@ -218,20 +230,36 @@ public $helpers = array(
          * @return void
          */
         public function delete($id = null) {
-        	$this->Tag->id = $id;
-        	if (!$this->Tag->exists()) {
-        		throw new NotFoundException(__('Invalid tag'));
+        	$options = array('conditions' => array(
+        			'Tag.'.$this->Tag->primaryKey => $id),
+        			'order' => array('Tag.ID'),
+        	);
+        	$reslut = $this->Tag->find('first', $options);
+        	if ($reslut['Tag']['user_id'] == $this->Auth->user('id')) {
+	        	$this->Tag->id = $id;
+	        	if (!$this->Tag->exists()) {
+	        		throw new NotFoundException(__('Invalid tag'));
+	        	}
+	        	$this->request->onlyAllow('post', 'delete');
+	        	$this->loadModel('User');
+
+	        	if ($this->Tag->delete()){
+	        		$this->Session->setFlash(__('The article has been deleted.'));
+	        		$data['User']['tlimit'] = $this->Auth->user('tlimit') + 1;
+	        		$data['User']['id'] = $this->request->data['Tag']['user_id'];
+	        		if($this->User->save($data)){
+	        			$this->Session->setFlash(__('The tag has been deleted.残りタグ数'.$this->Auth->user('tlimit')));
+	        		}else {
+	        			$this->Session->setFlash(__('deleted but can not count up..残りタグ数'.$this->Auth->user('tlimit')));
+	        		}
+	        	} else {
+	        		$this->Session->setFlash(__('The article could not be deleted. Please, try again.'));
+	        	}
         	}
-        	$this->request->onlyAllow('post', 'delete');
-        	if ($this->Tag->delete()) {
-        		$this->Session->setFlash(__('The tag has been deleted.'));
-        	} else {
-        		$this->Session->setFlash(__('The tag could not be deleted. Please, try again.'));
-        	}
-        	return $this->redirect(array('action' => 'index'));
+        	debug($this->referer());
+        	return $this->redirect($this->referer());
         }
         public function articleview($id) {
-        	//$this->redirect(array('controller' => 'articles','action'=>'view',$id));
         	$this->redirect($this->referer());
         }
         /**
@@ -239,6 +267,10 @@ public $helpers = array(
          *
          * @return void
          */
+        public function test2(&$that){
+        	debug($that->referer());
+        	$that->redirect($that->referer());
+        }
         public function test(){
         	debug($this->referer());
         	$this->redirect($this->referer());
@@ -250,7 +282,6 @@ public $helpers = array(
 
         public function search() {
         	debug($this->Auth->user('id'));
-        	//$this->Prg->commonProcess();
         	$req = $this->passedArgs;
         	if (!empty($this->request->data['Tag']['keyword'])) {
         		$andor = !empty($this->request->data['Tag']['andor']) ? $this->request->data['Tag']['andor'] : null;
@@ -267,7 +298,6 @@ public $helpers = array(
         			)
         	);
         	$this->set('tags', $this->Paginator->paginate());
-        	//$this->set('Auth', $this->Auth->user('ID'));
         }
 
         public function quant($id = null) {
@@ -285,12 +315,10 @@ public $helpers = array(
         			}
         		}
         	}
-        	$this->redirect($this->referer());/*
-        	debug($this->referer());*/
+        	$this->redirect($this->referer());
         }
 
         public function tagdel($id = null) {
-        	/*if ($this->request->is('post') and $this->request->data['Link']['user_id'] == Configure::read('acountID.admin')) {*/
         	$this->loadModel('Link');
         	if ($this->Link->delete($this->request->data('Link.ID'))){
         		$this->Session->setFlash(__('削除完了.'));
@@ -299,9 +327,6 @@ public $helpers = array(
         		$this->Session->setFlash(__('削除失敗.'));
         		debug("fail");
         	}
-        	/*}else {
-        	 debug("no auth");
-        	}*/
         	$this->redirect($this->referer());
         }
 
@@ -309,12 +334,7 @@ public $helpers = array(
         	debug($this->request->data['Link']['LTo']);
         	debug($this->request->data['tag']['userid']
         	);
-
-
-        	$this->keyid = Configure::read('tagID.search');/*
-        	$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->data['Link']['LTo']);*/
-        	//$searchID = Configure::read('tagID.search');
-        	//$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+        	$this->keyid = Configure::read('tagID.search');
         	$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
         	$this->request->data['Link']['user_id'] = $this->request->data['tag']['userid'];
         	$LinkLTo=$this->request->data['Link']['LTo'];
@@ -385,6 +405,17 @@ public $helpers = array(
         public function triarticleadd($id = null) {
         	$this->Common->triarticleAdd($this);
         	$this->redirect($this->referer());
+        }
+        public function logout() {
+        	$user = $this->Auth->user();
+        	$this->Cookie->destroy();
+        	$this->Session->destroy();
+        	if (isset($_COOKIE[$this->Cookie->name])) {
+        		$this->Cookie->destroy();
+        	}
+        	$this->RememberMe->destroyCookie();
+        	$this->Session->setFlash(sprintf(__d('users', '%s you have successfully logged out'), $user[$this->{$this->modelClass}->displayField]));
+        	$this->redirect("/tags/search");
         }
 
 }

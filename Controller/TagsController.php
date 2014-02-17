@@ -131,17 +131,24 @@ public $helpers = array(
         }
 
         public function view($id = null) {
+        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
+        	$resultForChange = $this->Tag->find('first', $options);
         	debug("no admin view");
         	$this->id =$id;
         	$this->Tag->cachedName = $this->name;
+        	$userID = $this->Auth->user('id');
         	if($this->request->data['tagRadd']['add'] == true){
         		$this->Basic->tagRadd($this);
         		$this->Basic->social($this);
         		$this->redirect($this->referer());
+        	}elseif ($this->request->data['Tag']['max_quant'] != null){
+        		if ($this->Auth->user('id')==$resultForChange['Tag']['user_id']) {
+        			$this->Tag->save($this->request->data());
+        		}else {
+        			debug("fail no Auth");
+        		}
         	}
-        	$userID = $this->Auth->user('id');
         	if($this->request->data['Link']['quant'] != null){
-        		//$this->UserID = $this->request->data['Link']['user_id'];
         		$this->Basic->quant($this);
         		$this->Basic->social($this);
         	}
@@ -267,14 +274,7 @@ public $helpers = array(
          *
          * @return void
          */
-        public function test2(&$that){
-        	debug($that->referer());
-        	$that->redirect($that->referer());
-        }
-        public function test(){
-        	debug($this->referer());
-        	$this->redirect($this->referer());
-        }
+
         public function index() {
         	$this->Tag->recursive = 0;
         	$this->set('tags', $this->Paginator->paginate());
@@ -309,6 +309,7 @@ public $helpers = array(
         		if($this->request->data['Link']['user_id'] == $this->userID){
         			$this->loadModel('Link');
         			if ($this->Link->save($this->request->data)) {
+
         				$this->Session->setFlash(__('The article has been saved.'));
         			} else {
         				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
@@ -321,8 +322,12 @@ public $helpers = array(
         public function tagdel($id = null) {
         	$this->loadModel('Link');
         	if ($this->Link->delete($this->request->data('Link.ID'))){
-        		$this->Session->setFlash(__('削除完了.'));
-        		debug("sucsess");
+        		if($this->Basic->taglimitcountup($this)){
+        			$this->Session->setFlash(__('削除完了.'));
+        			debug("sucsess");
+        		}else{
+        			debug("auth fail");
+        		}
         	} else {
         		$this->Session->setFlash(__('削除失敗.'));
         		debug("fail");
@@ -417,5 +422,12 @@ public $helpers = array(
         	$this->Session->setFlash(sprintf(__d('users', '%s you have successfully logged out'), $user[$this->{$this->modelClass}->displayField]));
         	$this->redirect("/tags/search");
         }
-
+        public function test2(&$that){
+        	debug($that->referer());
+        	$that->redirect($that->referer());
+        }
+        public function test(){
+        	debug($this->referer());
+        	$this->redirect($this->referer());
+        }
 }

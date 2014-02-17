@@ -40,6 +40,25 @@ class BasicComponent extends Component {
 			}
 		}
 	}
+	public function tagAuthCuntdown(&$that,$FromID){
+		$that->loadmodel('Auth');
+		$options = array('condition' => array('Auth.tag_id ='.$FromID,'Auth.user_id ='.$that->request->data['Tag']['user_id']));
+		$result = $that->Auth->find('first',$options);
+		//$data['Auth'] = array('id'=>$result['Auth']['id'],'quant'=> $that->request->data['Auth']['quant']);
+		$result['Auth']['quant'] += $result['Auth']['quant'] - $that->quant;//動かし分だけquantを消費　==
+		if ($result['Auth']['quant'] >= 0) {//払っても借金でないことを確認。借金を実装するときはここを変える。
+			if(null != $result['Auth']['user_id']){
+				if($that->Auth->save($result)){
+					return true;
+				}else {
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}
+	}
+
 	public function taglimitcountup(&$that){
 		$that->loadModel('User');
 		if ($that->Auth->user('tlimit') > 0) {
@@ -76,9 +95,8 @@ class BasicComponent extends Component {
 		}
 	}
 	public function tagRadd(&$that) {
-		$searchID = Configure::read('tagID.search');//tagConst()['searchID'];
+		$searchID = Configure::read('tagID.search');
 		$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
-		//$that->Link->unbindModel(array('hasOne'=>array('LO')), false);
 		$that->request->data['Tag']['user_id'] = $that->request->data['tag']['userid'];
 		$that->request->data['Link']['user_id'] = $that->request->data['tag']['userid'];
 		$LinkLTo=$that->request->data['Link']['LTo'];
@@ -280,42 +298,43 @@ class BasicComponent extends Component {
 				)
 			)
 		);
-
 		$that->returntribasic = $that->Link->find('first',$option);
 		return $that->returntribasic;
 	}
 	public function trilinkAdd(&$that,$FromID,$ToID,$keyID) {
+		$that->quant = 1;
 		debug($that->request->data['Tag']['user_id']);
 		debug($keyID);
-		$that->loadModel('Link');
-		$that->request->data['Link'] = array(
-			'user_id' => $that->request->data['Tag']['user_id'],
-			'LFrom' => $FromID,
-			'LTo' => $ToID,//リンク先記事or タグ
-			'quant' => 1,
-			'created' => date("Y-m-d H:i:s"),
-			'modified' => date("Y-m-d H:i:s"),
-		);
-		$that->loadModel('Link');
-		$that->Link->create();
-		if($that->Link->save($that->request->data)){
-			$that->last_id = $that->Link->getLastInsertID();
+		if ($that->Basic->tagAuthCuntdown($that,$FromID)) {
+			$that->loadModel('Link');
 			$that->request->data['Link'] = array(
 					'user_id' => $that->request->data['Tag']['user_id'],
-					'LFrom' => $keyID,//
-					'LTo' => $that->last_id,
-					'quant' => 1,
+					'LFrom' => $FromID,
+					'LTo' => $ToID,//リンク先記事or タグ
+					'quant' => $that->quant,
 					'created' => date("Y-m-d H:i:s"),
 					'modified' => date("Y-m-d H:i:s"),
 			);
+			$that->loadModel('Link');
 			$that->Link->create();
-			if($that->Link->save($that->request->data)==false){
-				debug("2nd step miss");
+			if($that->Link->save($that->request->data)){
+				$that->last_id = $that->Link->getLastInsertID();
+				$that->request->data['Link'] = array(
+						'user_id' => $that->request->data['Tag']['user_id'],
+						'LFrom' => $keyID,//
+						'LTo' => $that->last_id,
+						'quant' => $that->quant,
+						'created' => date("Y-m-d H:i:s"),
+						'modified' => date("Y-m-d H:i:s"),
+				);
+				$that->Link->create();
+				if($that->Link->save($that->request->data)==false){
+					debug("2nd step miss");
+				}
+			}else{
+				debug("1st step miss");
 			}
-		}else{
-			debug("1st step miss");
 		}
-
 	}
 
 	public function trisinglefind(&$that = null,$trikeyID,$modelSe,$Ltotarget) {

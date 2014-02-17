@@ -64,9 +64,13 @@ $(function () {
 			<?php echo h($tag['Tag']['modified']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('ID'); ?></dt>
+		<dt><?php echo __('Max quant'); ?></dt>
 		<dd>
-			<?php echo h($tag['Tag']['max_quant']); ?>
+<?php echo $this->Form->create('Tag'//,array('controller' => 'tags','action'=>'quant')
+); ?>
+			<?php echo $this->Form->input('Tag.max_quant',array('default'=>$tag['Tag']['max_quant'])); ?>
+<?php echo $this->Form->hidden('Tag.ID', array('value'=>$tag['Tag']['ID'])); ?>
+<?php echo $this->Form->end('change max quant'); ?>
 			&nbsp;
 		</dd>
 		<?php foreach ($headresults as $headtaghash): ?>

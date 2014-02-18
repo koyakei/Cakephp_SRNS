@@ -12,6 +12,8 @@ Configure::load("static");
  * @property PaginatorComponent $Paginator
  */
 class ArticlesController extends AppController {
+
+
 	//public $uses = array('Article');
 	public $paginate = array( 'limit' => 25);
 	 public function beforeFilter() {

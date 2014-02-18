@@ -5,7 +5,14 @@ App::uses('AppModel', 'Model');
  *
  * @property Owner $Owner
  */
-class Tag extends AppModel {/*
+class Tag extends AppModel {
+	public function beforeSave($options = array()){
+		$this->request->data['Tag'] += array(
+				'created' => date("Y-m-d H:i:s"),
+				'modified' => date("Y-m-d H:i:s"),
+		);
+	}
+/*
 	public function setValue($plugin = null,$name = null,$action = null,$view = null) {
 		debug($action);
 		debug($this->cachedName);

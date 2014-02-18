@@ -6,6 +6,13 @@ Configure::load("static");
  *
  */
 class Article extends AppModel {
+	public function beforeSave(){
+		debug($this->request->data);/*
+		$that->request->data['Article'] += array(
+				'created' => date("Y-m-d H:i:s"),
+				'modified' => date("Y-m-d H:i:s"),
+		);*/
+	}
 	//public $replyID = Configure::read('tagID.reply');//tagConst()['replyID']
 
 	public $actsAs = array('Search.Searchable','Srns');

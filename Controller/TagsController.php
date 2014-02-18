@@ -17,7 +17,11 @@ Configure::load("static");
 
 }*/
 
-class TagsController extends AppController {
+class TagsController extends AppController {/*
+	function beforeFind($query){
+		$query += array('order' => 'modified ASC');
+		return $query;
+	}*/
 
 /**
  * Components
@@ -190,6 +194,7 @@ public $helpers = array(
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	if ($this->request->is('post')) {
         		$this->Tag->create();
+        		debug($this->request->data);
         		$this->request->data['Tag'] += array(
         				'created' => date("Y-m-d H:i:s"),
         				'modified' => date("Y-m-d H:i:s"),
@@ -277,6 +282,9 @@ public $helpers = array(
 
         public function index() {
         	$this->Tag->recursive = 0;
+        	$this->Paginator->settings = array(
+        			'order' => 'modified ASC'
+        	);
         	$this->set('tags', $this->Paginator->paginate());
         }
 
@@ -321,6 +329,8 @@ public $helpers = array(
 
         public function tagdel($id = null) {
         	$this->loadModel('Link');
+        	$options = array('conditions' => array('.'.$this->Aurh->primaryKey => $this->request->data['Tag']['']));
+        	$this->Link->find('first',$option);
         	if ($this->Link->delete($this->request->data('Link.ID'))){
         		if($this->Basic->taglimitcountup($this)){
         			$this->Session->setFlash(__('削除完了.'));

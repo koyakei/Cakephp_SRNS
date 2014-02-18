@@ -82,6 +82,7 @@ $(function () {
 		<?php endforeach; ?>
 	</dl>
 <?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $tag['Tag']['ID'])); ?>
+<?php if($idre == 2184){ ?>
 <?php echo $this->Form->create('Link', array('url' => array('controller' => 'links', 'action' => 'singlelink'))); ?>
 	<?php
 		echo $this->Form->input('LTo');
@@ -89,8 +90,8 @@ $(function () {
 	<?php
 		echo $this->Form->hidden('LFrom',array('value' => $this->request['pass'][0]));
 	?>
-
 <?php echo $this->Form->end(__('Single link')); ?>
+<?php } ?>
 </div>
 
 <div class="actions">

@@ -279,9 +279,9 @@ class UsersController extends UsersAppController {
 		$this->loadModel('Social');
 			$this->Paginator->settings = array(
 				'condition' => array(
-				"user_id = $tuserid"
-			)
-		);
+					"user_id = $tuserid"
+				)
+			);
 			$this->set('socials',$this->Paginator->paginate('Social'));
 		} catch (Exception $e) {
 			$this->Session->setFlash($e->getMessage());

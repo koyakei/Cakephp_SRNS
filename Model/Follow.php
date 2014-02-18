@@ -46,7 +46,7 @@ class Follow extends AppModel {
 		),
 		'target' => array(
 			'numeric' => array(
-				'rule' => array('numeric'),http://blog52.fc2.com/control.php
+				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,

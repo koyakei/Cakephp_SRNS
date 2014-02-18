@@ -22,7 +22,6 @@ class CommonComponent extends Component {
 					'LTo' => $that->last_id,
 					'quant' => 1,
 					'created' => date("Y-m-d H:i:s"),
-					'modified' => date("Y-m-d H:i:s"),
 				);
 				$Link = new Link();
 				$Link->create();
@@ -35,7 +34,6 @@ class CommonComponent extends Component {
 					'LTo' => $that->last_id,
 					'quant' => 1,
 					'created' => date("Y-m-d H:i:s"),
-					'modified' => date("Y-m-d H:i:s"),
 				);
 				$Link->create();
 					if ($Link->save($that->request->data)) {
@@ -68,7 +66,6 @@ class CommonComponent extends Component {
 					'LTo' => $that->last_id,
 					'quant' => 1,
 					'created' => date("Y-m-d H:i:s"),
-					'modified' => date("Y-m-d H:i:s"),
 				);
 				debug($that->request->data);
 				$Link = new Link();
@@ -82,7 +79,6 @@ class CommonComponent extends Component {
 						'LTo' => $that->last_id,
 						'quant' => 1,
 						'created' => date("Y-m-d H:i:s"),
-						'modified' => date("Y-m-d H:i:s"),
 					);
 					$Link->create();
 					if ($Link->save($that->request->data)) {
@@ -128,7 +124,6 @@ class CommonComponent extends Component {
 						'LTo' => $that->last_id,
 						'quant' => 1,
 						'created' => date("Y-m-d H:i:s"),
-						'modified' => date("Y-m-d H:i:s"),
 				);
 				debug($that->request->data['Link']);
 				$Link = new Link();
@@ -142,7 +137,6 @@ class CommonComponent extends Component {
 							'LTo' => $that->last_id,
 							'quant' => 1,
 							'created' => date("Y-m-d H:i:s"),
-							'modified' => date("Y-m-d H:i:s"),
 					);
 					$Link->create();
 					if ($Link->save($that->request->data)) {

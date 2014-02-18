@@ -313,7 +313,6 @@ class BasicComponent extends Component {
 					'LTo' => $ToID,//リンク先記事or タグ
 					'quant' => $that->quant,
 					'created' => date("Y-m-d H:i:s"),
-					'modified' => date("Y-m-d H:i:s"),
 			);
 			$that->loadModel('Link');
 			$that->Link->create();
@@ -325,7 +324,6 @@ class BasicComponent extends Component {
 						'LTo' => $that->last_id,
 						'quant' => $that->quant,
 						'created' => date("Y-m-d H:i:s"),
-						'modified' => date("Y-m-d H:i:s"),
 				);
 				$that->Link->create();
 				if($that->Link->save($that->request->data)==false){

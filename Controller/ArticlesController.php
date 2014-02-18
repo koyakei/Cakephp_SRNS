@@ -2,8 +2,8 @@
 App::uses('AppController', 'Controller');
 /*App::uses('Tag', 'Model');
 App::uses('User', 'Model');
-App::uses('Link', 'Model');
-App::uses('Article', 'Model');*/
+App::uses('Link', 'Model');*/
+App::uses('Article', 'Model');
 Configure::load("static");
 /**
  * Articles Controller
@@ -12,7 +12,6 @@ Configure::load("static");
  * @property PaginatorComponent $Paginator
  */
 class ArticlesController extends AppController {
-
 
 	//public $uses = array('Article');
 	public $paginate = array( 'limit' => 25);

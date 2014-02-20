@@ -2,9 +2,6 @@
 <html>
 <head>
 <?php //$this->Html->loadConfig('html5_tags'); ?>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
     {

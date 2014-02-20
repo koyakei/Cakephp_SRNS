@@ -101,12 +101,13 @@ class CommonComponent extends Component {
 			$userID = Configure::read('acountID.admin');
 		}
 		debug($model);
-		$tagID = $that->$model->find('first',
+		$Tag = new Tag();
+		$tagID = $Tag->find('first',
 			array(
 				'conditions' => array('name' => $that->request->data['Tag']['name']),
 				'user_id' => $userID,
-				'fields' => array('Tag.ID'),
-				'order' => 'Tag.ID'
+				'fields' => array('Tag.ID')//,
+				//'order' => 'Tag.ID'
 			)
 		);
 		if($tagID['Tag']['ID'] == null){

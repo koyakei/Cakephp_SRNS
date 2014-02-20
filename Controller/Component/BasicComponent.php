@@ -7,11 +7,6 @@ App::uses('Article', 'Model');
 Configure::load("static");
 class BasicComponent extends Component {
 	public function social(&$that){
-		/*debug($that->plugin);
-		debug($that->action);
-		debug($that->view);
-		debug($that->name);
-		debug($that->id);*/
 		$data['Social']['vaction'] = $that->action;
 		$data['Social']['vplugin'] = $that->plugin;
 		$data['Social']['vctrl'] = $that->name;

@@ -40,7 +40,7 @@ public $presetVars = array(
 );
 public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('logout');
+	$this->Auth->allow('logout','view','search');
 	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
 			//'Form' => array('user' => 'Member')
@@ -71,25 +71,25 @@ public function beforeFilter() {
 	//$appSession = $this->Session->read('appSession');
 
 }
-public function isAuthorized($user) {
-	if ($this->action === 'add') {
-		return true;
-	}
-
-	// 投稿のオーナーは編集や削除ができる
-	if (in_array($this->action, array('edit', 'delete'))) {
-		$postId = $this->request->params['pass'][0];
-		if ($this->Post->isOwnedBy($postId, $user['id'])) {
+	public function isAuthorized($user) {
+		if ($this->action === 'add') {
 			return true;
 		}
-	}
 
-	return parent::isAuthorized($user);
-}
-public $helpers = array(
- 'Html',
-		'Session'
-);
+		// 投稿のオーナーは編集や削除ができる
+		if (in_array($this->action, array('edit', 'delete'))) {
+			$postId = $this->request->params['pass'][0];
+			if ($this->Post->isOwnedBy($postId, $user['id'])) {
+				return true;
+			}
+		}
+
+		return parent::isAuthorized($user);
+	}
+	public $helpers = array(
+	 'Html',
+			'Session'
+	);
 //        public $presetVars = true;
 
         public function admin_view($id = null) {
@@ -345,68 +345,10 @@ public $helpers = array(
         	$this->redirect($this->referer());
         }
 
-        public function tagRadd($id = null) {
-        	debug($this->request->data['Link']['LTo']);
-        	debug($this->request->data['tag']['userid']
-        	);
-        	$this->keyid = Configure::read('tagID.search');
-        	$this->request->data['Tag']['user_id'] = $this->request->data['tag']['userid'];
-        	$this->request->data['Link']['user_id'] = $this->request->data['tag']['userid'];
-        	$LinkLTo=$this->request->data['Link']['LTo'];
-        	if (!empty($this->request->data['Tag']['name'])) {
-        		$this->loadModel('Tag');
-        		$tagID = $this->Tag->find('first',
-        				array(
-        						'conditions' => array('name' => $this->request->data['Tag']['name'],
-        								'user_id' => $this->request->data['Tag']['user_id']),
-        						'fields' => array('Tag.ID'),
-        						'order' => 'Tag.ID'
-        				)
-        		);
-        		if($tagID == null){
-        			$this->Tag->create();
-        			$this->Tag->save($this->request->data);
-        			$last_id = $this->Tag->getLastInsertID();
-        			$this->Basic->trilinkAdd($this,$last_id,$LinkLTo,Configure::read('tagID.search'));
-        			$this->Session->setFlash(__('タグがなかった.'));
-        		}else {
-        			$this->loadModel('Link');
-        			$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
-        			$this->Link->unbindModel(array('hasOne'=>array('LO')), false);
-        			$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
-        			$this->Basic->tribasicfixverifybyid($this,$trikeyID,$LinkLTo);
-        			$LE = $this->returntribasic;
-        			if(null == $LE){
-        				$tagIDd = $tagID['Tag']['ID'];
-        				$this->Basic->trilinkAdd($this,$tagIDd,$LinkLTo,$trikeyID);
-        				$this->Session->setFlash(__('タグ既存リンク追加'));
-        			}else{
-        				$this->Session->setFlash(__('関連付け済み'));
-        			}
-        		}
-        	}else {
-        		$this->Session->setFlash(__('データなし'));
-        	}
-
-        	//$this->redirect(array('controller' => 'tags','action'=>'view',$this->request->data['tag']['idre']));
-        	//$this->redirect($this->referer());
-        }
-
         public function result($id = null) {
         	$this->Common->trifinder($this);
         	$this->set('idre', $id);
         }
-
-        /*
-         public function reply($articleID) {
-        if (!$this->Tag->exists($tagID)) {
-        throw new NotFoundException(__('関連タグが存在しない'));
-        }
-        $sql = "SELECT  `article` . *, `LINK`.`ID` AS LinkID FROM  `LINK` INNER JOIN  `LINK` AS tagLink ON  `LINK`.`ID` = `tagLink`.`LTo`, `article`  WHERE  `LINK`.`LFrom` =$tagID AND `tagLink`.`LFrom` =2138  AND `article` . `ID` = `LINK` . `LTo`";
-        $sqlres = $this->Tag->query($sql);
-        $this->set('results', $sqlres);
-        }
-        */
         public function replytagadd($id = null) {
 
         }

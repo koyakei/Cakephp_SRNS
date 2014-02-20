@@ -31,13 +31,7 @@ $(function () {
     });
 </script>
 </head>
-<div class="actions">
-<ul>
-		<li><?php echo $this->Html->link(__('List Tags'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('Tag search'), array('controller' => 'tags','action' => 'search')); ?> </li>
-	</ul>
-</div>
+
 <div class="articles view">
 <h2><?php echo __('Article'); ?></h2>
 	 <dl>
@@ -69,11 +63,19 @@ $(function () {
 		<?php foreach ($headresults as $headtaghash): ?>
 			<dt><?php echo __('Searchtagname'); ?></dt>
 		        <dd>
-		                <?php echo h($headtaghash['Tag']['name']); ?>
+		                <?php echo $this->Html->link(($headtaghash['Tag']['name']), array('controller' => 'tags','action' => 'view', $headtaghash['Tag']['ID'])); ?>
 		                &nbsp;
 		        </dd>
 		<?php endforeach; ?>
         </dl>
+</div>
+<div class="actions">
+<ul>
+		<li><?php echo $this->Html->link(__('List Tags'), array('action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('Tag search'), array('controller' => 'tags','action' => 'search')); ?> </li>
+	</ul>
+</div>
 <?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $article['Article']['ID'])); ?>
 	
 	<table cellpadding="0" cellspacing="0">
@@ -81,7 +83,9 @@ $(function () {
 	<?php echo $this->element('tablehead', Array('taghashes'=>$taghashes)); ?>
 	<tbody>
 	<?php echo $this->element('tablebody', Array('results' => $articleresults,'taghashes'=>$taghashes,'firstModel' => 'Article')); ?>
+	<?php echo $this->element('tablebody', Array('results' => $tagresults,'taghashes'=>$taghashes,'firstModel' => 'Tag','currentUserID' => $currentUserID)); ?>
 </tbody>
 	</table>
 	<?php echo $this->element('Input', Array('ulist' => $ulist,'keylist' => $keylist,'model' => 'Article')); ?>
 	<?php echo $this->element('Input', Array('ulist' => $ulist,'keylist' => $keylist,'model' => 'Tag')); ?>
+

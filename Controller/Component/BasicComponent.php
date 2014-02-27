@@ -58,10 +58,11 @@ class BasicComponent extends Component {
 		$that->loadModel('User');
 		if ($that->Auth->user('tlimit') > 0) {
 			if($that->Tag->save($that->request->data)){
+				$that->last_id = $that->Tag->getLastInsertID();
+				debug($that->last_id);
 				$data['User']['id'] = $that->request->data['Tag']['user_id'];
 				$data['User']['tlimit'] = $that->Auth->user('tlimit')- 1;
 				if($that->User->save($data)){
-					$that->last_id = $that->Tag->getLastInsertID();
 					$that->Session->setFlash(__('タグ追加成功　残りタグ数'.$that->Auth->user('tlimit')));
 				}
 			}else {
@@ -120,12 +121,16 @@ class BasicComponent extends Component {
 					$tagIDd = $tagID['Tag']['ID'];
 					$that->Basic->trilinkAdd($that,$tagIDd,$LinkLTo,$trikeyID);
 					$that->Session->setFlash(__('タグ既存リンク追加'));
+					debug("Radded");
 
 				}else{
 					$that->Session->setFlash(__('関連付け済み'));
+					debug("already exist");
 				}
 			}
-		}
+		}else {
+				$that->Session->setFlash(__('リクエストが空っぽでこけている　tag.ID'));
+			}
 		debug($that->referer());
 		$that->redirect($that->referer());
 	}

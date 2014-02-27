@@ -1,5 +1,5 @@
 <?php
-
+App::import('Vendor', 'DebugKit.FireCake');
 App::uses('AppController', 'Controller');/*
 App::uses('Link', 'Model');
 App::uses('User', 'Model');*/
@@ -47,7 +47,7 @@ public function beforeFilter() {
 	);
 	$this->Security->validateOnce = false;
 	$this->Security->validatePost = false;
-	$this->Security->csrfCheck = false;
+	$this->Security->csrfCheck = false;/*
 	if ($this->request->data['keyid']['keyid'] == null){
 		$this->request->data['keyid']['keyid'] = Configure::read('tagID.reply');
 	}
@@ -194,15 +194,14 @@ public function beforeFilter() {
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	if ($this->request->is('post')) {
         		$this->Tag->create();
-        		debug($this->request->data);
         		$this->request->data['Tag'] += array(
         				'created' => date("Y-m-d H:i:s"),
         				'modified' => date("Y-m-d H:i:s"),
         				'max_quant' => $max_quant,
         		);
         		$this->Basic->taglimitcountup($this);
-        		$this->loadModel('Auth');
         		$data['Auth'] =array('user_id' => $this->request->data['Tag']['user_id'],'tag_id' =>$this->last_id,'quant' => $max_quant);
+        		$this->loadModel('Auth');
         		$this->Auth->create();
         		$this->Auth->save($data);
         	}
@@ -329,8 +328,9 @@ public function beforeFilter() {
 
         public function tagdel($id = null) {
         	$this->loadModel('Link');
-        	$options = array('conditions' => array('.'.$this->Aurh->primaryKey => $this->request->data['Tag']['']));
-        	$this->Link->find('first',$option);
+        	//$options = array('conditions' => array('.'.$this->Aurh->primaryKey => $this->request->data['Tag']['']));
+        	//$this->Link->find('first',$option);
+        	debug($this->request->data('Link.ID'));
         	if ($this->Link->delete($this->request->data('Link.ID'))){
         		if($this->Basic->taglimitcountup($this)){
         			$this->Session->setFlash(__('削除完了.'));

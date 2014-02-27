@@ -1,6 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
-/*App::uses('Tag', 'Model');
+App::uses('Tag', 'Model');/*
 App::uses('User', 'Model');
 App::uses('Link', 'Model');*/
 App::uses('Article', 'Model');
@@ -55,6 +55,13 @@ class ArticlesController extends AppController {
  */
 	public function view($id = null) {
 		debug($this->Auth->user('id'));
+        	if($this->request->data['tagRadd']['add'] == true){
+        		$that->Session->setFlash(__('radd に入ってきている。'));
+        		$this->Basic->tagRadd($this);
+        		$this->Basic->social($this);
+        	}else {
+        		$that->Session->setFlash(__('radd に入ってinai。'));
+        	}
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
 			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));

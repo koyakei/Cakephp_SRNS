@@ -59,15 +59,33 @@ class LinksController extends AppController {
 			$this->keyid = $this->request->data['Tag']['keyid'];
 			$this->Common->tritagAdd($this,"Tag",1);
 		}
-
+/*
 		$this->set('idre', $id);
 		$trikeyID = Configure::read('tagID,search');//tagConst()['searchID'];
+		$this->set('article',$this->taghashgen);
 		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
 		$this->set('headresults', $this->returntribasic);
 		$this->Common->trifinderbyid($this);
 		$this->Session->write('userselected',$this->request->data['tag']['userid'] );
 		$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
+*/
 		$this->set('upperIdeas', $this->returntribasic);
+		$this->taghashgen = $this->Link->find('first',array('conditions' => array('Link.' . $this->Link->primaryKey => $id)));
+		$this->Link->read(null,$id);
+		$this->set('idre', $id);
+		$this->i = 0;
+		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
+		$this->set('link',$this->taghashgen);
+		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
+		$this->set('headresults', $this->returntribasic);
+		$this->set('headtaghashes', $this->taghash);
+		$targetID = $id;
+		$this->Common->trifinderbyid($this);
+		$this->loadModel('User');
+		$this->loadModel('Key');
+		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
+		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+		$this->set('currentUserID', $this->Auth->user('id'));
 	}
 
 /**

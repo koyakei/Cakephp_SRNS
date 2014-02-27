@@ -2,12 +2,11 @@
 <?php if($firstModel == Tag){$userCallAssosiation = 'TO';} else {$userCallAssosiation = 'AO';}?>
 				<tr>
 					<td><?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
-					<td><?php echo h($result[$firstModel]['name']); ?>&nbsp;</td>
+					<td><?php echo $this->Html->link($result[$firstModel]['name'], array('controller' => $firstModel, 'action' => 'view', $result[$firstModel]['ID'])); ?></td>
 					<td><?php echo h($result[$userCallAssosiation]['username']); ?>&nbsp;</td>
 					<td><?php echo h($result["$firstModel"]['created']); ?>&nbsp;</td>
 					<td><?php echo h($result["$firstModel"]['modified']); ?>&nbsp;</td>
 					<td class="actions">
-						<?php echo $this->Html->link(__('View'), array('controller'=> $firstModel."s",'action' => 'view', $result[$firstModel]['ID'])); ?>
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?>
 						<?php echo $this->Form->postLink(__('Delete'), array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID'])); ?>
 					</td>
@@ -21,7 +20,7 @@
 										<td><?php echo $subtag['Link']['quant']; ?></td>
 										<!--<?php echo $subtag['Tag']['name']; ?>-->
 										<td>
-										<?php echo $this->Html->link(__('Link View'), array('controller'=> "links",'action' => 'view', $subtag['Link']['ID'])); ?>
+										
 										<?php echo $this->Form->create('tag'//,array('controller' => 'tags','action'=>'quant')
 ); ?>
 										<?php echo $this->Form->input('Link.quant',array('default'=>$subtag['Link']['quant'])); ?>

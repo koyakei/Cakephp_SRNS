@@ -59,16 +59,6 @@ class LinksController extends AppController {
 			$this->keyid = $this->request->data['Tag']['keyid'];
 			$this->Common->tritagAdd($this,"Tag",1);
 		}
-/*
-		$this->set('idre', $id);
-		$trikeyID = Configure::read('tagID,search');//tagConst()['searchID'];
-		$this->set('article',$this->taghashgen);
-		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
-		$this->set('headresults', $this->returntribasic);
-		$this->Common->trifinderbyid($this);
-		$this->Session->write('userselected',$this->request->data['tag']['userid'] );
-		$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
-*/
 		$this->set('upperIdeas', $this->returntribasic);
 		$this->taghashgen = $this->Link->find('first',array('conditions' => array('Link.' . $this->Link->primaryKey => $id)));
 		$this->Link->read(null,$id);

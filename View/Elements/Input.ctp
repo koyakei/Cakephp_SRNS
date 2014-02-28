@@ -1,13 +1,13 @@
 <?php echo $this->Form->create($model); ?>
 <fieldset>
-	<?php echo $this->element('keylist', Array('keylist' => $keylist)); ?>
+	
 <?php echo $this->Form->input('user_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,
 	  'selected' => $currentUserID//['userselected']  
 	)); ?>
-	
+	<?php echo $this->element('keylist', Array('keylist' => $keylist)); ?>
 		<legend><?php echo __($model); ?></legend>
 	<?php
 		$targetid = $this->params['pass'][0];

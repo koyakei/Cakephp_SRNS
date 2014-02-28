@@ -48,12 +48,10 @@ class CommonComponent extends Component {
 	}
 
 	public function triarticleAdd(&$that = null,$model,$userID) {
-		debug($that->name);
 		/*$that->Tag->setValue($that->plugin,$that->name.$that->action,$that->view);*/
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');
 		}
-		debug($userID);
 		if ($that->request->params['pass'][0] != null) {
 			$Article = new $model();
 			$Article->create();

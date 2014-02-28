@@ -17,11 +17,11 @@ Configure::load("static");
 
 }*/
 
-class TagsController extends AppController {/*
+class TagsController extends AppController {
 	function beforeFind($query){
 		$query += array('order' => 'modified ASC');
 		return $query;
-	}*/
+	}
 
 /**
  * Components
@@ -47,28 +47,7 @@ public function beforeFilter() {
 	);
 	$this->Security->validateOnce = false;
 	$this->Security->validatePost = false;
-	$this->Security->csrfCheck = false;/*
-	if ($this->request->data['keyid']['keyid'] == null){
-		$this->request->data['keyid']['keyid'] = Configure::read('tagID.reply');
-	}
-	if ($this->request->data['keyid']['keyid'] != null){
-		$this->Session->write("selected",$this->request->data['keyid']['keyid']);
-		debug("case1");
-	}/*elseif ($this->request->data['Tag']['keyid'] != null){
-	$this->Session->write("selected",$this->request->data['Tag']['keyid']);
-	echo "case2";
-	}elseif ($this->request->data['Article']['keyid'] != null){
-	$_SESSION['selected'] = $this->request->data['Article']['keyid'];
-	echo "case3";
-	}elseif ($_SESSION['selected'] == null){
-	$_SESSION['selected'] = '2138';
-	echo "case4";
-	}*//*
-	if ($this->request->data['keyid']['keyid'] == null){
-	$this->request->data['keyid']['keyid'] = Configure::read('tagID.reply');
-	}
-	*/
-	//$appSession = $this->Session->read('appSession');
+	$this->Security->csrfCheck = false;
 
 }
 	public function isAuthorized($user) {
@@ -89,48 +68,15 @@ public function beforeFilter() {
 	);
 //        public $presetVars = true;
 
-        public function admin_view($id = null) {
-        	debug("admin view");
-        	$this->id =$id;
-        	$this->Tag->cachedName = $this->name;
-        	if($this->request->data['tagRadd']['add'] == true){
-        		$this->Basic->tagRadd($this);
-        		$this->Basic->social($this);
-        		$this->redirect($this->referer());
-        	}
-        	$userID = $this->Auth->user('id');
-        	if($this->request->data['Link']['quant'] != null){
-        		//$this->UserID = $this->request->data['Link']['user_id'];
-        		$this->Basic->quant($this);
-        		$this->Basic->social($this);
-        	}
-        	if($this->request->data['Article']['name'] != null){
-        		$this->keyid = $this->request->data['Article']['keyid'];
-        		$this->Common->triarticleAdd($this,'Article',$this->request->data['Tag']['user_id']);
-        		$this->Basic->social($this);
-        	}
-        	if($this->request->data['Tag']['name'] != null){
-        		$this->keyid = $this->request->data['Tag']['keyid'];
-        		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$this->request->params['pass'][0]);
-        		$this->Basic->social($this);
-        	}
-        	$this->set('idre', $id);
-        	if (!$this->Tag->exists($id)) {
-        		throw new NotFoundException(__('Invalid tag'));
-        	}
-        	$trikeyID = Configure::read('tagID.search');//$serchID;//tagConst()['searchID'];
-        	$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
-        	$this->set('headresults', $this->returntribasic);
-        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
-        	$this->Tag->unbindModel(array('hasOne'=>array('TO')), false);
-        	$this->set('tag', $this->Tag->find('first', $options));
-        	$this->set('currentUserID', $this->Auth->user('id'));
-        	$this->Common->trifinderbyid($this);
-        	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
-        	$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
-        	$this->set('upperIdeas', $this->returntribasic);
-        }
 
+        /**
+         * view method
+         *
+         * @throws NotFoundException
+         * @param string $id
+         * @param string $trikeyID
+         * @return void
+         */
         public function view($id = null,$trikeyID = null) {
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$resultForChange = $this->Tag->find('first', $options);
@@ -167,19 +113,28 @@ public function beforeFilter() {
         	if (!$this->Tag->exists($id)) {
         		throw new NotFoundException(__('Invalid tag'));
         	}
+        	$this->request->data['keyid']['keyid'] =$trikeyID;
         	if ($trikeyID == NULL){//$serchID;//tagConst()['searchID'];
         		$trikeyID = Configure::read('tagID.search');
         	}
-        	$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
+        	$this->Common->SecondDem($this,"Tag","Tag.ID",Configure::read('tagID.search'),$id);
         	$this->set('headresults', $this->returntribasic);
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$this->set('tag', $this->Tag->find('first', $options));
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->Common->trifinderbyid($this);
         	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
-        	$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
+        	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$this->request['pass'][0]);
         	$this->set('upperIdeas', $this->returntribasic);
         	$this->set('trikeyID', $trikeyID);
+        }
+        /**
+         * transmitter method
+         *
+         * @return void
+         */
+        public function transmitter (){
+
         }
 
         /**
@@ -286,6 +241,11 @@ public function beforeFilter() {
         	);
         	$this->set('tags', $this->Paginator->paginate());
         }
+        /**
+         * search method
+         *
+         * @return void
+         */
 
         public function search() {
         	debug($this->Auth->user('id'));
@@ -352,13 +312,7 @@ public function beforeFilter() {
         public function replytagadd($id = null) {
 
         }
-        /**
-         * view method
-         *
-         * @throws NotFoundException
-         * @param string $id
-         * @return void
-         */
+
         public function triarticleadd($id = null) {
         	$this->Common->triarticleAdd($this);
         	$this->redirect($this->referer());
@@ -373,13 +327,5 @@ public function beforeFilter() {
         	$this->RememberMe->destroyCookie();
         	$this->Session->setFlash(sprintf(__d('users', '%s you have successfully logged out'), $user[$this->{$this->modelClass}->displayField]));
         	$this->redirect("/tags/search");
-        }
-        public function test2(&$that){
-        	debug($that->referer());
-        	$that->redirect($that->referer());
-        }
-        public function test(){
-        	debug($this->referer());
-        	$this->redirect($this->referer());
         }
 }

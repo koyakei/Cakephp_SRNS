@@ -84,7 +84,7 @@ class LinksController extends AppController {
  * @return void
  */
 	public function transmitter($id = null){// 渡されるのが一つだけでいいのか？
-		function
+
 	}
 /**
  * add method
@@ -157,7 +157,13 @@ class LinksController extends AppController {
 		}
 		return $this->redirect($this->referer());
 	}
-
+	/**
+	 * singlelink method
+	 *
+	 *
+	 * @param string $id
+	 * @return void
+	 */
 	public function singlelink($id = NULL) {
 		$this->request->data['Link']['user_id'] = $this->Auth->user('ID');
 		$this->request->data['Link']['quant'] = 1;

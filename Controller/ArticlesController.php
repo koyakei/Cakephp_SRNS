@@ -20,7 +20,7 @@ class ArticlesController extends AppController {
         $this->Security->validateOnce = false;
         $this->Security->validatePost = false;
         $this->Security->csrfCheck = false;
-        $this->Auth->allow('logout');
+        $this->Auth->allow('logout','view');
 	$this->Auth->authenticate = array(
 		'Basic' => array('user' => 'admin'),
 		//'Form' => array('user' => 'Member')
@@ -54,16 +54,16 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-		debug($this->Auth->user('id'));
         	if($this->request->data['tagRadd']['add'] == true){
         		$that->Session->setFlash(__('radd に入ってきている。'));
         		$this->Basic->tagRadd($this);
         		$this->Basic->social($this);
         	}else {
-        		$that->Session->setFlash(__('radd に入ってinai。'));
+        		//$this->Session->setFlash(__('radd に入ってinai。'));
         	}
 		if($this->request->data['Article']['name'] != null){
 			$this->keyid = $this->request->data['Article']['keyid'];
+			$this->Session->setFlash(__($this->keyid));
 			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
 			$this->Basic->social($this);
 		}

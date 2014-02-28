@@ -75,9 +75,17 @@ class LinksController extends AppController {
 		$this->loadModel('Key');
 		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+		debug($this->Auth->user('id'));
 		$this->set('currentUserID', $this->Auth->user('id'));
 	}
-
+/**
+ * transmitter method
+ *
+ * @return void
+ */
+	public function transmitter($id = null){// 渡されるのが一つだけでいいのか？
+		function
+	}
 /**
  * add method
  *

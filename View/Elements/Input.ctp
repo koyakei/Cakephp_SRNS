@@ -1,11 +1,6 @@
 <?php echo $this->Form->create($model); ?>
 <fieldset>
-	<?php echo $this->Form->input('keyid', array(
-	'type' => 'select',
-	'multiple'=> false,
-	'options' => $keylist,
-	'selected' => $selected  
-	)); ?>
+	<?php echo $this->element('keylist', Array('keylist' => $keylist)); ?>
 <?php echo $this->Form->input('user_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,

@@ -1,0 +1,9 @@
+
+<form>
+<select onChange="top.location.href=value">
+<option value=
+></option>
+
+</select>
+</form>
+//$_SERVER['DOCUMENT_ROOT'].DS."tags".DS."view".DS.$idre.DS.

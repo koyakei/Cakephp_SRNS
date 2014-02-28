@@ -72,9 +72,6 @@ public function beforeFilter() {
 
 }
 	public function isAuthorized($user) {
-		if ($this->action === 'add') {
-			return true;
-		}
 
 		// 投稿のオーナーは編集や削除ができる
 		if (in_array($this->action, array('edit', 'delete'))) {
@@ -134,7 +131,7 @@ public function beforeFilter() {
         	$this->set('upperIdeas', $this->returntribasic);
         }
 
-        public function view($id = null) {
+        public function view($id = null,$trikeyID = null) {
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$resultForChange = $this->Tag->find('first', $options);
         	debug("no admin view");
@@ -170,7 +167,9 @@ public function beforeFilter() {
         	if (!$this->Tag->exists($id)) {
         		throw new NotFoundException(__('Invalid tag'));
         	}
-        	$trikeyID = Configure::read('tagID.search');//$serchID;//tagConst()['searchID'];
+        	if ($trikeyID == NULL){//$serchID;//tagConst()['searchID'];
+        		$trikeyID = Configure::read('tagID.search');
+        	}
         	$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
         	$this->set('headresults', $this->returntribasic);
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
@@ -180,6 +179,7 @@ public function beforeFilter() {
         	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
         	$this->Basic->triupperfiderbyid($this,"2183","Tag",$this->request['pass'][0]);
         	$this->set('upperIdeas', $this->returntribasic);
+        	$this->set('trikeyID', $trikeyID);
         }
 
         /**

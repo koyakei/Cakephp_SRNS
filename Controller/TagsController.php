@@ -127,14 +127,42 @@ public function beforeFilter() {
         	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$this->request['pass'][0]);
         	$this->set('upperIdeas', $this->returntribasic);
         	$this->set('trikeyID', $trikeyID);
+        	$this->loadModel('User');
+        	$this->loadModel('Key');
+        	$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
+        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+        	$this->set('taghashes', $this->taghash);
+        	$this->set('articleresults', $this->articleparentres);
+        	$this->set('tagresults', $this->tagparentres);
         }
         /**
          * transmitter method
          *
          * @return void
          */
-        public function transmitter (){
+        public function transmitter ($leftID = null,$leftKeyID = null,$rghitID = null,$rightKeyID = null ){
+			//view method を読み込む　左
+			//左右を同じelemrnt で構成する　その画面を呼び出す方法を考える。
+			//ページを固定したまま検索する方法を考える。
+			//togetter の左は編集先になっている。
+        	$this->id =$leftID;
+        	$this->request->data['keyid']['keyid'] =$leftKeyID;
+        	$this->Common->trifinderbyid($this);
+        	$this->set('lefttaghashes', $this->taghash);
+        	$this->set('leftarticleresults', $this->articleparentres);
+        	$this->set('lefttagresults', $this->tagparentres);
+        	$this->id =$rightID;
+        	$this->request->data['keyid']['keyid'] =$rightKeyID;
+        	$this->Common->trifinderbyid($this);
+        	$this->set('righttaghashes', $this->taghash);
+        	$this->set('rightarticleresults', $this->articleparentres);
+        	$this->set('righttagresults', $this->tagparentres);
 
+        	$this->loadModel('User');
+        	$this->loadModel('Key');
+        	$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
+        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+        	$this->set('leftKeyID', $leftKeyID);
         }
 
         /**

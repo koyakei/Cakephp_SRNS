@@ -254,10 +254,6 @@ class CommonComponent extends Component {
 			}
 			$that->i++;
 		}
-		$that->loadModel('User');
-		$that->loadModel('Key');
-		$that->set( 'keylist', $that->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
-		$that->set( 'ulist', $that->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		$that->set('taghashes', $that->taghash);
 		$that->set('articleresults', $that->articleparentres);
 		$that->set('tagresults', $that->tagparentres);

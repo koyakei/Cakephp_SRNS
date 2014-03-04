@@ -5,11 +5,11 @@
 
 <?php
 $this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', null, array('block' => 'css'));
-$this->Html->script(
+/*$this->Html->script(
 	array('http://code.jquery.com/ui/1.9.1/jquery-ui.js',
 		'http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js'),
 	array('block' => 'script')
-);
+);*/
 ?>
 <?php $this->start('script'); ?>
 <script>

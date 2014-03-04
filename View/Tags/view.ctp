@@ -14,50 +14,13 @@ $(document).ready(function()
 <?php echo $this->element('contentsidebar', Array('keylist' => $upperIdeas,'idre'=>$idre,'firstModel' => 'Tag','data' => $tag)); ?>
 <div class="tags view">
 <h2><?php echo __('Tag'); ?></h2>
-	<dl>
-		<dt><?php echo __('ID'); ?></dt>
-		<dd>
-			<?php echo h($tag['Tag']['ID']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Name'); ?></dt>
-		<dd>
-			<?php echo h($tag['Tag']['name']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Owner Id'); ?></dt>
-		<dd>
-			<?php echo h($tag['Tag']['user_id']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Created'); ?></dt>
-		<dd>
-			<?php echo h($tag['Tag']['created']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Modified'); ?></dt>
-		<dd>
-			<?php echo h($tag['Tag']['modified']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Max quant'); ?></dt>
-		<dd>
-<?php echo $this->Form->create('Tag'//,array('controller' => 'tags','action'=>'quant')
-); ?>
-			<?php echo $this->Form->input('Tag.max_quant',array('default'=>$tag['Tag']['max_quant'])); ?>
-<?php echo $this->Form->hidden('Tag.ID', array('value'=>$tag['Tag']['ID'])); ?>
-<?php echo $this->Form->end('change max quant'); ?>
-			&nbsp;
-		</dd>
-		<?php foreach ($headresults as $headtaghash): ?>
-			<dt><?php echo __('Searchtagname'); ?></dt>
-		        <dd>
-		                <?php 
-		                 echo $this->Html->link(__($headtaghash['Tag']['name']), array('controller'=> 'tags','action' => 'view', $headtaghash['Tag']['ID'])); ?>
-		        </dd>
-		<?php endforeach; ?>
-	</dl>
+<dl>
+		<?php echo $this->element('detail',array('detail' =>  $tag,'firstModel' => 'Tag')); ?>
 <?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $tag['Tag']['ID'],'currentUserID' => $currentUserID)); ?>
+<?php if ($headresults =! null) { ?>
+		<?php echo $this->element('detalSTag',array('headresults' =>  $headresults,'firstModel' => 'Tag')); ?>
+		<?php } ?>
+</dl>
 <?php if($idre == 2184){ ?>
 <?php echo $this->Form->create('Link', array('url' => array('controller' => 'links', 'action' => 'singlelink'))); ?>
 	<?php

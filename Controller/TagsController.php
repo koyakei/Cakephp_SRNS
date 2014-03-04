@@ -140,29 +140,57 @@ public function beforeFilter() {
          *
          * @return void
          */
-        public function transmitter ($leftID = null,$leftKeyID = null,$rghitID = null,$rightKeyID = null ){
+        public function transmitter($leftID = null,$leftKeyID = null,$rghitID = null,$rightKeyID = null ){
 			//view method を読み込む　左
 			//左右を同じelemrnt で構成する　その画面を呼び出す方法を考える。
 			//ページを固定したまま検索する方法を考える。
 			//togetter の左は編集先になっている。
-        	$this->id =$leftID;
-        	$this->request->data['keyid']['keyid'] =$leftKeyID;
-        	$this->Common->trifinderbyid($this);
-        	$this->set('lefttaghashes', $this->taghash);
-        	$this->set('leftarticleresults', $this->articleparentres);
-        	$this->set('lefttagresults', $this->tagparentres);
-        	$this->id =$rightID;
-        	$this->request->data['keyid']['keyid'] =$rightKeyID;
-        	$this->Common->trifinderbyid($this);
-        	$this->set('righttaghashes', $this->taghash);
-        	$this->set('rightarticleresults', $this->articleparentres);
-        	$this->set('righttagresults', $this->tagparentres);
-
+			debug($leftID);
+			debug($rightID);
+        	if($this->request->data['Tag']['left'] == true){
+        		$leftID = null;
+        		$leftKeyID = null;
+				$this->psearch($this);
+				$this->set('lefttagresults', $this->Paginator->paginate());
+				//left $leftID $leftKeyID del
+        	}elseif ($this->request->data['Tag']['right'] == true) {
+        		$rghitID = null;
+        		$rightKeyID = null;
+        		$this->psearch($this);
+        		$this->set('righttagresults', $this->Paginator->paginate());
+				//left $rightID $rightKeyID del
+        	}//else{
+    			if ($leftID != null && $rightID != false) {
+    				debug("left");
+					$this->id =$leftID;
+		        	$this->request->data['keyid']['keyid'] =$leftKeyID;
+		        	$this->Common->trifinderbyid($this);
+		        	$this->set('lefttaghashes', $this->taghash);
+		        	$this->set('leftarticleresults', $this->articleparentres);
+		        	$this->set('lefttagresults', $this->tagparentres);
+					$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $leftID),'order' => array('Tag.ID'));
+					$this->set('leftheadresult', $this->Tag->find('first', $options));
+				}
+				if ($rightID != null && $rightID != false) {
+					debug("right");
+		        	$this->id =$rightID;
+		        	$this->request->data['keyid']['keyid'] =$rightKeyID;
+		        	$this->Common->trifinderbyid($this);
+		        	$this->set('righttaghashes', $this->taghash);
+		        	$this->set('rightarticleresults', $this->articleparentres);
+		        	$this->set('righttagresults', $this->tagparentres);
+					$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $rightID),'order' => array('Tag.ID'));
+					$this->set('rightheadresult', $this->Tag->find('first', $options));
+				}
+        	//}
         	$this->loadModel('User');
         	$this->loadModel('Key');
         	$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+        	$this->set('leftID', $leftID);
         	$this->set('leftKeyID', $leftKeyID);
+        	$this->set('rightID', $rightID);
+        	$this->set('rightKeyID', $rightKeyID);
         }
 
         /**
@@ -270,29 +298,42 @@ public function beforeFilter() {
         	$this->set('tags', $this->Paginator->paginate());
         }
         /**
-         * search method
+         * psearch method
          *
-         * @return void
+         * @return $tagresult
          */
+        private function psearch(&$that){
 
-        public function search() {
-        	debug($this->Auth->user('id'));
-        	$req = $this->passedArgs;
-        	if (!empty($this->request->data['Tag']['keyword'])) {
-        		$andor = !empty($this->request->data['Tag']['andor']) ? $this->request->data['Tag']['andor'] : null;
-        		$word = $this->Tag->multipleKeywords($this->request->data['Tag']['keyword'], $andor);
+        	debug($that->request->data['Tag']['keyword']);
+        	$req = $that->passedArgs;
+        	if (!empty($that->request->data['Tag']['keyword'])) {
+        		$andor = !empty($that->request->data['Tag']['andor']) ? $that->request->data['Tag']['andor'] : null;
+        		$word = $that->Tag->multipleKeywords($that->request->data['Tag']['keyword'], $andor);
         		$req = array_merge($req, array("word" => $word));
         	}
-        	$this->paginate = array(
+        	$that->paginate = array(
         			'Tag' =>
         			array(
         					'conditions' => array(
-        							$this->Tag->parseCriteria($req),
+        							$that->Tag->parseCriteria($req),
         					)
 
         			)
         	);
+
+        }
+
+
+        /**
+         * search method
+         *
+         * @return $tagresult
+         */
+
+        public function search() {
+        	$this->psearch($this);
         	$this->set('tags', $this->Paginator->paginate());
+
         }
 
         public function quant($id = null) {

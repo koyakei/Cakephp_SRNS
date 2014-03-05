@@ -145,22 +145,20 @@ public function beforeFilter() {
 			//左右を同じelemrnt で構成する　その画面を呼び出す方法を考える。
 			//ページを固定したまま検索する方法を考える。
 			//togetter の左は編集先になっている。
-			debug($leftID);
-			debug($rightID);
-        	if($this->request->data['Tag']['left'] == true){
+        	if($this->request->data['Tag']['lr'] == true){
         		$leftID = null;
         		$leftKeyID = null;
 				$this->psearch($this);
 				$this->set('lefttagresults', $this->Paginator->paginate());
 				//left $leftID $leftKeyID del
-        	}elseif ($this->request->data['Tag']['right'] == true) {
+        	}elseif ($this->request->data['Tag']['lr'] == false) {
         		$rghitID = null;
         		$rightKeyID = null;
         		$this->psearch($this);
         		$this->set('righttagresults', $this->Paginator->paginate());
 				//left $rightID $rightKeyID del
         	}//else{
-    			if ($leftID != null && $rightID != false) {
+    			if ($leftID != null && $leftID != false) {
     				debug("left");
 					$this->id =$leftID;
 		        	$this->request->data['keyid']['keyid'] =$leftKeyID;
@@ -169,7 +167,7 @@ public function beforeFilter() {
 		        	$this->set('leftarticleresults', $this->articleparentres);
 		        	$this->set('lefttagresults', $this->tagparentres);
 					$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $leftID),'order' => array('Tag.ID'));
-					$this->set('leftheadresult', $this->Tag->find('first', $options));
+					$this->set('leftheadresults', $this->Tag->find('first', $options));
 				}
 				if ($rightID != null && $rightID != false) {
 					debug("right");
@@ -180,7 +178,7 @@ public function beforeFilter() {
 		        	$this->set('rightarticleresults', $this->articleparentres);
 		        	$this->set('righttagresults', $this->tagparentres);
 					$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $rightID),'order' => array('Tag.ID'));
-					$this->set('rightheadresult', $this->Tag->find('first', $options));
+					$this->set('rightheadresults', $this->Tag->find('first', $options));
 				}
         	//}
         	$this->loadModel('User');
@@ -303,8 +301,6 @@ public function beforeFilter() {
          * @return $tagresult
          */
         private function psearch(&$that){
-
-        	debug($that->request->data['Tag']['keyword']);
         	$req = $that->passedArgs;
         	if (!empty($that->request->data['Tag']['keyword'])) {
         		$andor = !empty($that->request->data['Tag']['andor']) ? $that->request->data['Tag']['andor'] : null;

@@ -7,7 +7,11 @@
 			            $options = array('and' => 'AND', 'or' => 'OR');
 			            $attributes = array('default' => 'and', 'class' => 'radio inline');
 			            echo $this->Form->radio('andor', $options, $attributes);
-			            echo $this->Form->hidden('left',array('value' => true));
+			            if($lr == "left"){
+			            	echo $this->Form->hidden('lr',array('value' => true));
+			            } elseif ($lr == "rghit") {
+			            	echo $this->Form->hidden('lr',array('value' => false));
+			            } else {}
 			        ?>
 			        </div>
 			    </div>

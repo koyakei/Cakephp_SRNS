@@ -18,7 +18,9 @@
 						} ?>
 					</td>
 					<td>
-						<?php if ($idre != null) {$ToID =$result[$firstModel]['ID']; echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $ToID,'currentUserID' => $currentUserID));
+						<?php if ($idre != null) {
+							$ToID =$result[$firstModel]['ID']; 
+							echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $ToID,'currentUserID' => $currentUserID));
 						}
 						 ?></td>
 

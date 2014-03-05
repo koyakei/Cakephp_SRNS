@@ -23,8 +23,14 @@ function checkSelect(obj,val){
 <select name ="keyid1" onChange="location.href=value">
 
 <?php foreach($keylist as $key => $value){ ?>
+<?php if ($this->action == 'transmitter') { ?>
+<option id="<?php echo $key ?>" value="<?php echo "/cakephp/tags/transmitter/".$leftID."/".$key; ?>"
+>
+<?php } else { ?>
 <option id="<?php echo $key ?>" value="<?php echo "/cakephp/tags/view/".$idre."/".$key; ?>"
-><?php echo $value; ?></option>
+>
+<?php } ?>
+<?php echo $value; ?></option>
 <?php } ?>
 </select>
 </form>

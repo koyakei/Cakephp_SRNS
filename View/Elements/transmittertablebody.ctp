@@ -3,7 +3,9 @@
 <div id="draggble">
 				<tr>
 					<td><?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
-					<td><?php echo $this->Html->link($result[$firstModel]['name'], array('controller' => $firstModel."s", 'action' => 'transmitter', $result[$firstModel]['ID'],$leftKeyID,$rightID,$rightKeyID));
+					<td><?php if($LR == "left"){ echo $this->Html->link($result[$firstModel]['name'], array('controller' => $firstModel."s", 'action' => 'transmitter', $result[$firstModel]['ID'],$leftKeyID,$rightID,$rightKeyID)); } else {
+						
+					}
 
 					 	?>
 						<?php echo $this->Form->hidden($firstModel.'.ID', array('value'=>$result[$firstModel]['ID'])); ?></td>

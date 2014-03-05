@@ -17,7 +17,7 @@ echo $this->Html->script('ddscript');
 		<div class="tags view">
 		<?php echo $this->element('detail',array('detail' =>  $leftheadresults,'firstModel' => 'Tag')); ?>
 		</div>
-		<?php echo $this->Form->create(false,array('url' => array('controller' => 'tags','action' => 'transmitter',$leftID,$leftKeyID,$rightID,$rightKeyID))); ?><?php echo $this->Form->end('transmit'); ?>
+		<?php echo $this->Form->create('Tag',array('url' => array('controller' => 'tags','action' => 'transmitter',$leftID,$leftKeyID,$rightID,$rightKeyID))); ?>
 		<table class="main_table" id="tbl1" cellpadding="0" cellspacing="0">
 			<thead>
 			<?php echo $this->element('tablehead', Array('taghashes'=>$lefttaghashes)); ?>
@@ -33,6 +33,7 @@ echo $this->Html->script('ddscript');
 					</tr>
 			</tbody>
 		</table>
+		<?php echo $this->Form->end('transmit'); ?>
 	</div>
 	<div class="bottom_box">
 	<?php echo $this->Form->create('Tag', array('url'=> array('action' => 'transmitter',0,0,$rightID,$rightKeyID))); ?>
@@ -48,17 +49,15 @@ echo $this->Html->script('ddscript');
 		<div class="tags view">
 		<?php echo $this->element('detail',array('detail' =>  $rightheadresults,'firstModel' => 'Tag')); ?>
 		</div>
-		<?php echo $this->Form->create(false, array('url' =>  array('controller' => 'tags','action' => 'transmitter',$rightID,$rightKeyID,$rightID,$rightKeyID))); ?>
-		
-			<?php echo $this->Form->end('transmit'); ?>
+			<?php echo $this->Form->create(false, array('url' =>  array('controller' => 'tags','action' => 'transmitter',$rightID,$rightKeyID,$rightID,$rightKeyID))); ?>
 		<table class="main_table" id="tbl2" cellpadding="0" cellspacing="0">
 			<thead>
 			<?php echo $this->element('tablehead', Array('taghashes'=>$righttaghashes)); ?>
 			</thead>
 			<tbody>
-			
 				<?php if($rightarticleresults != null){ echo $this->element('transmittertablebody', Array('results' => $rightarticleresults,'taghashes'=>$righttaghashes,'firstModel' => 'Article','currentUserID' => $currentUserID,'LR' => "right",'idre'=>$rightID)); } ?>
 				<?php if($righttagresults != null){ echo $this->element('transmittertablebody', Array('results' => $righttagresults,'taghashes'=>$righttaghashes,'firstModel' => 'Tag','currentUserID' => $currentUserID,'LR' => "right",'idre'=>$rightID));  } ?>
+			<?php echo $this->Form->end('transmit'); ?>
 			</tbody>
 		</table>
 	</div>

@@ -24,8 +24,13 @@ function checkSelect(obj,val){
 
 <?php foreach($keylist as $key => $value){ ?>
 <?php if ($this->action == 'transmitter') { ?>
-<option id="<?php echo $key ?>" value="<?php echo "/cakephp/tags/transmitter/".$leftID."/".$key; ?>"
+<?php if ($lr == "left") { ?>
+<option id="<?php echo $key ?>" value="<?php echo "/cakephp/tags/transmitter/".$leftID."/".$key."/".$rightID."/".$rightKeyID; ?>"
+>	
+<?php } else { ?>
+<option id="<?php echo $key ?>" value="<?php echo "/cakephp/tags/transmitter/".$leftID."/".$leftKeyID."/".$rightID."/".$key; ?>"
 >
+<?php } ?>
 <?php } else { ?>
 <option id="<?php echo $key ?>" value="<?php echo "/cakephp/tags/view/".$idre."/".$key; ?>"
 >

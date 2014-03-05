@@ -1,9 +1,17 @@
+<?php if ($leftID == null) {
+	$leftID = 0;
+}
+if ($leftKeyID == null) {
+	$leftKeyID = 0;
+} ?>
 <?php foreach ($results  as $result): ?>
 <?php if($firstModel == 'Tag'){$userCallAssosiation = 'TO';} else {$userCallAssosiation = 'AO';}?>
 <div id="draggble">
 				<tr>
-					<td><?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
+					<td class="rowhandler"><div class="drag row">
+						<?php echo h($result[$firstModel]['ID']); ?></div></td>
 					<td><?php if($LR == "left"){ echo $this->Html->link($result[$firstModel]['name'], array('controller' => $firstModel."s", 'action' => 'transmitter', $result[$firstModel]['ID'],$leftKeyID,$rightID,$rightKeyID)); } else {
+						echo $this->Html->link($result[$firstModel]['name'], array('controller' => $firstModel."s", 'action' => 'transmitter', $leftID,$leftKeyID,$result[$firstModel]['ID'],$rightKeyID));
 						
 					}
 

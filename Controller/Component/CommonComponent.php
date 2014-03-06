@@ -47,12 +47,15 @@ class CommonComponent extends Component {
 		}
 	}
 
-	public function triarticleAdd(&$that = null,$model,$userID) {
+	public function triarticleAdd(&$that = null,$model,$userID,$FromID,$options) {
 		/*$that->Tag->setValue($that->plugin,$that->name.$that->action,$that->view);*/
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');
 		}
-		if ($that->request->params['pass'][0] != null) {
+		if ($options['key'] == null){
+			$options['key'] = Configure::read('tagID.reply');
+		}
+		if ($FromID != null) {
 			$Article = new $model();
 			$Article->create();
 			if ($Article->save($that->request->data)) {
@@ -60,12 +63,11 @@ class CommonComponent extends Component {
 				$that->request->data = null;
 				$that->request->data['Link'] = array(
 					'user_id' => $userID,
-					'LFrom' => $that->request->params['pass'][0],//2138
+					'LFrom' => $FromID,//2138
 					'LTo' => $that->last_id,
 					'quant' => 1,
 					'created' => date("Y-m-d H:i:s"),
 				);
-				debug($that->request->data);
 				$Link = new Link();
 				$Link->create();
 				if ($Link->save($that->request->data)) {
@@ -73,7 +75,7 @@ class CommonComponent extends Component {
 					$that->request->data = null;
 					$that->request->data['Link'] = array(
 						'user_id' => $userID,
-						'LFrom' => $that->keyid,//
+						'LFrom' => $options['key'],//
 						'LTo' => $that->last_id,
 						'quant' => 1,
 						'created' => date("Y-m-d H:i:s"),
@@ -92,6 +94,53 @@ class CommonComponent extends Component {
 
 		}
 
+	}
+
+	public function triAddbyid(&$that = null,$model,$userID,$FromID,$ToID,$options) {
+		/*$that->Tag->setValue($that->plugin,$that->name.$that->action,$that->view);*/
+		if ($userID == null) {
+			$userID = Configure::read('acountID.admin');
+		}
+		if ($options['key'] == null){
+			$options['key'] = Configure::read('tagID.reply');
+		}
+
+		if ($FromID != null) {
+			debug("byid");
+			$that->request->data = null;
+			$that->request->data['Link'] = array(
+					'user_id' => $userID,
+					'LFrom' => $FromID,//2138
+					'LTo' => $ToID,
+					'quant' => 1,
+					'created' => date("Y-m-d H:i:s"),
+			);
+			$Link = new Link();
+			$Link->create();
+			if ($Link->save($that->request->data)) {
+
+				$that->last_id = $Link->getLastInsertID();
+
+				debug($that->last_id);
+				$that->request->data = null;
+				$that->request->data['Link'] = array(
+						'user_id' => $userID,
+						'LFrom' => $options['key'],//
+						'LTo' => $that->last_id,
+						'quant' => 1,
+						'created' => date("Y-m-d H:i:s"),
+				);
+				$Link->create();
+				if ($Link->save($that->request->data)) {
+					$that->Session->setFlash(__('The article has been saved.'));
+
+				} else {
+					$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
+				}
+			}else {
+				debug("misslink1");
+			}
+		}
 	}
 
 	public function tritagAdd(&$that = null,$model,$userID,$targetFromID) {
@@ -211,16 +260,12 @@ class CommonComponent extends Component {
 		$that->set('taghashes', $that->taghash);
 		$that->set('results', $that->parentres);
 	}
-	public function trifinderbyid(&$that = null) {
-		if ($_SESSION['selected'] == null) {
-			$_SESSION['selected'] = Configure::read('tagID.reply');
+	public function trifinderbyid(&$that = null,&$id,&$option) {
+		if ($option['key'] == null) {
+			$option['key'] = Configure::read('tagID.reply');
 		}
-		if ($that->request->data['keyid']['keyid'] == null) {
-			$that->request->data['keyid']['keyid'] = $_SESSION['selected'];
-		}
-		$id = $that->request['pass'][0];
 		//debug($that->request->data['keyid']['keyid']);
-		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Article","Article.ID",$id);
+		$this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);
 		$that->articleparentres = $that->returntribasic;
 		$that->i = 0;
 		$that->taghash = array();
@@ -239,7 +284,7 @@ class CommonComponent extends Component {
 			$that->i++;
 		}
 		$that->i = 0;
-		$this->Basic->tribasicfiderbyid($that,$that->request->data['keyid']['keyid'],"Tag","Tag.ID",$id);
+		$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
 		$that->tagparentres = $that->returntribasic;
 		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
 		foreach ($that->tagparentres as $result){

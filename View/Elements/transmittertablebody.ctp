@@ -11,7 +11,7 @@ if ($leftKeyID == null) {
 						
 					<td class="rowhandler"><div class="drag row">
 						<?php echo h($result[$firstModel]['ID']); ?></div><br>
-					<?php echo $firstModel; echo $this->Form->hidden('.'.$firstModel.'.ID', array('value'=>$result[$firstModel]['ID'])); ?></td>
+					<?php echo $firstModel; echo $this->Form->hidden('to.'.$firstModel.'.'.'.ID', array('value'=>$result[$firstModel]['ID'])); ?></td>
 					<td><?php if($LR == "left"){ echo $this->Html->link($result[$firstModel]['name'], array('controller' => $firstModel."s", 'action' => 'transmitter', $result[$firstModel]['ID'],$leftKeyID,$rightID,$rightKeyID)); } else {
 						echo $this->Html->link($result[$firstModel]['name'], array('controller' => $firstModel."s", 'action' => 'transmitter', $leftID,$leftKeyID,$result[$firstModel]['ID'],$rightKeyID));
 						

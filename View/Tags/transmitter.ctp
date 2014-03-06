@@ -10,14 +10,19 @@ echo $this->Html->script('ddscript');
 
 ?>
 <div id="drag">
-<div class="left">
-	
+<div class="left">	
 	<?php echo $this->element('contentssidebar', array('idre'=>$leftID,'firstModel' => 'Tag','data' => $leftheadresult,'lr' => 'left','trikeyID' => $leftKeyID,'rightID' => $rightID ,'rightKeyID' => $rightKeyID,'leftID' => $leftID,'leftKeyID' => $leftKeyID)); ?>
 	<div class="main">
 		<div class="tags view">
 		<?php echo $this->element('detail',array('detail' =>  $leftheadresults,'firstModel' => 'Tag')); ?>
 		</div>
-		<?php echo $this->Form->create('Tag',array('url' => array('controller' => 'tags','action' => 'transmitter',$leftID,$leftKeyID,$rightID,$rightKeyID))); ?>
+		<?php echo $this->Form->create(false,array('url' => array('controller' => 'tags','action' => 'transmitter',$leftID,$leftKeyID,$rightID,$rightKeyID))); ?>
+		<?php foreach ($leftarticleresults as $value): ?>
+			<?php echo $this->Form->hidden('from.Article..ID',array('value' => $value['Article']['ID'])); ?>		
+		<?php endforeach ; ?>
+		<?php foreach ($lefttagresults as $value): ?>
+		<?php echo $this->Form->hidden('from.Tag..ID',array('value' => $value['Tag']['ID'])); ?>
+		<?php endforeach ; ?>
 		<table class="main_table" id="tbl1" cellpadding="0" cellspacing="0">
 			<thead>
 			<?php echo $this->element('tablehead', Array('taghashes'=>$lefttaghashes)); ?>
@@ -33,7 +38,6 @@ echo $this->Html->script('ddscript');
 					</tr>
 			</tbody>
 		</table>
-		<?php echo $this->Form->end('transmit'); ?>
 	</div>
 	<div class="bottom_box">
 	<?php echo $this->Form->create('Tag', array('url'=> array('action' => 'transmitter',0,0,$rightID,$rightKeyID))); ?>

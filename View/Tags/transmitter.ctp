@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<?php //echo $this->Html->css('lr'); 
+<?php echo $this->Html->css('lr'); 
 //echo $this->Html->css('dd'); 
 //echo $this->Html->script('jquery.tablednd');
 echo $this->Html->script('header');
@@ -9,11 +9,11 @@ echo $this->Html->script('redips-drag-min');
 echo $this->Html->script('ddscript');
 
 ?>
-<div id="drag">
-<div class="left">	
+<body>
+<div id="drag" class="boxContainer">
+<div class="box">	
 	<?php echo $this->element('contentssidebar', array('idre'=>$leftID,'firstModel' => 'Tag','data' => $leftheadresult,'lr' => 'left','trikeyID' => $leftKeyID,'rightID' => $rightID ,'rightKeyID' => $rightKeyID,'leftID' => $leftID,'leftKeyID' => $leftKeyID)); ?>
-	<div class="main">
-		<div class="tags view">
+		<div class="transmitter view">
 		<?php echo $this->element('detail',array('detail' =>  $leftheadresults,'firstModel' => 'Tag')); ?>
 		</div>
 		<?php echo $this->Form->create(false,array('url' => array('controller' => 'tags','action' => 'transmitter',$leftID,$leftKeyID,$rightID,$rightKeyID))); ?>
@@ -23,22 +23,17 @@ echo $this->Html->script('ddscript');
 		<?php foreach ($lefttagresults as $value): ?>
 		<?php echo $this->Form->hidden('from.Tag..ID',array('value' => $value['Tag']['ID'])); ?>
 		<?php endforeach ; ?>
-		<table class="main_table" id="tbl1" cellpadding="0" cellspacing="0">
-			<thead>
+		<table class="main_table" cellpadding="0" cellspacing="0">
 			<?php echo $this->element('tablehead', Array('taghashes'=>$lefttaghashes)); ?>
-			</thead>
-			<tbody>
-			
+			<tbody id="tbl1">			
 				<?php if($leftarticleresults != null){ echo $this->element('transmittertablebody', Array('results' => $leftarticleresults,'taghashes'=>$lefttaghashes,'firstModel' => 'Article','currentUserID' => $currentUserID,'LR' => "left",'idre'=>$leftID)); } ?>
 				<?php if($lefttagresults != null){ echo $this->element('transmittertablebody', Array('results' => $lefttagresults,'taghashes'=>$lefttaghashes,'firstModel' => 'Tag','currentUserID' => $currentUserID,'LR' => "left",'idre'=>$leftID));  } ?>
 			<?php echo $this->Form->end('transmit'); ?>
-
 					<tr>
 						<td colspan="6" class="mark"><span id="msg">Message line</span></td>
 					</tr>
 			</tbody>
 		</table>
-	</div>
 	<div class="bottom_box">
 	<?php echo $this->Form->create('Tag', array('url'=> array('action' => 'transmitter',0,0,$rightID,$rightKeyID))); ?>
 			<?php echo $this->element('searchbox',array('lr' => 'left')); ?>
@@ -46,7 +41,7 @@ echo $this->Html->script('ddscript');
 		<?php echo $this->Form->end('検索'); ?>
 	</div>
 </div>
-<div class="right">
+<div class="box">
 	<?php echo $this->element('contentssidebar', array('idre'=>$rightID,'firstModel' => 'Tag','data' => $rightheadresult,'lr' => 'right','rightID' => $rightID ,'rightKeyID' => $rightKeyID,'leftID' => $leftID,'leftKeyID' => $leftKeyID,'trikeyID' => $rightKeyID)); ?>
 	
 	<div class="main">
@@ -54,11 +49,9 @@ echo $this->Html->script('ddscript');
 		<?php echo $this->element('detail',array('detail' =>  $rightheadresults,'firstModel' => 'Tag')); ?>
 		</div>
 			<?php echo $this->Form->create(false, array('url' =>  array('controller' => 'tags','action' => 'transmitter',$rightID,$rightKeyID,$rightID,$rightKeyID))); ?>
-		<table class="main_table" id="tbl2" cellpadding="0" cellspacing="0">
-			<thead>
+		<table class="main_table" cellpadding="0" cellspacing="0">
 			<?php echo $this->element('tablehead', Array('taghashes'=>$righttaghashes)); ?>
-			</thead>
-			<tbody>
+			<tbody id="tbl2">
 				<?php if($rightarticleresults != null){ echo $this->element('transmittertablebody', Array('results' => $rightarticleresults,'taghashes'=>$righttaghashes,'firstModel' => 'Article','currentUserID' => $currentUserID,'LR' => "right",'idre'=>$rightID)); } ?>
 				<?php if($righttagresults != null){ echo $this->element('transmittertablebody', Array('results' => $righttagresults,'taghashes'=>$righttaghashes,'firstModel' => 'Tag','currentUserID' => $currentUserID,'LR' => "right",'idre'=>$rightID));  } ?>
 			<?php echo $this->Form->end('transmit'); ?>
@@ -89,4 +82,5 @@ echo $this->Html->script('ddscript');
 			<div class="inst">
 			DIV elements and table rows can be cloned with SHIFT key</div>
 		</div>
+	</body>
 </html>

@@ -1,1 +1,9 @@
 @CHARSET "UTF-8";
+
+#drag{
+overflow-x:scroll;
+}
+.box {
+	display: table-cell;
+}
+

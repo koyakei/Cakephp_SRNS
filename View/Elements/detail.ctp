@@ -1,5 +1,7 @@
 <?php $controller_name = lcfirst ($firstModel) ?>
-<?php echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre)); ?>
+<?php if ($upperIdeas) {
+echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre)); 
+} ?>
 		<dt><?php echo __('ID'); ?></dt>
 		<dd>
 			<?php echo h($detail[$firstModel]['ID']); ?>

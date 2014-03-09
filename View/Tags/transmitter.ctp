@@ -14,7 +14,9 @@ echo $this->Html->script('ddscript');
 <div class="box">	
 	<?php echo $this->element('contentssidebar', array('idre'=>$leftID,'firstModel' => 'Tag','data' => $leftheadresult,'lr' => 'left','trikeyID' => $leftKeyID,'rightID' => $rightID ,'rightKeyID' => $rightKeyID,'leftID' => $leftID,'leftKeyID' => $leftKeyID)); ?>
 		<div class="transmitter view">
+			<dl>
 		<?php echo $this->element('detail',array('detail' =>  $leftheadresults,'firstModel' => 'Tag')); ?>
+			</dl>
 		</div>
 		<?php echo $this->Form->create(false,array('url' => array('controller' => 'tags','action' => 'transmitter',$leftID,$leftKeyID,$rightID,$rightKeyID))); ?>
 		<?php foreach ($leftarticleresults as $value): ?>
@@ -46,7 +48,9 @@ echo $this->Html->script('ddscript');
 	
 	<div class="main">
 		<div class="tags view">
+			<dl>
 		<?php echo $this->element('detail',array('detail' =>  $rightheadresults,'firstModel' => 'Tag')); ?>
+	</dl>
 		</div>
 			<?php echo $this->Form->create(false, array('url' =>  array('controller' => 'tags','action' => 'transmitter',$rightID,$rightKeyID,$rightID,$rightKeyID))); ?>
 		<table class="main_table" cellpadding="0" cellspacing="0">

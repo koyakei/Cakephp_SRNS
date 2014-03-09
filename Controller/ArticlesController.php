@@ -14,7 +14,12 @@ Configure::load("static");
 class ArticlesController extends AppController {
 
 	//public $uses = array('Article');
-	public $paginate = array( 'limit' => 25);
+	public $paginate = array(
+			//PostalCodeモデルの設定
+				'Article'=>array(
+						'order' => array('modified' => 'desc')
+				)
+			);
 	 public function beforeFilter() {
         parent::beforeFilter();
         $this->Security->validateOnce = false;
@@ -41,7 +46,6 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function index() {
-		debug($this->Auth->user('id'));
 		$this->Article->recursive = 0;
 		$this->set('articles', $this->Paginator->paginate());
 	}

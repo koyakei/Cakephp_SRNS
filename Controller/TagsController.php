@@ -21,9 +21,9 @@ App::uses('Article','Model');
 class TagsController extends AppController {
 	public $paginate = array(
 			//PostalCodeモデルの設定
-				'Article'=>array(
-						'order' => array('modified' => 'desc')
-				)
+				//'Article'=>array(
+						'order' => array('Article.modified' => 'ASC')
+				//)
 			);
 	//public $pagination =  $this->paginator->sort('modified', 'desc');
 /**
@@ -80,7 +80,6 @@ public function beforeFilter() {
 		public function index() {
 			$this->loadModel('Article');
 			$this->set('tags', $this->paginate('Article'));
-			debug($this->paginate('Article'));
 		}
         /**
          * view method
@@ -220,7 +219,9 @@ public function beforeFilter() {
             'Article.modified' => 'desc'
         ));*/
 
-				$this->set('rightarticleresults', $this->paginate('Article',$options));
+				$this->set('rightarticleresults', //$this->paginate('Article',$options)
+				$this->Article->find('all',array('order'=> array('Article.modified' => 'desc'),'limit' => 30))
+					);
         	//}
         	$this->loadModel('User');
         	$this->loadModel('Key');

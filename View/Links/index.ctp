@@ -26,6 +26,7 @@
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $link['Link']['ID'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $link['Link']['ID'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $link['Link']['ID']), null, __('Are you sure you want to delete # %s?', $link['Link']['ID'])); ?>
+			
 		</td>
 	</tr>
 <?php endforeach; ?>

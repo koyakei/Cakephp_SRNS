@@ -51,5 +51,6 @@ function checkSelect(obj,val){
 		<li><?php echo $this->Html->link(__('Tag search'), array('controller' => 'tags','action' => 'search')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Article'), array('controller' => 'articles','action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('Transmitter'), array('controller' => 'tags','action' => 'transmitter')); ?> </li>
+		
 	</ul>
 </div>

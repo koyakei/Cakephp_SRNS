@@ -24,8 +24,9 @@ redips.init = function () {
 	// enable clone element and clone row with shift key
 	rd.clone.keyDiv = rd.clone.keyRow = true;
 	// mark row in second table as empty
-	rd.rowEmpty('tbl2', 2);
-	rd.rowEmpty('tbl1', 2);
+	rd.rowEmpty('tbl1', 1);
+	rd.rowEmpty('tbl2', 1);
+
 	//
 	// row event handlers
 	//

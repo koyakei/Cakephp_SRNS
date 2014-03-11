@@ -30,26 +30,12 @@ echo $this->Html->script('ddscript');
 			<tbody id="tbl1">			
 				<?php if($leftarticleresults != null){ echo $this->element('transmittertablebody', Array('results' => $leftarticleresults,'taghashes'=>$lefttaghashes,'firstModel' => 'Article','currentUserID' => $currentUserID,'LR' => "left",'idre'=>$leftID)); } ?>
 				<?php if($lefttagresults != null){ echo $this->element('transmittertablebody', Array('results' => $lefttagresults,'taghashes'=>$lefttaghashes,'firstModel' => 'Tag','currentUserID' => $currentUserID,'LR' => "left",'idre'=>$leftID));  } ?>
-				<?php  if(is_array($leftarticleresults) == false or $lefttagresults == null): ?>
-
-<tr>
-						
-					<td>ここにドラッグ</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td>
-					</td>
-					
-				</tr>
-<?php endif; ?>
 			<?php echo $this->Form->end('transmit'); ?>
-
+					<tr>
+						<td colspan="6" class="mark"><span id="msg">Message line</span></td>
+					</tr>
 			</tbody>
 		</table>
-		<tr>
-						
 	<div class="bottom_box">
 	<?php echo $this->Form->create('Tag', array('url'=> array('action' => 'transmitter',0,0,$rightID,$rightKeyID))); ?>
 			<?php echo $this->element('searchbox',array('lr' => 'left')); ?>

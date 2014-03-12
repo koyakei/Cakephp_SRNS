@@ -46,7 +46,24 @@ class CommonComponent extends Component {
 			}
 		}
 	}
-
+	public function trasmitterDiff(&$that,$fromID,$fromKeyID,$model){
+		if($that->request->data['from'][$model] == null){
+			$that->request->data['from'][$model] = array();
+		}
+		//debug($that->request->data['from']);
+		if($that->request->data['to'][$model] == null){
+			$that->request->data['to'][$model] = array();
+		}
+		$diff =array_diff ($that->request->data['to']['Article'],$that->request->data['from']['Article'] );
+		//debug($diff);
+		$options['key'] = $fromKeyID;
+		foreach ($diff as $var){
+			//debug($var['ID']);
+			$ToID= $var['ID'];
+			$that->Common->triAddbyid($that,$that->Auth->user('id'),$fromID,$ToID,$options);
+			//}
+		}
+	}
 	public function triarticleAdd(&$that = null,$model,$userID,$FromID,$options) {
 		/*$that->Tag->setValue($that->plugin,$that->name.$that->action,$that->view);*/
 		if ($userID == null) {
@@ -59,6 +76,7 @@ class CommonComponent extends Component {
 			$Article = new $model();
 			$Article->create();
 			if ($Article->save($that->request->data)) {
+				$that->Session->setFlash(__('1st created.'));
 				$that->last_id = $Article->getLastInsertID();
 				$that->request->data = null;
 				$that->request->data['Link'] = array(
@@ -96,7 +114,7 @@ class CommonComponent extends Component {
 
 	}
 
-	public function triAddbyid(&$that = null,$model,$userID,$FromID,$ToID,$options) {
+	public function triAddbyid(&$that = null,$userID,$FromID,$ToID,$options) {
 		/*$that->Tag->setValue($that->plugin,$that->name.$that->action,$that->view);*/
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');

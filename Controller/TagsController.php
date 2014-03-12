@@ -156,26 +156,12 @@ public function beforeFilter() {
 			//debug($this->request->data['to']);
         	//debug($this->request->data['from']);
         	debug($this->request->data);
-        	if($this->request->data['from']['Article'] == null){
-        		$this->request->data['from']['Article'] = array();
-        	}
-        	//debug($this->request->data['from']);
-        	if($this->request->data['to']['Article'] == null){
-        		$this->request->data['to']['Article'] = array();
-        	}/*
+        	/*
         	debug($this->request->data);
         	debug(array_diff ($this->request->data['from'],$this->request->data['to'] ) );*/
         	/*debug($this->request->data['from']['Article']);
         	debug($this->request->data['to']['Article']);*/
-        	$diff =array_diff ($this->request->data['to']['Article'],$this->request->data['from']['Article'] );
-        	//debug($diff);
-        	$options['key'] = $leftKeyID;
-			foreach ($diff as $var){
-				debug($var['ID']);
-				 $ToID= $var['ID'];
-				$this->Common->triAddbyid($this,'Article',$this->Auth->user('id'),$leftID,$ToID,$options);
-				//}
-			}
+        	$this->Common->trasmitterDiff($this,$leftID,$leftKeyID,'Article');
 
         	if($this->request->data['Tag']['lr'] == "left"){
         		$leftID = null;
@@ -373,7 +359,7 @@ public function articletransmitter($leftID = null,$leftKeyID = null){
 			foreach ($diff as $var){
 				debug($var['ID']);
 				 $ToID= $var['ID'];
-				$this->Common->triAddbyid($this,'Article',$this->Auth->user('id'),$leftID,$ToID,$options);
+				$this->Common->triAddbyid($this,$this->Auth->user('id'),$leftID,$ToID,$options);
 			}
         	if($this->request->data['Tag']['lr'] == "left"){
         		$leftID = null;

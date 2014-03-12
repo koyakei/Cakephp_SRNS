@@ -66,9 +66,9 @@ class ArticlesController extends AppController {
         		//$this->Session->setFlash(__('radd に入ってinai。'));
         	}
 		if($this->request->data['Article']['name'] != null){
-			$this->keyid = $this->request->data['Article']['keyid'];
-			$this->Session->setFlash(__($this->keyid));
-			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
+			//$this->keyid = $this->request->data['Article']['keyid'];
+        	debug($this->request->data);
+			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'),$id);
 			$this->Basic->social($this);
 		}
 		if($this->request->data['Tag']['name'] != null){
@@ -91,7 +91,7 @@ class ArticlesController extends AppController {
 		$this->set('headresults', $this->returntribasic);
 		$this->set('headtaghashes', $this->taghash);
 		$targetID = $id;
-		$this->Common->trifinderbyid($this);
+		$this->Common->trifinderbyid($this,$id,$option);
 		$this->loadModel('User');
 		$this->loadModel('Key');
 		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));

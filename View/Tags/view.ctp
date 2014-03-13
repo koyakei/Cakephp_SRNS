@@ -11,7 +11,7 @@ $(document).ready(function()
 </script>
 </head>
 <body>
-<?php echo $this->element('contentsidebar', Array('keylist' => $upperIdeas,'idre'=>$idre,'firstModel' => 'Tag','data' => $tag)); ?>
+<?php echo $this->element('contentsidebar', Array('keylist' => $upperIdeas,'idre'=>$idre,'firstModel' => 'Tag','data' => $tag,'key' => $trikeyID)); ?>
 <div class="tags view">
 <h2><?php echo __('Tag'); ?></h2>
 <dl>
@@ -43,5 +43,23 @@ $(document).ready(function()
 	</table>
 		<?php echo $this->element('Input', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article','currentUserID' => $currentUserID)); ?>
 		<?php echo $this->element('Input', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag','currentUserID' => $currentUserID)); ?>
+		<script>
+	window.onload=function(){
+
+
+		var f=document.getElementById("keyid");
+		checkSelect(f.elements["keyid"],"<?php echo $trikeyID; ?>");
+	}
+	function checkSelect(obj,val){
+		for(var i=0;i<obj.length;i++){
+			var objval =obj[i].id;
+			var objval2 =val;
+			if(obj[i].id==val){
+			obj[i].selected=true;
+			break;
+			}
+		}
+	}
+	</script>
 </body>
 </html>

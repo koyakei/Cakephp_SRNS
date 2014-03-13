@@ -26,7 +26,7 @@ redips.init = function () {
 	// mark row in second table as empty
 	rd.rowEmpty('tbl1', 1);
 	rd.rowEmpty('tbl2', 1);
-
+/*
 	//
 	// row event handlers
 	//
@@ -85,7 +85,7 @@ redips.init = function () {
 		rd.rowOpacity(rd.objOld, 100);
 		// display message
 		msg.innerHTML = 'Undeleted';
-	};
+	};*/
 };
 
 

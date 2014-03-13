@@ -4,7 +4,7 @@ echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre));
 } ?>
 		<dt><?php echo __('ID'); ?></dt>
 		<dd>
-			<?php echo h($detail[$firstModel]['ID']); ?>
+			<?php echo $this->Html->link($detail[$firstModel]['ID'], array('controller' => $firstModel."s", 'action' => 'view', $detail[$firstModel]['ID'])); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Name'); ?></dt>

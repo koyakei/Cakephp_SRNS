@@ -1,8 +1,8 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('Tag', 'Model');/*
+App::uses('Tag', 'Model');
 App::uses('User', 'Model');
-App::uses('Link', 'Model');*/
+App::uses('Link', 'Model');
 App::uses('Article', 'Model');
 Configure::load("static");
 /**
@@ -25,7 +25,7 @@ class ArticlesController extends AppController {
         $this->Security->validateOnce = false;
         $this->Security->validatePost = false;
         $this->Security->csrfCheck = false;
-        $this->Auth->allow('logout','view');
+        $this->Auth->allow('logout','view','index');
 	$this->Auth->authenticate = array(
 		'Basic' => array('user' => 'admin'),
 		//'Form' => array('user' => 'Member')

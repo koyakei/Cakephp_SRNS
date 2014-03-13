@@ -176,7 +176,7 @@ public function beforeFilter() {
         		$this->psearch($this);
         		$this->set('righttagresults', $this->Paginator->paginate());
 				//left $rightID $rightKeyID del
-        	}else{
+        	}//else{
         		$this->loadModel('Article');
         		if($rightID == null ){
         			$newart = $this->Article->find('all',array('order'=> array('Article.modified' => 'desc'),'limit' => 30));
@@ -195,7 +195,7 @@ public function beforeFilter() {
         			}
 
         		}
-        	}
+        	//}
     			if ($leftID != null and $leftID != 0) {
     				debug("left");
 					$options = array('key' => $leftKeyID);

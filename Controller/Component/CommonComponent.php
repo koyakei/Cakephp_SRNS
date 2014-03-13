@@ -278,7 +278,7 @@ class CommonComponent extends Component {
 		$that->set('taghashes', $that->taghash);
 		$that->set('results', $that->parentres);
 	}
-	public function trifinderbyid(&$that = null,&$id,&$option) {
+	public function trifinderbyid(&$that = null,$id,&$option) {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}

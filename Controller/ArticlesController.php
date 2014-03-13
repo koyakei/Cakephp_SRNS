@@ -113,7 +113,6 @@ class ArticlesController extends AppController {
 				'created' => date("Y-m-d H:i:s"),
 				'modified' => date("Y-m-d H:i:s"),
 			);
-			debug($this->request->data['Article']);
 			if ($this->Article->save($this->request->data)) {
 				$this->Session->setFlash(__('The article has been saved.'));
 				//return $this->redirect(array('action' => 'index'));

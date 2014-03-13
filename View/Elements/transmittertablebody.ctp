@@ -23,10 +23,13 @@ if ($leftKeyID == null) {
 					<td><?php echo h($result[$firstModel]['created']); ?>&nbsp;</td>
 					<td><?php echo h($result[$firstModel]['modified']); ?>&nbsp;</td>
 					<td class="actions">
-						<?php echo $this->Html->link(__('View'), array('controller'=> $firstModel."s",'action' => 'view', $result[$firstModel]['ID'])); ?>
+						<?php echo $this->Html->link(__('View'), array('controller'=> $firstModel."s",'action' => 'view', $result["$firstModel"]['ID'])); ?>
 						<?php 
-						 echo $this->Form->postLink(__('Delete'), array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result['Link']['ID'])); 
-						 ?>
+						if ($result['Link']['ID'] =! null) {
+						 echo $this->Form->postLink(__('Delete'), array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID'])); 
+
+						
+						} ?>
 					</td>
 					
 				</tr>

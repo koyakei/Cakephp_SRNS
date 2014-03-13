@@ -35,4 +35,11 @@ class AppModel extends Model {
 		$this->data[$this->alias]['modified'] = date("Y-m-d H:i:s");
 		return true;
 	}
+
+	public function afterSave($created){
+		if ($created == true) {
+			$this->data[$this->alias]['created'] = date("Y-m-d H:i:s");
+			return true;
+		}
+	}
 }

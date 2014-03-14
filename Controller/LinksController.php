@@ -155,6 +155,7 @@ class LinksController extends AppController {
 		} else {
 			$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
 		}
+		//debug($this->referer());
 		return $this->redirect($this->referer());
 	}
 /**

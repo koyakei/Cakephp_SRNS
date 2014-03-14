@@ -35,4 +35,5 @@ class AppModel extends Model {
 		$this->data[$this->alias]['modified'] = date("Y-m-d H:i:s");
 		return true;
 	}
+
 }

@@ -1,9 +1,10 @@
 <?php
 App::import('Vendor', 'DebugKit.FireCake');
-App::uses('AppController', 'Controller');/*
+App::uses('AppController', 'Controller');
 App::uses('Link', 'Model');
-App::uses('User', 'Model');*/
+App::uses('User', 'Model');
 Configure::load("static");
+App::uses('Article','Model');
 /*App::uses('Article', 'Model');
 /**
  * Tags Controller
@@ -18,11 +19,7 @@ Configure::load("static");
 }*/
 
 class TagsController extends AppController {
-	function beforeFind($query){
-		$query += array('order' => 'modified ASC');
-		return $query;
-	}
-
+	//public $pagination =  $this->paginator->sort('modified', 'desc');
 /**
  * Components
  *
@@ -40,7 +37,7 @@ public $presetVars = array(
 );
 public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('logout','view','search');
+	$this->Auth->allow('logout','view','search','transmitter');
 	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
 			//'Form' => array('user' => 'Member')
@@ -68,7 +65,16 @@ public function beforeFilter() {
 	);
 //        public $presetVars = true;
 
+		/**
+		 * index method
+		 *
+		 * @return void
+		 */
 
+		public function index() {
+			$this->loadModel('Article');
+			$this->set('tags', $this->paginate('Article'));
+		}
         /**
          * view method
          *
@@ -99,14 +105,15 @@ public function beforeFilter() {
         		$this->Basic->quant($this);
         		$this->Basic->social($this);
         	}
+
         	if($this->request->data['Article']['name'] != null){
-        		$this->keyid = $this->request->data['Article']['keyid'];
-        		$this->Common->triarticleAdd($this,'Article',$this->request->data['Tag']['user_id']);
+        		$options['key'] = $trikeyID;
+        		$this->Common->triarticleAdd($this,'Article',$this->request->data['Tag']['user_id'],$id,$options);
         		$this->Basic->social($this);
         	}
         	if($this->request->data['Tag']['name'] != null){
-        		$this->keyid = $this->request->data['Tag']['keyid'];
-        		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$this->request->params['pass'][0]);
+        		$options['key'] = $trikeyID;
+        		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$id,$options);
         		$this->Basic->social($this);
         	}
         	$this->set('idre', $id);
@@ -122,9 +129,10 @@ public function beforeFilter() {
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$this->set('tag', $this->Tag->find('first', $options));
         	$this->set('currentUserID', $this->Auth->user('id'));
-        	$this->Common->trifinderbyid($this);
+        	$options = array('key' => $trikeyID);
+        	$this->Common->trifinderbyid($this,$id,$options);
         	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
-        	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$this->request['pass'][0]);
+        	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id);
         	$this->set('upperIdeas', $this->returntribasic);
         	$this->set('trikeyID', $trikeyID);
         	$this->loadModel('User');
@@ -145,7 +153,16 @@ public function beforeFilter() {
 			//左右を同じelemrnt で構成する　その画面を呼び出す方法を考える。
 			//ページを固定したまま検索する方法を考える。
 			//togetter の左は編集先になっている。
-			debug($this->request->data);
+			//debug($this->request->data['to']);
+        	//debug($this->request->data['from']);
+        	debug($this->request->data);
+        	/*
+        	debug($this->request->data);
+        	debug(array_diff ($this->request->data['from'],$this->request->data['to'] ) );*/
+        	/*debug($this->request->data['from']['Article']);
+        	debug($this->request->data['to']['Article']);*/
+        	$this->Common->trasmitterDiff($this,$leftID,$leftKeyID,'Article');
+
         	if($this->request->data['Tag']['lr'] == "left"){
         		$leftID = null;
         		$leftKeyID = null;
@@ -160,30 +177,40 @@ public function beforeFilter() {
         		$this->set('righttagresults', $this->Paginator->paginate());
 				//left $rightID $rightKeyID del
         	}//else{
-        	debug($leftID);
+        		$this->loadModel('Article');
+        		if($rightID == null ){
+        			$newart = $this->Article->find('all',array('order'=> array('Article.modified' => 'desc'),'limit' => 30));
+        			$this->set('rightarticleresults', //$this->paginate('Article',$options)
+        					$newart
+        			);
+        		} else {
+        			if ($rightID != null or $rightID != 0) {
+        				$options = array('key' => $leftKeyID);
+        				$this->Common->trifinderbyid($this,$rightID,$options);
+        				$this->set('righttaghashes', $this->taghash);
+        				$this->set('rightarticleresults', $this->articleparentres);
+        				$this->set('righttagresults', $this->tagparentres);
+        				$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $rightID),'order' => array('Tag.ID'));
+        				$this->set('rightheadresults', $this->Tag->find('first', $options));
+        			}
+
+        		}
+        	//}
     			if ($leftID != null and $leftID != 0) {
     				debug("left");
-					$this->id =$leftID;
-		        	$this->request->data['keyid']['keyid'] =$leftKeyID;
-		        	$this->Common->trifinderbyid($this);
+					$options = array('key' => $leftKeyID);
+		        	$this->Common->trifinderbyid($this,$leftID,$options);
 		        	$this->set('lefttaghashes', $this->taghash);
 		        	$this->set('leftarticleresults', $this->articleparentres);
 		        	$this->set('lefttagresults', $this->tagparentres);
 					$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $leftID),'order' => array('Tag.ID'));
 					$this->set('leftheadresults', $this->Tag->find('first', $options));
 				}
-				debug($rightID);
-				if ($rightID != null or $rightID != 0) {
-					debug("right");
-		        	$this->id =$rightID;
-		        	$this->request->data['keyid']['keyid'] =$rightKeyID;
-		        	$this->Common->trifinderbyid($this);
-		        	$this->set('righttaghashes', $this->taghash);
-		        	$this->set('rightarticleresults', $this->articleparentres);
-		        	$this->set('righttagresults', $this->tagparentres);
-					$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $rightID),'order' => array('Tag.ID'));
-					$this->set('rightheadresults', $this->Tag->find('first', $options));
-				}
+
+			/*$options = array('order' => array(
+            'Article.modified' => 'desc'
+        ));*/
+
         	//}
         	$this->loadModel('User');
         	$this->loadModel('Key');
@@ -286,19 +313,7 @@ public function beforeFilter() {
         public function articleview($id) {
         	$this->redirect($this->referer());
         }
-        /**
-         * index method
-         *
-         * @return void
-         */
 
-        public function index() {
-        	$this->Tag->recursive = 0;
-        	$this->Paginator->settings = array(
-        			'order' => 'modified ASC'
-        	);
-        	$this->set('tags', $this->Paginator->paginate());
-        }
         /**
          * psearch method
          *
@@ -322,6 +337,64 @@ public function beforeFilter() {
         	);
 
         }
+        /**
+         * articlelist method
+         *
+         * @return void
+         */
+public function articletransmitter($leftID = null,$leftKeyID = null){
+			//view method を読み込む　左
+			//左右を同じelemrnt で構成する　その画面を呼び出す方法を考える。
+			//ページを固定したまま検索する方法を考える。
+			//togetter の左は編集先になっている。
+        	if($this->request->data['from'] == null){
+        		$this->request->data['from'] = array();
+        	}
+        	if($this->request->data['to'] == null){
+        		$this->request->data['to'] = array();
+        	}
+        	$diff =array_diff ($this->request->data['to']['Article'],$this->request->data['from']['Article'] );
+        	debug($diff);
+        	$options['key'] = $leftKeyID;
+			foreach ($diff as $var){
+				debug($var['ID']);
+				 $ToID= $var['ID'];
+				$this->Common->triAddbyid($this,$this->Auth->user('id'),$leftID,$ToID,$options);
+			}
+        	if($this->request->data['Tag']['lr'] == "left"){
+        		$leftID = null;
+        		$leftKeyID = null;
+				$this->psearch($this);
+				$this->set('lefttagresults', $this->Paginator->paginate());
+				//left $leftID $leftKeyID del
+        	}
+    		if ($leftID != null and $leftID != 0) {
+				$options = array('key' => $leftKeyID);
+	        	$this->Common->trifinderbyid($this,$leftID,$options);
+	        	$this->set('lefttaghashes', $this->taghash);
+	        	$this->set('leftarticleresults', $this->articleparentres);
+	        	$this->set('lefttagresults', $this->tagparentres);
+				$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $leftID),'order' => array('Tag.ID'));
+				$this->set('leftheadresults', $this->Tag->find('first', $options));
+			}
+			//$this->Article->recursive = 0;
+			//$conditions = array();//array('order' => array('Article.modified' => 'asc'));
+
+			//$this->set('rightarticleresults', $this->paginate('Article',array()));
+			$this->loadModel('Article');
+			if($rightID == null ){
+				$this->set('rightarticleresults', //$this->paginate('Article',$options)
+						$this->Article->find('all',array('order'=> array('Article.modified' => 'desc'),'limit' => 30))
+				);
+			}
+        	$this->loadModel('User');
+        	$this->loadModel('Key');
+        	$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
+        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+        	$this->set('leftID', $leftID);
+        	$this->set('leftKeyID', $leftKeyID);
+        }
+
 
 
         /**

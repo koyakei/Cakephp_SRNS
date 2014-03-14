@@ -1,3 +1,4 @@
+
 <?php foreach ($results  as $result): ?>
 <?php if($firstModel == 'Tag'){$userCallAssosiation = 'TO';} else {$userCallAssosiation = 'AO';}?>
 <div id="draggble">

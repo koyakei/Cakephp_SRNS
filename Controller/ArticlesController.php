@@ -1,8 +1,8 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('Tag', 'Model');/*
+App::uses('Tag', 'Model');
 App::uses('User', 'Model');
-App::uses('Link', 'Model');*/
+App::uses('Link', 'Model');
 App::uses('Article', 'Model');
 Configure::load("static");
 /**
@@ -12,15 +12,19 @@ Configure::load("static");
  * @property PaginatorComponent $Paginator
  */
 class ArticlesController extends AppController {
-
 	//public $uses = array('Article');
-	public $paginate = array( 'limit' => 25);
+	public $paginate = array(
+			//PostalCodeモデルの設定
+				'Article'=>array(
+						'order' => array('modified' => 'desc')
+				)
+			);
 	 public function beforeFilter() {
         parent::beforeFilter();
         $this->Security->validateOnce = false;
         $this->Security->validatePost = false;
         $this->Security->csrfCheck = false;
-        $this->Auth->allow('logout','view');
+        $this->Auth->allow('logout','view','index');
 	$this->Auth->authenticate = array(
 		'Basic' => array('user' => 'admin'),
 		//'Form' => array('user' => 'Member')
@@ -41,7 +45,6 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function index() {
-		debug($this->Auth->user('id'));
 		$this->Article->recursive = 0;
 		$this->set('articles', $this->Paginator->paginate());
 	}
@@ -62,9 +65,9 @@ class ArticlesController extends AppController {
         		//$this->Session->setFlash(__('radd に入ってinai。'));
         	}
 		if($this->request->data['Article']['name'] != null){
-			$this->keyid = $this->request->data['Article']['keyid'];
-			$this->Session->setFlash(__($this->keyid));
-			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
+			//$this->keyid = $this->request->data['Article']['keyid'];
+        	debug($this->request->data);
+			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'),$id);
 			$this->Basic->social($this);
 		}
 		if($this->request->data['Tag']['name'] != null){
@@ -87,7 +90,7 @@ class ArticlesController extends AppController {
 		$this->set('headresults', $this->returntribasic);
 		$this->set('headtaghashes', $this->taghash);
 		$targetID = $id;
-		$this->Common->trifinderbyid($this);
+		$this->Common->trifinderbyid($this,$id,$option);
 		$this->loadModel('User');
 		$this->loadModel('Key');
 		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
@@ -105,11 +108,6 @@ class ArticlesController extends AppController {
 		$this->loadModel('User');
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		if ($this->request->is('post')) {
-			$this->request->data['Article'] += array(
-				'created' => date("Y-m-d H:i:s"),
-				'modified' => date("Y-m-d H:i:s"),
-			);
-			debug($this->request->data['Article']);
 			if ($this->Article->save($this->request->data)) {
 				$this->Session->setFlash(__('The article has been saved.'));
 				//return $this->redirect(array('action' => 'index'));

@@ -12,7 +12,7 @@ echo $this->Html->script('ddscript');
 <body>
 <div id="drag" class="boxContainer">
 <div class="box">	
-	<?php echo $this->element('contentssidebar', array('idre'=>$leftID,'firstModel' => 'Tag','data' => $leftheadresult,'lr' => true,'trikeyID' => $leftKeyID,'rightID' => $rightID ,'rightKeyID' => $rightKeyID,'leftID' => $leftID,'leftKeyID' => $leftKeyID)); ?>
+	<?php echo $this->element('contentssidebar', array('idre'=>$leftID,'firstModel' => 'Tag','data' => $leftheadresult,'lr' => 'left','trikeyID' => $leftKeyID,'rightID' => $rightID ,'rightKeyID' => $rightKeyID,'leftID' => $leftID,'leftKeyID' => $leftKeyID)); ?>
 		<div class="transmitter view">
 			<dl>
 		<?php echo $this->element('detail',array('detail' =>  $leftheadresults,'firstModel' => 'Tag')); ?>
@@ -30,26 +30,12 @@ echo $this->Html->script('ddscript');
 			<tbody id="tbl1">			
 				<?php if($leftarticleresults != null){ echo $this->element('transmittertablebody', Array('results' => $leftarticleresults,'taghashes'=>$lefttaghashes,'firstModel' => 'Article','currentUserID' => $currentUserID,'LR' => "left",'idre'=>$leftID)); } ?>
 				<?php if($lefttagresults != null){ echo $this->element('transmittertablebody', Array('results' => $lefttagresults,'taghashes'=>$lefttaghashes,'firstModel' => 'Tag','currentUserID' => $currentUserID,'LR' => "left",'idre'=>$leftID));  } ?>
-				<?php  if(is_array($leftarticleresults) == false or $lefttagresults == null): ?>
-
-<tr>
-						
-					<td>ここにドラッグ</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td>
-					</td>
-					
-				</tr>
-<?php endif; ?>
 			<?php echo $this->Form->end('transmit'); ?>
-
+					<tr>
+						<td colspan="6" class="mark"><span id="msg">Message line</span></td>
+					</tr>
 			</tbody>
 		</table>
-		<tr>
-						
 	<div class="bottom_box">
 	<?php echo $this->Form->create('Tag', array('url'=> array('action' => 'transmitter',0,0,$rightID,$rightKeyID))); ?>
 			<?php echo $this->element('searchbox',array('lr' => 'left')); ?>
@@ -58,7 +44,7 @@ echo $this->Html->script('ddscript');
 	</div>
 </div>
 <div class="box">
-	<?php echo $this->element('contentssidebar', array('idre'=>$rightID,'firstModel' => 'Tag','data' => $rightheadresult,'lr' => false,'rightID' => $rightID ,'rightKeyID' => $rightKeyID,'leftID' => $leftID,'leftKeyID' => $leftKeyID,'trikeyID' => $rightKeyID)); ?>
+	<?php echo $this->element('contentssidebar', array('idre'=>$rightID,'firstModel' => 'Tag','data' => $rightheadresult,'lr' => 'right','rightID' => $rightID ,'rightKeyID' => $rightKeyID,'leftID' => $leftID,'leftKeyID' => $leftKeyID,'trikeyID' => $rightKeyID)); ?>
 	
 	<div class="main">
 		<div class="tags view">
@@ -101,24 +87,4 @@ echo $this->Html->script('ddscript');
 			DIV elements and table rows can be cloned with SHIFT key</div>
 		</div>
 	</body>
-	<script>
-	window.onload=function(){
-
-
-		var f=document.getElementById("keyid1");
-		checkSelect(f.elements["keyid1"],"<?php echo $leftKeyID; ?>");
-		var f=document.getElementById("keyid0");
-		checkSelect(f.elements["keyid0"],"<?php echo $rightKeyID; ?>");
-	}
-	function checkSelect(obj,val){
-		for(var i=0;i<obj.length;i++){
-			var objval =obj[i].id;
-			var objval2 =val;
-			if(obj[i].id==val){
-			obj[i].selected=true;
-			break;
-			}
-		}
-	}
-	</script>
 </html>

@@ -37,7 +37,7 @@ public $presetVars = array(
 );
 public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('logout','view','search');
+	$this->Auth->allow('logout','view','search','transmitter');
 	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
 			//'Form' => array('user' => 'Member')

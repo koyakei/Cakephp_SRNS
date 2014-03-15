@@ -6,7 +6,7 @@ App::uses('Article', 'Model');
 App::uses('BasicComponent', 'Controller/Component');
 Configure::load("static");
 class CommonComponent extends Component {
-        public $components = array('Basic');
+    public $components = array('Basic');
 	public function replyarticleAdd(&$that = null) {
 		if ($that->request->params['pass'][0] != null) {
 			$Article = new Article();
@@ -21,7 +21,6 @@ class CommonComponent extends Component {
 					'LFrom' => $that->request->params['pass'][0],//2138
 					'LTo' => $that->last_id,
 					'quant' => 1,
-					'created' => date("Y-m-d H:i:s"),
 				);
 				$Link = new Link();
 				$Link->create();
@@ -33,7 +32,6 @@ class CommonComponent extends Component {
 					'LFrom' => 2138,//
 					'LTo' => $that->last_id,
 					'quant' => 1,
-					'created' => date("Y-m-d H:i:s"),
 				);
 				$Link->create();
 					if ($Link->save($that->request->data)) {
@@ -84,7 +82,6 @@ class CommonComponent extends Component {
 					'LFrom' => $FromID,//2138
 					'LTo' => $that->last_id,
 					'quant' => 1,
-					'created' => date("Y-m-d H:i:s"),
 				);
 				$Link = new Link();
 				$Link->create();
@@ -96,7 +93,6 @@ class CommonComponent extends Component {
 						'LFrom' => $options['key'],//
 						'LTo' => $that->last_id,
 						'quant' => 1,
-						'created' => date("Y-m-d H:i:s"),
 					);
 					$Link->create();
 					if ($Link->save($that->request->data)) {
@@ -115,7 +111,6 @@ class CommonComponent extends Component {
 	}
 
 	public function triAddbyid(&$that = null,$userID,$FromID,$ToID,$options) {
-		/*$that->Tag->setValue($that->plugin,$that->name.$that->action,$that->view);*/
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');
 		}
@@ -131,7 +126,6 @@ class CommonComponent extends Component {
 					'LFrom' => $FromID,//2138
 					'LTo' => $ToID,
 					'quant' => 1,
-					'created' => date("Y-m-d H:i:s"),
 			);
 			$Link = new Link();
 			$Link->create();
@@ -146,7 +140,6 @@ class CommonComponent extends Component {
 						'LFrom' => $options['key'],//
 						'LTo' => $that->last_id,
 						'quant' => 1,
-						'created' => date("Y-m-d H:i:s"),
 				);
 				$Link->create();
 				if ($Link->save($that->request->data)) {
@@ -189,7 +182,6 @@ class CommonComponent extends Component {
 						'LFrom' => $targetFromID,//$that->request->params['pass'][0],
 						'LTo' => $that->last_id,
 						'quant' => 1,
-						'created' => date("Y-m-d H:i:s"),
 				);
 				debug($that->request->data['Link']);
 				$Link = new Link();
@@ -202,7 +194,6 @@ class CommonComponent extends Component {
 							'LFrom' => $that->keyid,//
 							'LTo' => $that->last_id,
 							'quant' => 1,
-							'created' => date("Y-m-d H:i:s"),
 					);
 					$Link->create();
 					if ($Link->save($that->request->data)) {

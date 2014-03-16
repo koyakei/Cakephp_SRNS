@@ -56,8 +56,7 @@ class ArticlesController extends AppController {
 	public function view($id = null) {
 		debug($this->Auth->user('id'));
 		if($this->request->data['Article']['name'] != null){
-			$this->keyid = $this->request->data['Article']['keyid'];
-			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'));
+			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'),$id,$options);
 			$this->Basic->social($this);
 		}
 		if($this->request->data['Tag']['name'] != null){
@@ -80,7 +79,7 @@ class ArticlesController extends AppController {
 		$this->set('headresults', $this->returntribasic);
 		$this->set('headtaghashes', $this->taghash);
 		$targetID = $id;
-		$this->Common->trifinderbyid($this);
+		$this->Common->trifinderbyid($this,$id);
 		$this->loadModel('User');
 		$this->loadModel('Key');
 		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));

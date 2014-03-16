@@ -67,25 +67,25 @@ class CommonComponent extends Component {
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');
 		}
-		if ($options['key'] == null){
+		if ($options['key'] == null or $options['key'] == 0){
 			$options['key'] = Configure::read('tagID.reply');
 		}
 		if ($FromID != null) {
 			$Article = new $model();
 			$Article->create();
 			if ($Article->save($that->request->data)) {
-				$that->Session->setFlash(__('1st created.'));
+				$that->Session->setFlash(__($Article->getLastInsertID()));
 				$that->last_id = $Article->getLastInsertID();
 				$that->request->data = null;
 				$that->request->data['Link'] = array(
 					'user_id' => $userID,
-					'LFrom' => $FromID,//2138
+					'LFrom' => $FromID,
 					'LTo' => $that->last_id,
 					'quant' => 1,
 				);
 				$Link = new Link();
 				$Link->create();
-				if ($Link->save($that->request->data)) {
+				if ($Link->save($that->request->data,false)) {
 					$that->last_id = $Link->getLastInsertID();
 					$that->request->data = null;
 					$that->request->data['Link'] = array(
@@ -95,7 +95,7 @@ class CommonComponent extends Component {
 						'quant' => 1,
 					);
 					$Link->create();
-					if ($Link->save($that->request->data)) {
+					if ($Link->save($that->request->data,false)) {
 						$that->Session->setFlash(__('The article has been saved.'));
 
 					} else {

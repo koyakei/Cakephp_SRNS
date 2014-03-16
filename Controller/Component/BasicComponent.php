@@ -131,8 +131,6 @@ class BasicComponent extends Component {
 		}else {
 				$that->Session->setFlash(__('リクエストが空っぽでこけている　tag.ID'));
 			}
-		debug($that->referer());
-		$that->redirect($that->referer());
 	}
 	public function test(&$that){
 		$that->redirect($that->referer());

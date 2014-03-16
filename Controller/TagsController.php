@@ -107,7 +107,7 @@ public function beforeFilter() {
         	}
 
         	if($this->request->data['Article']['name'] != null){
-        		$options['key'] = $trikeyID;
+        		$options['key'] = $this->request->data['Article']['keyid'];
         		$this->Common->triarticleAdd($this,'Article',$this->request->data['Tag']['user_id'],$id,$options);
         		$this->Basic->social($this);
         	}

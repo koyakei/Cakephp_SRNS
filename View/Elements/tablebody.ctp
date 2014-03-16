@@ -11,12 +11,8 @@
 					<td><?php echo h($result[$firstModel]['modified']); ?>&nbsp;</td>
 					<td class="actions">
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?>
-						<?php 
-						if ($result['Link']['ID'] =! null) {
-						 echo $this->Form->postLink(__('Delete'), array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID'])); 
-
 						
-						} ?>
+						 <?php echo $this->Form->postLink(__('Delete'), array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID'])); ?>
 					</td>
 					<td>
 						<?php if ($idre != null) {

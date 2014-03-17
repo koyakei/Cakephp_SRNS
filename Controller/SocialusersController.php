@@ -38,17 +38,12 @@ class SocialusersController extends AppController {
  */
 
 	public function myfollow() {
-		$this->paginate = array(
-				/*'condition' => array(
-						"Socialuser.user_id" => $this->Auth->user('id')),*/
+		$this->Paginator->settings = array(
+
+				'conditions' => array(
+						"Socialuser.user_id" => $this->Auth->user('id')),
 				'order' => array('Socialuser.created' => 'desc')
 		);
-		$this->Paginator->settings = $this->paginate;/* array(
-				'condition' => array(
-						"Socialuser.user_id" => $this->Auth->user('id'),
-
-				),
-		);*/
 		$this->set('socialusers', $this->Paginator->paginate());
 	}
 /**

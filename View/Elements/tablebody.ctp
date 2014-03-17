@@ -12,7 +12,8 @@
 					<td class="actions">
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?>
 						
-						 <?php echo $this->Form->postLink(__('Delete'), array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID'])); ?>
+						 <?php echo $this->Form->postLink(__('Delete'), array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
+						  ?>
 					</td>
 					<td>
 						<?php if ($idre != null) {
@@ -28,10 +29,9 @@
 								<?php foreach ($result['subtag'] as $subtag): ?>
 									<?php if ($hash['ID'] == $subtag['Tag']['ID']){ ?>
 										<td><?php echo $subtag['Link']['quant']; ?></td>
-										<!--<?php echo $subtag['Tag']['name']; ?>-->
 										<td>
 										
-										<?php echo $this->Form->create('tag'//,array('controller' => 'tags','action'=>'quant')
+										<?php echo $this->Form->create('tag'
 ); ?>
 										<?php echo $this->Form->input('Link.quant',array('default'=>$subtag['Link']['quant'])); ?>
 										<?php echo $this->Form->hidden('Link.ID', array('value'=>$subtag['Link']['ID'])); ?>

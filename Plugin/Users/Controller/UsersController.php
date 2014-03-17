@@ -10,6 +10,7 @@
  */
 
 App::uses('CakeEmail', 'Network/Email');
+App::uses('CakeEmailPbs', 'Vendor');
 App::uses('UsersAppController', 'Users.Controller');
 App::uses('Social', 'Model');
 

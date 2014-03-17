@@ -14,14 +14,10 @@
 	<tr>
 		<td><?php echo h($social['Social']['ID']); ?>&nbsp;</td>
 		<td>
-			<?php echo $this->Html->link($social['User']['id'], array('controller' => 'users', 'action' => 'view', $social['User']['id'])); ?>
+			<?php echo $this->Html->link($social['User']['id'], array('plugin' =>'users','controller' => 'users', 'action' => 'view', $social['User']['id'])); ?>
 		</td>
-		<td><?php echo h($social['Social']['ctrl']); ?>&nbsp;</td>
-		<td><?php echo h($social['Social']['view']); ?>&nbsp;</td>
-		<td><?php echo h($social['Social']['page_id']); ?>&nbsp;</td>
-		<td><?php echo h($social['Social']['created']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $social['Social']['ID'])); ?>
+			<?php echo $this->Html->link(__('View'), array('controller' => $social['Social']['vctrl'], 'action' => $social['Social']['vaction'], $social['Social']['page_id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $social['Social']['ID'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $social['Social']['ID']), null, __('Are you sure you want to delete # %s?', $social['Social']['ID'])); ?>
 		</td>

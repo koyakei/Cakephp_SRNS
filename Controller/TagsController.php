@@ -37,7 +37,7 @@ public $presetVars = array(
 );
 public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('logout','view','search','transmitter');
+	$this->Auth->allow('logout');
 	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
 			//'Form' => array('user' => 'Member')
@@ -86,7 +86,6 @@ public function beforeFilter() {
         public function view($id = null,$trikeyID = null) {
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$resultForChange = $this->Tag->find('first', $options);
-        	debug("no admin view");
         	$this->id =$id;
         	$this->Tag->cachedName = $this->name;
         	$userID = $this->Auth->user('id');
@@ -108,7 +107,8 @@ public function beforeFilter() {
 
         	if($this->request->data['Article']['name'] != null){
         		$options['key'] = $this->request->data['Article']['keyid'];
-        		$this->Common->triarticleAdd($this,'Article',$this->request->data['Tag']['user_id'],$id,$options);
+        		debug($this->request->data);
+        		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
         		$this->Basic->social($this);
         	}
         	if($this->request->data['Tag']['name'] != null){

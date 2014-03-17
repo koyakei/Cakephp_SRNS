@@ -27,22 +27,7 @@ class SocialsController extends AppController {
 			'Security',
 			'Search.Prg','Users.RememberMe');
 
-/**
- * index method
- *
- * @return void
- */
-	public function myfollow() {
 
-		debug($this->Auth->user('id'));
-		$this->Social->recursive = 0;
-			$this->Paginator->settings = array(
-				'condition' => array(
-				"user_id = Configure::read('acountID.admin')"
-			)
-		);
-		$this->set('socials', $this->Paginator->paginate());
-	}
 
 /**
  * index method

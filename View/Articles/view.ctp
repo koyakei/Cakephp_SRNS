@@ -72,7 +72,7 @@ $(function () {
 <div class="actions">
 <ul>
 		<li><?php echo $this->Html->link(__('List Tags'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Tag'), array('controller'=> 'tags','action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('Tag search'), array('controller' => 'tags','action' => 'search')); ?> </li>
 	</ul>
 </div>

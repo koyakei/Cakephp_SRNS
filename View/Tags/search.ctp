@@ -52,7 +52,7 @@ $this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', nu
 			<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('article index'), array('controller' => 'articles','action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('key index'), array('controller' => 'keys','action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('social my follow'), array('controller' => 'socials','action' => 'myfollow')); ?> </li>
+		<li><?php echo $this->Html->link(__('social my follow'), array('controller' => 'socialusers','action' => 'myfollow')); ?> </li>
 		<li><?php echo $this->Html->link(__('Article Add'), array('controller' => 'articles','action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('Transmitter'), array('controller' => 'tags','action' => 'transmitter')); ?> </li>
 		</ul>

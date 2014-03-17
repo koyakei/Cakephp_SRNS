@@ -14,11 +14,15 @@ class LinksController extends AppController {
 	);*/
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('logout','');
+		$this->Auth->allow('logout');
 		$this->Auth->authenticate = array(
-				'Basic' => array('user' => 'admin'),
+				'Basic' => array('user' => array('admin','registered')),
 				//'Form' => array('user' => 'Member')
 		);
+
+		$this->Security->validateOnce = false;
+		$this->Security->validatePost = false;
+		$this->Security->csrfCheck = false;
 	}
 
 /**
@@ -26,7 +30,7 @@ class LinksController extends AppController {
  *
  * @var array
  */
-	public $components = array('Search.Prg','Paginator','Common','Basic','Cookie','Session');
+	public $components = array('Search.Prg','Paginator','Common','Basic','Cookie','Session','Security');
 
 /**
  * index method
@@ -150,12 +154,14 @@ class LinksController extends AppController {
 			throw new NotFoundException(__('Invalid link'));
 		}
 		$this->request->onlyAllow('post', 'delete');
-		if ($this->Link->delete()) {
-			$this->Session->setFlash(__('The link has been deleted.'));
-		} else {
-			$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
+		$result = $this->Link->find('first',array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id')));
+		if ($this->Auth->user('id') == $result['Link']['user_id']) {
+			if ($this->Link->delete()) {
+				$this->Session->setFlash(__('The link has been deleted.'));
+			} else {
+				$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
+			}
 		}
-		//debug($this->referer());
 		return $this->redirect($this->referer());
 	}
 /**

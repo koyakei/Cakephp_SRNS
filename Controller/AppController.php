@@ -51,7 +51,7 @@ public $components = array(
 	)
 );
 public function isAuthorized($user) {
-    if (isset($user['role']) && $user['role'] === 'admin') {
+    if ((isset($user['role']) && $user['role'] === 'admin') or (isset($user['role']) && $user['role'] === 'registered')) {
         return true;
     }
 return false;

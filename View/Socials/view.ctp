@@ -44,7 +44,7 @@
 		<tr>
 			<td><?php echo h($social['Social']['created']); ?>&nbsp
 			</td>
-			<td><?php echo $this->Html->link(__('Edit'), array('plugin' =>$social['Social']['social'] 'action' => 'edit', $social['Social']['ID'])); ?></td>
+			<td><?php echo $this->Html->link(__('Edit'), array('plugin' =>$social['Social']['social'] ,'action' => 'view', $social['Social']['ID'])); ?></td>
 			
 		</tr>
 		<?php endforeach; ?>

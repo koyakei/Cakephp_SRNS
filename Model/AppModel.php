@@ -30,10 +30,10 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
-
+/*
 	public function beforeSave(){
 		$this->data[$this->alias]['modified'] = date("Y-m-d H:i:s");
 		return true;
 	}
-
+*/
 }

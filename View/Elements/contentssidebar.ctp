@@ -1,4 +1,4 @@
-<div class="actions">
+<div class="actions"  style ="width: 115px;">
 <?php if ($firstModel == 'Tag'): ?>
 	<form id="keyid<?php if ($this->action == 'transmitter'): ?><?php if($lr == true ){echo 1; } else { echo 0; } ?><?php endif; ?>">
 	<select name ="keyid<?php if ($this->action == 'transmitter'): ?><?php if($lr == true ){echo 1; } else { echo 0; } ?><?php endif; ?>" onChange="location.href=value">

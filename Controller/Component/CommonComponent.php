@@ -48,12 +48,11 @@ class CommonComponent extends Component {
 		if($that->request->data['from'][$model] == null){
 			$that->request->data['from'][$model] = array();
 		}
-		//debug($that->request->data['from']);
 		if($that->request->data['to'][$model] == null){
 			$that->request->data['to'][$model] = array();
 		}
 		$diff =array_diff ($that->request->data['to']['Article'],$that->request->data['from']['Article'] );
-		//debug($diff);
+		debug($diff);
 		$options['key'] = $fromKeyID;
 		foreach ($diff as $var){
 			//debug($var['ID']);
@@ -123,7 +122,7 @@ class CommonComponent extends Component {
 			$that->request->data = null;
 			$that->request->data['Link'] = array(
 					'user_id' => $userID,
-					'LFrom' => $FromID,//2138
+					'LFrom' => $FromID,
 					'LTo' => $ToID,
 					'quant' => 1,
 			);

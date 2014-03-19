@@ -161,12 +161,16 @@ public function beforeFilter() {
         	debug(array_diff ($this->request->data['from'],$this->request->data['to'] ) );*/
         	/*debug($this->request->data['from']['Article']);
         	debug($this->request->data['to']['Article']);*/
-        	$this->Common->trasmitterDiff($this,$leftID,$leftKeyID,'Article');
+        	$model_name = array_slice($this->request->data['from'], 0,0);
+
+        		$this->Common->trasmitterDiff($this,$leftID,$leftKeyID,$model_name);
+
 
         	if($this->request->data['Tag']['lr'] == "left"){
         		$leftID = null;
         		$leftKeyID = null;
 				$this->psearch($this);
+
 				$this->set('lefttagresults', $this->Paginator->paginate());
 				//left $leftID $leftKeyID del
         	}elseif ($this->request->data['Tag']['lr'] == "right") {
@@ -190,21 +194,42 @@ public function beforeFilter() {
         				$this->set('righttaghashes', $this->taghash);
         				$this->set('rightarticleresults', $this->articleparentres);
         				$this->set('righttagresults', $this->tagparentres);
-        				$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $rightID),'order' => array('Tag.ID'));
-        				$this->set('rightheadresults', $this->Tag->find('first', $options));
+        				if ($rightID <= 100000) {
+	        				$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $rightID),'order' => array('Tag.ID'));
+	        				$rightheadresults = $this->Tag->find('first', $options);
+        				} else {
+        					$options = array('conditions' => array('Article.'.$this->Article->primaryKey => $rightID),'order' => array('Article.ID'));
+        					$rightheadresults = $this->Article->find('first', $options);
+        				}
+        				$this->set('rightheadresults', $rightheadresults);
+        				if(array_key_exists ( 'Tag' , $rightheadresults )){
+        					$this->set('rightheadmodel', 'Tag');
+        				}else {
+        					$this->set('rightheadmodel', 'Article');
+        				}
         			}
 
         		}
         	//}
     			if ($leftID != null and $leftID != 0) {
-    				debug("left");
 					$options = array('key' => $leftKeyID);
 		        	$this->Common->trifinderbyid($this,$leftID,$options);
 		        	$this->set('lefttaghashes', $this->taghash);
 		        	$this->set('leftarticleresults', $this->articleparentres);
 		        	$this->set('lefttagresults', $this->tagparentres);
-					$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $leftID),'order' => array('Tag.ID'));
-					$this->set('leftheadresults', $this->Tag->find('first', $options));
+		        		if ($leftID < 100000) {
+	        				$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $leftID),'order' => array('Tag.ID'));
+	        				$leftheadresults = $this->Tag->find('first', $options);
+        				} else {
+        					$options = array('conditions' => array('Article.'.$this->Article->primaryKey => $leftID),'order' => array('Article.ID'));
+        					$leftheadresults = $this->Article->find('first', $options);
+        				}
+					$this->set('leftheadresults', $leftheadresults);
+					if(array_key_exists ( 'Tag' , $leftheadresults )){
+						$this->set('leftheadmodel', 'Tag');
+					}else {
+						$this->set('leftheadmodel', 'Article');
+					}
 				}
 
 			/*$options = array('order' => array(

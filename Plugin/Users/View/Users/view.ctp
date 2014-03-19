@@ -34,6 +34,7 @@
 		}
 		?>
 	</dl>
-</div>
+
 	<?php echo $this->element('timeline', Array('socials' => $socials)); ?>
+</div>
 <?php echo $this->element('Users.Users/sidebar'); ?>

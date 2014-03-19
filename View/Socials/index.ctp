@@ -4,8 +4,6 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('ID'); ?></th>
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('ctrl'); ?></th>
-			<th><?php echo $this->Paginator->sort('view'); ?></th>
 			<th><?php echo $this->Paginator->sort('page_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>

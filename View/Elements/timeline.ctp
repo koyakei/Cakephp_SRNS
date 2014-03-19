@@ -1,24 +1,22 @@
-<div class="socials timeline">
-<table>
-		<thead>
-			<th><?php echo $this->Paginator->sort('created'); ?>
-			</th>
-			<th>link
-			</th>
-		</thead>
-		<tbody>
-			<?php foreach ($socials as $social): ?>
-			<tr>
-				<td><?php echo h($social['Social']['created']); ?>&nbsp
-				</td>
-				<td><?php echo $this->Html->link(($social['User']['username']), array('plugin' =>$social['Social']['vplugin'],'controller' => $social['Social']['vctrl'], 'action' => $social['Social']['vaction'], $social['Social']['page_id'])); ?></td>
-				
-			</tr>
-			<?php endforeach; ?>
-		
-		</tbody>
+
+	<h2><?php echo __('Follows'); ?></h2>
+	<table cellpadding="0" cellspacing="0">
+	<tr>
+			<th><?php echo $this->Paginator->sort('created'); ?></th>
+			<th><?php echo $this->Paginator->sort('username'); ?></th>
+			<th class="actions"><?php echo __('Actions'); ?></th>
+	</tr>
+	<?php foreach ($socials as $socialuser): ?>
+	<tr>
+		<td><?php echo $this->Html->link($socialuser['Socialuser']['created'], array('plugin' => null ,'controller' => $socialuser['Socialuser']['vctrl'], 'action' => $socialuser['Socialuser']['vaction'], $socialuser['Socialuser']['page_id'])); ?>&nbsp;</td>
+		<td><?php echo h($socialuser['Socialuser']['username']); ?>&nbsp;</td>
+		<td class="actions">
+			<?php echo $this->Html->link(__('View'), array('action' => 'vview', $socialuser['Socialuser']['ID'])); ?>
+		</td>
+	</tr>
+<?php endforeach; ?>
 	</table>
-<p>
+	<p>
 	<?php
 	echo $this->Paginator->counter(array(
 	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
@@ -31,4 +29,3 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>

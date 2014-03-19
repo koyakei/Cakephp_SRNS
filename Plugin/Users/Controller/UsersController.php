@@ -277,13 +277,15 @@ class UsersController extends UsersAppController {
 		try {
 			$this->set('user', $this->{$this->modelClass}->view($slug));
 			$tuserid = $this->{$this->modelClass}->view($slug)[$this->modelClass]['id'];
-		$this->loadModel('Social');
+		$this->loadModel('Socialuser');
 			$this->Paginator->settings = array(
-				'condition' => array(
-					"user_id = $tuserid"
-				)
-			);
-			$this->set('socials',$this->Paginator->paginate('Social'));
+
+				'conditions' => array(
+						"Socialuser.user_id" => $slug),
+				'order' => array('Socialuser.created' => 'desc')
+		);
+			//debug($this->Paginator->paginate('Socialuser'));
+			$this->set('socials',$this->Paginator->paginate('Socialuser'));
 		} catch (Exception $e) {
 			$this->Session->setFlash($e->getMessage());
 			$this->redirect('/');

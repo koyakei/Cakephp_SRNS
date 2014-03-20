@@ -32,13 +32,6 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 
-	function afterSave($created){
-		if ($created) {
-			$this->data[$this->alias]['created'] = date("Y-m-d H:i:s");
-
-		}
-	}
-
 public $components = array(
     'Session',
     'Auth' => array(

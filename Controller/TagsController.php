@@ -156,11 +156,6 @@ public function beforeFilter() {
 			//debug($this->request->data['to']);
         	//debug($this->request->data['from']);
         	debug($this->request->data);
-        	/*
-        	debug($this->request->data);
-        	debug(array_diff ($this->request->data['from'],$this->request->data['to'] ) );*/
-        	/*debug($this->request->data['from']['Article']);
-        	debug($this->request->data['to']['Article']);*/
         	$model_name = array_slice($this->request->data['from'], 0,0);
 
         		$this->Common->trasmitterDiff($this,$leftID,$leftKeyID,$model_name);

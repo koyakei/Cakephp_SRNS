@@ -1,11 +1,12 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('Date', 'Model');
+Configure::load("static");
 /**
  * Tag Model
  *
  * @property Owner $Owner
  */
-class Tag extends AppModel {
+class Tag extends Date {
 /*
 	public function setValue($plugin = null,$name = null,$action = null,$view = null) {
 		debug($action);

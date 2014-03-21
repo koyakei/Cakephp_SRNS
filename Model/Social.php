@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('Date', 'Model');
 Configure::load("static");
 /**
  * Social Model
@@ -7,7 +7,7 @@ Configure::load("static");
  * @property User $User
  * @property Page $Page
  */
-class Social extends AppModel {
+class Social extends Datel {
 
 /**
  * Use database config

@@ -239,9 +239,9 @@ class BasicComponent extends Component {
 	}
 	public function triupperfiderbyid(&$that = null,$trikeyID,$modelSe,$id) {
 		$that->loadModel($modelSe);
-		/*if($trikeyID == null) {
+		if($trikeyID == null) {
 			$trikeyID = Configure::read('tagID.reply');//tagConst()['replyID'];
-		}*/
+		}
 		$option = array(
 				'conditions'=> array(
 				        	"Link.LFrom =".$modelSe.".ID"

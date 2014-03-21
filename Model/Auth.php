@@ -1,12 +1,12 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('Date', 'Model');
 /**
  * Auth Model
  *
  * @property User $User
  * @property Tag $Tag
  */
-class Auth extends AppModel {
+class Auth extends Date {
 
 /**
  * Validation rules

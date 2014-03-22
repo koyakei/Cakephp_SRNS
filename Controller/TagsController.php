@@ -167,21 +167,22 @@ public function beforeFilter() {
 				$this->psearch($this);
 
 				$this->set('lefttagresults', $this->Paginator->paginate());
+				//left $leftID $leftKeyID del
         	}elseif ($this->request->data['Tag']['lr'] == "right") {
         		debug("isrs");
         		$rghitID = null;
         		$rightKeyID = null;
         		$this->psearch($this);
         		$this->set('righttagresults', $this->Paginator->paginate());
-        	}else{
+				//left $rightID $rightKeyID del
+        	}//else{
         		$this->loadModel('Article');
         		if($rightID == null ){
         			$newart = $this->Article->find('all',array('order'=> array('Article.modified' => 'desc'),'limit' => 30));
         			$this->set('rightarticleresults', //$this->paginate('Article',$options)
         					$newart
         			);
-        		}
-        	}
+        		} else {
         			if ($rightID != null or $rightID != 0) {
         				$options = array('key' => $leftKeyID);
         				$this->Common->trifinderbyid($this,$rightID,$options);
@@ -203,10 +204,10 @@ public function beforeFilter() {
         				}
         			}
 
-
+        		}
         	//}
     			if ($leftID != null and $leftID != 0) {
-					$options = array('key' => $rightKeyID);
+					$options = array('key' => $leftKeyID);
 		        	$this->Common->trifinderbyid($this,$leftID,$options);
 		        	$this->set('lefttaghashes', $this->taghash);
 		        	$this->set('leftarticleresults', $this->articleparentres);

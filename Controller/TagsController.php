@@ -328,6 +328,7 @@ public function beforeFilter() {
 	        	}
         	}
         	debug($this->referer());
+        	print_r("戻るで戻って");
         	return $this->redirect($this->referer());
         }
         public function articleview($id) {

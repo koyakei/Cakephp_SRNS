@@ -1,11 +1,11 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('Date', 'Model');
 /**
  * Follow Model
  *
  * @property User $User
  */
-class Follow extends AppModel {
+class Follow extends Date {
 
 /**
  * Use database config

@@ -15,4 +15,14 @@ class Date extends AppModel {
 			}
 
 	}
+	public function afterFind($results){
+		//auth の数値で判定分岐
+		//debug($results);
+		if ($results[$this->alias]['auth'] == 0) {//0何も処理をせずに通す
+
+		}elseif ($results[$this->alias]['auth'] == 1){//1 特定ユーザーだけに許可
+			//sauthテーブルをjoin して
+
+		}
+	}
 }

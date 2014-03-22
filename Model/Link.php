@@ -1,13 +1,13 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('Date', 'Model');
 /**
  * Link Model
  *
  * @property LinkID_LinkTo $LinkID_LinkTo
  * @property LinkID_LinkFrom $LinkID_LinkFrom
  */
-class Link extends AppModel {
-	public $actsAs = array('Search.Searchable','Srns');
+class Link extends Date {
+	public $actsAs = array('Search.Searchable');
 
 /**
  * Use database config

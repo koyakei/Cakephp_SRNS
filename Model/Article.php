@@ -1,11 +1,11 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('Date', 'Model');
 Configure::load("static");
 /**
  * Article Model
  *
  */
-class Article extends AppModel {
+class Article extends Date {
 	//public $replyID = Configure::read('tagID.reply');//tagConst()['replyID']
 
 	public $actsAs = array('Search.Searchable','Srns');

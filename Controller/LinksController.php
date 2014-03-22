@@ -9,14 +9,13 @@ Configure::load("static");
  * @property PaginatorComponent $Paginator
  */
 class LinksController extends AppController {
-	/*public $actsAs = array(
-		'Srns'
-	);*/
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('logout');
 		$this->Auth->authenticate = array(
-				'Basic' => array('user' => array('admin','registered')),
+				'Basic' => array('user' => array('admin'
+						//,'registered'
+		)),
 				//'Form' => array('user' => 'Member')
 		);
 
@@ -30,7 +29,7 @@ class LinksController extends AppController {
  *
  * @var array
  */
-	public $components = array('Search.Prg','Paginator','Common','Basic','Cookie','Session','Security');
+	public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session','Security');
 
 /**
  * index method
@@ -162,6 +161,8 @@ class LinksController extends AppController {
 				$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
 			}
 		}
+		debug($this->referer());
+		print_r("戻るで戻って");
 		return $this->redirect($this->referer());
 	}
 /**

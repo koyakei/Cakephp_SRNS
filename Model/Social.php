@@ -7,7 +7,7 @@ Configure::load("static");
  * @property User $User
  * @property Page $Page
  */
-class Social extends Datel {
+class Social extends Date {
 
 /**
  * Use database config

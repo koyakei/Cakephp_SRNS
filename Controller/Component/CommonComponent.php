@@ -62,7 +62,6 @@ class CommonComponent extends Component {
 		}
 	}
 	public function triarticleAdd(&$that = null,$model,$userID,$FromID,$options) {
-		/*$that->Tag->setValue($that->plugin,$that->name.$that->action,$that->view);*/
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');
 		}

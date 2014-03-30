@@ -8,7 +8,7 @@ Configure::load("static");
 class Article extends Date {
 	//public $replyID = Configure::read('tagID.reply');//tagConst()['replyID']
 
-	public $actsAs = array('Search.Searchable','Srns');
+	public $actsAs = array('Search.Searchable');
 	public $filterArgs = array(
 	        'word' => array(
 //'name' => 'name',
@@ -30,7 +30,7 @@ class Article extends Date {
  * @var mixed False or table name
  */
 	public $useTable = 'article';
-	var $uses = array("article", "link");
+	//var $uses = array("article", "link");
 
 /**
  * Primary key field

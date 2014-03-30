@@ -1,47 +1,46 @@
-<?php 
 <?php
 class FirecakeHelper extends Helper
 {
     /**
      * Firecake Helper
      * ---------------
-     * This will repeat messages from the error.log as well as variables, form data, 
-     * validation errors, session data, and other useful info into the Firebug console 
+     * This will repeat messages from the error.log as well as variables, form data,
+     * validation errors, session data, and other useful info into the Firebug console
      * window.  Other than the normal log usage, you don't have to tell it to trace anything,
      * it'll get the info automagically.
      *
      * Installation:
      * -------------
      * (1.) Install Firebug, http://www.getfirebug.com, reopen browser, turn Firebug on.
-     * 
+     *
      * (2.) Turn debug on in /app/config/core.php  ie: define('DEBUG', 2);
-     * 
-     * (3.) Enable helpers in /app/app_controller.php 
+     *
+     * (3.) Enable helpers in /app/app_controller.php
      * var $helpers = array('Html', 'Javascript', 'Firecake');
-     * 
-     * (4.) Add $firecake->view($this); between the <HEAD> tags of your layout file(s). 
+     *
+     * (4.) Add $firecake->view($this); between the <HEAD> tags of your layout file(s).
      * ie: /app/views/layouts/default.thtml
      * ie: <HEAD><?php $firecake->view($this); ?></HEAD><BODY>Welcome to my site! Yay!...
-     * 
+     *
      * You can add a second parameter to this if you just want the log.
      * ie: $firecake->view($this,1);
-     * 
+     *
      * (5.) Now just save this file as app/views/helpers/firecake.php
-     * 
+     *
      * (6.) Tweak it.  In the view function, comment out data you don't want,
      * like if you're not using sessions, comment out $script .= "\n".$this->getSession();
      * by placing // in front of it.  Maybe you can think of a whole other category to add.
      * If you want to avoid the alphabetical order Firebug uses, try numbering the keys, like
      * ['Session'] becomes ['1. Sessions'].
-     * 
+     *
      * (7.) Now quit playing with it and go build an app already!
-     * 
+     *
      * Credits:
      * --------
      * Discussion and ideas for this started at:
      * http://groups.google.com/group/cake-php/browse_thread/thread/5e041ccdc9d60131/
      * 4987cb9652108bb9?#4987cb9652108bb9
-     * 
+     *
      * In that thread, NOSLOW posted an awesome helper that outputed the variables and
      * info at the bottom of the page.  It works great, but I was itchy to make use of the
      * new Firebug plugin for Firefox!  So I modified it to output into Firebug instead of
@@ -49,10 +48,10 @@ class FirecakeHelper extends Helper
      * a script released under MIT license by Masashi Shinbara.  I basically just mashed
      * everything together, so you got all kinds of useful information in [+] tree order
      * to sift through.
-     * 
+     *
      * The php2js() function was modified only slightly to work with cake and the original
      * can be found at http://paws.de/blog/2006/12/25/export-php-variables-to-javascript/
-     * 
+     *
      */
 
 
@@ -85,7 +84,7 @@ class FirecakeHelper extends Helper
             $script .= "\n".$this->getValidationErrors($var);
             $script .= "\n".$this->getVars($var);
             $script .= "\n".$this->getLogs();
-            
+
             //$script .= "\n"."fbout['Version'] = '".$this->version."';";
             //$script .= "\n".$this->getConstants();
             //$script .= "\n".$this->getPaths();
@@ -176,7 +175,7 @@ class FirecakeHelper extends Helper
     function getConstants() {
         $a = file(ROOT . DS . APP_DIR . DS . 'config' . DS . 'core.php');
         //$b = file(ROOT . DS . APP_DIR . DS . 'webroot' . DS . 'index.php');
-        $b = file(WWW_ROOT . 'index.php'); 
+        $b = file(WWW_ROOT . 'index.php');
         $contents = array_merge($a,$b);
 
         $array = array();

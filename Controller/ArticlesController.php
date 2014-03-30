@@ -1,10 +1,9 @@
 <?php
 App::uses('AppController', 'Controller');
 /*App::uses('Tag', 'Model');
-App::uses('User', 'Model');
-App::uses('Link', 'Model');*/
-App::uses('Article', 'Model');
-Configure::load("static");
+App::uses('User', 'Model');*/
+App::uses('Link', 'Model');
+//Configure::load("static");
 /**
  * Articles Controller
  *
@@ -12,9 +11,33 @@ Configure::load("static");
  * @property PaginatorComponent $Paginator
  */
 class ArticlesController extends AppController {
+	public function isAuthorized($user) {
+		// 登録済ユーザーは投稿できる
+		if ($this->action === 'add'|| $this->action === 'transmitter') {
+			return true;
+		}
 
+		// 投稿のオーナーは編集や削除ができる
+		if (in_array($this->action, array('edit', 'delete'))) {
+			$postId = (int) $this->request->params['pass'][0];
+			if ($this->Article->isOwnedBy($postId, $user['id'])) {
+				return true;
+			}else {
+				$this->redirect($this->referer());
+			}
+		}
+
+		return parent::isAuthorized($user);
+	}
+	public $presetVars = array(
+			'user_id' => array('type' => 'value'),
+			'keyword' => array('type' => 'value'),
+			'andor' => array('type' => 'value'),
+			'from' => array('type' => 'value'),
+			'to' => array('type' => 'value'),
+	);
 	//public $uses = array('Article');
-	public $paginate = array( 'limit' => 25);
+	//public $paginate = array( 'limit' => 25);
 	 public function beforeFilter() {
         parent::beforeFilter();
         $this->Security->validateOnce = false;
@@ -31,10 +54,11 @@ class ArticlesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session',
-			'Security',
-			'Search.Prg','Users.RememberMe');
-
+	public $components = array('Search.Prg','Paginator','Common','Basic','Cookie');
+	public $helpers = array(
+			'Html',
+			'Session'
+	);
 /**
  * index method
  *
@@ -55,6 +79,7 @@ class ArticlesController extends AppController {
  */
 	public function view($id = null) {
 		debug($this->Auth->user('id'));
+
 		if($this->request->data['Article']['name'] != null){
 			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'),$id,$options);
 			$this->Basic->social($this);
@@ -70,6 +95,7 @@ class ArticlesController extends AppController {
 			throw new NotFoundException(__('Invalid tag'));
 		}
 		$this->taghashgen = $this->Article->find('first',array('conditions' => array('Article.' . $this->Article->primaryKey => $id)));
+
 		$this->Article->read(null,$id);
 		$this->set('idre', $id);
 		$this->i = 0;
@@ -115,6 +141,9 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+// 		if ($this->Auth->user('id') == $this->taghashgen['owner_id'] && $this->request->data('auth') !) {
+// 			$this->Article->save($this->request->data('auth'));
+// 		}
 		if (!$this->Article->exists($id)) {
 			throw new NotFoundException(__('Invalid article'));
 		}

@@ -60,6 +60,7 @@ $(function () {
                         <?php echo h($article['Article']['modified']); ?>
                         &nbsp;
                 </dd>
+		
 		<?php foreach ($headresults as $headtaghash): ?>
 			<dt><?php echo __('Searchtagname'); ?></dt>
 		        <dd>
@@ -74,6 +75,7 @@ $(function () {
 		<li><?php echo $this->Html->link(__('List Tags'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Tag'), array('controller'=> 'tags','action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('Tag search'), array('controller' => 'tags','action' => 'search')); ?> </li>
+		<li><?php echo $this->Html->link(__('Edit article'), array('controller' => 'articles','action' => 'edit',$article['Article']['ID'])); ?> </li>
 	</ul>
 </div>
 <?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $article['Article']['ID'])); ?>

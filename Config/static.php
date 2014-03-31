@@ -4,7 +4,8 @@ $config['tagID'] = array(
 	'reply' => 2138,//�R�����g�@�ԐM
 	'owner' => 1,//��l�̎��ɊǗ��җp�ɌŒ肷��
 	'search' => 2146,
-	'upperIdea' => 2183
+	'upperIdea' => 2183,
+	'definition' => 2183,
 
 );
 $config['acountID'] = array(

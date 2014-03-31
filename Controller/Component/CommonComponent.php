@@ -152,11 +152,14 @@ class CommonComponent extends Component {
 		}
 	}
 
-	public function tritagAdd(&$that = null,$model,$userID,$targetFromID) {
+	public function tritagAdd(&$that = null,$model,$userID,$targetFromID,$options) {
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');
 		}
-		debug($model);
+		if ($options['key'] == null) {
+			$options['key'] = Configure::read('acountID.reply');
+		}
+
 		$Tag = new Tag();
 		$tagID = $Tag->find('first',
 			array(
@@ -189,16 +192,16 @@ class CommonComponent extends Component {
 					$that->request->data = null;
 					$that->request->data['Link'] = array(
 							'user_id' => $userID,
-							'LFrom' => $that->keyid,//
+							'LFrom' => $options['key'],//
 							'LTo' => $that->last_id,
 							'quant' => 1,
 					);
 					$Link->create();
 					if ($Link->save($that->request->data)) {
-						$that->Session->setFlash(__('The article has been saved.'));
+						$that->Session->setFlash(__('The tag has been saved.'));
 
 					} else {
-						$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
+						$that->Session->setFlash(__('The tag could not be saved. Please, try again.'));
 					}
 				}else {
 					debug("miss");
@@ -306,9 +309,6 @@ class CommonComponent extends Component {
 			}
 			$that->i++;
 		}
-		$that->set('taghashes', $that->taghash);
-		$that->set('articleresults', $that->articleparentres);
-		$that->set('tagresults', $that->tagparentres);
 	}
 	public function SecondDem(&$that,$model,$order,$keyID,$id){
 		$that->Basic->tribasicfiderbyid($that,$keyID,$model,$id,$order);

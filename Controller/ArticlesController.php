@@ -23,7 +23,7 @@ class ArticlesController extends AppController {
 			if ($this->Article->isOwnedBy($postId, $user['id'])) {
 				return true;
 			}else {
-				$this->redirect($this->referer());
+				$this->redirect($this->referer())
 			}
 		}
 

@@ -52,7 +52,7 @@ public function beforeFilter() {
 		// 投稿のオーナーは編集や削除ができる
 		if (in_array($this->action, array('edit', 'delete'))) {
 			$postId = $this->request->params['pass'][0];
-			if ($this->Post->isOwnedBy($postId, $user['id'])) {
+			if ($this->Tag->isOwnedBy($postId, $user['id'])) {
 				return true;
 			}
 		}
@@ -83,7 +83,7 @@ public function beforeFilter() {
          * @param string $trikeyID
          * @return void
          */
-        public function view($id = null,$trikeyID = null) {
+        public function view($id = null) {
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$resultForChange = $this->Tag->find('first', $options);
         	$this->id =$id;
@@ -112,7 +112,8 @@ public function beforeFilter() {
         		$this->Basic->social($this);
         	}
         	if($this->request->data['Tag']['name'] != null){
-        		$options['key'] = $trikeyID;
+        		debug($this->request->data);
+        		$options['key'] = $this->request->data['Tag']['keyid'];
         		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$id,$options);
         		$this->Basic->social($this);
         	}
@@ -129,19 +130,26 @@ public function beforeFilter() {
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$this->set('tag', $this->Tag->find('first', $options));
         	$this->set('currentUserID', $this->Auth->user('id'));
-        	$options = array('key' => $trikeyID);
-        	$this->Common->trifinderbyid($this,$id,$options);
+
         	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
         	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id);
         	$this->set('upperIdeas', $this->returntribasic);
         	$this->set('trikeyID', $trikeyID);
         	$this->loadModel('User');
         	$this->loadModel('Key');
-        	$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
+        	$key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
+        	$this->set( 'keylist', $key);
+        	$i = 0;
+        	foreach ($key as $key => $value){
+        		$options = array('key' => $key);
+        		$this->Common->trifinderbyid($this,$id,$options);
+	        	$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
+	        	$i++;
+        	}
+        	$this->set('tableresults', $tableresults);;
+
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-        	$this->set('taghashes', $this->taghash);
-        	$this->set('articleresults', $this->articleparentres);
-        	$this->set('tagresults', $this->tagparentres);
+
         }
         /**
          * transmitter method

@@ -1,7 +1,8 @@
 <div class="actions"  style ="width: 115px;">
 <?php if ($firstModel == 'Tag'): ?>
-	<?php foreach($keylist as $key => $value): ?>
-<a href="#<?php echo $value ?>"><?php echo $value ?></a>
+	<h2><?php foreach($keylist as $key => $value): ?></h2>
+	<br>
+<a href="#<?php echo $key ?>"><?php echo $value ?></a>
 	<?php endforeach; ?>
 	<form id="keyid<?php if ($this->action == 'transmitter'): ?><?php if($lr == true ){echo 1; } else { echo 0; } ?><?php endif; ?>">
 	<select name ="keyid<?php if ($this->action == 'transmitter'): ?><?php if($lr == true ){echo 1; } else { echo 0; } ?><?php endif; ?>" onChange="location.href=value">

@@ -9,6 +9,13 @@ Configure::load("static");
  * @property PaginatorComponent $Paginator
  */
 class LinksController extends AppController {
+	public $presetVars = array(
+			'user_id' => array('type' => 'value'),
+			'keyword' => array('type' => 'value'),
+			'andor' => array('type' => 'value'),
+			'from' => array('type' => 'value'),
+			'to' => array('type' => 'value'),
+	);
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('logout');
@@ -23,7 +30,18 @@ class LinksController extends AppController {
 		$this->Security->validatePost = false;
 		$this->Security->csrfCheck = false;
 	}
+	public function isAuthorized($user) {
 
+		// 投稿のオーナーは編集や削除ができる
+		if (in_array($this->action, array('edit', 'delete'))) {
+			$postId = $this->request->params['pass'][0];
+			if ($this->Link->isOwnedBy($postId, $user['id'])) {
+				return true;
+			}
+		}
+
+		return parent::isAuthorized($user);
+	}
 /**
  * Components
  *

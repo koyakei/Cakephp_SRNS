@@ -36,19 +36,18 @@ $(document).ready(function()
 </div>
 
 <?php echo $this->element('contentssidebar', Array('keylist' => $keylist,'idre'=>$idre,'firstModel' => 'Tag','data' => $tag,'idre'=>$idre,'trikeyID', $trikeyID)); ?>
-<?php foreach($keylist as $key => $value): ?>
-<a href="#<?php echo $value ?>"><?php echo $value ?></a>
-
-<a name="<?php echo $value ?>">
+<?php foreach($tableresults as $value): ?>
+<a name="<?php echo $value['ID'] ?>">
+	<h2><?php echo $value['name'] ?></h2>
 	<table class="myTable" cellpadding="0" cellspacing="0">
-		<?php echo $this->element('tablehead', Array('taghashes'=>$taghashes)); ?>
+		<?php echo $this->element('tablehead', Array('taghashes'=>$value['head'])); ?>
 		<tbody>
-		<?php echo $this->element('tablebody', Array('results' => $articleresults,'taghashes'=>$taghashes,'firstModel' => 'Article','currentUserID' => $currentUserID)); ?>
-		<?php echo $this->element('tablebody', Array('results' => $tagresults,'taghashes'=>$taghashes,'firstModel' => 'Tag','currentUserID' => $currentUserID)); ?>
+		<?php echo $this->element('tablebody', Array('results' => $value['tag'],'taghashes'=>$value['head'],'firstModel' => 'Article','currentUserID' => $currentUserID)); ?>
+		<?php echo $this->element('tablebody', Array('results' => $value['article'],'taghashes'=>$value['head'],'firstModel' => 'Tag','currentUserID' => $currentUserID)); ?>
 		</tbody>
 	</table>
-		<?php echo $this->element('Input', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article','currentUserID' => $currentUserID)); ?>
-		<?php echo $this->element('Input', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag','currentUserID' => $currentUserID)); ?>
+		<?php echo $this->element('inputind', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>
+		<?php echo $this->element('inputind', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>
 	</a>
 <?php endforeach; ?>
 		<script>

@@ -23,7 +23,7 @@ class ArticlesController extends AppController {
 			if ($this->Article->isOwnedBy($postId, $user['id'])) {
 				return true;
 			}else {
-				$this->redirect($this->referer())
+				$this->redirect($this->referer());
 			}
 		}
 
@@ -108,6 +108,8 @@ class ArticlesController extends AppController {
 		$this->Common->trifinderbyid($this,$id);
 		$this->loadModel('User');
 		$this->loadModel('Key');
+		$this->set('articleresults', $this->articleparentres);
+		$this->set('tagresults', $this->tagparentres);
 		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		$this->set('currentUserID', $this->Auth->user('id'));

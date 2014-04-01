@@ -157,7 +157,7 @@ class CommonComponent extends Component {
 			$userID = Configure::read('acountID.admin');
 		}
 		if ($options['key'] == null) {
-			$options['key'] = Configure::read('acountID.reply');
+			$options['key'] = Configure::read('tagID.reply');
 		}
 
 		$Tag = new Tag();
@@ -310,6 +310,7 @@ class CommonComponent extends Component {
 			$that->i++;
 		}
 	}
+
 	public function SecondDem(&$that,$model,$order,$keyID,$id){
 		$that->Basic->tribasicfiderbyid($that,$keyID,$model,$id,$order);
 		$that->taghashgen = $that->returntribasic;

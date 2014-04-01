@@ -12,11 +12,15 @@ class BasicComponent extends Component {
 		$data['Social']['vctrl'] = $that->name;
 		$data['Social']['vview'] = $that->view;
 		$data['Social']['page_id'] = $that->id;
-		$data['Social']['user_id'] = Configure::read('acountID.admin');
+		$data['Social']['user_id'] = $that->Auth->user('id');
 		$data['Social']['created'] = date("Y-m-d H:i:s");
 		$Social = new Social();
 		$Social->create();
-		$Social->Save($data);
+		if($Social->Save($data)){
+			debug("social ok");
+		} else{
+			debug("social miss");
+		}
 	}
 
 	public function quant(&$that) {

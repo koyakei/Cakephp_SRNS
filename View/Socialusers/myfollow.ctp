@@ -16,7 +16,6 @@
 	</tr>
 <?php endforeach; ?>
 	</table>
-	<?php echo $this->element('timeline', Array('socials' => $socials)); ?>
 	<p>
 	<?php
 	echo $this->Paginator->counter(array(

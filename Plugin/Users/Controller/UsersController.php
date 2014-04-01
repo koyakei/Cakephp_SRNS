@@ -286,6 +286,7 @@ class UsersController extends UsersAppController {
 		);
 			//debug($this->Paginator->paginate('Socialuser'));
 			$this->set('socials',$this->Paginator->paginate('Socialuser'));
+// 			$this->set('myactivity',$this->Paginator->paginate('Socialuser'));
 		} catch (Exception $e) {
 			$this->Session->setFlash($e->getMessage());
 			$this->redirect('/');

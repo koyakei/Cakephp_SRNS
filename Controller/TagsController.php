@@ -27,7 +27,7 @@ class TagsController extends AppController {
  * @var array
  */
 public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session',
-			'Security',
+			'Security','Authpaginator',
 			'Search.Prg','Users.RememberMe');
 public $presetVars = array(
 		'user_id' => array('type' => 'value'),
@@ -285,6 +285,7 @@ public function beforeFilter() {
          * @return void
          */
         public function edit($id = null) {
+        	//$this->set('idre', $id);
         	$this->set('userinfo', array('ID' => $this->Auth->user('ID')));
 
         	if (!$this->Tag->exists($id)) {
@@ -439,7 +440,7 @@ public function articletransmitter($leftID = null,$leftKeyID = null){
 
         public function search() {
         	$this->psearch($this);
-        	$this->set('tags', $this->Paginator->paginate());
+        	$this->set('tags', $this->Authpaginator->paginate());
 
         }
 

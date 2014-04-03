@@ -7,6 +7,23 @@ Configure::load("static");
  * @property Owner $Owner
  */
 class Tag extends Date {
+	var $_findMethods = array(
+			'auth' => true,
+	);
+	public function _findAuth($state, $query, $results = array()){
+		debug($state);
+		if ($state === 'before') {
+			debug($query);
+// 			$query = Set::merge(
+// 					$query,array(
+// 							'conditons' => array(
+// 									'OR' => array($this->model.'.auth' => '0','AND'=>array($this->model.'.auth' => '1','W.user_id' => $this->Auth->user('id'))))));
+			return $query;
+		}
+		debug($results);
+		return $results;
+
+	}
 /*
 	public function setValue($plugin = null,$name = null,$action = null,$view = null) {
 		debug($action);

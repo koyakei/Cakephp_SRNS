@@ -38,6 +38,8 @@ public $presetVars = array(
 );
 public function beforeFilter() {
 	parent::beforeFilter();
+	App::import('Model', 'User');
+	User::store($this->Auth->user());
 	$this->Auth->allow('logout','search');
 	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),

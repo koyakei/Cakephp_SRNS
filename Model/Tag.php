@@ -1,23 +1,29 @@
 <?php
 App::uses('Date', 'Model');
 Configure::load("static");
+
 /**
  * Tag Model
  *
  * @property Owner $Owner
  */
 class Tag extends Date {
+	public $components = array('Auth');
 	public $findMethods = array(
 			'auth' => true,
 	);
 	public function _findAuth($state, $query, $results = array()){
-		debug($state);
 		if ($state === 'before') {
-			debug($query);
-// 			$query = Set::merge(
-// 					$query,array(
-// 							'conditons' => array(
-// 									'OR' => array($this->model.'.auth' => '0','AND'=>array($this->model.'.auth' => '1','W.user_id' => $this->Auth->user('id'))))));
+
+ 			$query = Set::merge(
+ 					$query,array(
+ 							'conditons' => array(
+//  									'OR' => array(
+ 											$this->model.'.auth' => '0'
+//  											,'AND'=>array($this->model.'.auth' => '1','W.user_id' => User::get('id'))
+//  							)
+ 							)));
+ 			debug($query);
 			return $query;
 		}
 		debug($results);
@@ -144,7 +150,7 @@ institution'
     );
    public $hasMany= array(
    		'W' => array(
-   				'className' => 'Whiteuser',
+   				'className' => 'Whitelist',
    				'foreignKey' => 'entity_id',
    				'dependent' => false,
    				'conditions' => '',

@@ -17,13 +17,13 @@ class Tag extends Date {
 
  			$query = Set::merge(
  					$query,array(
- 							'conditons' => array(
+ 							'conditions' => array(
 //  									'OR' => array(
- 											'Tag.auth' => '0'
-//  											,'AND'=>array($this->model.'.auth' => '1','W.user_id' => User::get('id'))
+//  											'Tag.auth' => '0'
+//  											,'AND'=>array('Tag.auth' => '1','W.user_id' => User::get('id'))
 //  							)
  							)));
- 			debug($query);
+ 			debug(User::get('id'));
 			return $query;
 		}
 		debug($results);

@@ -131,7 +131,7 @@ public function beforeFilter() {
         	}
         	$this->Common->SecondDem($this,"Tag","Tag.ID",Configure::read('tagID.search'),$id);
         	$this->set('headresults', $this->returntribasic);
-        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
+        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id));
         	$this->set('tag', $this->Tag->find('first', $options));
         	$this->set('currentUserID', $this->Auth->user('id'));
 

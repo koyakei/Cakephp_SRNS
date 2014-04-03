@@ -19,7 +19,7 @@ class Tag extends Date {
  					$query,array(
  							'conditons' => array(
 //  									'OR' => array(
- 											$this->model.'.auth' => '0'
+ 											'Tag.auth' => '0'
 //  											,'AND'=>array($this->model.'.auth' => '1','W.user_id' => User::get('id'))
 //  							)
  							)));

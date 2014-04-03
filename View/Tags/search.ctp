@@ -104,7 +104,7 @@ $this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', nu
             <tr>
 		<td><?php echo h($tag['Tag']['ID']); ?>&nbsp;</td>
 		<td><?php echo h($tag['Tag']['name']); ?>&nbsp;</td>
-		<td><?php echo h($tag['Tag']['user_id']); ?>&nbsp;</td>
+		<td><?php echo h($tag['TO']['username']); ?>&nbsp;</td>
 		<td><?php echo h($tag['Tag']['created']); ?>&nbsp;</td>
 		<td><?php echo h($tag['Tag']['modified']); ?>&nbsp;</td>
 		<td class="actions">

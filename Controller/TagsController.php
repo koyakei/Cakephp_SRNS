@@ -20,6 +20,7 @@ App::uses('Article','Model');
 
 class TagsController extends AppController {
 	//public $pagination =  $this->paginator->sort('modified', 'desc');
+
 /**
  * Components
  *
@@ -37,7 +38,7 @@ public $presetVars = array(
 );
 public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('logout');
+	$this->Auth->allow('logout','search');
 	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
 			//'Form' => array('user' => 'Member')
@@ -73,7 +74,8 @@ public function beforeFilter() {
 
 		public function index() {
 			$this->loadModel('Article');
-			$this->set('tags', $this->paginate('Article'));
+// 			$query = array('order'=> array('Tag.modified' => 'DESC'));
+			$this->set('tags', $this->paginate('Article',array('order'=> array('Tag.modified' => 'DESC'))));
 		}
         /**
          * view method
@@ -284,6 +286,7 @@ public function beforeFilter() {
          */
         public function edit($id = null) {
         	$this->set('userinfo', array('ID' => $this->Auth->user('ID')));
+
         	if (!$this->Tag->exists($id)) {
         		throw new NotFoundException(__('Invalid tag'));
         	}
@@ -298,6 +301,8 @@ public function beforeFilter() {
         	} else {
         		$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id),'order'=>'Tag.ID');
         		$this->request->data = $this->Tag->find('first', $options);
+        		debug($this->request->data['W']);
+        		$this->set('users', $this->request->data['W']);
         	}
         }
 

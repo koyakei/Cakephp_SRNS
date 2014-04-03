@@ -53,7 +53,10 @@ return false;
 
 
     public function beforeFilter() {
+
+
         $this->Auth->allow('login');
+
     }/*
     public function restoreLoginFromCookie() {
     	$this->Cookie->name = 'Users';

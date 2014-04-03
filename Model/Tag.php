@@ -1,7 +1,6 @@
 <?php
 App::uses('Date', 'Model');
 Configure::load("static");
-
 /**
  * Tag Model
  *
@@ -15,18 +14,22 @@ class Tag extends Date {
 	public function _findAuth($state, $query, $results = array()){
 		if ($state === 'before') {
 
- 			$query = Set::merge(
- 					$query,array(
- 							'conditions' => array(
-//  									'OR' => array(
-//  											'Tag.auth' => '0'
-//  											,'AND'=>array('Tag.auth' => '1','W.user_id' => User::get('id'))
-//  							)
- 							)));
- 			debug(User::get('id'));
 			return $query;
 		}
-		debug($results);
+		foreach ($results as $idx => $value){
+			if ($value['Tag']['auth'] == 1) {
+				if (false == array_search(AuthComponent::user('id'),$value['W'])) {
+					unset($results[$idx]);
+				}
+
+			}elseif ($value['Tag']['auth'] == 0){
+				if (false == array_search(AuthComponent::user('id'),$value['B'])) {
+					;
+				}
+			}
+
+		}
+		$results = array_values($results);
 		return $results;
 
 	}

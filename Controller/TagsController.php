@@ -5,6 +5,7 @@ App::uses('Link', 'Model');
 App::uses('User', 'Model');
 Configure::load("static");
 App::uses('Article','Model');
+
 /*App::uses('Article', 'Model');
 /**
  * Tags Controller
@@ -38,21 +39,17 @@ public $presetVars = array(
 );
 public function beforeFilter() {
 	parent::beforeFilter();
-	App::import('Model', 'User');
-	User::store($this->Auth->user());
-	$this->Auth->allow('logout','search');
+	$this->Auth->allow('logout');
 	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
-			//'Form' => array('user' => 'Member')
 	);
 	$this->Security->validateOnce = false;
 	$this->Security->validatePost = false;
 	$this->Security->csrfCheck = false;
-
 }
-	public function isAuthorized($user) {
 
-		// 投稿のオーナーは編集や削除ができる
+
+	public function isAuthorized($user) {
 		if (in_array($this->action, array('edit', 'delete'))) {
 			$postId = $this->request->params['pass'][0];
 			if ($this->Tag->isOwnedBy($postId, $user['id'])) {
@@ -76,7 +73,6 @@ public function beforeFilter() {
 
 		public function index() {
 			$this->loadModel('Article');
-// 			$query = array('order'=> array('Tag.modified' => 'DESC'));
 			$this->set('tags', $this->paginate('Article',array('order'=> array('Tag.modified' => 'DESC'))));
 		}
         /**

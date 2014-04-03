@@ -7,7 +7,7 @@ Configure::load("static");
  * @property Owner $Owner
  */
 class Tag extends Date {
-	var $_findMethods = array(
+	public $findMethods = array(
 			'auth' => true,
 	);
 	public function _findAuth($state, $query, $results = array()){

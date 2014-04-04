@@ -157,7 +157,7 @@ institution'
     );
    public $hasMany= array(
    		'W' => array(
-   				'className' => 'Whitelist',
+   				'className' => 'Whiteuser',
    				'foreignKey' => 'entity_id',
    				'dependent' => false,
    				'conditions' => '',

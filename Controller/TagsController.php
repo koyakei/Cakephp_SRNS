@@ -73,7 +73,8 @@ public function beforeFilter() {
 
 		public function index() {
 			$this->loadModel('Article');
-			$this->set('tags', $this->paginate('Article',array('order'=> array('Tag.modified' => 'DESC'))));
+			$this->paginate->setting = array('order'=> array('Tag.modified' => 'DESC'));
+			$this->set('tags', $this->paginate('Tag'));
 		}
         /**
          * view method
@@ -186,7 +187,7 @@ public function beforeFilter() {
         	}//else{
         		$this->loadModel('Article');
         		if($rightID == null ){
-        			$newart = $this->Article->find('all',array('order'=> array('Article.modified' => 'desc'),'limit' => 30));
+        			$newart = $this->Article->find('auth',array('order'=> array('Article.modified' => 'desc'),'limit' => 30));
         			$this->set('rightarticleresults', //$this->paginate('Article',$options)
         					$newart
         			);

@@ -17,11 +17,15 @@ class Tag extends Date {
 			return $query;
 		}
 		foreach ($results as $idx => $value){
-			if ($value['Tag']['auth'] == 1) {
-				if (false == array_search(AuthComponent::user('id'),$value['W'])) {
+			if (AuthComponent::user('id') == $value['Tag']['user_id']) {
+
+			}elseif ($value['Tag']['auth'] == 1) {
+				foreach ($value['W'] as $whiteuser){
+					$list[] =$whiteuser['user_id'];
+				}
+				if (false === in_array(AuthComponent::user('id'),$list)) {
 					unset($results[$idx]);
 				}
-
 			}elseif ($value['Tag']['auth'] == 0){
 				if (false == array_search(AuthComponent::user('id'),$value['B'])) {
 					;

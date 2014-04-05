@@ -27,9 +27,9 @@ class Tag extends Date {
 					unset($results[$idx]);
 				}
 			}elseif ($value['Tag']['auth'] == 0){
-				if (false == array_search(AuthComponent::user('id'),$value['B'])) {
-					;
-				}
+// 				if (false == array_search(AuthComponent::user('id'),$value['B'])) {
+// 					;
+// 				}
 			}
 
 		}

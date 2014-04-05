@@ -13,7 +13,7 @@ App::uses('CakeEmail', 'Network/Email');
 App::uses('CakeEmailPbs', 'Vendor');
 App::uses('UsersAppController', 'Users.Controller');
 App::uses('Social', 'Model');
-
+App::uses('Tag', 'Model');
 /**
  * Users Users Controller
  *
@@ -275,11 +275,15 @@ class UsersController extends UsersAppController {
  */
 	public function view($slug = null) {
 		try {
-			$this->set('user', $this->{$this->modelClass}->view($slug));
+			$this->loadModel('Tag');
+			$user = $this->{$this->modelClass}->view($slug);
+			debug($this->Tag->primaryKey);
+			$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $user['User']['tag_id']));
+			$this->set('tag', $this->Tag->find('first',$options));
+			$this->set('user', $user);
 			$tuserid = $this->{$this->modelClass}->view($slug)[$this->modelClass]['id'];
 		$this->loadModel('Socialuser');
 			$this->Paginator->settings = array(
-
 				'conditions' => array(
 						"Socialuser.user_id" => $slug),
 				'order' => array('Socialuser.created' => 'desc')

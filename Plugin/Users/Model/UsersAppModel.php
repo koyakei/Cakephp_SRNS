@@ -31,7 +31,7 @@ class UsersAppModel extends AppModel {
  *
  * @var integer
  */
-	public $recursive = -1;
+	//public $recursive = -1;
 
 /**
  * Behaviors

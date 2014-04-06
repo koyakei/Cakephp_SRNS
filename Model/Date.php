@@ -1,6 +1,38 @@
 <?php
 App::uses('AppModel', 'Model');
 class Date extends AppModel {
+	public $components = array('Auth');
+	public $findMethods = array(
+			'auth' => true,
+	);
+	public function _findAuth($state, $query, $results = array()){
+		debug(AuthComponent::user('id'));
+		if ($state === 'before') {
+
+			return $query;
+		}
+		foreach ($results as $idx => $value){
+			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {
+
+			}elseif ($value[$this->alias]['auth'] == 1) {
+				foreach ($value['W'] as $whiteuser){
+					$list[] =$whiteuser['user_id'];
+				}
+				if (false === in_array(AuthComponent::user('id'),$list)) {
+					unset($results[$idx]);
+				}
+			}elseif ($value[$this->alias]['auth'] == 0){
+				// 				if (false == array_search(AuthComponent::user('id'),$value['B'])) {
+				// 					;
+				// 				}
+			}
+
+		}
+
+		$results = array_values($results);
+		return $results;
+
+	}
 	public function beforeSave(){
 			$this->data[$this->alias]['modified'] = date("Y-m-d H:i:s");
 			return true;

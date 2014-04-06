@@ -7,36 +7,7 @@ Configure::load("static");
  * @property Owner $Owner
  */
 class Tag extends Date {
-	public $components = array('Auth');
-	public $findMethods = array(
-			'auth' => true,
-	);
-	public function _findAuth($state, $query, $results = array()){
-		if ($state === 'before') {
 
-			return $query;
-		}
-		foreach ($results as $idx => $value){
-			if (AuthComponent::user('id') == $value['Tag']['user_id']) {
-
-			}elseif ($value['Tag']['auth'] == 1) {
-				foreach ($value['W'] as $whiteuser){
-					$list[] =$whiteuser['user_id'];
-				}
-				if (false === in_array(AuthComponent::user('id'),$list)) {
-					unset($results[$idx]);
-				}
-			}elseif ($value['Tag']['auth'] == 0){
-// 				if (false == array_search(AuthComponent::user('id'),$value['B'])) {
-// 					;
-// 				}
-			}
-
-		}
-		$results = array_values($results);
-		return $results;
-
-	}
 /*
 	public function setValue($plugin = null,$name = null,$action = null,$view = null) {
 		debug($action);

@@ -275,9 +275,8 @@ class UsersController extends UsersAppController {
  */
 	public function view($slug = null) {
 		try {
-			$this->loadModel('Tag');
+// 			$this->loadModel('Tag');
 			$user = $this->{$this->modelClass}->view($slug);
-			debug($this->Tag->primaryKey);
 			$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $user['User']['tag_id']));
 			$this->set('tag', $this->Tag->find('first',$options));
 			$this->set('user', $user);
@@ -421,7 +420,6 @@ class UsersController extends UsersAppController {
  * @return void
  */
 	public function add() {
-		debug("koyakei");
 		if ($this->Auth->user()) {
 			$this->Session->setFlash(__d('users', 'You are already registered and logged in!'));
 			$this->redirect('/');
@@ -441,7 +439,12 @@ class UsersController extends UsersAppController {
 				if ($Event->isStopped()) {
 					$this->redirect(array('action' => 'login'));
 				}
-
+				$Tag = new Tag();
+				$Tag->create;
+				$data['Tag'] = array('name' =>$this->{$this->modelClass}->data['username'],'user_id'=> $this->{$this->modelClass}->data['id']);
+				$Tag->save($data);
+				$this->{$this->modelClass}->data['User']['tag_id'] = $Tag->getLastInsertID();
+				$this->User->save($this->{$this->modelClass}->data);
 				$this->_sendVerificationEmail($this->{$this->modelClass}->data);
 				$this->Session->setFlash(__d('users', 'Your account has been created. You should receive an e-mail shortly to authenticate your account. Once validated you will be able to login.'));
 				$this->redirect(array('action' => 'login'));

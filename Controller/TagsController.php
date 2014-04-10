@@ -28,8 +28,7 @@ class TagsController extends AppController {
  * @var array
  */
 public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session',
-			'Security','Authpaginator',
-			'Search.Prg','Users.RememberMe');
+			'Security','Authpaginator','Users.RememberMe');
 public $presetVars = array(
 		'user_id' => array('type' => 'value'),
 		'keyword' => array('type' => 'value'),
@@ -361,6 +360,7 @@ public function beforeFilter() {
         		$req = array_merge($req, array("word" => $word));
         	}
         	$that->paginate = array(
+//         	$that->Authpaginator->paginate = array(
         			'Tag' =>
         			array(
         					'conditions' => array(
@@ -369,6 +369,12 @@ public function beforeFilter() {
 
         			)
         	);
+
+        }
+        public function search() {
+        	$this->psearch($this);
+        	$this->set('tags', $this->paginate());
+//         	$this->set('tags', $this->Authpaginator->paginate());
 
         }
         /**
@@ -437,11 +443,6 @@ public function articletransmitter($leftID = null,$leftKeyID = null){
          * @return $tagresult
          */
 
-        public function search() {
-        	$this->psearch($this);
-        	$this->set('tags', $this->Authpaginator->paginate());
-
-        }
 
         public function quant($id = null) {
         	if ($this->request->is('post')) {

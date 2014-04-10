@@ -24,7 +24,7 @@ class AuthpaginatorComponent extends PaginatorComponent {
 			$options['conditions'] = array();
 		}
 
-		$type = 'auth';
+		$type = 'all';
 
 		if (isset($options[0])) {
 			$type = $options[0];

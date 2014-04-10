@@ -2,10 +2,10 @@
 App::uses('AppModel', 'Model');
 class Date extends AppModel {
 	public $components = array('Auth');
-	public $findMethods = array(
-			'auth' => true,
-	);
-	public function _findAuth($state, $query, $results = array()){
+// 	public $findMethods = array(
+// 			'auth' => true,
+// 	);
+	public function _findAll($state, $query, $results = array()){
 		debug(AuthComponent::user('id'));
 		if ($state === 'before') {
 

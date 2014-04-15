@@ -110,6 +110,7 @@ class ArticlesController extends AppController {
 		$this->loadModel('Key');
 		$this->set('articleresults', $this->articleparentres);
 		$this->set('tagresults', $this->tagparentres);
+		$this->set('taghashes', $this->taghash);
 		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		$this->set('currentUserID', $this->Auth->user('id'));

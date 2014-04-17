@@ -132,14 +132,15 @@ public $validate = array(
 		),
 );
 
-	public $belongsTo= array(
-			'AO' => array(
-					'className' => 'User',
-					'foreignKey' => 'user_id',
-					'dependent' => false,
-					'conditions' => '',
-					//'type' => 'inner'
-			)
-	);
+   public $hasOne= array(
+        'AO' => array(
+		'className' => 'User',
+		'foreignKey' => FALSE,
+		'dependent' => false,
+		'conditions' => array('`AO.id = Article.ID`')
+		,
+		//'type' => 'inner'
+        )
+    );
 
 }

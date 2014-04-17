@@ -146,6 +146,7 @@ public function beforeFilter() {
 	        	$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
 	        	$i++;
         	}
+        	debug($tableresults);
         	$this->set('tableresults', $tableresults);;
 
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));

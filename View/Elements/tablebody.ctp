@@ -7,8 +7,6 @@
 					<td><?php echo $this->Html->link($result[$firstModel]['name'], array('controller' => $firstModel."s", 'action' => 'view', $result[$firstModel]['ID'])); ?>
 						<?php echo $this->Form->hidden($firstModel.'.ID', array('value'=>$result[$firstModel]['ID'])); ?></td>
 					<td><?php echo h($result[$userCallAssosiation]['username']); ?>&nbsp;</td>
-					<td><?php echo h($result[$firstModel]['created']); ?>&nbsp;</td>
-					<td><?php echo h($result[$firstModel]['modified']); ?>&nbsp;</td>
 					<td class="actions">
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?>
 						

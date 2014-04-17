@@ -6,7 +6,6 @@ class Date extends AppModel {
 // 			'auth' => true,
 // 	);
 	public function _findAll($state, $query, $results = array()){
-		debug(AuthComponent::user('id'));
 		if ($state === 'before') {
 
 			return $query;

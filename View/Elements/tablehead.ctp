@@ -2,9 +2,9 @@
 			<tr>
 				<th class="mark">ID</th>
 				<th class="mark">name </th>
-				<th>user_id</th>
+				<th>user_id</th><!--
 				<th>created</th>
-				<th>modified</th>
+				<th>modified</th>-->
 				<th class="actions"><?php echo __('Actions'); ?></th>
 				<th></th>
 				<?php if($taghashes != null and $this->action != 'transmitter'){ ?>

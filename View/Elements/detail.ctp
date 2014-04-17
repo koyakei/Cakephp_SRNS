@@ -14,7 +14,7 @@ echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre));
 		</dd>
 		<dt><?php echo __('Owner Id'); ?></dt>
 		<dd>
-			<?php echo h($detail[$firstModel]['user_id']); ?>
+			<?php echo h($detail['O']['username']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Created'); ?></dt>

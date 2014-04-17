@@ -118,11 +118,11 @@ institution'
 	);
 */
    public $hasOne= array(
-        'TO' => array(
+        'O' => array(
 		'className' => 'User',
 		'foreignKey' => FALSE,
 		'dependent' => false,
-		'conditions' => array('`TO.id = Tag.ID`')
+		'conditions' => array('`O.id = Tag.user_id`')
 		,
 		//'type' => 'inner'
         )

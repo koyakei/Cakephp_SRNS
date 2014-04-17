@@ -214,8 +214,7 @@ class BasicComponent extends Component {
 				'conditions'=> array(
 				        	"Link.LTo = $Ltotarget"
 			        	 ),
-				'fields' => array('Link.*',$modelSe .'.*'
-					),
+				'fields' => array('*'		),
 				'joins'
 				 => array(
 				array(

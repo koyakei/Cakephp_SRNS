@@ -126,9 +126,11 @@ public function beforeFilter() {
         		$trikeyID = Configure::read('tagID.search');
         	}
         	$this->Common->SecondDem($this,"Tag","Tag.ID",Configure::read('tagID.search'),$id);
+
         	$this->set('headresults', $this->returntribasic);
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id));
         	$this->set('tag', $this->Tag->find('first', $options));
+        	debug($this->Tag->find('first', $options));
         	$this->set('currentUserID', $this->Auth->user('id'));
 
         	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
@@ -146,7 +148,7 @@ public function beforeFilter() {
 	        	$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
 	        	$i++;
         	}
-        	debug($tableresults);
+
         	$this->set('tableresults', $tableresults);;
 
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));

@@ -1,6 +1,6 @@
 
 <?php foreach ($results  as $result): ?>
-<?php if($firstModel == 'Tag'){$userCallAssosiation = 'TO';} else {$userCallAssosiation = 'AO';}?>
+<?php if($firstModel == 'Tag'){$userCallAssosiation = 'O';} else {$userCallAssosiation = 'O';} // アソシエーションの名前を一緒にしたが後で別にするかも?>
 <div id="draggble">
 				<tr>
 					<td><?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>

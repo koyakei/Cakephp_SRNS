@@ -133,11 +133,12 @@ public $validate = array(
 );
 
    public $hasOne= array(
-        'AO' => array(
+        'O' => array(
+        'fields' => 'username',
 		'className' => 'User',
 		'foreignKey' => FALSE,
 		'dependent' => false,
-		'conditions' => array('`AO.id = Article.ID`')
+		'conditions' => array('`O.id = Article.user_id`')
 		,
 		//'type' => 'inner'
         )

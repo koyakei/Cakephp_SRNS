@@ -23,8 +23,8 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php echo $cakeDescription ?>:
-		<?php echo $title_for_layout; ?>
+		SRNS:
+		
 	</title>
 	<?php
 		echo $this->Html->meta('icon');

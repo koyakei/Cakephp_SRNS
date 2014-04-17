@@ -35,7 +35,12 @@ class AppController extends Controller {
 public $components = array(
     'Session',
     'Auth' => array(
-        //'loginRedirect' => array('controller' => 'articles', 'action' => 'index'),
+    		'loginAction' => array(
+    				'controller' => 'users',
+    				'action' => 'login',
+    				'plugin' => 'users'
+    		),
+        'loginRedirect' => array('controller' => 'tags', 'action' => 'search'),
         'logoutRedirect' => array(
         		'controller' => 'articles', 'action' => 'index'
     ),
@@ -47,10 +52,11 @@ public $components = array(
 );
 public function isAuthorized($user) {
     if ((isset($user['role']) && $user['role'] === 'admin') or (isset($user['role']) && $user['role'] === 'registered')) {
-        return true;
-    }else{
-	return false;
+ 		return true;
     }
+ 	return false;
+
+
     }
 
 

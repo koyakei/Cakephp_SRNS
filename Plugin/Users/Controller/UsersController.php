@@ -275,7 +275,7 @@ class UsersController extends UsersAppController {
  */
 	public function view($slug = null) {
 		try {
-// 			$this->loadModel('Tag');
+			$this->loadModel('Tag');
 			$user = $this->{$this->modelClass}->view($slug);
 			$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $user['User']['tag_id']));
 			$this->set('tag', $this->Tag->find('first',$options));

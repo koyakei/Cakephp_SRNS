@@ -69,4 +69,8 @@ return false;
     		$this->Auth->login($data);
     	}
     }*/
+    function beforeRender() {
+    	debug($this->pageTitle);
+    	$this->set('title_for_layout', $this->pageTitle);
+    }
 }

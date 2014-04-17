@@ -96,6 +96,7 @@ class ArticlesController extends AppController {
 		}
 		$this->taghashgen = $this->Article->find('first',array('conditions' => array('Article.' . $this->Article->primaryKey => $id)));
 
+		$this->pageTitle = $this->taghashgen[$this->modelClass]['name'];
 		$this->Article->read(null,$id);
 		$this->set('idre', $id);
 		$this->i = 0;

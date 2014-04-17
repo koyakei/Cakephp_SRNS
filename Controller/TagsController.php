@@ -86,6 +86,7 @@ public function beforeFilter() {
         public function view($id = null) {
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$resultForChange = $this->Tag->find('first', $options);
+
         	$this->id =$id;
         	$this->Tag->cachedName = $this->name;
         	$userID = $this->Auth->user('id');
@@ -129,10 +130,10 @@ public function beforeFilter() {
 
         	$this->set('headresults', $this->returntribasic);
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id));
-        	$this->set('tag', $this->Tag->find('first', $options));
-        	debug($this->Tag->find('first', $options));
+        	$tag = $this->Tag->find('first', $options);
+        	$this->set('tag', $tag);
+        	$this->pageTitle = $tag[$this->modelClas]['name'];
         	$this->set('currentUserID', $this->Auth->user('id'));
-
         	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
         	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id);
         	$this->set('upperIdeas', $this->returntribasic);
@@ -148,9 +149,7 @@ public function beforeFilter() {
 	        	$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
 	        	$i++;
         	}
-
-        	$this->set('tableresults', $tableresults);;
-
+        	$this->set('tableresults', $tableresults);
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 
         }

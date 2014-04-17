@@ -38,7 +38,7 @@ public $presetVars = array(
 );
 public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('logout','search');
+	$this->Auth->allow('logout');
 	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
 	);
@@ -132,7 +132,7 @@ public function beforeFilter() {
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id));
         	$tag = $this->Tag->find('first', $options);
         	$this->set('tag', $tag);
-        	$this->pageTitle = $tag[$this->modelClas]['name'];
+        	$this->pageTitle = $tag["Tag"]['name'];
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
         	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id);
@@ -148,6 +148,84 @@ public function beforeFilter() {
         		$this->Common->trifinderbyid($this,$id,$options);
 	        	$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
 	        	$i++;
+        	}
+        	$this->set('tableresults', $tableresults);
+        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+
+        }
+        /**
+         * view method
+         *
+         * @throws NotFoundException
+         * @param string $id
+         * @param string $trikeyID
+         * @return void
+         */
+        public function registerd_view($id = null) {
+        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
+        	$resultForChange = $this->Tag->find('first', $options);
+
+        	$this->id =$id;
+        	$this->Tag->cachedName = $this->name;
+        	$userID = $this->Auth->user('id');
+        	if($this->request->data['tagRadd']['add'] == true){
+        		$this->Basic->tagRadd($this);
+        		$this->Basic->social($this);
+        		$this->redirect($this->referer());
+        	}elseif ($this->request->data['Tag']['max_quant'] != null){
+        		if ($this->Auth->user('id')==$resultForChange['Tag']['user_id']) {
+        			$this->Tag->save($this->request->data());
+        		}else {
+        			debug("fail no Auth");
+        		}
+        	}
+        	if($this->request->data['Link']['quant'] != null){
+        		$this->Basic->quant($this);
+        		$this->Basic->social($this);
+        	}
+
+        	if($this->request->data['Article']['name'] != null){
+        		$options['key'] = $this->request->data['Article']['keyid'];
+        		debug($this->request->data);
+        		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
+        		$this->Basic->social($this);
+        	}
+        	if($this->request->data['Tag']['name'] != null){
+        		debug($this->request->data);
+        		$options['key'] = $this->request->data['Tag']['keyid'];
+        		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$id,$options);
+        		$this->Basic->social($this);
+        	}
+        	$this->set('idre', $id);
+        	if (!$this->Tag->exists($id)) {
+        		throw new NotFoundException(__('Invalid tag'));
+        	}
+        	$this->request->data['keyid']['keyid'] =$trikeyID;
+        	if ($trikeyID == NULL){//$serchID;//tagConst()['searchID'];
+        		$trikeyID = Configure::read('tagID.search');
+        	}
+        	$this->Common->SecondDem($this,"Tag","Tag.ID",Configure::read('tagID.search'),$id);
+
+        	$this->set('headresults', $this->returntribasic);
+        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id));
+        	$tag = $this->Tag->find('first', $options);
+        	$this->set('tag', $tag);
+        	$this->pageTitle = $tag["Tag"]['name'];
+        	$this->set('currentUserID', $this->Auth->user('id'));
+        	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
+        	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id);
+        	$this->set('upperIdeas', $this->returntribasic);
+        	$this->set('trikeyID', $trikeyID);
+        	$this->loadModel('User');
+        	$this->loadModel('Key');
+        	$key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
+        	$this->set( 'keylist', $key);
+        	$i = 0;
+        	foreach ($key as $key => $value){
+        		$options = array('key' => $key);
+        		$this->Common->trifinderbyid($this,$id,$options);
+        		$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
+        		$i++;
         	}
         	$this->set('tableresults', $tableresults);
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));

@@ -36,7 +36,9 @@ public $components = array(
     'Session',
     'Auth' => array(
         //'loginRedirect' => array('controller' => 'articles', 'action' => 'index'),
-        'logoutRedirect' => array('controller' => 'articles', 'action' => 'index'),
+        'logoutRedirect' => array(
+        		'controller' => 'articles', 'action' => 'index'
+    ),
         'authorize' => array('Controller')
     ),
 	'Security' => array(
@@ -46,14 +48,14 @@ public $components = array(
 public function isAuthorized($user) {
     if ((isset($user['role']) && $user['role'] === 'admin') or (isset($user['role']) && $user['role'] === 'registered')) {
         return true;
+    }else{
+	return false;
     }
-return false;
     }
 
 
 
     public function beforeFilter() {
-
 
         $this->Auth->allow('login');
 
@@ -70,7 +72,6 @@ return false;
     	}
     }*/
     function beforeRender() {
-    	debug($this->pageTitle);
     	$this->set('title_for_layout', $this->pageTitle);
     }
 }

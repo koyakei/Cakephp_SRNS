@@ -271,10 +271,10 @@ class CommonComponent extends Component {
 		$that->set('results', $that->parentres);
 	}
 	public function trifinderbyid(&$that = null,$id,&$option) {
+		debug($id);
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-		//debug($that->request->data['keyid']['keyid']);
 		$this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);
 		$that->articleparentres = $that->returntribasic;
 		$that->i = 0;

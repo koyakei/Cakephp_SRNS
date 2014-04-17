@@ -35,15 +35,22 @@ class AppController extends Controller {
 public $components = array(
     'Session',
     'Auth' => array(
-    		'loginAction' => array(
-    				'controller' => 'users',
-    				'action' => 'login',
-    				'plugin' => 'users'
-    		),
-        'loginRedirect' => array('controller' => 'tags', 'action' => 'search'),
-        'logoutRedirect' => array(
-        		'controller' => 'articles', 'action' => 'index'
-    ),
+		        'loginAction' => array(
+		            'controller' => 'users',
+		            'action' => 'login',
+		            'plugin' => 'users'
+		        ),
+		        'authError' => 'Did you really think you are allowed to see that?',
+		        'authenticate' => array(
+		            'Form' => array(
+		                'fields' => array('username' => 'email')
+		            )
+		        ),
+
+	        'loginRedirect' => array('controller' => 'tags', 'action' => 'search'),
+	        'logoutRedirect' => array(
+	        		'controller' => 'articles', 'action' => 'index'
+	    	),
         'authorize' => array('Controller')
     ),
 	'Security' => array(
@@ -55,8 +62,6 @@ public function isAuthorized($user) {
  		return true;
     }
  	return false;
-
-
     }
 
 

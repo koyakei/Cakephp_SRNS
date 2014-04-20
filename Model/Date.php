@@ -2,7 +2,7 @@
 App::uses('AppModel', 'Model');
 App::uses('CommonComponent', 'Controller/Component');
 class Date extends AppModel {
-	public $components = array('Auth');
+	public $components = array('Auth','Common');
 // 	public $findMethods = array(
 // 			'auth' => true,
 // 	);
@@ -13,7 +13,7 @@ class Date extends AppModel {
 		}
 		foreach ($results as $idx => $value){
 			$this->Common->getURL($this,$value[$this->alias]['id']);
-			$results[$idx]['URL'] = $that->returntribasic[0]['name'];
+			$results[$idx]['URL'] = $this->returntribasic[0]['name'];
 			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {
 
 			}elseif ($value[$this->alias]['auth'] == 1) {

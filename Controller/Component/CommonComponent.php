@@ -7,6 +7,10 @@ App::uses('BasicComponent', 'Controller/Component');
 Configure::load("static");
 class CommonComponent extends Component {
     public $components = array('Basic');
+    public function getURL(&$that = null,$id = null){
+		$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.URL'),'Article',"Article.ID",$id);
+		$that->returntribasic[0];
+    }
 	public function replyarticleAdd(&$that = null) {
 		if ($that->request->params['pass'][0] != null) {
 			$Article = new Article();
@@ -271,7 +275,6 @@ class CommonComponent extends Component {
 		$that->set('results', $that->parentres);
 	}
 	public function trifinderbyid(&$that = null,$id,&$option) {
-		debug($id);
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}

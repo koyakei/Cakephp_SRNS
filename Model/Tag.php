@@ -1,5 +1,6 @@
 <?php
 App::uses('Date', 'Model');
+App::uses('BasicComponent', 'Controller/Component');
 Configure::load("static");
 /**
  * Tag Model
@@ -125,8 +126,46 @@ institution'
 		'conditions' => array('`O.id = Tag.user_id`')
 		,
 		//'type' => 'inner'
-        )
+        ),
+//    		'URL' => array(
+//    				'className' => 'Link',
+//    				'foreignKey' => 'LFrom',
+//    				'dependent' => false,
+// //    				'conditions' => array(),
+// //    				'type' => 'inner',
+//    				'joins' => array(
+// 				array(
+// 		                    'table' => 'link',
+// 		                    'alias' => 'Link',
+// 		                    'type' => 'INNER',
+// 		                    'conditions' => array(
+// 					array( '2299 = Link.LFrom')
+// 					)
+// 		                ),
+// 				),
+//    		)
     );
+   public $hasAndBelongsToMany= array(
+//    		'URL' => array(  'with', 'foreignKey', 'associationForeignKey', 'conditions', 'fields', 'offset', 'unique', 'finderQuery',
+//    				'className' => 'Link',
+//    				'foreignKey' => 'LFrom',
+//    				'dependent' => false,
+// //     				'conditions' => array(),
+// //    				'type' => 'inner',
+//    				'joinTable'
+// 				 => array(
+// 				array(
+// 		                    'table' => 'link',
+// 		                    'alias' => 'Link',
+// 		                    'type' => 'INNER',
+// 		                    'conditions' => array(
+// 					array( '2299 = Link.LFrom')
+// 					)
+// 		                ),
+// 				),
+//    		)
+
+   	);
    public $hasMany= array(
    		'W' => array(
    				'className' => 'Whiteuser',
@@ -134,6 +173,6 @@ institution'
    				'dependent' => false,
    				'conditions' => '',
    				//'type' => 'inner'
-   		)
+   		),
    );
 }

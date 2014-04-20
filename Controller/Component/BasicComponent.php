@@ -207,7 +207,17 @@ class BasicComponent extends Component {
 		$that->returntrybasic = $that->Tag->find('all',$option);
 		return $that->returntrybasic;
 	}
-
+	/**
+	 * tribasicfiderbyid method
+	 *
+	 * @throws NotFoundException
+	 * @param mix $that
+	 * @param int $trikeyID
+	 * @param string $modelSe
+	 * @param string $Ltotarget //target colmunn
+	 * @param ind $id
+	 * @return $that->returntribasic
+	 */
 	public function tribasicfiderbyid(&$that = null,$trikeyID,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
 		$option = array(
@@ -253,23 +263,23 @@ class BasicComponent extends Component {
 					),
 				'joins'
 				 => array(
-				array(
-		                    'table' => 'link',
-		                    'alias' => 'Link',
-		                    'type' => 'INNER',
-		                    'conditions' => array(
-					array("$id = Link.LTo")
-					)
-		                ),
-				array(
-		                    'table' => 'link',
-		                    'alias' => 'taglink',
-		                    'type' => 'INNER',
-		                    'conditions' => array(
-					array("Link.ID = taglink.LTo"),
-					array($trikeyID . " = taglink.LFrom")
-					)
-		                ),
+						array(
+				                    'table' => 'link',
+				                    'alias' => 'Link',
+				                    'type' => 'INNER',
+				                    'conditions' => array(
+							array("$id = Link.LTo")
+							)
+			            ),
+						array(
+				                    'table' => 'link',
+				                    'alias' => 'taglink',
+				                    'type' => 'INNER',
+				                    'conditions' => array(
+							array("Link.ID = taglink.LTo"),
+							array($trikeyID . " = taglink.LFrom")
+						)
+			        ),
 				),
 				'order' => ''
 			);

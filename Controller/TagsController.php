@@ -38,10 +38,7 @@ public $presetVars = array(
 );
 public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('logout');
-	$this->Auth->authenticate = array(
-			'Basic' => array('user' => 'admin'),
-	);
+
 	$this->Security->validateOnce = false;
 	$this->Security->validatePost = false;
 	$this->Security->csrfCheck = false;
@@ -84,6 +81,11 @@ public function beforeFilter() {
          * @return void
          */
         public function view($id = null) {
+        	debug($this->Auth->user('usrname'));
+//         	if($this->Auth->user('id') === null){
+//         		$this->Auth->login('52fdeb54-e344-4fcc-8f8c-405fe0e4e673');
+//         	}
+
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$resultForChange = $this->Tag->find('first', $options);
 
@@ -154,14 +156,14 @@ public function beforeFilter() {
 
         }
         /**
-         * view method
+         * publish view method
          *
          * @throws NotFoundException
          * @param string $id
          * @param string $trikeyID
          * @return void
          */
-        public function registerd_view($id = null) {
+        public function anonymous_view($id = null) {
         	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
         	$resultForChange = $this->Tag->find('first', $options);
 
@@ -272,7 +274,7 @@ public function beforeFilter() {
         			);
         		} else {
         			if ($rightID != null or $rightID != 0) {
-        				$options = array('key' => $leftKeyID);
+        				$options = array('key' => $rightKeyID);
         				$this->Common->trifinderbyid($this,$rightID,$options);
         				$this->set('righttaghashes', $this->taghash);
         				$this->set('rightarticleresults', $this->articleparentres);
@@ -449,12 +451,12 @@ public function beforeFilter() {
 
         			)
         	);
-
         }
+
         public function search() {
-        	debug($this->Auth->user());
         	$this->psearch($this);
-        	$this->set('tags', $this->paginate());
+        	$tags = $this->paginate();
+        	$this->set('tags', $tags);
 //         	$this->set('tags', $this->Authpaginator->paginate());
 
         }

@@ -47,7 +47,7 @@ public $components = array(
 // 		            )
 // 		        ),
 
-	        'loginRedirect' => array('controller' => 'tags', 'action' => 'search'),
+// 	        'loginRedirect' => array('controller' => 'tags', 'action' => 'search'),
 	        'logoutRedirect' => array(
 	        		'controller' => 'articles', 'action' => 'index'
 	    	),
@@ -58,10 +58,8 @@ public $components = array(
 	)
 );
 public function isAuthorized($user) {
+
 	    if ((isset($user['role']) && $user['role'] === 'admin') or (isset($user['role']) && $user['role'] === 'registered')) {
-	 		return true;
-	    }else {
-	 		$this->Auth->login('52fdeb54-e344-4fcc-8f8c-405fe0e4e673');
 	 		return true;
 	    }
 	    return false;
@@ -70,11 +68,16 @@ public function isAuthorized($user) {
 
 
     public function beforeFilter() {
-    	if($this->Auth->user('id') === null){
-    		$this->Auth->login('52fdeb54-e344-4fcc-8f8c-405fe0e4e673');
-    	}
-        $this->Auth->allow('login');
+    	parent::beforeFilter();
+    	$this->Auth->authenticate = array(
+			'Basic' => array('user' => 'admin'),
+	);
 
+        $this->Auth->allow('login','anonymous_view');
+//         if (empty($this->params['registerd'])) {
+//         	// adminルーティングではない場合、認証を通さない（allow）
+//         	$this->Auth->allow($this->params['action']);
+//         }
     }/*
     public function restoreLoginFromCookie() {
     	$this->Cookie->name = 'Users';

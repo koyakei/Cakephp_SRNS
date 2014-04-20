@@ -116,6 +116,51 @@ class ArticlesController extends AppController {
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		$this->set('currentUserID', $this->Auth->user('id'));
 	}
+	/**
+	 * anonymous_view method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function anonymous_view($id = null) {
+
+		if($this->request->data['Article']['name'] != null){
+			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'),$id,$options);
+			$this->Basic->social($this);
+		}
+		if($this->request->data['Tag']['name'] != null){
+			$this->keyid = $this->request->data['Tag']['keyid'];
+			$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->params['pass'][0]);
+			$this->Basic->social($this);
+		}
+
+		$this->set('idre', $id);
+		if (!$this->Article->exists($id)) {
+			throw new NotFoundException(__('Invalid tag'));
+		}
+		$this->taghashgen = $this->Article->find('first',array('conditions' => array('Article.' . $this->Article->primaryKey => $id)));
+
+		$this->pageTitle = $this->taghashgen["Article"]['name'];
+		$this->Article->read(null,$id);
+		$this->set('idre', $id);
+		$this->i = 0;
+		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
+		$this->set('article',$this->taghashgen);
+		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
+		$this->set('headresults', $this->returntribasic);
+		$this->set('headtaghashes', $this->taghash);
+		$targetID = $id;
+		$this->Common->trifinderbyid($this,$id);
+		$this->loadModel('User');
+		$this->loadModel('Key');
+		$this->set('articleresults', $this->articleparentres);
+		$this->set('tagresults', $this->tagparentres);
+		$this->set('taghashes', $this->taghash);
+		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
+		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+		$this->set('currentUserID', $this->Auth->user('id'));
+	}
 
 /**
  * add method

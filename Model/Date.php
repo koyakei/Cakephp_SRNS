@@ -1,5 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
+App::uses('CommonComponent', 'Controller/Component');
 class Date extends AppModel {
 	public $components = array('Auth');
 // 	public $findMethods = array(
@@ -11,6 +12,7 @@ class Date extends AppModel {
 			return $query;
 		}
 		foreach ($results as $idx => $value){
+			$this->Common->getURL($this,$value[$this->alias]['id']);
 			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {
 
 			}elseif ($value[$this->alias]['auth'] == 1) {

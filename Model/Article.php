@@ -134,14 +134,23 @@ public $validate = array(
 
    public $hasOne= array(
         'O' => array(
-        'fields' => 'username',
-		'className' => 'User',
-		'foreignKey' => FALSE,
-		'dependent' => false,
-		'conditions' => array('`O.id = Article.user_id`')
-		,
+	        'fields' => 'username',
+			'className' => 'User',
+			'foreignKey' => FALSE,
+			'dependent' => false,
+			'conditions' => array('`O.id = Article.user_id`')
+			,
 		//'type' => 'inner'
-        )
+        ),
+   		'URL' => array(
+   				'fields' => 'name',
+   				'className' => 'Link',
+   				'foreignKey' => FALSE,
+   				'dependent' => false,
+   				'conditions' => array('`URL.FromID = Article.ID`',)
+   				,
+   				'type' => 'inner',
+   				'joins' => array()
+   		)
     );
-
 }

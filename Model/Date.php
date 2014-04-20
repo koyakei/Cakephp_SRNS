@@ -9,13 +9,14 @@ class Date extends AppModel {
 // 			'auth' => true,
 // 	);
 	public function _findAll($state, $query, $results = array()){
-		$Common = new CommonComponent();
+		$this->Common = new CommonComponent();
+		$this->Basic = new BasicComponent();
 		if ($state === 'before') {
 
 			return $query;
 		}
 		foreach ($results as $idx => $value){
-			$Common->getURL($this,$value[$this->alias]['id']);
+			$this->Common->getURL($Common,$value[$this->alias]['id']);
 // 			$results[$idx]['URL'] = $this->returntribasic[0]['name'];
 			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {
 

@@ -13,6 +13,7 @@ class Date extends AppModel {
 		}
 		foreach ($results as $idx => $value){
 			$this->Common->getURL($this,$value[$this->alias]['id']);
+			$results[$idx]['URL'] = $that->returntribasic[0]['name'];
 			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {
 
 			}elseif ($value[$this->alias]['auth'] == 1) {

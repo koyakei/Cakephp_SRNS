@@ -2,22 +2,26 @@
 App::uses('AppModel', 'Model');
 App::uses('CommonComponent', 'Controller/Component');
 App::uses('BasicComponent', 'Controller/Component');
-
+App::uses('ArticleModel', 'Model');
 class Date extends AppModel {
 	public $components = array('Auth','Common','Basic');
 // 	public $findMethods = array(
 // 			'auth' => true,
 // 	);
 	public function _findAll($state, $query, $results = array()){
+
 		$this->Common = new CommonComponent();
-		$this->Basic = new BasicComponent();
+		$this->Common->Basic = new BasicComponent();
+		$this->Common->Basic->Article = new Article();
+
 		if ($state === 'before') {
 
 			return $query;
 		}
 		foreach ($results as $idx => $value){
-			$this->Common->getURL($Common,$value[$this->alias]['id']);
-// 			$results[$idx]['URL'] = $this->returntribasic[0]['name'];
+			$this->Common->getURL($Common,$value[$this->alias]['ID'],$this->alias);
+// 			debug($Common->returntribasic[0]['Article']['name']);
+			$results[$idx]['URL'] = $Common->returntribasic[0]['Article']['name'];
 			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {
 
 			}elseif ($value[$this->alias]['auth'] == 1) {

@@ -219,7 +219,8 @@ class BasicComponent extends Component {
 	 * @return $that->returntribasic
 	 */
 	public function tribasicfiderbyid(&$that = null,$trikeyID,$modelSe,$Ltotarget,$id) {
-		$that->loadModel($modelSe);
+// 		$that->loadModel($modelSe);
+		$modelSe = new $modelSe();
 		$option = array(
 				'conditions'=> array(
 				        	"Link.LTo = $Ltotarget"
@@ -247,7 +248,8 @@ class BasicComponent extends Component {
 				),
 				'order' => ''
 			);
-		$that->returntribasic = $that->$modelSe->find('all',$option);
+		$that->returntribasic = $modelSe->find('all',$option);
+// 		debug($that->returntribasic[0]['Article']['name']); // URL
 		return $that->returntribasic;
 	}
 	public function triupperfiderbyid(&$that = null,$trikeyID,$modelSe,$id) {

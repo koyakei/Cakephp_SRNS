@@ -142,15 +142,15 @@ public $validate = array(
 			,
 		//'type' => 'inner'
         ),
-   		'URL' => array(
-   				'fields' => 'name',
-   				'className' => 'Link',
-   				'foreignKey' => FALSE,
-   				'dependent' => false,
-   				'conditions' => array('`URL.FromID = Article.ID`',)
-   				,
-   				'type' => 'inner',
-   				'joins' => array()
-   		)
+//    		'URL' => array(
+//    				'fields' => 'name',
+//    				'className' => 'Link',
+//    				'foreignKey' => FALSE,
+//    				'dependent' => false,
+//    				'conditions' => array('`URL.FromID = Article.ID`',)
+//    				,
+//    				'type' => 'inner',
+//    				'joins' => array()
+//    		)
     );
 }

@@ -9,7 +9,8 @@ class CommonComponent extends Component {
     public $components = array('Basic');
     public function getURL(&$that = null,$id = null){
 		$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.URL'),'Article',"Article.ID",$id);
-// 		$that->returntribasic[0];
+		debug($that->returntribasic[0]['Article']['name']);
+		return $that->returntribasic[0]['Article']['name'];
     }
 	public function replyarticleAdd(&$that = null) {
 		if ($that->request->params['pass'][0] != null) {

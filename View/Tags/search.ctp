@@ -105,8 +105,18 @@ $this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', nu
         <?php foreach ($tags as $tag): ?>
             <tr>
 		<td><?php echo h($tag['Tag']['ID']); ?>&nbsp;</td>
-		<td><?php echo h($tag['Tag']['name']); ?>&nbsp;</td>
-		<td><?php echo h($tag['TO']['username']); ?>&nbsp;</td>
+		<td>
+		<?php if($tag['URL'] == null): ?>
+		<?php echo h($tag['Tag']['name']); ?>
+		<?php else: ?>
+		<a href="
+		<?php echo $tag['URL']; ?>
+		">
+		<?php echo $tag['Tag']['name']; ?>
+		</a>
+		<?php endif; ?>
+		&nbsp;</td>
+		<td><?php echo h($tag['O']['username']); ?>&nbsp;</td>
 		<td><?php echo h($tag['Tag']['created']); ?>&nbsp;</td>
 		<td><?php echo h($tag['Tag']['modified']); ?>&nbsp;</td>
 		<td class="actions">

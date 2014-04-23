@@ -48,8 +48,9 @@ class BasicComponent extends Component {
 		}
 	}
 	public function tagAuthCuntdown(&$that,$FromID){
-		$options = array('conditions' => array('Auth.tag_id'=> $FromID
-// 				,'Auth.user_id'=> $that->request->data['Tag']['user_id']
+		$that->Tagauthcount = new Tagauthcount();
+		$options = array('conditions' => array('Tagauthcount.tag_id'=> $FromID
+// 				,'Tagauthcount.user_id'=> $that->request->data['Tag']['user_id']
 		));
 		$result = $that->Tagauthcount->find('first',$options);
 

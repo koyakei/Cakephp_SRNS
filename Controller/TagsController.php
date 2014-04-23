@@ -3,6 +3,7 @@ App::import('Vendor', 'DebugKit.FireCake');
 App::uses('AppController', 'Controller');
 App::uses('Link', 'Model');
 App::uses('User', 'Model');
+App::uses('Auth', 'Model');
 Configure::load("static");
 App::uses('Article','Model');
 

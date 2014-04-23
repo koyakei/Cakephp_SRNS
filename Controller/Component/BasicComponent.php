@@ -4,7 +4,7 @@ App::uses('Tag', 'Model');
 App::uses('User', 'Model');
 App::uses('Link', 'Model');
 App::uses('Article', 'Model');
-App::uses('Auth', 'Model');
+App::uses('Tagauthcount', 'Model');
 Configure::load("static");
 class BasicComponent extends Component {
 	public $components = array('Auth');
@@ -48,29 +48,29 @@ class BasicComponent extends Component {
 		}
 	}
 	public function tagAuthCuntdown(&$that,$FromID){
-// 		$that->loadmodel('Auth');
-// 		$Auth = new Auth();
-// 		$options = array('conditions' => array('Auth.tag_id'=> $FromID
-// // 				,'Auth.user_id'=> $that->request->data['Tag']['user_id']
-// 		));
-// 		debug($options);
-// 		$result = $Auth->find('first',$options);
+		$options = array('conditions' => array('Auth.tag_id'=> $FromID
+// 				,'Auth.user_id'=> $that->request->data['Tag']['user_id']
+		));
+		$result = $that->Tagauthcount->find('first',$options);
 
-// 		debug($result);
-// 		//$data['Auth'] = array('id'=>$result['Auth']['id'],'quant'=> $that->request->data['Auth']['quant']);
-// 		$result['Auth']['quant'] += $result['Auth']['quant'] - $that->quant;//動かし分だけquantを消費　==
-// 		if ($result['Auth']['quant'] >= 0) {//払っても借金でないことを確認。借金を実装するときはここを変える。
-// 			if(null != $result['Auth']['user_id']){
-// 				if($that->Auth->save($result)){
-// 					return true;
-// 				}else {
-// 					return false;
-// 				}
-// 			}else{
-// 				return false;
-// 			}
-// 		}
-	return true;
+		debug($result);
+		//$data['Auth'] = array('id'=>$result['Auth']['id'],'quant'=> $that->request->data['Auth']['quant']);
+		$result['Auth']['quant'] += $result['Auth']['quant'] - $that->quant;//動かし分だけquantを消費　==
+		if ($result['Auth']['quant'] >= 0) {//払っても借金でないことを確認。借金を実装するときはここを変える。
+			if(null != $result['Auth']['user_id']){
+				if($that->Auth->save($result)){
+					debug("auth count down ok");
+					return true;
+				}else {
+					debug("auth count down miss");
+					return false;
+				}
+			}else{
+				debug("auth count down miss");
+				return false;
+			}
+		}
+//  	return true;
 	}
 
 	public function taglimitcountup(&$that){
@@ -329,7 +329,6 @@ class BasicComponent extends Component {
 	}
 	public function trilinkAdd(&$that,$FromID,$ToID,$keyID) {
 		$that->quant = 1;
-		debug($keyID);
 		if ($that->Basic->tagAuthCuntdown($that,$FromID)) {
 			$that->loadModel('Link');
 			$that->request->data['Link'] = array(

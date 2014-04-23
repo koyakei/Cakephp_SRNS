@@ -37,7 +37,7 @@ $(function () {
 	 <dl>
                 <dt><?php echo __('ID'); ?></dt>
                 <dd>
-                        <?php echo h($article['Article']['ID']); ?>
+<?php echo $this->Html->link($article['Article']['ID'], array('controller' => "articles", 'action' => 'view', $article['Article']['ID'])); ?>
                         &nbsp;
                 </dd>
                 <dt><?php echo __('Name'); ?></dt>

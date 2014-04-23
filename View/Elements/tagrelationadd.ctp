@@ -1,4 +1,4 @@
-<?php echo $this->Form->create('tag',array('controller' => 'tags','action'=>$this->action)); ?>
+<?php echo $this->Form->create('tag',array('controller' => 'tags','action'=>$this->action )); ?>
 	<?php echo $this->Form->input('Tag.name'); ?>
 	<?php echo $this->Form->input('userid', array(
 	    'type' => 'select',

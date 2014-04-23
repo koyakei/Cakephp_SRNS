@@ -81,7 +81,7 @@ public function beforeFilter() {
          * @return void
          */
         public function view($id = null) {
-        	debug($this->Auth->user('usrname'));
+        	debug($this->request->data);
 //         	if($this->Auth->user('id') === null){
 //         		$this->Auth->login('52fdeb54-e344-4fcc-8f8c-405fe0e4e673');
 //         	}
@@ -93,9 +93,11 @@ public function beforeFilter() {
         	$this->Tag->cachedName = $this->name;
         	$userID = $this->Auth->user('id');
         	if($this->request->data['tagRadd']['add'] == true){
+//         		$this->Basic->social($this);
         		$this->Basic->tagRadd($this);
-        		$this->Basic->social($this);
-        		$this->redirect($this->referer());
+//         		$this->Auth->user('id') = $userID;
+// 				debug($this->referer());
+//         		$this->redirect($this->referer());
         	}elseif ($this->request->data['Tag']['max_quant'] != null){
         		if ($this->Auth->user('id')==$resultForChange['Tag']['user_id']) {
         			$this->Tag->save($this->request->data());
@@ -114,11 +116,11 @@ public function beforeFilter() {
         		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
         		$this->Basic->social($this);
         	}
-        	if($this->request->data['Tag']['name'] != null){
+        	if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
         		debug($this->request->data);
         		$options['key'] = $this->request->data['Tag']['keyid'];
         		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$id,$options);
-        		$this->Basic->social($this);
+        		$this->Basic->social($this,$userID);
         	}
         	$this->set('idre', $id);
         	if (!$this->Tag->exists($id)) {

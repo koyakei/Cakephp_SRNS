@@ -4,19 +4,27 @@ App::uses('Tag', 'Model');
 App::uses('User', 'Model');
 App::uses('Link', 'Model');
 App::uses('Article', 'Model');
+App::uses('Auth', 'Model');
 Configure::load("static");
 class BasicComponent extends Component {
-	public function social(&$that){
+	public $components = array('Auth');
+	public function social(&$that,$userID){
 		$data['Social']['vaction'] = $that->action;
 		$data['Social']['vplugin'] = $that->plugin;
 		$data['Social']['vctrl'] = $that->name;
 		$data['Social']['vview'] = $that->view;
 		$data['Social']['page_id'] = $that->id;
-		$data['Social']['user_id'] = $that->Auth->user('id');
+		if ($userID == null) {
+			$data['Social']['user_id'] = $that->Auth->user('id');;
+		}else {
+			$data['Social']['user_id'] = $userID;
+		}
+
 		$data['Social']['created'] = date("Y-m-d H:i:s");
+		debug($data);
 		$Social = new Social();
 		$Social->create();
-		if($Social->Save($data)){
+		if($Social->Save($data,false)){
 			debug("social ok");
 		} else{
 			debug("social miss");
@@ -40,22 +48,29 @@ class BasicComponent extends Component {
 		}
 	}
 	public function tagAuthCuntdown(&$that,$FromID){
-		$that->loadmodel('Auth');
-		$options = array('condition' => array('Auth.tag_id ='.$FromID,'Auth.user_id ='.$that->request->data['Tag']['user_id']));
-		$result = $that->Auth->find('first',$options);
-		//$data['Auth'] = array('id'=>$result['Auth']['id'],'quant'=> $that->request->data['Auth']['quant']);
-		$result['Auth']['quant'] += $result['Auth']['quant'] - $that->quant;//動かし分だけquantを消費　==
-		if ($result['Auth']['quant'] >= 0) {//払っても借金でないことを確認。借金を実装するときはここを変える。
-			if(null != $result['Auth']['user_id']){
-				if($that->Auth->save($result)){
-					return true;
-				}else {
-					return false;
-				}
-			}else{
-				return false;
-			}
-		}
+// 		$that->loadmodel('Auth');
+// 		$Auth = new Auth();
+// 		$options = array('conditions' => array('Auth.tag_id'=> $FromID
+// // 				,'Auth.user_id'=> $that->request->data['Tag']['user_id']
+// 		));
+// 		debug($options);
+// 		$result = $Auth->find('first',$options);
+
+// 		debug($result);
+// 		//$data['Auth'] = array('id'=>$result['Auth']['id'],'quant'=> $that->request->data['Auth']['quant']);
+// 		$result['Auth']['quant'] += $result['Auth']['quant'] - $that->quant;//動かし分だけquantを消費　==
+// 		if ($result['Auth']['quant'] >= 0) {//払っても借金でないことを確認。借金を実装するときはここを変える。
+// 			if(null != $result['Auth']['user_id']){
+// 				if($that->Auth->save($result)){
+// 					return true;
+// 				}else {
+// 					return false;
+// 				}
+// 			}else{
+// 				return false;
+// 			}
+// 		}
+	return true;
 	}
 
 	public function taglimitcountup(&$that){
@@ -63,7 +78,6 @@ class BasicComponent extends Component {
 		if ($that->Auth->user('tlimit') > 0) {
 			if($that->Tag->save($that->request->data)){
 				$that->last_id = $that->Tag->getLastInsertID();
-				debug($that->last_id);
 				$data['User']['id'] = $that->request->data['Tag']['user_id'];
 				$data['User']['tlimit'] = $that->Auth->user('tlimit')- 1;
 				if($that->User->save($data)){
@@ -124,8 +138,7 @@ class BasicComponent extends Component {
 				if(null == $LE){
 					$tagIDd = $tagID['Tag']['ID'];
 					$that->Basic->trilinkAdd($that,$tagIDd,$LinkLTo,$trikeyID);
-					$that->Session->setFlash(__('タグ既存リンク追加'));
-					debug("Radded");
+
 
 				}else{
 					$that->Session->setFlash(__('関連付け済み'));
@@ -316,7 +329,6 @@ class BasicComponent extends Component {
 	}
 	public function trilinkAdd(&$that,$FromID,$ToID,$keyID) {
 		$that->quant = 1;
-		debug($that->request->data['Tag']['user_id']);
 		debug($keyID);
 		if ($that->Basic->tagAuthCuntdown($that,$FromID)) {
 			$that->loadModel('Link');
@@ -329,6 +341,7 @@ class BasicComponent extends Component {
 			);
 			$that->loadModel('Link');
 			$that->Link->create();
+			debug("a");
 			if($that->Link->save($that->request->data)){
 				$that->last_id = $that->Link->getLastInsertID();
 				$that->request->data['Link'] = array(

@@ -6,6 +6,8 @@ App::uses('User', 'Model');
 App::uses('Auth', 'Model');
 Configure::load("static");
 App::uses('Article','Model');
+App::uses('Tagauthcount','Model');
+
 
 /*App::uses('Article', 'Model');
 /**
@@ -94,9 +96,8 @@ public function beforeFilter() {
         	$this->Tag->cachedName = $this->name;
         	$userID = $this->Auth->user('id');
         	if($this->request->data['tagRadd']['add'] == true){
-//         		$this->Basic->social($this);
+        		$this->Basic->social($this);
         		$this->Basic->tagRadd($this);
-//         		$this->Auth->user('id') = $userID;
 // 				debug($this->referer());
 //         		$this->redirect($this->referer());
         	}elseif ($this->request->data['Tag']['max_quant'] != null){
@@ -105,8 +106,7 @@ public function beforeFilter() {
         		}else {
         			debug("fail no Auth");
         		}
-        	}
-        	if($this->request->data['Link']['quant'] != null){
+        	} elseif($this->request->data['Link']['quant'] != null){
         		$this->Basic->quant($this);
         		$this->Basic->social($this);
         	}
@@ -353,10 +353,10 @@ public function beforeFilter() {
         				'max_quant' => $max_quant,
         		);
         		$this->Basic->taglimitcountup($this);
-        		$data['Auth'] =array('user_id' => $this->request->data['Tag']['user_id'],'tag_id' =>$this->last_id,'quant' => $max_quant);
-        		$this->loadModel('Auth');
-        		$this->Auth->create();
-        		$this->Auth->save($data);
+        		$data['Tagauthcount'] =array('user_id' => $this->request->data['Tag']['user_id'],'tag_id' =>$this->last_id,'quant' => $max_quant);
+        		$this->loadModel('Tagauthcount');
+        		$this->Tagauthcount->create();
+        		$this->Tagauthcount->save($data);
         	}
         }
 

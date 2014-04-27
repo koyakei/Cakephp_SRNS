@@ -28,14 +28,17 @@
 <?php endif; ?>
 	<ul>
 	<?php if($idre != null): ?>
+		<li><?php echo $this->Html->link(__('New user'), array('plugin' =>  'users','controller' => 'users','action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('Edit' .$firstModel), array('controller' => 'tags','action' => 'edit', $data[$firstModel]['ID'])); ?> </li>
 		<li><?php echo $this->Form->postLink(__('Delete'. $firstModel), array('controller' => 'tags','action' => 'delete',$data[$firstModel]['ID']), null, __('Are you sure you want to delete # %s?', $data[$firstModel]['ID'])); ?> </li>
 	<?php endif; ?>
 		<li><?php echo $this->Html->link(__('List Tags'), array('controller' => 'tags','action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Tag'), array('controller' => 'tags','action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('Tag search'), array('controller' => 'tags','action' => 'search')); ?> </li>
+
 		<li><?php echo $this->Html->link(__('List Article'), array('controller' => 'articles','action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('Transmitter'), array('controller' => 'tags','action' => 'transmitter')); ?> </li>
+		
 		
 	</ul>
 </div>

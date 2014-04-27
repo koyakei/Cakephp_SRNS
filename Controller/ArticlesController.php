@@ -1,9 +1,9 @@
 <?php
 App::uses('AppController', 'Controller');
-/*App::uses('Tag', 'Model');
-App::uses('User', 'Model');*/
+App::uses('Tag', 'Model');
+App::uses('User', 'Model');
 App::uses('Link', 'Model');
-//Configure::load("static");
+Configure::load("static");
 /**
  * Articles Controller
  *
@@ -78,13 +78,18 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-		debug($this->Auth->user('id'));
+		debug($this->request->data());
 
 		if($this->request->data['Article']['name'] != null){
 			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'),$id,$options);
 			$this->Basic->social($this);
 		}
-		if($this->request->data['Tag']['name'] != null){
+		if($this->request->data['tagRadd']['add'] == true){
+        		$this->Basic->social($this);
+        		$this->Basic->tagRadd($this);
+// 				debug($this->referer());
+//         		$this->redirect($this->referer());
+        }elseif($this->request->data['Tag']['name'] != null){
 			$this->keyid = $this->request->data['Tag']['keyid'];
 			$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->params['pass'][0]);
 			$this->Basic->social($this);

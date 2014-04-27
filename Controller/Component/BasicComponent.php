@@ -53,13 +53,12 @@ class BasicComponent extends Component {
 // 				,'Tagauthcount.user_id'=> $that->request->data['Tag']['user_id']
 		));
 		$result = $that->Tagauthcount->find('first',$options);
-
 		debug($result);
 		//$data['Auth'] = array('id'=>$result['Auth']['id'],'quant'=> $that->request->data['Auth']['quant']);
-		$result['Auth']['quant'] += $result['Auth']['quant'] - $that->quant;//動かし分だけquantを消費　==
-		if ($result['Auth']['quant'] >= 0) {//払っても借金でないことを確認。借金を実装するときはここを変える。
-			if(null != $result['Auth']['user_id']){
-				if($that->Auth->save($result)){
+		$result['Tagauthcount']['quant'] += $result['Tagauthcount']['quant'] - $that->quant;//動かし分だけquantを消費　==
+		if ($result['Tagauthcount']['quant'] >= 0) {//払っても借金でないことを確認。借金を実装するときはここを変える。
+			if(null != $result['Tagauthcount']['user_id']){
+				if($that->Tagauthcount->save($result)){
 					debug("auth count down ok");
 					return true;
 				}else {
@@ -75,7 +74,6 @@ class BasicComponent extends Component {
 	}
 
 	public function taglimitcountup(&$that){
-		$that->loadModel('User');
 		if ($that->Auth->user('tlimit') > 0) {
 			if($that->Tag->save($that->request->data)){
 				$that->last_id = $that->Tag->getLastInsertID();
@@ -111,7 +109,7 @@ class BasicComponent extends Component {
 	}
 	public function tagRadd(&$that) {
 		$searchID = Configure::read('tagID.search');
-		$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+// 		$that->Tag->unbindModel(array('hasOne'=>array('O')), false);
 		$that->request->data['Tag']['user_id'] = $that->request->data['tag']['userid'];
 		$that->request->data['Link']['user_id'] = $that->request->data['tag']['userid'];
 		$LinkLTo=$that->request->data['Link']['LTo'];
@@ -125,6 +123,7 @@ class BasicComponent extends Component {
 					'order' => 'Tag.ID'
 				)
 			);
+
 			if($tagID == null){
 				$that->Tag->create();
 				$that->Basic->taglimitcountup($that);
@@ -138,7 +137,10 @@ class BasicComponent extends Component {
 				$LE = $that->returntribasic;
 				if(null == $LE){
 					$tagIDd = $tagID['Tag']['ID'];
-					$that->Basic->trilinkAdd($that,$tagIDd,$LinkLTo,$trikeyID);
+					if($that->Basic->trilinkAdd($that,$tagIDd,$LinkLTo,$trikeyID)){
+						debug(debug("sucsess"));
+					}
+
 
 
 				}else{
@@ -339,7 +341,7 @@ class BasicComponent extends Component {
 					'quant' => $that->quant,
 					'created' => date("Y-m-d H:i:s"),
 			);
-			$that->loadModel('Link');
+// 			$that->loadModel('Link');
 			$that->Link->create();
 			debug("a");
 			if($that->Link->save($that->request->data)){
@@ -352,11 +354,12 @@ class BasicComponent extends Component {
 						'created' => date("Y-m-d H:i:s"),
 				);
 				$that->Link->create();
-				if($that->Link->save($that->request->data)==false){
-					debug("2nd step miss");
+				if($that->Link->save($that->request->data)){
+					return true;
 				}
 			}else{
 				debug("1st step miss");
+				return false;
 			}
 		}
 	}

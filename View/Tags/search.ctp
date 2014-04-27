@@ -67,6 +67,7 @@ $this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', nu
         <h2><?php echo $this->Html->link('SRNS', array('action' => 'index')); ?></h2>
         login_id anonymous<br>
         pass word 123456
+        <a href="https://docs.google.com/drawings/d/1_TCqtJ2_Wef4_AKJHG_hPJ5yp-HnMdf6CQRNFPpYfNk/edit?usp=sharing">使うべき理由</a>
 	<div class="span3">
 		<div class="well" style="margin-top:20px;">
 			<div class="rightcontainer">

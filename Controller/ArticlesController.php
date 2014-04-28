@@ -79,22 +79,34 @@ class ArticlesController extends AppController {
  */
 	public function view($id = null) {
 		debug($this->request->data());
+		if($this->request->data['tagRadd']['add'] == true){
+			$this->Basic->social($this);
+			$this->Basic->tagRadd($this);
+			// 				debug($this->referer());
+			//         		$this->redirect($this->referer());
+		}elseif ($this->request->data['Tag']['max_quant'] != null){
+			if ($this->Auth->user('id')==$resultForChange['Tag']['user_id']) {
+				$this->Tag->save($this->request->data());
+			}else {
+				debug("fail no Auth");
+			}
+		} elseif($this->request->data['Link']['quant'] != null){
+			$this->Basic->quant($this);
+			$this->Basic->social($this);
+		}
 
 		if($this->request->data['Article']['name'] != null){
-			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'),$id,$options);
+			$options['key'] = $this->request->data['Article']['keyid'];
+			debug($this->request->data);
+			$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
 			$this->Basic->social($this);
 		}
-		if($this->request->data['tagRadd']['add'] == true){
-        		$this->Basic->social($this);
-        		$this->Basic->tagRadd($this);
-// 				debug($this->referer());
-//         		$this->redirect($this->referer());
-        }elseif($this->request->data['Tag']['name'] != null){
-			$this->keyid = $this->request->data['Tag']['keyid'];
-			$this->Common->tritagAdd($this,"Tag",$this->Auth->user('id'),$this->request->params['pass'][0]);
-			$this->Basic->social($this);
+		if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
+			debug($this->request->data);
+			$options['key'] = $this->request->data['Tag']['keyid'];
+			$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$id,$options);
+			$this->Basic->social($this,$userID);
 		}
-
 		$this->set('idre', $id);
 		if (!$this->Article->exists($id)) {
 			throw new NotFoundException(__('Invalid tag'));
@@ -106,20 +118,25 @@ class ArticlesController extends AppController {
 		$this->set('idre', $id);
 		$this->i = 0;
 		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
-		$this->set('article',$this->taghashgen);
+		$this->set('headresult',$this->taghashgen);
 		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
 		$this->set('headresults', $this->returntribasic);
 		$this->set('headtaghashes', $this->taghash);
 		$targetID = $id;
-		$this->Common->trifinderbyid($this,$id);
 		$this->loadModel('User');
 		$this->loadModel('Key');
-		$this->set('articleresults', $this->articleparentres);
-		$this->set('tagresults', $this->tagparentres);
-		$this->set('taghashes', $this->taghash);
-		$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
+		$key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
+        $this->set( 'keylist', $key);
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		$this->set('currentUserID', $this->Auth->user('id'));
+		$i = 0;
+		foreach ($key as $key => $value){
+			$options = array('key' => $key);
+			$this->Common->trifinderbyid($this,$id,$options);
+			$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
+			$i++;
+		}
+		$this->set('tableresults', $tableresults);
 	}
 	/**
 	 * anonymous_view method

@@ -27,6 +27,7 @@ echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre));
 			<?php echo h($detail[$firstModel]['modified']); ?>
 			&nbsp;
 		</dd>
+		<?php if ($firstModel == 'Tag'): ?>
 		<dt><?php echo __('Max quant'); ?></dt>
 		<dd>
 <?php echo $this->Form->create($firstModel//,array('controller' => 'tags','action'=>'quant')
@@ -36,5 +37,5 @@ echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre));
 <?php echo $this->Form->end('change max quant'); ?>
 			&nbsp;
 		</dd>
-
+		<?php endif; ?>
 	

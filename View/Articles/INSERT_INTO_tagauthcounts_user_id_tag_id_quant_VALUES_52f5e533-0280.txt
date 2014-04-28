@@ -1,3 +1,0 @@
-INSERT INTO `tagauthcounts`(`user_id`, `tag_id`, `quant`) ,
-SELECT '52f5e533-0280-4b40-878a-0194e0e4e673',`tag`.`ID` FROM ,'1000'
-`tag` WHERE `tag`.`user_id` = '52f5e533-0280-4b40-878a-0194e0e4e673'

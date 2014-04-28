@@ -18,11 +18,11 @@ $(document).ready(function()
 <dl>
 		<?php echo $this->element('detail',array('detail' =>  $tag,'firstModel' => 'Tag')); ?>
 <?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $tag['Tag']['ID'],'currentUserID' => $currentUserID)); ?>
-<?php if ($headresults =! null) { ?>
-		<?php echo $this->element('detalSTag',array('headresults' =>  $headresults,'firstModel' => 'Tag')); ?>
-		<?php } ?>
+<?php if ($headresults =! null) : ?>
+		<?php echo $this->element('detailSTag',array('headresults' =>  $headresults,'firstModel' => 'Tag')); ?>
+		<?php endif; ?>
 </dl>
-<?php if($idre == 2184):?>
+<?php if($idre == 2184): ?>
 <?php echo $this->Form->create('Link', array('url' => array('controller' => 'links', 'action' => 'singlelink'))); ?>
 	<?php
 		echo $this->Form->input('LTo');
@@ -31,7 +31,7 @@ $(document).ready(function()
 		echo $this->Form->hidden('LFrom',array('value' => $this->request['pass'][0]));
 	?>
 <?php echo $this->Form->end(__('Single link')); ?>
-<?php endif ?>
+<?php endif; ?>
 
 </div>
 

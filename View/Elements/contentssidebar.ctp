@@ -28,8 +28,11 @@
 	<ul>
 	<?php if($idre != null): ?>
 		<li><?php echo $this->Html->link(__('New user'), array('plugin' =>  'users','controller' => 'users','action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('Edit ' .$firstModel), array('action' => 'edit', $data[$firstModel]['ID'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete'. $firstModel), array('action' => 'delete',$data[$firstModel]['ID']), null, __('Are you sure you want to delete # %s?', $data[$firstModel]['ID'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Edit ' .$firstModel), array('action' => 'edit', $idre)); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Delete'. $firstModel), array('action' => 'delete',$idre), null, __('Are you sure you want to delete # %s?', $idre)); ?> </li>
+	<?php if($firstModel == "Tag"): ?>
+		<li><?php echo $this->Html->link(__('Exchange'), array('controller' => 'tags','action' => 'exchange',$idre)); ?> </li>
+		<?php endif; ?>
 	<?php endif; ?>
 		<li><?php echo $this->Html->link(__('List Tags'), array('controller' => 'tags','action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New '.$firstModel), array('controller' => $firstModel.'s','action' => 'add')); ?> </li>

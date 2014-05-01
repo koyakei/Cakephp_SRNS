@@ -68,6 +68,6 @@ class Date extends AppModel {
 // 		}
 	}
 	public function isOwnedBy($post, $user) {
-		return $this->field('user_id', array('ID' => $post, 'user_id' => $user)) === $post;
+		return $this->field('user_id', array('ID' => $post, 'user_id' => $user)) === $user;
 	}
 }

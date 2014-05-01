@@ -23,7 +23,7 @@ class ArticlesController extends AppController {
 			if ($this->Article->isOwnedBy($postId, $user['id'])) {
 				return true;
 			}else {
-				$this->redirect($this->referer());
+				return false;
 			}
 		}
 
@@ -43,7 +43,7 @@ class ArticlesController extends AppController {
         $this->Security->validateOnce = false;
         $this->Security->validatePost = false;
         $this->Security->csrfCheck = false;
-        $this->Auth->allow('logout');
+//         $this->Auth->allow();
 	$this->Auth->authenticate = array(
 		'Basic' => array('user' => 'admin'),
 		//'Form' => array('user' => 'Member')
@@ -78,65 +78,15 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-		debug($this->request->data());
-		if($this->request->data['tagRadd']['add'] == true){
-			$this->Basic->social($this);
-			$this->Basic->tagRadd($this);
-			// 				debug($this->referer());
-			//         		$this->redirect($this->referer());
-		}elseif ($this->request->data['Tag']['max_quant'] != null){
-			if ($this->Auth->user('id')==$resultForChange['Tag']['user_id']) {
-				$this->Tag->save($this->request->data());
-			}else {
-				debug("fail no Auth");
-			}
-		} elseif($this->request->data['Link']['quant'] != null){
-			$this->Basic->quant($this);
-			$this->Basic->social($this);
-		}
-
-		if($this->request->data['Article']['name'] != null){
-			$options['key'] = $this->request->data['Article']['keyid'];
-			debug($this->request->data);
-			$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
-			$this->Basic->social($this);
-		}
-		if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
-			debug($this->request->data);
-			$options['key'] = $this->request->data['Tag']['keyid'];
-			$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$id,$options);
-			$this->Basic->social($this,$userID);
-		}
-		$this->set('idre', $id);
-		if (!$this->Article->exists($id)) {
-			throw new NotFoundException(__('Invalid tag'));
-		}
-		$this->taghashgen = $this->Article->find('first',array('conditions' => array('Article.' . $this->Article->primaryKey => $id)));
-
-		$this->pageTitle = $this->taghashgen["Article"]['name'];
-		$this->Article->read(null,$id);
-		$this->set('idre', $id);
+		parent::view($id);
+// 		$this->Article->read(null,$id);
 		$this->i = 0;
-		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
-		$this->set('headresult',$this->taghashgen);
-		$this->Common->SecondDem($this,"Tag","Tag.ID",$trikeyID,$id);
-		$this->set('headresults', $this->returntribasic);
+		$trikeyID = Configure::read('tagID.search');
+
+
 		$this->set('headtaghashes', $this->taghash);
 		$targetID = $id;
-		$this->loadModel('User');
-		$this->loadModel('Key');
-		$key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
-        $this->set( 'keylist', $key);
-		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-		$this->set('currentUserID', $this->Auth->user('id'));
-		$i = 0;
-		foreach ($key as $key => $value){
-			$options = array('key' => $key);
-			$this->Common->trifinderbyid($this,$id,$options);
-			$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
-			$i++;
-		}
-		$this->set('tableresults', $tableresults);
+
 	}
 	/**
 	 * anonymous_view method

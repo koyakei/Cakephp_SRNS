@@ -38,4 +38,7 @@ echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre));
 			&nbsp;
 		</dd>
 		<?php endif; ?>
-	
+
+	<?php if (!empty($SecondDem)): ?>
+		<?php echo $this->element('detailSTag',array('SecondDems' =>  $SecondDems,'firstModel' => 'Tag')); ?>
+	<?php endif; ?>

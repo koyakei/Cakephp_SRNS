@@ -1,8 +1,8 @@
-<?php foreach ($headresults as $headtaghash): ?>
+<?php foreach ($SecondDems as $SecondDem): ?>
 			<dt><?php echo __('Searchtagname'); ?></dt>
 		        <dd>
 		                <?php 
-		                 echo $this->Html->link(__($headtaghash[$firstModel]['name']), array('controller'=> $controller_name,'action' => 'view', $headtaghash[$firstModel]['ID'])); ?>
+		                 echo $this->Html->link(__($headtaghash[$firstModel]['name']), array('controller'=> 'tags','action' => 'view', $SecondDem[$firstModel]['ID'])); ?>
 		        </dd>
 		<?php endforeach; ?>
 		

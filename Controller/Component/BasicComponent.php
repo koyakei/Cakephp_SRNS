@@ -26,8 +26,10 @@ class BasicComponent extends Component {
 		$Social->create();
 		if($Social->Save($data,false)){
 			debug("social ok");
+			return true;
 		} else{
 			debug("social miss");
+			return FALSE;
 		}
 	}
 
@@ -47,15 +49,24 @@ class BasicComponent extends Component {
 			}
 		}
 	}
-	public function tagAuthCuntdown(&$that,$FromID){
+	/**
+	 * publish tagAuthCountdown method
+	 *
+	 * @param mixed $that
+	 * @param string $FromID
+	 * @param string $target_user_id //give or recive する対象
+	 * @param string $quant //give する量+　recive -
+	 * @return boolean
+	 */
+	public function tagAuthCountdown(&$that,$FromID,$target_user_id,$quant){
 		$that->Tagauthcount = new Tagauthcount();
 		$options = array('conditions' => array('Tagauthcount.tag_id'=> $FromID
-// 				,'Tagauthcount.user_id'=> $that->request->data['Tag']['user_id']
+				,'Tagauthcount.user_id'=> $target_user_id
 		));
 		$result = $that->Tagauthcount->find('first',$options);
 		debug($result);
 		//$data['Auth'] = array('id'=>$result['Auth']['id'],'quant'=> $that->request->data['Auth']['quant']);
-		$result['Tagauthcount']['quant'] += $result['Tagauthcount']['quant'] - $that->quant;//動かし分だけquantを消費　==
+		$result['Tagauthcount']['quant'] = $result['Tagauthcount']['quant'] - $quant;//動かし分だけquantを消費　==
 		if ($result['Tagauthcount']['quant'] >= 0) {//払っても借金でないことを確認。借金を実装するときはここを変える。
 			if(null != $result['Tagauthcount']['user_id']){
 				if($that->Tagauthcount->save($result)){
@@ -70,7 +81,7 @@ class BasicComponent extends Component {
 				return false;
 			}
 		}
-//  	return true;
+		return false;
 	}
 
 	public function taglimitcountup(&$that){
@@ -109,7 +120,6 @@ class BasicComponent extends Component {
 	}
 	public function tagRadd(&$that) {
 		$searchID = Configure::read('tagID.search');
-// 		$that->Tag->unbindModel(array('hasOne'=>array('O')), false);
 		$that->request->data['Tag']['user_id'] = $that->request->data['tag']['userid'];
 		$that->request->data['Link']['user_id'] = $that->request->data['tag']['userid'];
 		$LinkLTo=$that->request->data['Link']['LTo'];
@@ -139,10 +149,8 @@ class BasicComponent extends Component {
 					$tagIDd = $tagID['Tag']['ID'];
 					if($that->Basic->trilinkAdd($that,$tagIDd,$LinkLTo,$trikeyID)){
 						debug(debug("sucsess"));
+						return true;
 					}
-
-
-
 				}else{
 					$that->Session->setFlash(__('関連付け済み'));
 					debug("already exist");
@@ -151,9 +159,7 @@ class BasicComponent extends Component {
 		}else {
 				$that->Session->setFlash(__('リクエストが空っぽでこけている　tag.ID'));
 			}
-	}
-	public function test(&$that){
-		$that->redirect($that->referer());
+			return false;
 	}
 	public function tribasic(&$that = null,$trykeyname,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
@@ -331,8 +337,8 @@ class BasicComponent extends Component {
 		return $that->returntribasic;
 	}
 	public function trilinkAdd(&$that,$FromID,$ToID,$keyID) {
-		$that->quant = 1;
-		if ($that->Basic->tagAuthCuntdown($that,$FromID)) {
+		$quant = 1;
+		if ($that->Basic->tagAuthCountdown($that,$FromID,$that->request->data['tag']['userid'],$quant)) {
 			$that->loadModel('Link');
 			$that->request->data['Link'] = array(
 					'user_id' => $that->request->data['Tag']['user_id'],

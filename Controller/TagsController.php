@@ -2,11 +2,12 @@
 App::import('Vendor', 'DebugKit.FireCake');
 App::uses('AppController', 'Controller');
 App::uses('Link', 'Model');
-App::uses('User', 'Model');
-App::uses('Auth', 'Model');
+
+App::uses('Tagauthcounts', 'Model');
 Configure::load("static");
 App::uses('Article','Model');
 App::uses('Tagauthcount','Model');
+App::uses('Tagauth','Model');
 
 
 /*App::uses('Article', 'Model');
@@ -84,82 +85,69 @@ public function beforeFilter() {
          * @return void
          */
         public function view($id = null) {
-        	debug($this->request->data);
-//         	if($this->Auth->user('id') === null){
-//         		$this->Auth->login('52fdeb54-e344-4fcc-8f8c-405fe0e4e673');
-//         	}
-
-        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
-        	$resultForChange = $this->Tag->find('first', $options);
-
-        	$this->id =$id;
-        	$this->Tag->cachedName = $this->name;
-        	$userID = $this->Auth->user('id');
-        	if($this->request->data['tagRadd']['add'] == true){
-        		$this->Basic->social($this);
-        		$this->Basic->tagRadd($this);
-// 				debug($this->referer());
-//         		$this->redirect($this->referer());
-        	}elseif ($this->request->data['Tag']['max_quant'] != null){
-        		if ($this->Auth->user('id')==$resultForChange['Tag']['user_id']) {
-        			$this->Tag->save($this->request->data());
-        		}else {
-        			debug("fail no Auth");
-        		}
-        	} elseif($this->request->data['Link']['quant'] != null){
-        		$this->Basic->quant($this);
-        		$this->Basic->social($this);
-        	}
-
-        	if($this->request->data['Article']['name'] != null){
-        		$options['key'] = $this->request->data['Article']['keyid'];
-        		debug($this->request->data);
-        		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
-        		$this->Basic->social($this);
-        	}
-        	if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
-        		debug($this->request->data);
-        		$options['key'] = $this->request->data['Tag']['keyid'];
-        		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$id,$options);
-        		$this->Basic->social($this,$userID);
-        	}
-        	$this->set('idre', $id);
-        	if (!$this->Tag->exists($id)) {
-        		throw new NotFoundException(__('Invalid tag'));
-        	}
+        	parent::view($id);
+//         	$this->Tag->cachedName = $this->name;
         	$this->request->data['keyid']['keyid'] =$trikeyID;
         	if ($trikeyID == NULL){//$serchID;//tagConst()['searchID'];
         		$trikeyID = Configure::read('tagID.search');
         	}
-        	$this->Common->SecondDem($this,"Tag","Tag.ID",Configure::read('tagID.search'),$id);
-
-        	$this->set('headresults', $this->returntribasic);
-        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id));
-        	$tag = $this->Tag->find('first', $options);
-        	$this->set('tag', $tag);
-        	$this->pageTitle = $tag["Tag"]['name'];
-        	$this->set('currentUserID', $this->Auth->user('id'));
-        	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
         	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id);
         	$this->set('upperIdeas', $this->returntribasic);
         	$this->set('trikeyID', $trikeyID);
-        	$this->loadModel('User');
-        	$this->loadModel('Key');
-        	$key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
-        	$this->set( 'keylist', $key);
-        	$i = 0;
-        	foreach ($key as $key => $value){
-        		$options = array('key' => $key);
-        		$this->Common->trifinderbyid($this,$id,$options);
-	        	$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
-	        	$i++;
-        	}
-        	$this->set('tableresults', $tableresults);
-        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-
         }
         /**
-         * publish view method
+         * publish excange method
+         *
+         * @throws NotFoundException
+         * @param string $id
+         * @return boolean
+         */
+        public function exchange($id = NULL){
+        	if (!$this->Tag->exists($id)) {
+        		throw new NotFoundException(__('Invalid tagauth'));
+        	}
+			$this->set('headresults',$this->headview($id));
+        	$this->set('idre', $id);
+        	$this->Tagauthcount = new Tagauthcount();
+        	$this->set('myauthresult',$this->Tagauthcount->find('first',array(
+        			'conditions' => array('Tagauthcount.tag_id'=> $id,
+        					'Tagauthcount.user_id'=> $this->Auth->user('id')
+        			))));
+        	debug($id);
+        	$this->loadModel('Tagauth');
+        	$this->Paginator->setting = array(
+        			"Tagauth.tag_id" => $id);
+        	$tagauth = $this->paginate('Tagauth',$this->Paginator->setting);
+        	$this->set('tagauths',$tagauth
+        			);
+
+        	//表示部分ここまで
+        	//以下権限変更部分
+
+
+        	if ($this->request->is(array('post', 'put'))) {
+        		$targetTagauthcounts=$this->Tagauth->find('first',array('conditions'=>array('Tagauthcount' => array('tag_id'=>$id,
+        			'username'=> $this->request->data['username']))))['Tagauth']['id'];
+        	//max_quant を超えないようにするチェック　いつも全部の行を合計する処理は重たいのでやらない。一回一回の処理の整合性を取っていく。
+	        	if ($this->Basic->tagAuthCountdown($this,$id,$targetTagauthcounts,$this->request->data['Tagauthcount'][`quant`])) {//相手が特定できているか
+	           		$that->Session->setFlash(__('The tag has been saved.'));
+	        		return true;
+	        	} else {
+	        			$this->Session->setFlash(__('The tagauth could not be saved. Please, try again.'));
+	        	}
+	        } else {
+	        		$this->request->data = $this->headview($id);
+        	}
+//         	$users = $this->Tagauth->User->find('list');
+//         	$tags = $this->Tagauth->Tag->find('list');
+//         	$this->set(compact('users', 'tags'));
+
+
+
+        }
+
+        /**
+         * publish anonymous_view method
          *
          * @throws NotFoundException
          * @param string $id
@@ -325,8 +313,6 @@ public function beforeFilter() {
         ));*/
 
         	//}
-        	$this->loadModel('User');
-        	$this->loadModel('Key');
         	$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	$this->set('leftID', $leftID);
@@ -385,7 +371,6 @@ public function beforeFilter() {
         	} else {
         		$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id),'order'=>'Tag.ID');
         		$this->request->data = $this->Tag->find('first', $options);
-        		debug($this->request->data['W']);
         		$this->set('users', $this->request->data['W']);
         	}
         }
@@ -464,11 +449,11 @@ public function beforeFilter() {
 
         }
         /**
-         * articlelist method
+         * articletransmitter method
          *
          * @return void
          */
-public function articletransmitter($leftID = null,$leftKeyID = null){
+		public function articletransmitter($leftID = null,$leftKeyID = null){
 			//view method を読み込む　左
 			//左右を同じelemrnt で構成する　その画面を呼び出す方法を考える。
 			//ページを固定したまま検索する方法を考える。

@@ -50,10 +50,13 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
 			<?php echo $this->fetch('content'); ?>
 		</div>
-		<div id="footer">
-			
+		<div id="footer" style="text-align:left">
+			<?php echo $this->Html->link("Contact", "https://twitter.com/koyakei"); ?>
+
 		</div>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>
+
 </body>
+
 </html>

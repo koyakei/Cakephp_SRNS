@@ -20,7 +20,8 @@
  */
 
 App::uses('Controller', 'Controller');
-
+App::uses('User', 'Model');
+App::uses('Key', 'Model');
 /**
  * Application Controller
  *
@@ -72,25 +73,77 @@ public function isAuthorized($user) {
     	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
 	);
-
-        $this->Auth->allow('login','anonymous_view');
+        $this->Auth->allow('login','anonymous_view','logout');
 //         if (empty($this->params['registerd'])) {
 //         	// adminルーティングではない場合、認証を通さない（allow）
 //         	$this->Auth->allow($this->params['action']);
 //         }
-    }/*
-    public function restoreLoginFromCookie() {
-    	$this->Cookie->name = 'Users';
-    	$cookie = $this->Cookie->read('rememberMe');
-    	if (!empty($cookie) && !$this->Auth->user()) {
-    		$data['User'][$this->Auth->fields['username']] = $cookie
-    		[$this->Auth->fields['username']];
-    		$data['User'][$this->Auth->fields['password']] = $cookie
-    		[$this->Auth->fields['password']];
-    		$this->Auth->login($data);
-    	}
-    }*/
+    }
     function beforeRender() {
     	$this->set('title_for_layout', $this->pageTitle);
+    }
+    public function headview($id = NULL){
+    			return $this->{$this->modelClass}->find('first',
+    					 array('conditions' => array(
+    					 		$this->modelClass.'.'.$this->{$this->modelClass}->primaryKey => $id)));
+    }
+
+    function view($id = NULL){
+    	$this->set('headresults',$this->headview($id));
+    	if (!$this->{$this->modelClass}->exists($id)) {
+    		throw new NotFoundException(__('Invalid tag'));
+    	}
+    	if($this->request->data['tagRadd']['add'] == true){
+    		if($this->Basic->tagRadd($this)){
+    			if($this->Basic->social($this)){
+						debug("tag relation added.");
+    			}
+    		}
+    	}elseif ($this->request->data['Tag']['max_quant'] != null){
+    		if ($this->Auth->user('id')==$resultForChange['Tag']['user_id']) {
+    			if($this->Tag->save($this->request->data())){
+    				$that->Session->setFlash(__('Max quant changed.'));
+    			}
+    		}else {
+    			debug("fail no Auth");
+    		}
+    	} elseif($this->request->data['Link']['quant'] != null){
+    		if($this->Basic->quant($this) && $this->Basic->social($this)){
+    			$that->Session->setFlash(__('Quant changed.'));
+    		}
+    	}
+    	if($this->request->data['Article']['name'] != null){
+    		$options['key'] = $this->request->data['Article']['keyid'];
+    		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
+    		$this->Basic->social($this);
+    	}
+    	if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
+    		debug($this->request->data);
+    		$options['key'] = $this->request->data['Tag']['keyid'];
+    		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$id,$options);
+    		$this->Basic->social($this,$userID);
+    	}
+    	$this->set('idre', $id);
+    	$this->loadModel('User');
+    	$this->loadModel('Key');
+    	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+    	$key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
+    	$this->set( 'keylist', $key);
+    	$i = 0;
+    	foreach ($key as $key => $value){
+    		if (!($this->name == 'Articles' && $key == Configure::read('tagID.search'))) {
+    			$options = array('key' => $key);
+	    		$this->Common->trifinderbyid($this,$id,$options);
+	    		$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
+	    		$i++;
+    		}
+
+    	}
+    	$this->set('tableresults', $tableresults);
+
+    	$this->pageTitle = $headresults[$this->modelClass]['name'];
+    	$this->Common->SecondDem($this,"Tag","Tag.ID",Configure::read('tagID.search'),$id);
+    	$this->set('SecondDems', $this->returntribasic);
+    	$this->set('currentUserID', $this->Auth->user('id'));
     }
 }

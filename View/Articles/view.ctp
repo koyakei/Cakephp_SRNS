@@ -37,11 +37,8 @@ $(function () {
     <?php echo $this->element('contentssidebar', Array('keylist' => $keylist,'idre'=>$idre,'firstModel' => 'Article','data' => $headresult,'idre'=>$idre,'trikeyID', $trikeyID)); ?>
 <div class="articles view">
 <h2><?php echo __('Article'); ?></h2>
-	 <dl><?php echo $this->element('detail',array('detail' =>  $headresult,'firstModel' => 'Article')); ?>
+	 <dl><?php echo $this->element('detail',array('detail' =>  $headresults,'firstModel' => 'Article','SecondDems' =>  $SecondDems)); ?>
 <?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $headresult['Tag']['ID'],'currentUserID' => $currentUserID)); ?>
-        <?php if ($headresults =! null) : ?>
-        <?php echo $this->element('detailSTag',array('headresults' =>  $headresults,'firstModel' => 'Tag')); ?>
-        <?php endif; ?>
         </dl>
 </div>
 	<?php foreach($tableresults as $value): ?>

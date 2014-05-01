@@ -1,7 +1,7 @@
 		<thead>
 			<tr>
 				<th class="mark">ID</th>
-				<th class="mark">name </th>
+				<th class="mark" style="min-width: 100px;">name </th>
 				<th>user_id</th><!--
 				<th>created</th>
 				<th>modified</th>-->

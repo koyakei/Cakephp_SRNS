@@ -72,12 +72,6 @@ $this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', nu
 		<div class="well" style="margin-top:20px;">
 			<div class="rightcontainer">
 			<?php echo $this->Form->create('Tag', array('action' => 'search')); ?>
-			<!--<fieldset>
-				<legend>検索</legend>				
-					<div class="controls">
-						<?php echo $this->Form->input('name'); ?>
-					</div>
-			</fieldset>-->
 			    <div class="control-group">
 			        <?php echo $this->Form->label('keyword', 'キーワード', array('class' => 'control-label')); ?>
 			        <div class="controls">

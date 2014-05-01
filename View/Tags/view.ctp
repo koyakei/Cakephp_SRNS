@@ -9,6 +9,7 @@ $(document).ready(function()
     }
 );
 </script>
+
 </head>
 <body>
 <?php echo $this->element('contentsidebar', Array('keylist' => $upperIdeas,'idre'=>$idre,'firstModel' => 'Tag','data' => $tag,'key' => $trikeyID)); ?>
@@ -16,12 +17,11 @@ $(document).ready(function()
 <h2><?php echo __('Tag');  ?></h2>
 
 <dl>
-		<?php echo $this->element('detail',array('detail' =>  $tag,'firstModel' => 'Tag')); ?>
-<?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $tag['Tag']['ID'],'currentUserID' => $currentUserID)); ?>
-<?php if ($headresults =! null) : ?>
-		<?php echo $this->element('detailSTag',array('headresults' =>  $headresults,'firstModel' => 'Tag')); ?>
-		<?php endif; ?>
+
+		<?php echo $this->element('detail',array('detail' =>  $headresults,'firstModel' => 'Tag','SecondDems' =>  $SecondDems)); ?>
+
 </dl>
+<?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $tag['Tag']['ID'],'currentUserID' => $currentUserID)); ?>
 <?php if($idre == 2184): ?>
 <?php echo $this->Form->create('Link', array('url' => array('controller' => 'links', 'action' => 'singlelink'))); ?>
 	<?php
@@ -39,7 +39,7 @@ $(document).ready(function()
 <?php foreach($tableresults as $value): ?>
 <a name="<?php echo $value['ID'] ?>">
 	<h2><?php echo $value['name'] ?></h2>
-	<table class="myTable" cellpadding="0" cellspacing="0">
+	<table class="myTable" cellpadding="0" cellspacing="0" style="width: 200%;">
 		<?php echo $this->element('tablehead', Array('taghashes'=>$value['head'])); ?>
 		<tbody>
 		<?php echo $this->element('tablebody', Array('results' => $value['tag'],'taghashes'=>$value['head'],'firstModel' => 'Article','currentUserID' => $currentUserID)); ?>

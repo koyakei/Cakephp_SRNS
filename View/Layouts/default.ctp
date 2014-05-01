@@ -21,6 +21,21 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 <!DOCTYPE html>
 <html>
 <head>
+	<script type="text/javascript">
+	function toggleShow(obj) {
+ var ch = obj.parentNode.children;
+ for (var i = 0, len = ch.length; i < len; i++) {
+    if (ch[i].getAttribute("id") == "HSfield") {
+      var element = ch[i];
+         if (element.style.display == 'none') {
+           element.style.display='block';
+         } else {
+           element.style.display='none';
+         }
+       }
+    }
+ }
+</script>
 	<?php echo $this->Html->charset(); ?>
 	<title>
 		<?php echo "SRNS" ?>:

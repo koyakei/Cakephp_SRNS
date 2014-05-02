@@ -54,7 +54,7 @@ class ArticlesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Search.Prg','Paginator','Common','Basic','Cookie');
+	public $components = array('Search.Prg','Paginator','Common','Basic','Cookie','Session');
 	public $helpers = array(
 			'Html',
 			'Session'
@@ -165,11 +165,13 @@ class ArticlesController extends AppController {
 // 		if ($this->Auth->user('id') == $this->taghashgen['owner_id'] && $this->request->data('auth') !) {
 // 			$this->Article->save($this->request->data('auth'));
 // 		}
-	if (isset($this->Session->read('beforeURL'))) {
+	if (null != ($this->Session->read('beforeURL'))) {
 		;
 	}else {
 		$this->Session->write(`beforeURL`,$this->referer());
 	}
+	$this->Session->write(`before.URL`,"a");
+	debug($this->Session->read('before.URL'));
 // 		$redirect = $this->referer();
 // 		debug($redirect);
 

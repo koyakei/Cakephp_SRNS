@@ -89,7 +89,9 @@ public function isAuthorized($user) {
     }
 
     function view($id = NULL){
-    	$this->set('headresults',$this->headview($id));
+    	$headresults = $this->headview($id);
+    	$this->pageTitle = $headresults["$this->modelClass"]['name'];
+    	$this->set('headresults',$headresults);
     	if (!$this->{$this->modelClass}->exists($id)) {
     		throw new NotFoundException(__('Invalid tag'));
     	}

@@ -22,37 +22,32 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 <html>
 <head>
 	<script type="text/javascript">
-	function toggleShow(obj) {
- var ch = obj.parentNode.children;
- for (var i = 0, len = ch.length; i < len; i++) {
-    if (ch[i].getAttribute("id") == "HSfield") {
-      var element = ch[i];
-         if (element.style.display == 'none') {
-           element.style.display='block';
-         } else {
-           element.style.display='none';
-         }
-       }
-    }
- }
+
 </script>
 	<?php echo $this->Html->charset(); ?>
 	<title>
 		<?php echo "SRNS" ?>:
 		<?php echo $title_for_layout; ?>
 	</title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+ 
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 	<?php
 		echo $this->Html->meta('icon');
 		echo $this->Html->css('cake.generic');
 		echo $this->Html->script(array('jquery.autocomplete'));
+		echo $this->Js->writeBuffer( array( 'inline' => 'true'));
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+   
+    </script>
 </head>
 <body>
 	<div id="container">

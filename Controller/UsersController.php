@@ -13,7 +13,7 @@ class UsersController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Paginator','RequestHandler');
 
 /**
  * index method
@@ -35,35 +35,7 @@ class UsersController extends AppController {
 		$this->User->recursive = 0;
 		$this->set('users', $this->Paginator->paginate());
 	}
-	/**
-	 * autoSuggest method
-	 *
-	 * @throws NotFoundException
-	 * @param string $id
-	 * @return void
-	 */
-	public function autoSuggest() {
-		$this->layout = 'ajax';
-		$data = ''; $json = '';
-		if(!empty($this->params['url']['q'])){
-			$options = array(
-					'field'     =>array('User.id','User.name'),
-					'conditions' => array('or'=> array(
-							array('User.kana LIKE ?' => $this->params['url']['q'].'%'),
-							array('User.name LIKE ?' => $this->params['url']['q'].'%')
-					),
-					),
-					'limit'     =>10
-			);
-			$datas = $this->User->find('list', $options);
 
-			foreach($datas as $key=>$val){
-				$data .= $val.'|'.$key."\n";
-			}
-		}
-		$this->set('json', $data);
-		$this->render('ajax_suggest');
-	}
 /**
  * view method
  *
@@ -139,4 +111,47 @@ class UsersController extends AppController {
 			$this->Session->setFlash(__('The user could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
-	}}
+	}
+	function home(){
+	}
+	function search(){
+		if ( $this->RequestHandler->isAjax() ) {
+			Configure::write ( 'debug', 0 );
+			$this->autoRender=false;
+			$users=$this->User->find('all',array('conditions'=>array('User.username LIKE'=>'%'.$_GET['term'].'%')));
+			$i=0;
+			foreach($users as $user){
+				$response[$i]['value']=$user['User']['username'];
+				$response[$i]['label']="<img class=\"avatar\" width=\"24\" height=\"24\" src=".$user['User']['profile_pictures']."/><span class=\"username\">".$user['User']['username']."</span>";
+				$i++;
+			}
+			echo json_encode($response);
+		}else{
+			if (!empty($this->data)) {
+				$this->set('users',$this->paginate(array('User.username LIKE'=>'%'.$this->data['User']['username'].'%')));
+			}
+		}
+	}
+	public function autoSuggest() {
+		$this->layout = 'ajax';
+		$data = ''; $json = '';
+		if(!empty($this->params['url']['q'])){
+			$options = array(
+					'field'     =>array('User.id','User.name'),
+					'conditions' => array('or'=> array(
+							array('User.kana LIKE ?' => $this->params['url']['q'].'%'),
+							array('User.name LIKE ?' => $this->params['url']['q'].'%')
+					),
+					),
+					'limit'     =>10
+			);
+			$datas = $this->User->find('list', $options);
+
+			foreach($datas as $key=>$val){
+				$data .= $val.'|'.$key."\n";
+			}
+		}
+		$this->set('json', $data);
+		$this->render('ajax_suggest');
+	}
+}

@@ -389,15 +389,14 @@ public function beforeFilter() {
         	$data = ''; $json = '';
         	if(!empty($this->params['url']['q'])){
         		$options = array(
-        				'field'     =>array('User.id','User.name'),
+        				'field'     =>array('Tag.ID','Tag.name'),
         				'conditions' => array('or'=> array(
-        						array('User.kana LIKE ?' => $this->params['url']['q'].'%'),
-        						array('User.name LIKE ?' => $this->params['url']['q'].'%')
+        						array('Tag.name LIKE ?' => $this->params['url']['q'].'%')
         				),
         				),
         				'limit'     =>10
         		);
-        		$datas = $this->User->find('list', $options);
+        		$datas = $this->Tag->find('list', $options);
 
         		foreach($datas as $key=>$val){
         			$data .= $val.'|'.$key."\n";
@@ -406,6 +405,11 @@ public function beforeFilter() {
         	$this->set('json', $data);
         	$this->render('ajax_suggest');
         }
+
+		public function ac(){
+
+		}
+
         /**
          * delete method
          *
@@ -478,6 +482,20 @@ public function beforeFilter() {
         	$this->set('tags', $tags);
 //         	$this->set('tags', $this->Authpaginator->paginate());
 
+        }
+
+        function auto_complete() {
+        	$terms = $this->Tag->find('all', array(
+        			'conditions' => array(
+        					'Tag.name LIKE' => $this->params['url']['autoCompleteText'].'%'
+        			),
+        			'fields' => array('name'),
+        			'limit' => 3,
+        			'recursive'=>-1,
+        	));
+        	$terms = Set::Extract($terms,'{n}.Tag.name');
+        	$this->set('terms', $terms);
+        	$this->layout = 'ajax';
         }
         /**
          * articletransmitter method

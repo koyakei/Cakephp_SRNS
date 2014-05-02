@@ -2,7 +2,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript">
+    <script type="text/javascript">
+    $(document).ready(function(){
+        //オートコンプリート
+        $('#auto').autocomplete(
+            '<?php echo $this->html->url('autoSuggest'); ?>',{
+                'database':['0'],
+                onItemSelect: function(li) {
+                }
+            }
+        );
+    });
+
 $(document).ready(function()
     {
         $(".myTable").tablesorter();

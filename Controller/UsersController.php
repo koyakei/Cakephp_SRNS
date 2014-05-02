@@ -35,7 +35,35 @@ class UsersController extends AppController {
 		$this->User->recursive = 0;
 		$this->set('users', $this->Paginator->paginate());
 	}
+	/**
+	 * autoSuggest method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function autoSuggest() {
+		$this->layout = 'ajax';
+		$data = ''; $json = '';
+		if(!empty($this->params['url']['q'])){
+			$options = array(
+					'field'     =>array('User.id','User.name'),
+					'conditions' => array('or'=> array(
+							array('User.kana LIKE ?' => $this->params['url']['q'].'%'),
+							array('User.name LIKE ?' => $this->params['url']['q'].'%')
+					),
+					),
+					'limit'     =>10
+			);
+			$datas = $this->User->find('list', $options);
 
+			foreach($datas as $key=>$val){
+				$data .= $val.'|'.$key."\n";
+			}
+		}
+		$this->set('json', $data);
+		$this->render('ajax_suggest');
+	}
 /**
  * view method
  *

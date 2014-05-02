@@ -148,4 +148,21 @@ public function isAuthorized($user) {
     	$this->set('SecondDems', $this->returntribasic);
     	$this->set('currentUserID', $this->Auth->user('id'));
     }
+    public function edit($id = null){
+    	debug($this->Session->read());
+    	if (null != ($this->Session->read('beforeURL'))) {
+    		$referer = $this->Session->read('beforeURL');
+    		debug("read=" . $referer);
+    	}else {
+    		$referer = $this->referer();
+    		if (!preg_match('/edit/', $referer)) {
+    			$this->Session->write('beforeURL', $referer);
+    			debug("write=" . $referer);
+    			debug($this->Session->read());
+    		} else {
+    			debug("no write=" . $referer);
+    			debug($this->Session->read());
+    		}
+    	}
+    }
 }

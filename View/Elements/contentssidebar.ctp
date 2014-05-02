@@ -1,4 +1,5 @@
 <div class="actions"  style ="width: 115px;">
+	
 	<h2><?php foreach($keylist as $key => $value): ?></h2>
 	<br>
 <a href="#<?php echo $key ?>"><?php echo $value ?></a>

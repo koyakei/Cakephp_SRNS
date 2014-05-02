@@ -8,6 +8,7 @@ Configure::load("static");
 App::uses('Article','Model');
 App::uses('Tagauthcount','Model');
 App::uses('Tagauth','Model');
+App::uses('Key','Model');
 
 
 /*App::uses('Article', 'Model');
@@ -259,7 +260,7 @@ public function beforeFilter() {
         	}//else{
         		$this->loadModel('Article');
         		if($rightID == null ){
-        			$newart = $this->Article->find('auth',array('order'=> array('Article.modified' => 'desc'),'limit' => 30));
+        			$newart = $this->Article->find('all',array('order'=> array('Article.modified' => 'desc'),'limit' => 30));
         			$this->set('rightarticleresults', //$this->paginate('Article',$options)
         					$newart
         			);
@@ -313,6 +314,8 @@ public function beforeFilter() {
         ));*/
 
         	//}
+			$this->loadModel('Key');
+			$this->loadModel('User');
         	$this->set( 'keylist', $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	$this->set('leftID', $leftID);
@@ -374,7 +377,35 @@ public function beforeFilter() {
         		$this->set('users', $this->request->data['W']);
         	}
         }
+        /**
+         * autoSuggest method
+         *
+         * @throws NotFoundException
+         * @param string $id
+         * @return void
+         */
+        public function autoSuggest() {
+        	$this->layout = 'ajax';
+        	$data = ''; $json = '';
+        	if(!empty($this->params['url']['q'])){
+        		$options = array(
+        				'field'     =>array('User.id','User.name'),
+        				'conditions' => array('or'=> array(
+        						array('User.kana LIKE ?' => $this->params['url']['q'].'%'),
+        						array('User.name LIKE ?' => $this->params['url']['q'].'%')
+        				),
+        				),
+        				'limit'     =>10
+        		);
+        		$datas = $this->User->find('list', $options);
 
+        		foreach($datas as $key=>$val){
+        			$data .= $val.'|'.$key."\n";
+        		}
+        	}
+        	$this->set('json', $data);
+        	$this->render('ajax_suggest');
+        }
         /**
          * delete method
          *

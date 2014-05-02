@@ -6,7 +6,9 @@
 		echo $this->Form->input('ID');
 		echo $this->Form->input('name');
 		//echo $this->Form->input('owner_id');
-		echo $this->Form->input('auth');?>
+		echo $this->Form->input('auth'); 
+		echo $this->Form->hidden('beforeURL',array('value' => $beforeURL));
+		?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>

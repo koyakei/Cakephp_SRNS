@@ -1,9 +1,9 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('Tag', 'Model');
-App::uses('User', 'Model');
+/*App::uses('Tag', 'Model');
+App::uses('User', 'Model');*/
 App::uses('Link', 'Model');
-Configure::load("static");
+//Configure::load("static");
 /**
  * Articles Controller
  *
@@ -23,7 +23,7 @@ class ArticlesController extends AppController {
 			if ($this->Article->isOwnedBy($postId, $user['id'])) {
 				return true;
 			}else {
-				return false;
+				$this->redirect($this->referer());
 			}
 		}
 
@@ -43,7 +43,7 @@ class ArticlesController extends AppController {
         $this->Security->validateOnce = false;
         $this->Security->validatePost = false;
         $this->Security->csrfCheck = false;
-//         $this->Auth->allow();
+        $this->Auth->allow('logout');
 	$this->Auth->authenticate = array(
 		'Basic' => array('user' => 'admin'),
 		//'Form' => array('user' => 'Member')
@@ -54,7 +54,7 @@ class ArticlesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Search.Prg','Paginator','Common','Basic','Cookie','Session');
+	public $components = array('Search.Prg','Paginator','Common','Basic','Cookie');
 	public $helpers = array(
 			'Html',
 			'Session'
@@ -78,24 +78,7 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-		parent::view($id);
-// 		$this->Article->read(null,$id);
-		$this->i = 0;
-		$trikeyID = Configure::read('tagID.search');
-
-
-		$this->set('headtaghashes', $this->taghash);
-		$targetID = $id;
-
-	}
-	/**
-	 * anonymous_view method
-	 *
-	 * @throws NotFoundException
-	 * @param string $id
-	 * @return void
-	 */
-	public function anonymous_view($id = null) {
+		debug($this->Auth->user('id'));
 
 		if($this->request->data['Article']['name'] != null){
 			$this->Common->triarticleAdd($this,'Article',$this->Auth->user('id'),$id,$options);
@@ -113,7 +96,6 @@ class ArticlesController extends AppController {
 		}
 		$this->taghashgen = $this->Article->find('first',array('conditions' => array('Article.' . $this->Article->primaryKey => $id)));
 
-		$this->pageTitle = $this->taghashgen["Article"]['name'];
 		$this->Article->read(null,$id);
 		$this->set('idre', $id);
 		$this->i = 0;
@@ -165,24 +147,13 @@ class ArticlesController extends AppController {
 // 		if ($this->Auth->user('id') == $this->taghashgen['owner_id'] && $this->request->data('auth') !) {
 // 			$this->Article->save($this->request->data('auth'));
 // 		}
-	if (null != ($this->Session->read('beforeURL'))) {
-		;
-	}else {
-		$this->Session->write(`beforeURL`,$this->referer());
-	}
-	$this->Session->write(`before.URL`,"a");
-	debug($this->Session->read('before.URL'));
-// 		$redirect = $this->referer();
-// 		debug($redirect);
-
-
 		if (!$this->Article->exists($id)) {
 			throw new NotFoundException(__('Invalid article'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Article->save($this->request->data)) {
 				$this->Session->setFlash(__('The article has been saved.'));
-				return $this->redirect($this->Session->read('beforeURL'));
+				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
 			}

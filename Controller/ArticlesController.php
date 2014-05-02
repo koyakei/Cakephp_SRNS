@@ -165,13 +165,14 @@ class ArticlesController extends AppController {
 // 		if ($this->Auth->user('id') == $this->taghashgen['owner_id'] && $this->request->data('auth') !) {
 // 			$this->Article->save($this->request->data('auth'));
 // 		}
+debug($this->referer());
 		if (!$this->Article->exists($id)) {
 			throw new NotFoundException(__('Invalid article'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Article->save($this->request->data)) {
 				$this->Session->setFlash(__('The article has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('action' => 'view' ,$id));
 			} else {
 				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
 			}

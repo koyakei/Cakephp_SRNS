@@ -28,7 +28,10 @@ echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre));
 			&nbsp;
 		</dd>
 		<?php if ($firstModel == 'Tag'): ?>
+		<div onClick='toggleShow(this);' >
 		<dt><?php echo __('Max quant'); ?></dt>
+						</div>
+		<div id='HSfield' style='display: none;'>
 		<dd>
 <?php echo $this->Form->create($firstModel//,array('controller' => 'tags','action'=>'quant')
 ); ?>
@@ -37,6 +40,7 @@ echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre));
 <?php echo $this->Form->end('change max quant'); ?>
 			&nbsp;
 		</dd>
+	</div>
 		<?php endif; ?>
 
 	<?php if (!empty($SecondDem)): ?>

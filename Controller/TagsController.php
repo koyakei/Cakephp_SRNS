@@ -364,7 +364,7 @@ public function beforeFilter() {
         		$this->Tag->id = $id;
         		if ($this->Tag->save($this->request->data)) {
         			$this->Session->setFlash(__('The tag has been saved.'));
-        			return $this->redirect(array('action' => 'index'));
+        			return $this->redirect(array('action' => 'view' ,$id));
         		} else {
         			$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
         		}

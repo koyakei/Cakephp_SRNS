@@ -9,7 +9,6 @@ class Date extends AppModel {
 // 			'auth' => true,
 // 	);
 	public function _findAll($state, $query, $results = array()){
-
 		$this->Common = new CommonComponent();
 		$this->Common->Basic = new BasicComponent();
 		$this->Common->Basic->Article = new Article();
@@ -21,7 +20,7 @@ class Date extends AppModel {
 		foreach ($results as $idx => $value){
 // 			$this->Common->getURL($Common,$value[$this->alias]['ID'],$this->alias);
 // 			debug($Common->returntribasic[0]['Article']['name']);
-			if ($this->params['action'] == 'auto_complete') {
+			if (Router::getParams()['action'] != 'auto_complete') {
 					$results[$idx]['URL'] = $this->Common->getURL($Common,$value[$this->alias]['ID'],$this->alias);	;
 			}
 			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {

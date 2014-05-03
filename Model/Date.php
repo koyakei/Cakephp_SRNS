@@ -44,18 +44,19 @@ class Date extends AppModel {
 		return $results;
 
 	}
-	public function beforeSave(){
-			$this->data[$this->alias]['modified'] = date("Y-m-d H:i:s");
+	public function beforeSave($option = null){
+		parent::beforeSave();
+		$this->data[$this->alias]['modified'] = date("Y-m-d H:i:s");
 			return true;
 		}
 
-		public function afterSave($created){
-			if ($created) {
-				$this->data[$this->alias]['created'] = date("Y-m-d H:i:s");
-				$created_save = new $this->alias;
-				$created_save->save($this->data);
-				return true;
-			}
+	public function afterSave($created = null,$option =null){
+		if ($created) {
+			$this->data[$this->alias]['created'] = date("Y-m-d H:i:s");
+			$created_save = new $this->alias;
+			$created_save->save($this->data);
+			return true;
+		}
 
 	}
 // 	public function afterFind($results){

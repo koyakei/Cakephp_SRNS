@@ -19,9 +19,11 @@ class Date extends AppModel {
 			return $query;
 		}
 		foreach ($results as $idx => $value){
-			$this->Common->getURL($Common,$value[$this->alias]['ID'],$this->alias);
+// 			$this->Common->getURL($Common,$value[$this->alias]['ID'],$this->alias);
 // 			debug($Common->returntribasic[0]['Article']['name']);
-			$results[$idx]['URL'] = $Common->returntribasic[0]['Article']['name'];
+			if ($this->params['action'] == 'auto_complete') {
+					$results[$idx]['URL'] = $this->Common->getURL($Common,$value[$this->alias]['ID'],$this->alias);	;
+			}
 			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {
 
 			}elseif ($value[$this->alias]['auth'] == 1) {

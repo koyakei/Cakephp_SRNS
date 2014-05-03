@@ -71,17 +71,17 @@ $this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', nu
 	<div class="span3">
 		<div class="well" style="margin-top:20px;">
 			<div class="rightcontainer">
-			<?php echo $this->Form->create(false, array('action' => 'search')); ?>
+			<?php echo $this->Form->create('Tag', array('action' => 'search')); ?>
 			    <div class="control-group">
 			        <?php echo $this->Form->label('keyword', 'キーワード', array('class' => 'control-label')); ?>
 			        <div class="controls">
 			        <?php  
 echo $this->AutoComplete->input( 
-    'Tag.name', 
+    'keyword', 
     array( 
         'autoCompleteUrl'=>$this->Html->url(  
             array( 
-                'controller'=>'terms', 
+                'controller'=>'tags', 
                 'action'=>'auto_complete', 
             ) 
         ), 

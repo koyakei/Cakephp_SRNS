@@ -495,7 +495,7 @@ public function beforeFilter() {
         	));
         	$terms = Set::Extract($terms,'{n}.Tag.name');
         	$this->set('terms', $terms);
-//         	$this->layout = 'ajax';
+        	$this->layout = 'ajax';
         }
         /**
          * articletransmitter method

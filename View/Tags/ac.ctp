@@ -5,7 +5,7 @@ echo $this->AutoComplete->input(
     array( 
         'autoCompleteUrl'=>$this->Html->url(  
             array( 
-                'controller'=>'terms', 
+                'controller'=>'tags', 
                 'action'=>'auto_complete', 
             ) 
         ), 

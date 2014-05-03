@@ -64,9 +64,9 @@
             $html = '';
 
             #-- Add the javascript
-            if(!$this->jsIncluded) {
+         /*   if(!$this->jsIncluded) {
                 $html .= $this->Html->script($this->scriptPath,array('inline'=>true));
-            }
+            }*/
             $this->jsIncluded=true;
 
             #-- Return the html

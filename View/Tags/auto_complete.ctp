@@ -1,5 +1,5 @@
 <?php 
-  if(isset($terms)) { 
+   if(isset($terms)) { 
     echo $this->Js->object($terms); 
   } 
 ?> 

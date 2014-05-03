@@ -487,7 +487,7 @@ public function beforeFilter() {
        public function auto_complete() {
         	$terms = $this->Tag->find('all', array(
         			'conditions' => array(
-        					'Tag.name LIKE' => $this->params['url']['autoCompleteText'].'%'
+        					'Tag.name LIKE' => '%'.$this->params['url']['autoCompleteText'].'%'
         			),
         			'fields' => array('name'),
         			'limit' => 3,
@@ -495,7 +495,7 @@ public function beforeFilter() {
         	));
         	$terms = Set::Extract($terms,'{n}.Tag.name');
         	$this->set('terms', $terms);
-        	$this->layout = 'ajax';
+//         	$this->layout = 'ajax';
         }
         /**
          * articletransmitter method

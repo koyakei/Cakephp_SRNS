@@ -17,11 +17,7 @@ class Tag extends Date {
 		debug($aname);
 	}*/
 	//public $uses = array('Article','Link','User','Tag');
-	public function beforeFind($query){
-// 		debug($query);
-//  		$query = array('order'=> array('Tag.modified' => 'DESC'));
-// 		return $query;
-	}
+
 // 	public $order = array('Tag.created ASC');
 	public $actsAs = array('Search.Searchable');
 	public $filterArgs = array(

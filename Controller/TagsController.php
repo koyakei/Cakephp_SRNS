@@ -484,7 +484,7 @@ public function beforeFilter() {
 
         }
 
-        function auto_complete() {
+       public function auto_complete() {
         	$terms = $this->Tag->find('all', array(
         			'conditions' => array(
         					'Tag.name LIKE' => $this->params['url']['autoCompleteText'].'%'

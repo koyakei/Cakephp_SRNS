@@ -489,13 +489,15 @@ public function beforeFilter() {
         			'conditions' => array(
         					'Tag.name LIKE BINARY' => '%'.$this->params['url']['autoCompleteText'].'%'
         			),
-        			'fields' => array('name'),
+        			'fields' => array('name','user_id'),
         			'limit' => 3,
-        			'recursive'=>-1,
+        			'recursive'=>1,
         	));
-        	$terms = Set::Extract($terms,'{n}.Tag.name');
+        	debug($terms);
+        	$terms = Set::Extract($terms,'{n}.Tag');
+//         	$terms += Set::Extract($terms,'{n}.Tag.name');
         	$this->set('terms', $terms);
-        	$this->layout = 'ajax';
+//         	$this->layout = 'ajax';
         }
         /**
          * articletransmitter method

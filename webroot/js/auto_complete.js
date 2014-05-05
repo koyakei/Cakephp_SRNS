@@ -50,7 +50,7 @@ $(document).ready(function(){
         // Build a list of links from the terms, set href equal to the term
         var options = '';
         $.each(itemList, function(index, name) {
-              options += '<a autoCompleteItem='+tag+' href="'+name['ID']+'" >' +  name['name'] + ":" + name['username'] + '</a>';
+              options += '<a autoCompleteItem='+tag+' href="'+name['ID']+'" id="'+name['ID']+'" >' +  name['name'] + ":" + name['username'] + '</a>';
             });
         // Show them or hide div if nothing to show
         if(options!=''){
@@ -61,9 +61,9 @@ $(document).ready(function(){
         }
         // Attach a function to click to transfer value to the text box
         $('a[autoCompleteItem='+tag+']').click(function(){
-            $('input[update='+tag+']').val( $(this).attr('href'));
+            $('input[update='+tag+']').val( $(this).attr('id'));
             //IDを下に表示
-            $('.tag_id').val( $(this).attr('href'));
+            $('#tag_id').html( $(this).attr('href'));
             $('input[update='+tag+']').focus();
 
             return false;

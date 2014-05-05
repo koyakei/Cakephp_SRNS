@@ -114,9 +114,7 @@ class TagusersController extends AppController {
 				'limit' => 3,
 				'recursive'=>1,
 		));
-		debug($terms);
 		$terms = Set::Extract($terms,'{n}.Taguser');
-		//         	$terms += Set::Extract($terms,'{n}.Tag.name');
 		$this->set('terms', $terms);
 		//         	$this->layout = 'ajax';
 	}

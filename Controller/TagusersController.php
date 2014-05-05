@@ -110,12 +110,12 @@ class TagusersController extends AppController {
 				'conditions' => array(
 						'Taguser.name LIKE BINARY' => '%'.$this->params['url']['autoCompleteText'].'%'
 				),
-				'fields' => array('name','username'),
+				'fields' => array('ID' ,'name','username'),
 				'limit' => 3,
 				'recursive'=>1,
 		));
 		$terms = Set::Extract($terms,'{n}.Taguser');
 		$this->set('terms', $terms);
-		//         	$this->layout = 'ajax';
+		        	$this->layout = 'ajax';
 	}
 }

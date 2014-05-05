@@ -13,3 +13,4 @@ echo $this->AutoComplete->input(
     ) 
 ); 
 ?> 
+<div class="tag_id"></div>

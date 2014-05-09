@@ -31,13 +31,13 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	</title>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
- 
+
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 
 	<?php
 		echo $this->Html->meta('icon');
 		echo $this->Html->css('cake.generic');
-		echo $this->Html->script(array('jquery.autocomplete','auto_complete'));
+		echo $this->Html->script(array('jquery.autocomplete','auto_complete','vis'));
 		echo $this->Js->writeBuffer( array( 'inline' => 'true'));
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -46,13 +46,13 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
-   
+
     </script>
 </head>
 <body>
 	<div id="container">
 		<div id="header">
-			
+
 		</div>
 		<div id="content">
 

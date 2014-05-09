@@ -260,7 +260,7 @@ class BasicComponent extends Component {
 					)
 		                ),
 				array(
-		                    'table' => 'link',
+		                    'table' => 'taglinks',
 		                    'alias' => 'taglink',
 		                    'type' => 'INNER',
 		                    'conditions' => array(

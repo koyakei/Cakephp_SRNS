@@ -278,14 +278,14 @@ class CommonComponent extends Component {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-		$this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);
+		$this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);//どんな記事がぶら下がっているか探す
 		$that->articleparentres = $that->returntribasic;
 		$that->i = 0;
 		$that->taghash = array();
 		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
 		foreach ($that->articleparentres as $result){
 			$res = $result['Article']['ID'];
-			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$res,"Tag.ID");
+			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$res,"Tag.ID");//
 			$that->taghashgen = $that->returntribasic;
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];

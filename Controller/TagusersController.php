@@ -119,7 +119,7 @@ class TagusersController extends AppController {
 		        	$this->layout = 'ajax';
 	}
 	public function mapt($id = null){
-
+			$this->set('id',$id);
 	}
 
 	/**

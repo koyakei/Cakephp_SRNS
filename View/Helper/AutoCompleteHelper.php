@@ -71,7 +71,7 @@
 
             #-- Return the html
             $html .= $this->Form->input( $name, $options );
-            $html .= $this->Form->hidden('ID',array('value' => ''));
+            $html .= $this->Form->hidden('ID',array('value' => '','class' => 'tag_id'));
             $html .= $this->Html->div('','',array('id'=>$options['update'],'class'=>'autoCompleteDiv'));
             //debug($options['update']);
             return $html;

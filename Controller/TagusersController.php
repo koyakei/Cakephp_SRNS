@@ -13,7 +13,7 @@ class TagusersController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Paginator','Basic','Common');
 
 /**
  * index method
@@ -118,4 +118,28 @@ class TagusersController extends AppController {
 		$this->set('terms', $terms);
 		        	$this->layout = 'ajax';
 	}
+
+	/**
+	 * delete method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+
+	public function map($id = null) {
+// 		$to = $this->Link->find('all',
+// 				array('conditions' => array('Taguser.'. $this->primaryKey => $id) //from と　toに分けるか？
+// 		));
+		$FT['Article'] = $this->Basic->tribasicfiderbyid($that,null,"Article","Article.ID",$id);
+		$FT['Tag'] = $this->Basic->tribasicfiderbyid($that,null,"Tag","Tag.ID",$id);
+		$TF['Tag'] = $this->Basic->tribasicfiderbyidTF($that,null,"Tag","Tag.ID",$id);
+		$TF['Article'] = $this->Basic->tribasicfiderbyidTF($that,null,"Article","Article.ID",$id);
+		//制限要素　user_id.trikey_id
+
+		$this->set('TF', $TF);
+		$this->set('FT', $FT);
+// 		$this->layout = 'ajax';
+	}
+
 }

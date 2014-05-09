@@ -1,6 +1,7 @@
 <?php
 App::uses('Social', 'Model');
 App::uses('Tag', 'Model');
+App::uses('Taguser', 'Model');
 App::uses('User', 'Model');
 App::uses('Link', 'Model');
 App::uses('Article', 'Model');
@@ -236,11 +237,11 @@ class BasicComponent extends Component {
 	 * @param mix $that
 	 * @param int $trikeyID
 	 * @param string $modelSe
-	 * @param string $Ltotarget //target colmunn
+	 * @param string $Ltotarget //target colmunn 探すID
 	 * @param ind $id
 	 * @return $that->returntribasic
 	 */
-	public function tribasicfiderbyid(&$that = null,$trikeyID,$modelSe,$Ltotarget,$id) {
+	public function tribasicfiderbyid(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$id) {
 // 		$that->loadModel($modelSe);
 		$modelSe = new $modelSe();
 		$option = array(
@@ -264,7 +265,7 @@ class BasicComponent extends Component {
 		                    'type' => 'INNER',
 		                    'conditions' => array(
 					array("Link.ID = taglink.LTo"),
-					array($trikeyID." = taglink.LFrom")//$trikeyID
+		                    		($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
 					)
 		                ),
 				),
@@ -272,6 +273,40 @@ class BasicComponent extends Component {
 			);
 		$that->returntribasic = $modelSe->find('all',$option);
 // 		debug($that->returntribasic[0]['Article']['name']); // URL
+		return $that->returntribasic;
+	}
+	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$id) {
+		// 		$that->loadModel($modelSe);
+		$modelSe = new $modelSe();
+		$option = array(
+				'conditions'=> array(
+						"Link.LFrom = $Ltotarget"
+				),
+				'fields' => array('*'		),
+				'joins'
+				=> array(
+						array(
+								'table' => 'link',
+								'alias' => 'Link',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("$id = Link.LTo")
+								)
+						),
+						array(
+								'table' => 'link',
+								'alias' => 'taglink',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Link.ID = taglink.LTo"),
+										($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
+								)
+						),
+				),
+				'order' => ''
+		);
+		$that->returntribasic = $modelSe->find('all',$option);
+		// 		debug($that->returntribasic[0]['Article']['name']); // URL
 		return $that->returntribasic;
 	}
 	public function triupperfiderbyid(&$that = null,$trikeyID,$modelSe,$id) {

@@ -46,3 +46,4 @@ echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre));
 	<?php if (!empty($SecondDems)): ?>
 		<?php echo $this->element('detailSTag',array('SecondDems' =>  $SecondDems,'firstModel' => 'Tag')); ?>
 	<?php endif; ?>
+	<?php echo $this->element('map', array('id' => $id)); ?>

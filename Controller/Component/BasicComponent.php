@@ -275,7 +275,7 @@ class BasicComponent extends Component {
 // 		debug($that->returntribasic[0]['Article']['name']); // URL
 		return $that->returntribasic;
 	}
-	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$id) {
+	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe = null,$Ltotarget = null ,$id) {
 		// 		$that->loadModel($modelSe);
 		$modelSe = new $modelSe();
 		$option = array(

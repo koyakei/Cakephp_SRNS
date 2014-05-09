@@ -118,6 +118,9 @@ class TagusersController extends AppController {
 		$this->set('terms', $terms);
 		        	$this->layout = 'ajax';
 	}
+	public function mapt($id = null){
+
+	}
 
 	/**
 	 * delete method

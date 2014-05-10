@@ -21,7 +21,7 @@ $(document).ready(function(){
 
 	$('input:button').click(function(){
 		//alert('test1');
-		$.getJSON('map',
+		$.getJSON('map/<?php echo $id; ?>',
 			null,
 			function(obj) {
 				if(obj !== null) {
@@ -63,6 +63,10 @@ $(document).ready(function(){
 						}
 					};
 					graph = new vis.Graph(container, data, options);
+					//select eventlistner from sample code 07 selection
+					graph.on('select', function(properties) {
+    				document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties) + '<br>';
+  });
 
 				}
 			}

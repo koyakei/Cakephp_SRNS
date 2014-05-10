@@ -1,7 +1,7 @@
 <head>
 <style type="text/css">
 #mygraph {
-	width: 800px;
+width: 100%;
 height: 600px;
 border: 1px solid lightgray;
 }
@@ -17,12 +17,14 @@ border: 1px solid lightgray;
 <script>
 var nodes = [];
 var edges = [];
+/*function getInfo(id){
+}*/
 $(document).ready(function(){
 
-	$('input:button').click(function(){
+	$('input:button').click(function getInfo(){
 		//alert('test1');
-		$.getJSON('map?id=<?php echo $id; ?>',
-			null,
+		$.getJSON('/cakephp/tagusers/map?id=<?php echo $id; ?>',
+			null,//{ id: <?php echo $id; ?> },
 			function(obj) {
 				if(obj !== null) {
 					//alert(obj);
@@ -35,7 +37,7 @@ $(document).ready(function(){
 						var lLFrom = item["Link"]["LFrom"];
 						var lLTo = item["Link"]["LTo"];
 						var tName = item["taglink"]["name"];
-						nodes.push({ id: <?php echo $id; ?>, label: "管理者" });
+						//nodes.push({ id: <?php echo $id; ?>, label: "管理者" });
 						nodes.push({ id: aId, label: aName });
 
 						var isFrom = true;
@@ -50,7 +52,6 @@ $(document).ready(function(){
 						}
  						if (isTo) nodes.push({ id: lLTo, label:tName });
 						edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, style: 'line' });
-						edges.push({ from: lLFrom, to: lLTo });
 					}
 
 					var container = document.getElementById('mygraph');
@@ -65,8 +66,10 @@ $(document).ready(function(){
 					};
 					graph = new vis.Graph(container, data, options);
 					//select eventlistner from sample code 07 selection
+					//cklick で　jsonを取得
 					graph.on('select', function(properties) {
     				document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties) + '<br>';
+    				getInfo(JSON.stringify(properties)['nodes'])
   });
 
 				}

@@ -52,7 +52,7 @@ $(document).ready(function(){
 							if (nodes[idx][j]["id"] == lLTo) isTo = false;
 						}
  						if (isTo) nodes[idx].push({ id: lLTo, label:tName });
-						edges[idx].push({ id: lId, from: lLFrom, to: lLTo, label: tName, style: 'line' });
+						edges[idx].push({ id: lId, from: lLFrom, to: lLTo, label: tName, style: 'line', length: Math.random()*200+40 });
 						//edges[idx].push({ from: lLFrom, to: lLTo });
 					}
 

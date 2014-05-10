@@ -15,6 +15,7 @@ border: 1px solid lightgray;
 <input type="button" value="Test" />
 
 <script>
+var idx = 0;
 var nodes = [];
 var edges = [];
 /*function getInfo(id){

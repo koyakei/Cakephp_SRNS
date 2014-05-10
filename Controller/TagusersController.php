@@ -136,8 +136,8 @@ class TagusersController extends AppController {
 // 		));
 		$FT['Article'] = $this->Basic->tribasicfiderbyid($that,null,"Article","Article.ID",$this->params['url']['id']);
 		$FT['Tag'] = $this->Basic->tribasicfiderbyid($that,null,"Tag","Tag.ID",$this->params['url']['id']);
-// 		$TF['Tag'] = $this->Basic->tribasicfiderbyidTF($that,null,"Tag","Tag.ID",$id);
-// 		$TF['Article'] = $this->Basic->tribasicfiderbyidTF($that,null,"Article","Article.ID",$id);
+// 		$TF['Tag'] = $this->Basic->tribasicfiderbyidTF($that,null,"Tag","Tag.ID",$this->params['url']['id']);
+// 		$TF['Article'] = $this->Basic->tribasicfiderbyidTF($that,null,"Article","Article.ID",$this->params['url']['id']);
 		//制限要素　user_id.trikey_id
 
 // 		$this->set('TF', $TF);

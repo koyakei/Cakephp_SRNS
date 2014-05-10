@@ -18,16 +18,16 @@ border: 1px solid lightgray;
 var idx = 0;
 var nodes = [];
 var edges = [];
-/*function getInfo(id){
-}*/
 $(document).ready(function(){
 
-	$('input:button').click(function getInfo(){
+	$('input:button').click(function(){
 		//alert('test1');
 		$.getJSON('/cakephp/tagusers/map?id=<?php echo $id; ?>',
 			null,//{ id: <?php echo $id; ?> },
 			function(obj) {
 				if(obj !== null) {
+					nodes[idx] = [];
+					edges[idx] = [];
 					//alert(obj);
 					list = obj["Article"];
 					for (var i = 0; i < list.length; i++) {
@@ -38,27 +38,28 @@ $(document).ready(function(){
 						var lLFrom = item["Link"]["LFrom"];
 						var lLTo = item["Link"]["LTo"];
 						var tName = item["taglink"]["name"];
-						//nodes.push({ id: <?php echo $id; ?>, label: "管理者" });
-						nodes.push({ id: aId, label: aName });
+						//nodes[idx].push({ id: <?php echo $id; ?>, label: "管理者" });
+						nodes[idx].push({ id: aId, label: aName });
 
 						var isFrom = true;
-						for (var j = 0; j < nodes.length; j++) {
-							if (nodes[j]["id"] == lLFrom) isFrom = false;
+						for (var j = 0; j < nodes[idx].length; j++) {
+							if (nodes[idx][j]["id"] == lLFrom) isFrom = false;
 						}
-						if (isFrom) nodes.push({ id: lLFrom, label:tName });
+						if (isFrom) nodes[idx].push({ id: lLFrom, label:tName });
 
 						var isTo = true;
-						for (var j = 0; j < nodes.length; j++) {
-							if (nodes[j]["id"] == lLTo) isTo = false;
+						for (var j = 0; j < nodes[idx].length; j++) {
+							if (nodes[idx][j]["id"] == lLTo) isTo = false;
 						}
- 						if (isTo) nodes.push({ id: lLTo, label:tName });
-						edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, style: 'line' });
+ 						if (isTo) nodes[idx].push({ id: lLTo, label:tName });
+						edges[idx].push({ id: lId, from: lLFrom, to: lLTo, label: tName, style: 'line' });
+						//edges[idx].push({ from: lLFrom, to: lLTo });
 					}
 
 					var container = document.getElementById('mygraph');
 					var data = {
-							nodes: nodes,
-							edges: edges
+							nodes: nodes[idx],
+							edges: edges[idx]
 					};
 					var options = {
 						nodes: {

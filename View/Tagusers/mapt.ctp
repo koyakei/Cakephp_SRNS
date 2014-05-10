@@ -21,7 +21,7 @@ $(document).ready(function(){
 
 	$('input:button').click(function(){
 		//alert('test1');
-		$.getJSON('map/237',
+		$.getJSON('map?id=<?php echo $id; ?>',
 			null,
 			function(obj) {
 				if(obj !== null) {
@@ -35,6 +35,7 @@ $(document).ready(function(){
 						var lLFrom = item["Link"]["LFrom"];
 						var lLTo = item["Link"]["LTo"];
 						var tName = item["taglink"]["name"];
+						nodes.push({ id: <?php echo $id; ?>, label: "管理者" });
 						nodes.push({ id: aId, label: aName });
 
 						var isFrom = true;

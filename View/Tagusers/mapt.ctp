@@ -1,11 +1,11 @@
 <head>
-  <style type="text/css">
-    #mygraph {
-      width: 400px;
-      height: 400px;
-      border: 1px solid lightgray;
-    }
-  </style>
+<style type="text/css">
+#mygraph {
+	width: 800px;
+height: 600px;
+border: 1px solid lightgray;
+}
+</style>
 </head>
 
 <body>
@@ -15,45 +15,61 @@
 <input type="button" value="Test" />
 
 <script>
-$(document).ready(function(){
-
 var nodes = [];
 var edges = [];
-$('input:button').click(function(){
- $.getJSON('map/' + '<?php echo $id; ?>',
-  null,
-  function(obj) {
-   if(obj !== null) {
-     list = obj["Article"];
-     for (var i = 0; i < list.length; i++) {
-         var item = list[i];
-         var aId = item["Article"]["ID"];
-         var aName = item["Article"]["name"];
-         var lId = item["Link"]["ID"];
-         var lLFrom = item["Link"]["LFrom"];
-         var lLTo = item["Link"]["LTo"];
-         var tName = item["taglink"]["name"];
-         nodes[i] = { ID: aId, label: aName };
-         edges[i] = { ID: lId, from: lLFrom, to: lLTo, label: tName, style: 'line' };
-     }
-     //alert(nodes);
-     //alert(edges);
-  // create a graph
-  var container = document.getElementById('mygraph');
-  var data = {
-    nodes: nodes,
-    edges: edges
-  };
-  var options = {
-    nodes: {
-      shape: 'box'
-    }
-  };
-  graph = new vis.Graph(container, data, options);
-   }
-  }
- );
-});
+$(document).ready(function(){
+
+	$('input:button').click(function(){
+		//alert('test1');
+		$.getJSON('map',
+			null,
+			function(obj) {
+				if(obj !== null) {
+					//alert(obj);
+					list = obj["Article"];
+					for (var i = 0; i < list.length; i++) {
+						var item = list[i];
+						var aId = item["Article"]["ID"];
+						var aName = item["Article"]["name"];
+						var lId = item["Link"]["ID"];
+						var lLFrom = item["Link"]["LFrom"];
+						var lLTo = item["Link"]["LTo"];
+						var tName = item["taglink"]["name"];
+						nodes.push({ id: aId, label: aName });
+
+						var isFrom = true;
+						for (var j = 0; j < nodes.length; j++) {
+							if (nodes[j]["id"] == lLFrom) isFrom = false;
+						}
+						if (isFrom) nodes.push({ id: lLFrom, label:tName });
+
+						var isTo = true;
+						for (var j = 0; j < nodes.length; j++) {
+							if (nodes[j]["id"] == lLTo) isTo = false;
+						}
+ 						if (isTo) nodes.push({ id: lLTo, label:tName });
+						edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, style: 'line' });
+						edges.push({ from: lLFrom, to: lLTo });
+					}
+
+					var container = document.getElementById('mygraph');
+					var data = {
+							nodes: nodes,
+							edges: edges
+					};
+					var options = {
+						nodes: {
+							shape: 'box'
+						}
+					};
+					graph = new vis.Graph(container, data, options);
+
+				}
+			}
+		);
+	});
+}
+		);
 
 </script>
 </body>

@@ -140,9 +140,9 @@ class TagusersController extends AppController {
 // 		$TF['Article'] = $this->Basic->tribasicfiderbyidTF($that,null,"Article","Article.ID",$id);
 		//制限要素　user_id.trikey_id
 
-		$this->set('TF', $TF);
+// 		$this->set('TF', $TF);
 		$this->set('FT', $FT);
-// 		$this->layout = 'ajax';
+		$this->layout = 'ajax';
 	}
 
 }

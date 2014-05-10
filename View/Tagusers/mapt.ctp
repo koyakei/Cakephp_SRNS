@@ -21,7 +21,7 @@ $(document).ready(function(){
 
 	$('input:button').click(function(){
 		//alert('test1');
-		$.getJSON('map/<?php echo $id; ?>',
+		$.getJSON('map/237',
 			null,
 			function(obj) {
 				if(obj !== null) {

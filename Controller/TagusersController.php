@@ -130,11 +130,11 @@ class TagusersController extends AppController {
 	 * @return void
 	 */
 
-	public function map($id = null) {
+	public function map() {
 // 		$to = $this->Link->find('all',
 // 				array('conditions' => array('Taguser.'. $this->primaryKey => $id) //from と　toに分けるか？
 // 		));
-		$FT['Article'] = $this->Basic->tribasicfiderbyid($that,null,"Article","Article.ID",$id);
+		$FT['Article'] = $this->Basic->tribasicfiderbyid($that,null,"Article","Article.ID",$this->params['url']['id']);
 // 		$FT['Tag'] = $this->Basic->tribasicfiderbyid($that,null,"Tag","Tag.ID",$id);
 // 		$TF['Tag'] = $this->Basic->tribasicfiderbyidTF($that,null,"Tag","Tag.ID",$id);
 // 		$TF['Article'] = $this->Basic->tribasicfiderbyidTF($that,null,"Article","Article.ID",$id);

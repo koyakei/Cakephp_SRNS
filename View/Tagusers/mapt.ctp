@@ -19,7 +19,7 @@ var idx = 0;
 var nodes = [];
 var edges = [];
 
-/* function 
+/* function
  * @object obj
  * @string entity
  * @string option['color']
@@ -71,42 +71,49 @@ function addNodes(obj, entity, option) {
 		//edges[idx].push({ from: lLFrom, to: lLTo });
 	}
 }
+function getInfo(id){
+	$.getJSON('/cakephp/tagusers/map?id='+ id,
+		null,//{ id: <?php echo $id; ?> },
+		function(obj) {
+			if(obj !== null) {
+				nodes[idx] = [];
+				edges[idx] = [];
+				addNodes(obj, "Article");
+				addNodes(obj, "Tag", "#FF6666");
+
+				var container = document.getElementById('mygraph');
+				var data = {
+					nodes: nodes[idx],
+					edges: edges[idx]
+				};
+				var options = {
+					nodes: {
+						shape: 'box'
+					}
+				};
+				graph = new vis.Graph(container, data, options);
+				//select eventlistner from sample code 07 selection
+				//cklick で　jsonを取得
+				//graph.on('select',function(){checkGet(properties)}
+				graph.on('select', function(properties) {
+    			document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties['nodes']) + '<br>';
+    			getInfo(JSON.stringify(properties['nodes'][0]))
+
+				});
+				idx++;
+			}
+		}
+	);
+}
+function checkGet(properties) {
+    				document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties) + '<br>';
+    				getInfo(JSON.stringify(properties)['nodes'])
+  		}
 
 $(document).ready(function(){
 
-	$('input:button').click(function(){
-		//alert('test1');
-		$.getJSON('/cakephp/tagusers/map?id=<?php echo $id; ?>',
-			null,//{ id: <?php echo $id; ?> },
-			function(obj) {
-				if(obj !== null) {
-					nodes[idx] = [];
-					edges[idx] = [];
-					addNodes(obj, "Article");
-					addNodes(obj, "Tag", "#FF6666");
-
-					var container = document.getElementById('mygraph');
-					var data = {
-							nodes: nodes[idx],
-							edges: edges[idx]
-					};
-					var options = {
-						nodes: {
-							shape: 'box'
-						}
-					};
-					graph = new vis.Graph(container, data, options);
-					//select eventlistner from sample code 07 selection
-					//cklick で　jsonを取得
-					graph.on('select', function(properties) {
-    				document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties) + '<br>';
-    				getInfo(JSON.stringify(properties)['nodes'])
-  });
-
-				}
-			}
-		);
-	});
+	$('input:button').click(getInfo(<?php echo $id; ?>)
+			);
 }
 		);
 

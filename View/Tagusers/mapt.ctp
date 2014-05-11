@@ -96,7 +96,7 @@ function getInfo(id){
 				//cklick で　jsonを取得
 				//graph.on('select',function(){checkGet(properties)}
 				graph.on('select', function(properties) {
-    			document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties['nodes']) + '<br>';
+    			document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties['nodes'][0]) + '<br>';
     			getInfo(JSON.stringify(properties['nodes'][0]))
 
 				});
@@ -111,7 +111,7 @@ function checkGet(properties) {
   		}
 
 $(document).ready(function(){
-
+getInfo(<?php echo $id; ?>);
 	$('input:button').click(getInfo(<?php echo $id; ?>)
 			);
 }

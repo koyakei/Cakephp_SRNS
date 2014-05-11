@@ -78,6 +78,7 @@ var options = {
         stabilize: false,
         dataManipulation: true,
         onAdd: function(data,callback) {
+        	var duringManip = true;
           var span = document.getElementById('operation');
           var idInput = document.getElementById('node-id');
           var labelInput = document.getElementById('node-label');
@@ -92,6 +93,7 @@ var options = {
           div.style.display = 'block';
         },
         onEdit: function(data,callback) {
+        var duringManip = true;
           var span = document.getElementById('operation');
           var idInput = document.getElementById('node-id');
           var labelInput = document.getElementById('node-label');
@@ -106,6 +108,7 @@ var options = {
           div.style.display = 'block';
         },
         onConnect: function(data,callback) {
+        var duringManip = true;
           if (data.from == data.to) {
             var r=confirm("Do you want to connect the node to itself?");
             if (r==true) {
@@ -192,7 +195,7 @@ function getInfo(id){
 				//graph.on('select',function(){checkGet(properties)}
 				graph.on('select', function(properties) {
     			document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties['nodes'][0]) + '<br>';
-    			if(properties['nodes'][0] != null){getInfo(JSON.stringify(properties['nodes'][0]));}
+    			if(properties['nodes'][0] != null && duringManip == false){getInfo(JSON.stringify(properties['nodes'][0]));}
 
 				});
 				idx++;
@@ -209,7 +212,7 @@ function getInfo(id){
         cancelButton.onclick = null;
         var div = document.getElementById('graph-popUp');
         div.style.display = 'none';
-
+        var duringManip = false;
       }
 
       function saveData(data,callback) {

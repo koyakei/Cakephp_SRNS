@@ -41,7 +41,7 @@ function addNodes(obj, entity, option) {
 			if (nodes[idx][j]["id"] == aId) isExists = true;
 		}
 		if (!isExists) {
-			//alert('aId=' + aId + ' aName=' + aName + ' lLFrom=' + lLFrom + ' lLTo=' + lLTo);
+			//alert('aId=' + aId + ' lId=' + lId + ' aName=' + aName + ' lLFrom=' + lLFrom + ' lLTo=' + lLTo);
 			nodes[idx].push({ id: aId, label: aName, color:option });
 		}
 
@@ -49,15 +49,25 @@ function addNodes(obj, entity, option) {
 		for (var j = 0; j < nodes[idx].length; j++) {
 			if (nodes[idx][j]["id"] == lLFrom) isFrom = true;
 		}
-		if (!isFrom) nodes[idx].push({ id: lLFrom, label:tName, color:option });
+		if (!isFrom) {
+			nodes[idx].push({ id: lLFrom, label:tName, color:option });
+		}
 
 		var isTo = false;
 		for (var j = 0; j < nodes[idx].length; j++) {
 			if (nodes[idx][j]["id"] == lLTo) isTo = true;
 		}
-		if (!isTo) nodes[idx].push({ id: lLTo, label:tName, color:option });
+		if (!isTo) {
+			nodes[idx].push({ id: lLTo, label:tName, color:option });
+		}
 
-		edges[idx].push({ /*id: lId,*/ from: lLFrom, to: lLTo, label: tName, style: 'line', length: Math.random()*200+40 });
+		var isEdge = false;
+		for (var j = 0; j < edges[idx].length; j++) {
+			if (edges[idx][j]["id"] == lId) isEdge = true;
+		}
+		if (!isEdge) {
+			edges[idx].push({ id: lId, from: lLFrom, to: lLTo, label: tName, style: 'line', length: Math.random()*200+40 });
+		}
 		//edges[idx].push({ from: lLFrom, to: lLTo });
 	}
 }

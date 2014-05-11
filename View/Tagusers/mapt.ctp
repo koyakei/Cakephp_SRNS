@@ -1,10 +1,52 @@
 <head>
 <style type="text/css">
-#mygraph {
-width: 100%;
-height: 600px;
-border: 1px solid lightgray;
-}
+body {
+      font: 10pt sans;
+    }
+    #mygraph {
+      position:relative;
+      width: 600px;
+      height: 600px;
+      border: 1px solid lightgray;
+    }
+    table.legend_table {
+      font-size: 11px;
+      border-width:1px;
+      border-color:#d3d3d3;
+      border-style:solid;
+    }
+    table.legend_table,td {
+      border-width:1px;
+      border-color:#d3d3d3;
+      border-style:solid;
+      padding: 2px;
+    }
+    div.table_content {
+      width:80px;
+      text-align:center;
+    }
+    div.table_description {
+      width:100px;
+    }
+
+    #operation {
+      font-size:28px;
+    }
+    #graph-popUp {
+      display:none;
+      position:absolute;
+      top:350px;
+      left:170px;
+      z-index:299;
+      width:250px;
+      height:120px;
+      background-color: #f9f9f9;
+      border-style:solid;
+      border-width:3px;
+      border-color: #5394ed;
+      padding:10px;
+      text-align: center;
+    }
 </style>
 <?php echo $this->Html->css('vis'); ?>
 </head>
@@ -144,33 +186,13 @@ function getInfo(id){
 
 
 
-				var options = {
-    			        edges: {
-    			          length: 50
-    			        },
-    			        stabilize: false,
-    			        dataManipulation: true,
-    			        onAdd: function(data,callback) {
-    			          var span = document.getElementById('operation');
-    			          var idInput = document.getElementById('node-id');
-    			          var labelInput = document.getElementById('node-label');
-    			          var saveButton = document.getElementById('saveButton');
-    			          var cancelButton = document.getElementById('cancelButton');
-    			          var div = document.getElementById('graph-popUp');
-    			          span.innerHTML = "Add Node";
-    			          idInput.value = data.id;
-    			          labelInput.value = data.label;
-
-    			          div.style.display = 'block';
-    			        }
-    			      };
 				graph = new vis.Graph(container, data, options);
 				//select eventlistner from sample code 07 selection
 				//cklick で　jsonを取得
 				//graph.on('select',function(){checkGet(properties)}
 				graph.on('select', function(properties) {
     			document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties['nodes'][0]) + '<br>';
-    			getInfo(JSON.stringify(properties['nodes'][0]))
+    			if(properties['nodes'][0] != null){getInfo(JSON.stringify(properties['nodes'][0]));}
 
 				});
 				idx++;

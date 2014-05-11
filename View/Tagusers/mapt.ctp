@@ -156,7 +156,7 @@ function getInfo(id){
 				//select eventlistner from sample code 07 selection
 				//cklick で　jsonを取得
 				//graph.on('select',function(){checkGet(properties)}
-						graph.on('select', function(properties) {
+				graph.on('select', function(properties) {
     			document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties['nodes'][0]) + '<br>';
     			getInfo(JSON.stringify(properties['nodes'][0]))
 

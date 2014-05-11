@@ -6,6 +6,7 @@ height: 600px;
 border: 1px solid lightgray;
 }
 </style>
+<?php echo $this->Html->css('vis'); ?>
 </head>
 
 <body>

@@ -64,7 +64,7 @@ body {
   <input type="button" value="cancel" id="cancelButton"></button>
 </div>
 <div id="sucsess">
-<?php echo $this->Form->create(false,array('controller' => 'tagusers','action' => 'addEntity'));
+<?php echo $this->Form->create(false,array('controller' => 'tagusers','action' => 'addentity'));
 echo $this->Form->input('Json_test');
 echo $this->Js->submit('Send', array(
     'before'=>$this->Js->get('#sending')->effect('fadeIn'),

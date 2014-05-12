@@ -245,5 +245,5 @@ getInfo(<?php echo $id; ?>);
 </script>
 
 
-<? php echo $this->Js->writeBuffer(); ?>
+<?php echo $this->Js->writeBuffer(); ?>
 </body>

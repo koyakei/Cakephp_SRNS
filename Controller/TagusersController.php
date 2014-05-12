@@ -13,7 +13,7 @@ class TagusersController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator','Basic','Common');
+	public $components = array('Paginator','Basic','Common','RequestHandler');
 
 /**
  * index method
@@ -120,6 +120,11 @@ class TagusersController extends AppController {
 	}
 	public function mapt($id = null){
 			$this->set('id',$id);
+	}
+	public function addEntity($entitiy = NULL){
+		$_REQUEST[$entitiy];
+		$this->Taguser->find('all',array('conditions' => array('Tagusers.ID' => $_REQUEST[$entitiy])));
+
 	}
 
 	/**

@@ -63,6 +63,16 @@ body {
   <input type="button" value="save" id="saveButton"></button>
   <input type="button" value="cancel" id="cancelButton"></button>
 </div>
+<div id="sucsess">
+<?php echo $this->Form->create(false,array('controller' => 'tagusers','action' => 'addEntity'));
+echo $this->Form->input('Json_test');
+echo $this->Js->submit('Send', array(
+    'before'=>$this->Js->get('#sending')->effect('fadeIn'),
+    'success'=>$this->Js->get('#sending')->effect('fadeOut'),
+    'update'=>'#success'
+));
+echo $this->Form->end('tag'); ?>
+<div>
 <br />
 <div id="mygraph"></div>
 <div id="info"></div>
@@ -78,7 +88,6 @@ var options = {
         stabilize: false,
         dataManipulation: true,
         onAdd: function(data,callback) {
-        	var duringManip = true;
           var span = document.getElementById('operation');
           var idInput = document.getElementById('node-id');
           var labelInput = document.getElementById('node-label');
@@ -93,7 +102,6 @@ var options = {
           div.style.display = 'block';
         },
         onEdit: function(data,callback) {
-        var duringManip = true;
           var span = document.getElementById('operation');
           var idInput = document.getElementById('node-id');
           var labelInput = document.getElementById('node-label');
@@ -195,7 +203,7 @@ function getInfo(id){
 				//graph.on('select',function(){checkGet(properties)}
 				graph.on('select', function(properties) {
     			document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties['nodes'][0]) + '<br>';
-    			if(properties['nodes'][0] != null && duringManip == false){getInfo(JSON.stringify(properties['nodes'][0]));}
+    			if(properties['nodes'][0] != null && options['dataManipulation'] == false){getInfo(JSON.stringify(properties['nodes'][0]));}
 
 				});
 				idx++;
@@ -212,7 +220,6 @@ function getInfo(id){
         cancelButton.onclick = null;
         var div = document.getElementById('graph-popUp');
         div.style.display = 'none';
-        var duringManip = false;
       }
 
       function saveData(data,callback) {
@@ -238,5 +245,5 @@ getInfo(<?php echo $id; ?>);
 </script>
 
 
-
+<? php echo $this->Js->writeBuffer(); ?>
 </body>

@@ -33,7 +33,7 @@ App::uses('Key', 'Model');
  */
 class AppController extends Controller {
 // 	public $helpers = array( 'Javascript', 'Ajax');
-
+	public $helpers = array('Js');
 public $components = array(
     'Session',
     'Auth' => array(

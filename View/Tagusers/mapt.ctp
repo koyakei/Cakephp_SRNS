@@ -243,7 +243,8 @@ getInfo(<?php echo $id; ?>);
 
 		);
 </script>
-
+<div id="success"></div>
+<div id="sending"></div>
 
 <?php echo $this->Js->writeBuffer(); ?>
 </body>

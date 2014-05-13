@@ -147,8 +147,7 @@ var options = {
  * return added Link info @string //追加に成功したら追加した情報が帰ってくるようにしたい。
  */
       function addLinkSQL(data){
-        //alert("json post go");
-        alert(data);
+
         // array('cntroller'=>'tagusers' ,'action' => 'addentity') に送る
         //data= {from:id,to:id,trikeyname:string} で渡ってくる　trikey も渡せるようにしたい。label の追加が必要だろう。なければreply にするか。
         //Json post を飛ばす。

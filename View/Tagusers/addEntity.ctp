@@ -1,1 +1,5 @@
-成功
+<?php
+   if(isset($json)) {
+    echo $this->Js->object($json);
+  }
+?>

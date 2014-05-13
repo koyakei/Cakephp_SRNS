@@ -124,26 +124,27 @@ class TagusersController extends AppController {
 	public function addentity(){
 // 		$_REQUEST[$entitiy];
 // 		$this->Taguser->find('all',array('conditions' => array('Tagusers.ID' => $_REQUEST[$entitiy])));
-		if($this->request->query['trikey_username'] ==null){
+		if($_REQUEST['trikey_username'] ==null){
 			$res = $this->Taguser->find('first',
-
 						array('conditions' =>
-								array('Taguser.name' =>$this->request->query['label'])
+								array('Taguser.name' =>$_REQUEST['label'])
 						)
 				);
 	}else {
 			$this->Taguser->find('first',
 
 					array('conditions' =>
-							array('Taguser.name' =>$this->request->query['label'],'Taguser.username'=>$this->request->query['trikey_username'])
+							array('Taguser.name' =>$_REQUEST['label'],'Taguser.username'=>$_REQUEST['trikey_username'])
 					)
 			);
 	}
 		debug($res);
 		$options['authCheck'] = false;
-		return ($this->Basic->trilinkAdd($this,$this->request->query['from'],$this->request->query['to'],$res['Taguser']['ID'],$options));
+
 			//成功したら、成功した情報を返す。
 // 		$this->render('addEntity', 'ajax');
+		$this->set('json', $this->Basic->trilinkAdd($this,$_REQUEST['from'],$_REQUEST['to'],$res['Taguser']['ID'],$options));
+		$this->layout = 'ajax';
 
 	}
 

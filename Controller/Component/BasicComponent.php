@@ -397,7 +397,7 @@ class BasicComponent extends Component {
 				$that->Link->create();
 				if($that->Link->save($that->request->data)){
 					//挿入したIDを返す
-					return array($that->last_id);
+					return $that->last_id;
 				}
 			}else{
 				debug("1st step miss");

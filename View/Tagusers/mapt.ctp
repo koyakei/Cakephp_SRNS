@@ -52,32 +52,37 @@ body {
 </head>
 
 <body>
+
 <div id="graph-popUp">
   <span id="operation">node</span> <br>
   <table style="margin:auto;"><tr>
     <td>id</td><td><input id="node-id" value="new value"></td>
   </tr>
     <tr>
-      <td>label</td><td><input id="node-label" value="new value"> </td>
-    </tr></table>
+      <td>label</td><td><input id="node-label" value="reply"> </td>
+
+    </tr>
+    </table>
   <input type="button" value="save" id="saveButton"></button>
   <input type="button" value="cancel" id="cancelButton"></button>
 </div>
-<div id="sucsess">
-<?php echo $this->Form->create(false,array('controller' => 'tagusers','action' => 'addentity'));
-echo $this->Form->input('Json_test');
-echo $this->Js->submit('Send', array(
-    'before'=>$this->Js->get('#sending')->effect('fadeIn'),
-    'success'=>$this->Js->get('#sending')->effect('fadeOut'),
-    'update'=>'#success'
-));
-echo $this->Form->end('tag'); ?>
-<div>
+<br />
+<div id="edge-popUp">
+  <span id="edgeOperation">edge</span> <br>
+  <table style="margin:auto;">
+    <tr>
+      <td>label</td><td><input id="edge-label" value="reply"> </td>
+    </tr>
+    </table>
+  <input type="button" value="save" id="saveButton"></button>
+  <input type="button" value="cancel" id="cancelButton"></button>
+</div>
 <br />
 <div id="mygraph"></div>
 <div id="info"></div>
 <input type="button" value="Test" />
 <script>
+//次にやること　var data を array('cntroller'=>'tagusers' ,'action' => 'addentity') に渡して、そっくりそのまま返す。
 var idx = 0;
 var nodes = [];
 var edges = [];
@@ -117,7 +122,21 @@ var options = {
         },
         onConnect: function(data,callback) {
         var duringManip = true;
-          if (data.from == data.to) {
+        var span = document.getElementById('edgeOperation');
+        var labelInput = document.getElementById('edge-label');
+        var saveButton = document.getElementById('saveButton');
+        var cancelButton = document.getElementById('cancelButton');
+        var div = document.getElementById('edge-popUp');
+        span.innerHTML = "Add Edge";
+        labelInput = data.label;
+        var div = document.getElementById('edge-graph-popUp');
+         var div = document.getElementById('edge-popUp');
+        data.label = labelInput.value;
+        saveButton.onclick = saveEdgeData.bind(this,data,callback);
+        cancelButton.onclick = clearEdgePopUp.bind();
+        div.style.display = 'block';
+        //addLinkSQL(data);
+		if (data.from == data.to) {
             var r=confirm("Do you want to connect the node to itself?");
             if (r==true) {
               callback(data);
@@ -127,8 +146,20 @@ var options = {
             callback(data);
           }
         }
+
       };
-/* function
+      function addLinkSQL(data,callback){
+        // array('cntroller'=>'tagusers' ,'action' => 'addentity') に送る
+        //data= {from:id,to:id,trikeyname:string} で渡ってくる　trikey も渡せるようにしたい。label の追加が必要だろう。なければreply にするか。
+        //Json post を飛ばす。
+        $.postJSON('/cakephp/tagusers/',data,
+        	function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
+
+        	}
+        )
+
+      }
+/* function addNodes
  * @object obj
  * @string entity
  * @string option['color']
@@ -183,7 +214,7 @@ function addNodes(obj, entity, option) {
 }
 function getInfo(id){
 	$.getJSON('/cakephp/tagusers/map?id='+ id,
-		null,//{ id: <?php echo $id; ?> },
+		null,
 		function(obj) {
 			if(obj !== null) {
 				addNodes(obj, "Article");
@@ -229,6 +260,22 @@ function getInfo(id){
         data.id = idInput.value;
         data.label = labelInput.value;
         callback(data);
+      }
+      function clearEdgePopUp() {
+        var saveButton = document.getElementById('saveButton');
+        var cancelButton = document.getElementById('cancelButton');
+        saveButton.onclick = null;
+        cancelButton.onclick = null;
+        var div = document.getElementById('edge-popUp');
+        div.style.display = 'none';
+      }
+
+      function saveEdgeData(data,callback) {
+        var labelInput = document.getElementById('edge-label');
+        var div = document.getElementById('edge-graph-popUp');
+         var div = document.getElementById('edge-popUp');
+        data.label = labelInput.value;
+
       }
 function checkGet(properties) {
     				document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties) + '<br>';

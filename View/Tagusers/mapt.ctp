@@ -222,9 +222,9 @@ function getInfo(id){
 					nodes: nodes,
 					edges: edges
 				};
-				var newTagNodeSubmit = document.getElementById('tag_id_submint')
+				var newTagNodeSubmit = document.getElementById('tag_id_submit')
 				var submttingTagID = document.getElementById('tag_id');
-				newTagNodeSubmit.onclick = getInfo(submttingTagID.value);
+				ewTagNodeSubmit.onclick = function(){getInfo(submttingTagID.value)};
 
 
 				graph = new vis.Graph(container, data, options);

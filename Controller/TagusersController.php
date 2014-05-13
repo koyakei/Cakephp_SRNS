@@ -124,17 +124,17 @@ class TagusersController extends AppController {
 	public function addentity(){
 // 		$_REQUEST[$entitiy];
 // 		$this->Taguser->find('all',array('conditions' => array('Tagusers.ID' => $_REQUEST[$entitiy])));
-		debug($this->request->data);
+		debug($this->request->query);
 		debug($this->Taguser->find('first',
 						array('conditions' =>
-								array('Taguser.name' =>$this->request->data['label'],'Taguser.username'=>$this->request->data['trikey_username'])
+								array('Taguser.name' =>$this->request->query['label'],'Taguser.username'=>$this->request->query['trikey_username'])
 						)
 				));
 		return ($this->Basic->trilinkAdd(
 				$this,$this->request->daata['from'],$this->request->daata['to'],
 				$this->Taguser->find('first',
 						array('conditions' =>
-								array('Taguser.name' =>$this->request->data['label'],'Taguser.username'=>$this->request->data['trikey_username'])
+								array('Taguser.name' =>$this->request['label'],'Taguser.username'=>$this->request['trikey_username'])
 						)
 				)['Taguser']['ID']
 		)

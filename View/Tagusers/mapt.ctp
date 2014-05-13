@@ -85,6 +85,9 @@ echo $this->AutoComplete->input(
 <input type="button" value="new tag node" id="tag_id_submit"></button>
 <script>
 //次にやること　var data を array('cntroller'=>'tagusers' ,'action' => 'addentity') に渡して、そっくりそのまま返す。
+jQuery.postJSON = function(url, data, callback) {
+    jQuery.post(url, data, callback, "json");
+};
 var idx = 0;
 var nodes = [];
 var edges = [];
@@ -132,8 +135,6 @@ var options = {
         cancelButton.onclick = clearEdgePopUp.bind();
         div.style.display = 'block';
         //idも作ったやつを返したい
-        //addLinkSQL(data);
-
         }
 
       };
@@ -145,19 +146,22 @@ var options = {
  * @string option['color']
  * return added Link info @string //追加に成功したら追加した情報が帰ってくるようにしたい。
  */
-      function addLinkSQL(data,callback){
+      function addLinkSQL(data){
+        //alert("json post go");
+        alert(data);
         // array('cntroller'=>'tagusers' ,'action' => 'addentity') に送る
         //data= {from:id,to:id,trikeyname:string} で渡ってくる　trikey も渡せるようにしたい。label の追加が必要だろう。なければreply にするか。
         //Json post を飛ばす。
         $.postJSON('/cakephp/tagusers/addentity',data,
         	function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
+                alert(res);
                 if(res !== null) {
                     var result = res["result"];
                     alert("result=" + result);
                     if (result) {
-                        
+
                     } else {
-                        
+
                     }
                 }
         	}
@@ -281,6 +285,7 @@ function getInfo(id){
         var div = document.getElementById('graph-popUp');
         var labelInput = document.getElementById('label');
         data.label = labelInput.value;
+        addLinkSQL(data);
 		callback(data);
       }
 function checkGet(properties) {

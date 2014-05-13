@@ -149,9 +149,17 @@ var options = {
         // array('cntroller'=>'tagusers' ,'action' => 'addentity') に送る
         //data= {from:id,to:id,trikeyname:string} で渡ってくる　trikey も渡せるようにしたい。label の追加が必要だろう。なければreply にするか。
         //Json post を飛ばす。
-        $.postJSON('/cakephp/tagusers/',data,
+        $.postJSON('/cakephp/tagusers/addentity',data,
         	function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
-
+                if(res !== null) {
+                    var result = res["result"];
+                    alert("result=" + result);
+                    if (result) {
+                        
+                    } else {
+                        
+                    }
+                }
         	}
         )
 

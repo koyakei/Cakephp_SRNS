@@ -68,6 +68,21 @@ body {
 <div id="mygraph"></div>
 <div id="info"></div>
 <input type="button" value="Test" />
+<?php
+echo $this->AutoComplete->input(
+    'Tag.name',
+    array(
+        'autoCompleteUrl'=>$this->Html->url(
+            array(
+                'controller'=>'tagusers',
+                'action'=>'auto_complete',
+            )
+        ),
+        'autoCompleteRequestItem'=>'autoCompleteText',
+    )
+);
+?>
+<input type="button" value="new tag node" id="tag_id_submit"></button>
 <script>
 //次にやること　var data を array('cntroller'=>'tagusers' ,'action' => 'addentity') に渡して、そっくりそのまま返す。
 var idx = 0;
@@ -122,10 +137,13 @@ var options = {
         }
 
       };
+      //2つの違うツリーを読み込む方法 getJson を別にするselect 以外のタイミングでgetInfoがはりるように
+      //いつ走らせたら良いのか？　あのタグに対してリンクを貼りたいな。button-"mapload" をauto suggest付きのinput boxに表示して、
+      //それを 送ることでそのタグからのツリーを実行しよう。
       /* function addLinkSQL
  * @object data
  * @string option['color']
- * return added Link info @string
+ * return added Link info @string //追加に成功したら追加した情報が帰ってくるようにしたい。
  */
       function addLinkSQL(data,callback){
         // array('cntroller'=>'tagusers' ,'action' => 'addentity') に送る
@@ -204,7 +222,9 @@ function getInfo(id){
 					nodes: nodes,
 					edges: edges
 				};
-
+				var newTagNodeSubmit = document.getElementById('tag_id_submint')
+				var submttingTagID = document.getElementById('tag_id');
+				newTagNodeSubmit.onclick = getInfo(submttingTagID.value);
 
 
 				graph = new vis.Graph(container, data, options);

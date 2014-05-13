@@ -55,23 +55,10 @@ body {
 
 <div id="graph-popUp">
   <span id="operation">node</span> <br>
-  <table style="margin:auto;"><tr>
-    <td>id</td><td><input id="node-id" value="new value"></td>
-  </tr>
-    <tr>
-      <td>label</td><td><input id="node-label" value="reply"> </td>
-
-    </tr>
-    </table>
-  <input type="button" value="save" id="saveButton"></button>
-  <input type="button" value="cancel" id="cancelButton"></button>
-</div>
-<br />
-<div id="edge-popUp">
-  <span id="edgeOperation">edge</span> <br>
   <table style="margin:auto;">
     <tr>
-      <td>label</td><td><input id="edge-label" value="reply"> </td>
+      <td>label</td><td><input id="label" value="reply"> </td>
+
     </tr>
     </table>
   <input type="button" value="save" id="saveButton"></button>
@@ -94,8 +81,7 @@ var options = {
         dataManipulation: true,
         onAdd: function(data,callback) {
           var span = document.getElementById('operation');
-          var idInput = document.getElementById('node-id');
-          var labelInput = document.getElementById('node-label');
+          var labelInput = document.getElementById('label');
           var saveButton = document.getElementById('saveButton');
           var cancelButton = document.getElementById('cancelButton');
           var div = document.getElementById('graph-popUp');
@@ -108,8 +94,7 @@ var options = {
         },
         onEdit: function(data,callback) {
           var span = document.getElementById('operation');
-          var idInput = document.getElementById('node-id');
-          var labelInput = document.getElementById('node-label');
+          var labelInput = document.getElementById('label');
           var saveButton = document.getElementById('saveButton');
           var cancelButton = document.getElementById('cancelButton');
           var div = document.getElementById('graph-popUp');
@@ -122,32 +107,26 @@ var options = {
         },
         onConnect: function(data,callback) {
         var duringManip = true;
-        var span = document.getElementById('edgeOperation');
-        var labelInput = document.getElementById('edge-label');
+        var span = document.getElementById('operation');
+        var labelInput = document.getElementById('label');
         var saveButton = document.getElementById('saveButton');
         var cancelButton = document.getElementById('cancelButton');
-        var div = document.getElementById('edge-popUp');
+        var div = document.getElementById('graph-popUp');
         span.innerHTML = "Add Edge";
-        labelInput = data.label;
-        var div = document.getElementById('edge-graph-popUp');
-         var div = document.getElementById('edge-popUp');
-        data.label = labelInput.value;
         saveButton.onclick = saveEdgeData.bind(this,data,callback);
         cancelButton.onclick = clearEdgePopUp.bind();
         div.style.display = 'block';
+        //idも作ったやつを返したい
         //addLinkSQL(data);
-		if (data.from == data.to) {
-            var r=confirm("Do you want to connect the node to itself?");
-            if (r==true) {
-              callback(data);
-            }
-          }
-          else {
-            callback(data);
-          }
+
         }
 
       };
+      /* function addLinkSQL
+ * @object data
+ * @string option['color']
+ * return added Link info @string
+ */
       function addLinkSQL(data,callback){
         // array('cntroller'=>'tagusers' ,'action' => 'addentity') に送る
         //data= {from:id,to:id,trikeyname:string} で渡ってくる　trikey も渡せるようにしたい。label の追加が必要だろう。なければreply にするか。
@@ -266,16 +245,15 @@ function getInfo(id){
         var cancelButton = document.getElementById('cancelButton');
         saveButton.onclick = null;
         cancelButton.onclick = null;
-        var div = document.getElementById('edge-popUp');
+        var div = document.getElementById('graph-popUp');
         div.style.display = 'none';
       }
 
       function saveEdgeData(data,callback) {
-        var labelInput = document.getElementById('edge-label');
-        var div = document.getElementById('edge-graph-popUp');
-         var div = document.getElementById('edge-popUp');
+        var div = document.getElementById('graph-popUp');
+        var labelInput = document.getElementById('label');
         data.label = labelInput.value;
-
+		callback(data);
       }
 function checkGet(properties) {
     				document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties) + '<br>';

@@ -402,7 +402,9 @@ class BasicComponent extends Component {
 				debug("1st step miss");
 				return false;
 			}
+			return false;
 		}
+		return false;
 	}
 
 	public function trisinglefind(&$that = null,$trikeyID,$modelSe,$Ltotarget) {

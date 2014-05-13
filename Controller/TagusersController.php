@@ -121,11 +121,18 @@ class TagusersController extends AppController {
 	public function mapt($id = null){
 			$this->set('id',$id);
 	}
-	public function addentity($entitiy = NULL){
+	public function addentity(){
 // 		$_REQUEST[$entitiy];
 // 		$this->Taguser->find('all',array('conditions' => array('Tagusers.ID' => $_REQUEST[$entitiy])));
-		print_r($_REQUEST);
+		debug($this->request->daata());
+		if($this->Basic->trilinkAdd($this,$this->request->daata['from'],$this->request->daata['to'],$this->Taguser->find('first',array('conditions' => array('Tagusers.name' =>$this->request->data['trikey_name'],'Tagusers.username'=>$this->request->data['trikey_username']))))){
+			//成功したら、成功した情報を返す。
+			;
+		}else {
+			return false;
+		}
 // 		$this->render('addEntity', 'ajax');
+
 	}
 
 	/**

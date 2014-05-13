@@ -124,21 +124,24 @@ class TagusersController extends AppController {
 	public function addentity(){
 // 		$_REQUEST[$entitiy];
 // 		$this->Taguser->find('all',array('conditions' => array('Tagusers.ID' => $_REQUEST[$entitiy])));
-		debug($this->request->query);
-		debug($this->Taguser->find('first',
+		if($this->request->query['trikey_username'] ==null){
+			$res = $this->Taguser->find('first',
+
 						array('conditions' =>
-								array('Taguser.name' =>$this->request->query['label'],'Taguser.username'=>$this->request->query['trikey_username'])
+								array('Taguser.name' =>$this->request->query['label'])
 						)
-				));
-		return ($this->Basic->trilinkAdd(
-				$this,$this->request->daata['from'],$this->request->daata['to'],
-				$this->Taguser->find('first',
-						array('conditions' =>
-								array('Taguser.name' =>$this->request['label'],'Taguser.username'=>$this->request['trikey_username'])
-						)
-				)['Taguser']['ID']
-		)
-		);
+				);
+	}else {
+			$this->Taguser->find('first',
+
+					array('conditions' =>
+							array('Taguser.name' =>$this->request->query['label'],'Taguser.username'=>$this->request->query['trikey_username'])
+					)
+			);
+	}
+		debug($res);
+		$options['authCheck'] = false;
+		return ($this->Basic->trilinkAdd($this,$this->request->query['from'],$this->request->query['to'],$res['Taguser']['ID'],$options));
 			//成功したら、成功した情報を返す。
 // 		$this->render('addEntity', 'ajax');
 

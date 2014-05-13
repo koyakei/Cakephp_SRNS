@@ -371,27 +371,30 @@ class BasicComponent extends Component {
 		$that->returntribasic = $that->Link->find('first',$option);
 		return $that->returntribasic;
 	}
-	public function trilinkAdd(&$that,$FromID,$ToID,$keyID) {
+	public function trilinkAdd(&$that,$FromID,$ToID,$keyID,$options) {
 		$quant = 1;
+		if ($that->request->data['Tag']['user_id'] == null) {
+			$that->request->data['Tag']['user_id'] = Configure::read('acountID.admin');
+		}
+		if($options['authCheck'] == false){goto authSkip;}
 		if ($that->Basic->tagAuthCountdown($that,$FromID,$that->request->data['tag']['userid'],$quant)) {
+			authSkip:
 			$that->loadModel('Link');
 			$that->request->data['Link'] = array(
 					'user_id' => $that->request->data['Tag']['user_id'],
 					'LFrom' => $FromID,
 					'LTo' => $ToID,//リンク先記事or タグ
-					'quant' => $that->quant,
+					'quant' => $quant,
 					'created' => date("Y-m-d H:i:s"),
 			);
-// 			$that->loadModel('Link');
 			$that->Link->create();
-			debug("a");
 			if($that->Link->save($that->request->data)){
 				$that->last_id = $that->Link->getLastInsertID();
 				$that->request->data['Link'] = array(
 						'user_id' => $that->request->data['Tag']['user_id'],
 						'LFrom' => $keyID,//
 						'LTo' => $that->last_id,
-						'quant' => $that->quant,
+						'quant' => $quant,
 						'created' => date("Y-m-d H:i:s"),
 				);
 				$that->Link->create();

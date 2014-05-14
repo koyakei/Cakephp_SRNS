@@ -174,15 +174,11 @@ var options = {
         $.getJSON('/cakephp/tagusers/addentity',data,
         	function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
                 if(res !== null) {
-                    var result = res["result"];
-                    if (result) {
-
-                    } else {
-
-                    }
+                    return res;
                 }
         	}
         )
+        return false;
 
       }
 /* function addNodes
@@ -309,7 +305,8 @@ function getInfo(id){
         var div = document.getElementById('graph-popUp');
         var labelInput = document.getElementById('label');
         data.label = labelInput.value;
-        addLinkSQL(data);
+        data.color = (new jsSHA(data.label,'ASCII')).getHash('SHA-384','HEX').substr(1,6);
+        data.id = addLinkSQL(data);
 		callback(data);
       }
 

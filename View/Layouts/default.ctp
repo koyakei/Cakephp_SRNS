@@ -37,7 +37,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	<?php
 		echo $this->Html->meta('icon');
 		echo $this->Html->css('cake.generic');
-		echo $this->Html->script(array('jquery.autocomplete','auto_complete','vis'));
+		echo $this->Html->script(array('jquery.autocomplete','auto_complete','vis','sha'));
 		echo $this->Js->writeBuffer( array( 'inline' => 'true'));
 		echo $this->fetch('meta');
 		echo $this->fetch('css');

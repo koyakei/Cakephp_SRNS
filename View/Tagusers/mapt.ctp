@@ -88,22 +88,6 @@ echo $this->AutoComplete->input(
 <input type="button" value="new tag node" id="tag_id_submit"></button>
 <script>
 //次にやること　var data を array('cntroller'=>'tagusers' ,'action' => 'addentity') に渡して、そっくりそのまま返す。
-$('#mygraph').mousedown(function(event) {
-    switch (event.which) {
-        case 1:
-            //alert('Left Mouse button pressed.');
-            break;
-        case 2:
-            //alert('Middle Mouse button pressed.');
-            break;
-        case 3:
-            //alert('Right Mouse button pressed.');
-            
-            break;
-        default:
-            alert('You have a strange Mouse!');
-    }
-});
 jQuery.postJSON = function(url, data, callback) {
     jQuery.post(url, data, callback, "json");
 };
@@ -274,16 +258,18 @@ function getInfo(id){
 				//graph.on('select',function(){checkGet(properties)}
 
 				graph.on('select', function(properties) {
-				var nodeId = JSON.stringify(properties['nodes'][0]);
-    			document.getElementById('info').innerHTML += 'selection: ' + nodeId + ' ' + '<a href="/cakephp/' + (properties['nodes'][0] >= 100000 ? 'articles' : 'tags') + '/view/' + properties['nodes'][0] + '" target="_blank">' + properties['nodes'][0] + 'を開く</a>' + '<br>';
-				if(previousNodeId == properties['nodes'][0]){
+					var nodeId = JSON.stringify(properties['nodes'][0]);
+	    			if (properties['nodes'][0] != undefined) {
+	    				document.getElementById('info').innerHTML += 'selection: ' + nodeId + ' ' + '<a href="/cakephp/' + (properties['nodes'][0] >= 100000 ? 'articles' : 'tags') + '/view/' + properties['nodes'][0] + '" target="_blank">' + properties['nodes'][0] + 'を開く</a>' + '<br>';
+	    			}
+					if(previousNodeId == properties['nodes'][0]){
 
-    			if(properties['nodes'][0] != null){
-    				getInfo(nodeId);
-    			}
+	    			if(properties['nodes'][0] != null){
+	    				getInfo(nodeId);
+	    			}
 
-    			}
-    			previousNodeId = properties['nodes'][0];
+	    			}
+	    			previousNodeId = properties['nodes'][0];
 				});
 
 			}

@@ -140,6 +140,21 @@ var options = {
         div.style.display = 'block';
         duringManip = false;
         //idも作ったやつを返したい
+        },
+        onDelete: function(data,callback) {
+        	$.getJSON('/cakephp/tagusers/addentity',data,
+        		function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
+                	if(res !== null) {
+                    	var result = res["result"];
+
+                    if (result) {
+
+                   	 } else {
+
+                    	}
+                	}
+        		}
+        	)
         }
 
       };
@@ -160,7 +175,6 @@ var options = {
         	function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
                 if(res !== null) {
                     var result = res["result"];
-                    alert("result=" + result);
                     if (result) {
 
                     } else {

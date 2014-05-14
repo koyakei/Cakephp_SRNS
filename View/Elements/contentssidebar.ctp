@@ -1,5 +1,5 @@
 <div class="actions"  style ="width: 115px;">
-	
+
 	<h2><?php foreach($keylist as $key => $value): ?></h2>
 	<br>
 <a href="#<?php echo $key ?>"><?php echo $value ?></a>
@@ -10,11 +10,11 @@
 		<?php if ($this->action == 'transmitter'): ?>
 			<?php if ($lr == ture): ?>
 				<option id="<?php echo $key ?>" value="<?php echo "/cakephp/tags/transmitter/".$leftID."/".$key."/".$rightID."/".$rightKeyID; ?>"
-				>	
+				>
 			<?php  else:  ?>
 				<option id="<?php echo $key ?>" value="<?php echo "/cakephp/tags/transmitter/".$leftID."/".$leftKeyID."/".$rightID."/".$key; ?>"
 				>
-				
+
 			<?php endif; ?>
 		<?php else: ?>
 			<!--<option id="<?php echo $key ?>" value="<?php echo "/cakephp/tags/view/".$idre."/".$key; ?>"
@@ -29,6 +29,7 @@
 	<ul>
 	<?php if($idre != null): ?>
 		<li><?php echo $this->Html->link(__('New user'), array('plugin' =>  'users','controller' => 'users','action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('MindMap'), array('controller' => 'tagusers','action' => 'mapt', $idre)); ?> </li>
 		<li><?php echo $this->Html->link(__('Edit ' .$firstModel), array('action' => 'edit', $idre)); ?> </li>
 		<li><?php echo $this->Form->postLink(__('Delete'. $firstModel), array('action' => 'delete',$idre), null, __('Are you sure you want to delete # %s?', $idre)); ?> </li>
 	<?php if($firstModel == "Tag"): ?>
@@ -41,7 +42,7 @@
 
 		<li><?php echo $this->Html->link(__('List Article'), array('controller' => 'articles','action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('Transmitter'), array('controller' => 'tags','action' => 'transmitter')); ?> </li>
-		
-		
+
+
 	</ul>
 </div>

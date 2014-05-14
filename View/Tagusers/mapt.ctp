@@ -88,9 +88,9 @@ echo $this->AutoComplete->input(
 jQuery.postJSON = function(url, data, callback) {
     jQuery.post(url, data, callback, "json");
 };
-var idx = 0;
 var nodes = [];
 var edges = [];
+var duringManip = false;
 var options = {
         edges: {
           length: 50
@@ -124,7 +124,7 @@ var options = {
           div.style.display = 'block';
         },
         onConnect: function(data,callback) {
-        var duringManip = true;
+        duringManip = true;
         var span = document.getElementById('operation');
         var labelInput = document.getElementById('label');
         var saveButton = document.getElementById('saveButton');
@@ -134,6 +134,7 @@ var options = {
         saveButton.onclick = saveEdgeData.bind(this,data,callback);
         cancelButton.onclick = clearEdgePopUp.bind();
         div.style.display = 'block';
+        duringManip = false;
         //idも作ったやつを返したい
         }
 
@@ -151,9 +152,8 @@ var options = {
         // array('cntroller'=>'tagusers' ,'action' => 'addentity') に送る
         //data= {from:id,to:id,trikeyname:string} で渡ってくる　trikey も渡せるようにしたい。label の追加が必要だろう。なければreply にするか。
         //Json post を飛ばす。
-        $.postJSON('/cakephp/tagusers/addentity',data,
+        $.getJSON('/cakephp/tagusers/addentity',data,
         	function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
-                alert(res);
                 if(res !== null) {
                     var result = res["result"];
                     alert("result=" + result);
@@ -227,7 +227,7 @@ function getInfo(id){
 			if(obj !== null) {
 				addNodes(obj, "Article");
 				addNodes(obj, "Tag", "#FF6666");
-
+				console.log(nodes);
 				var container = document.getElementById('mygraph');
 				var data = {
 					nodes: nodes,
@@ -244,10 +244,10 @@ function getInfo(id){
 				//graph.on('select',function(){checkGet(properties)}
 				graph.on('select', function(properties) {
     			document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties['nodes'][0]) + '<br>';
-    			if(properties['nodes'][0] != null && options['dataManipulation'] == false){getInfo(JSON.stringify(properties['nodes'][0]));}
-
+    			if(properties['nodes'][0] != null && duringManip != true){
+    				getInfo(JSON.stringify(properties['nodes'][0]));
+    			}
 				});
-				idx++;
 			}
 		}
 	);
@@ -287,10 +287,6 @@ function getInfo(id){
         addLinkSQL(data);
 		callback(data);
       }
-function checkGet(properties) {
-    				document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties) + '<br>';
-    				getInfo(JSON.stringify(properties)['nodes']); //二回目取ってくる専用の
-  		}
 
 $(document).ready(function(){
 getInfo(<?php echo $id; ?>);
@@ -300,8 +296,4 @@ getInfo(<?php echo $id; ?>);
 
 		);
 </script>
-<div id="success"></div>
-<div id="sending"></div>
-
-<?php echo $this->Js->writeBuffer(); ?>
 </body>

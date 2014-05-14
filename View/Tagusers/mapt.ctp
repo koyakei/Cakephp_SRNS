@@ -91,6 +91,7 @@ jQuery.postJSON = function(url, data, callback) {
 var nodes = [];
 var edges = [];
 var duringManip = false;
+var previousNodeId = null;
 var options = {
         edges: {
           length: 50
@@ -244,11 +245,15 @@ function getInfo(id){
 				//graph.on('select',function(){checkGet(properties)}
 
 				graph.on('select', function(properties) {
-				if(duringManip != true){
+				if(previousNodeId == properties['nodes'][0]){
     			document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties['nodes'][0]) + '<br>';
+
     			if(properties['nodes'][0] != null){
     				getInfo(JSON.stringify(properties['nodes'][0]));
-    			}}
+    			}
+
+    			}
+    			previousNodeId = properties['nodes'][0];
 				});
 
 			}

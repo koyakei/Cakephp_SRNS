@@ -60,6 +60,9 @@ body {
       <td>label</td><td><input id="label" value="reply"> </td>
 
     </tr>
+    <tr>
+      <td>label</td><td><input id="unername" value="koyakei"> </td>
+    </tr>
     </table>
   <input type="button" value="save" id="saveButton"></button>
   <input type="button" value="cancel" id="cancelButton"></button>

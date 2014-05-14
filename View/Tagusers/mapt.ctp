@@ -242,14 +242,15 @@ function getInfo(id){
 				//select eventlistner from sample code 07 selection
 				//cklick で　jsonを取得
 				//graph.on('select',function(){checkGet(properties)}
-				if(duringManip != true){
+
 				graph.on('select', function(properties) {
+				if(duringManip != true){
     			document.getElementById('info').innerHTML += 'selection: ' + JSON.stringify(properties['nodes'][0]) + '<br>';
     			if(properties['nodes'][0] != null){
     				getInfo(JSON.stringify(properties['nodes'][0]));
-    			}
+    			}}
 				});
-				}
+
 			}
 		}
 	);

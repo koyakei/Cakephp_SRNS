@@ -232,52 +232,26 @@ function addNodes(obj, entity, option) {
 			if (edges[j]["id"] == lId) isEdge = true;
 		}
 		if (!isEdge) {
-			edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, length: Math.random()*200+40, color: (new jsSHA(tName,'ASCII')).getHash('SHA-384','HEX').substr(1,6) });
+			edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, length: Math.random()*200+40, /*color: (new jsSHA(tName,'ASCII')).getHash('SHA-384','HEX').substr(1,6) */});
 
 		}
 		//edges.push({ from: lLFrom, to: lLTo });
 	}
 }
-function getInfo(id){
+function graphData(obj){
+
+}
+function getInfo(id){/*
 	$.ajax({
     	url: '/cakephp/tagusers/map?id='+ id,
     	dataType: 'json',
     	success: function(obj) {
-			if(obj !== null) {
-				addNodes(obj, "Article");
-				addNodes(obj, "Tag", "#FF6666");
-				var container = document.getElementById('mygraph');
-				var data = {
-					nodes: nodes,
-					edges: edges
-				};
-				var newTagNodeSubmit = document.getElementById('tag_id_submit')
-				var submttingTagID = document.getElementById('tag_id');
-				newTagNodeSubmit.onclick = function(){getInfo(submttingTagID.value)};
-
-
-				graph = new vis.Graph(container, data, options);
-				//select eventlistner from sample code 07 selection
-				//cklick で　jsonを取得
-				//graph.on('select',function(){checkGet(properties)}
-
-				graph.on('select', function(properties) {
-					var nodeId = JSON.stringify(properties['nodes'][0]);
-	    			if (properties['nodes'][0] != undefined) {
-	    				document.getElementById('info').innerHTML += 'selection: ' + nodeId + ' ' + '<a href="/cakephp/' + (properties['nodes'][0] >= 100000 ? 'articles' : 'tags') + '/view/' + properties['nodes'][0] + '" target="_blank">' + properties['nodes'][0] + 'を開く</a>' + '<br>';
-	    			}
-					if(previousNodeId == properties['nodes'][0]){
-
-	    				if(properties['nodes'][0] != null){
-	    					getInfo(nodeId);
-	    				}
-
-	    			}
-	    			previousNodeId = properties['nodes'][0];
-				}
-			);
-		},
-		error: function(obj) {
+			graphData(obj);
+		}
+	});*/
+	$.getJSON('/cakephp/tagusers/map?id='+ id,
+		null,
+		function(obj) {
 			if(obj !== null) {
 				addNodes(obj, "Article");
 				addNodes(obj, "Tag", "#FF6666");
@@ -312,11 +286,6 @@ function getInfo(id){
 				}
 			);
 		}
-	}
-	});
-	$.getJSON('/cakephp/tagusers/map?id='+ id,
-		null,
-		function(obj) {
 		}
 	)
 }

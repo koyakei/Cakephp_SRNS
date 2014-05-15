@@ -36,7 +36,6 @@ function toggleShow(obj) {
     }
  }
 </script>
-</script>
 	<?php echo $this->Html->charset(); ?>
 	<title>
 		<?php echo "SRNS" ?>:

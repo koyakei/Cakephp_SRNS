@@ -168,6 +168,7 @@ class TagusersController extends AppController {
 
 // 		$this->set('TF', $TF);
 		$this->set('FT', $FT);
+		$this->response->type('json');
 		$this->layout = 'ajax';
 	}
 

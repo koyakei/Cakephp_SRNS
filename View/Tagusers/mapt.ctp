@@ -239,9 +239,10 @@ function addNodes(obj, entity, option) {
 	}
 }
 function getInfo(id){
-	$.getJSON('/cakephp/tagusers/map?id='+ id,
-		null,
-		function(obj) {
+	$.ajax({
+    	url: '/cakephp/tagusers/map?id='+ id,
+    	dataType: 'json',
+    	success: function(obj) {
 			if(obj !== null) {
 				addNodes(obj, "Article");
 				addNodes(obj, "Tag", "#FF6666");
@@ -267,17 +268,57 @@ function getInfo(id){
 	    			}
 					if(previousNodeId == properties['nodes'][0]){
 
-	    			if(properties['nodes'][0] != null){
-	    				getInfo(nodeId);
-	    			}
+	    				if(properties['nodes'][0] != null){
+	    					getInfo(nodeId);
+	    				}
 
 	    			}
 	    			previousNodeId = properties['nodes'][0];
-				});
+				}
+			);
+		},
+		error: function(obj) {
+			if(obj !== null) {
+				addNodes(obj, "Article");
+				addNodes(obj, "Tag", "#FF6666");
+				var container = document.getElementById('mygraph');
+				var data = {
+					nodes: nodes,
+					edges: edges
+				};
+				var newTagNodeSubmit = document.getElementById('tag_id_submit')
+				var submttingTagID = document.getElementById('tag_id');
+				newTagNodeSubmit.onclick = function(){getInfo(submttingTagID.value)};
 
-			}
+
+				graph = new vis.Graph(container, data, options);
+				//select eventlistner from sample code 07 selection
+				//cklick で　jsonを取得
+				//graph.on('select',function(){checkGet(properties)}
+
+				graph.on('select', function(properties) {
+					var nodeId = JSON.stringify(properties['nodes'][0]);
+	    			if (properties['nodes'][0] != undefined) {
+	    				document.getElementById('info').innerHTML += 'selection: ' + nodeId + ' ' + '<a href="/cakephp/' + (properties['nodes'][0] >= 100000 ? 'articles' : 'tags') + '/view/' + properties['nodes'][0] + '" target="_blank">' + properties['nodes'][0] + 'を開く</a>' + '<br>';
+	    			}
+					if(previousNodeId == properties['nodes'][0]){
+
+	    				if(properties['nodes'][0] != null){
+	    					getInfo(nodeId);
+	    				}
+
+	    			}
+	    			previousNodeId = properties['nodes'][0];
+				}
+			);
 		}
-	);
+	}
+	});
+	$.getJSON('/cakephp/tagusers/map?id='+ id,
+		null,
+		function(obj) {
+		}
+	)
 }
 //graph.on("resize", function(params) {console.log(params.width,params.height)});
 

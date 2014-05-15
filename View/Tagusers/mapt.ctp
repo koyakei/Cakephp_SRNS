@@ -91,6 +91,9 @@ echo $this->AutoComplete->input(
 jQuery.postJSON = function(url, data, callback) {
     jQuery.post(url, data, callback, "json");
 };
+$.ajaxSetup({
+    timeout: 10000
+});
 var nodes = [];
 var edges = [];
 var duringManip = false;
@@ -242,7 +245,6 @@ function getInfo(id){
 			if(obj !== null) {
 				addNodes(obj, "Article");
 				addNodes(obj, "Tag", "#FF6666");
-				console.log(nodes);
 				var container = document.getElementById('mygraph');
 				var data = {
 					nodes: nodes,

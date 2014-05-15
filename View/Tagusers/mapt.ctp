@@ -97,7 +97,8 @@ var duringManip = false;
 var previousNodeId = null;
 var options = {
         edges: {
-          length: 50
+          length: 50,
+          style: 'arrow'
         },
         stabilize: false,
         dataManipulation: true,

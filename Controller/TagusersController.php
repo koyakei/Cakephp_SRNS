@@ -161,9 +161,13 @@ class TagusersController extends AppController {
 // 				array('conditions' => array('Taguser.'. $this->primaryKey => $id) //from と　toに分けるか？
 // 		));
 		$FT['Article'] = $this->Basic->tribasicfiderbyid($that,null,"Article","Article.ID",$this->params['url']['id']);
-// 		$FT['Tag'] = $this->Basic->tribasicfiderbyid($that,null,"Tag","Tag.ID",$this->params['url']['id']);
-		$FT['Tag'] = $this->Basic->tribasicfiderbyidTF($that,null,"Tag","Tag.ID",$this->params['url']['id']);
-// 		$FT['Article'] = $this->Basic->tribasicfiderbyidTF($that,null,"Article","Article.ID",$this->params['url']['id']);
+		$FT['Tag'] = $this->Basic->tribasicfiderbyid($that,null,"Tag","Tag.ID",$this->params['url']['id']);
+		foreach ($this->Basic->tribasicfiderbyidTF($that,null,"Tag","Tag.ID",$this->params['url']['id']) as $val ){$FT['Tag'][] = $val;}
+		foreach ($this->Basic->tribasicfiderbyidTF($that,null,"Article","Article.ID",$this->params['url']['id']) as $val ){$FT['Article'][] = $val;}
+// array_merge($FT['Tag'],$this->Basic->tribasicfiderbyidTF($that,null,"Tag","Tag.ID",$this->params['url']['id']));
+// array_merge($FT['Article'],$this->Basic->tribasicfiderbyidTF($that,null,"Article","Article.ID",$this->params['url']['id']));
+// 		$FT['Article'] = $this->Basic->tribasicfiderbyidFTTF($that,null,"Tag","Tag.ID",$this->params['url']['id']);
+// 		$FT['Article'] = $this->Basic->tribasicfiderbyidFTTF($that,null,"Article","Article.ID",$this->params['url']['id']);
 		//制限要素　user_id.trikey_id
 
 // 		$this->set('TF', $TF);

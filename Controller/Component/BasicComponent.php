@@ -246,7 +246,7 @@ class BasicComponent extends Component {
 		$modelSe = new $modelSe();
 		$option = array(
 				'conditions'=> array(
-				        	"Link.LTo = $Ltotarget"
+				        	"Link.LFrom = $Ltotarget"
 			        	 ),
 				'fields' => array('*'		),
 				'joins'
@@ -256,7 +256,7 @@ class BasicComponent extends Component {
 		                    'alias' => 'Link',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
-					array("$id = Link.LFrom")
+					array("$id = Link.LTo")
 					)
 		                ),
 				array(
@@ -264,8 +264,7 @@ class BasicComponent extends Component {
 		                    'alias' => 'taglink',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
-					array("Link.ID = taglink.LTo"),
-		                    		($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
+					array("Link.ID = taglink.LTo")
 					)
 		                ),
 				),
@@ -279,8 +278,8 @@ class BasicComponent extends Component {
 		$modelSe = new $modelSe();
 		$option = array(
 				'conditions'=> array(
-						"Link.LFrom = $Lfromtarget"
-				),
+				        	"Link.LTo = $Lfromtarget"
+			        	 ),
 				'fields' => array('*'		),
 				'joins'
 				=> array(
@@ -289,7 +288,9 @@ class BasicComponent extends Component {
 								'alias' => 'Link',
 								'type' => 'INNER',
 								'conditions' => array(
-										array("$id = Link.LTo")
+										array("$id = Link.LFrom"),
+
+
 								)
 						),
 						array(
@@ -304,7 +305,6 @@ class BasicComponent extends Component {
 				),
 				'order' => ''
 		);
-// 		debug($modelSe->find('all',$option));
 	    return $modelSe->find('all',$option);
 
 	}

@@ -82,6 +82,7 @@ echo $this->AutoComplete->input(
             )
         ),
         'autoCompleteRequestItem'=>'autoCompleteText',
+        'houtput' => 'ID'
     )
 );
 ?>

@@ -264,7 +264,8 @@ class BasicComponent extends Component {
 		                    'alias' => 'taglink',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
-					array("Link.ID = taglink.LTo")
+					array("Link.ID = taglink.LTo"),
+		                    		($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")
 					)
 		                ),
 				),

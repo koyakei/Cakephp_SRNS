@@ -241,20 +241,6 @@ function addNodes(obj, entity, option) {
 	}
 }
 function graphData(obj){
-
-}
-function getInfo(id){/*
-	$.ajax({
-    	url: '/cakephp/tagusers/map?id='+ id,
-    	dataType: 'json',
-    	success: function(obj) {
-			graphData(obj);
-		}
-	});*/
-	$.getJSON('/cakephp/tagusers/map?id='+ id,
-		null,
-		function(obj) {
-			if(obj !== null) {
 				addNodes(obj, "Article");
 				addNodes(obj, "Tag", "#FF6666");
 				var container = document.getElementById('mygraph');
@@ -287,9 +273,20 @@ function getInfo(id){/*
 	    			previousNodeId = properties['nodes'][0];
 				}
 			);
+
+}
+function getInfo(id){
+	$.ajax({
+    	url: '/cakephp/tagusers/map?id='+ id,
+    	dataType: 'json',
+    	success: function(obj) {
+			graphData(obj);
 		}
+		,
+		error: function(obj) {
+			graphData(obj.responseJSON);
 		}
-	)
+	});
 }
 //graph.on("resize", function(params) {console.log(params.width,params.height)});
 

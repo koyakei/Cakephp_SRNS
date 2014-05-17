@@ -193,7 +193,8 @@ var options = {
  */
 function addNodes(obj, entity, option) {
 	list = obj[entity];
-	for (var i = 0; i < list.length; i++) {
+	if(obj[entity] != null){
+	for (var i = 0; i < obj[entity].length; i++) {
 		var item = list[i];
 		var aId = item[entity]["ID"];
 		var aName = item[entity]["name"];
@@ -233,10 +234,11 @@ function addNodes(obj, entity, option) {
 			if (edges[j]["id"] == lId) isEdge = true;
 		}
 		if (!isEdge) {
-			edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, length: Math.random()*200+40, /*color: (new jsSHA(tName,'ASCII')).getHash('SHA-384','HEX').substr(1,6) */});
+			edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, length: Math.random()*200+40, /*color: (new jsSHA(tName,'ASCII')).getHash('SHA-384','HEX').substr(1,6)*/});
 
 		}
 		//edges.push({ from: lLFrom, to: lLTo });
+	}
 	}
 }
 function graphData(obj){

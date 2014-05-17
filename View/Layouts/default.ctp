@@ -21,7 +21,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 <!DOCTYPE html>
 <html>
 <head>
-	<script type="text/javascript">
+<script type="text/javascript">
 function toggleShow(obj) {
  var ch = obj.parentNode.children;
  for (var i = 0, len = ch.length; i < len; i++) {

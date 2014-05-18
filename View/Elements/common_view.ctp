@@ -9,19 +9,22 @@ $(document).ready(function()
         $(".myTable").tablesorter();
     }
 );
-function ajaxtable(id){
+function ajaxtable(keyid){
 	$.ajax({
-    	url: '/cakephp/tagusers/mapft?id='+ id +'&keyid=' + keyid,
+    	url: '/cakephp/tagusers/mapft?id=<? echo $idre; ?>&keyid=' + keyid,
     	dataType: 'json',
     	success: function(obj) {
-			graphData(obj);
+			getTable(obj);
 		}
 		,
 		error: function(obj) {
-			graphData(obj.responseJSON);
+			getTable(obj.responseJSON);
 		}
 	});
 }
+var newTagNodeSubmit = document.getElementById('trikey_submit')
+var submttingTagID = document.getElementById('tag_id');
+newTagNodeSubmit.onclick = function(){ajaxtable(submttingTagID.value)};
 </script>
 </head>
 <body>
@@ -61,16 +64,32 @@ function ajaxtable(id){
 <!-- 現存するタグだけ表示して、　
 基本タグをプルダウンでサジェストして、
 -->
-<?php //view as specified trikey
-$this->element('ajaxtable'));
+<?php
+echo $this->AutoComplete->input(
+    'Tag.name',
+    array(
+        'autoCompleteUrl'=>$this->Html->url(
+            array(
+                'controller'=>'tagusers',
+                'action'=>'auto_complete',
+            )
+        ),
+        'autoCompleteRequestItem'=>'autoCompleteText',
+        'houtput' => 'tag_id'
+    )
+);
+?>
+<input type="button" value="new tag node" id="trikey_submit"></button>
+<?php
+
+//view as specified trikey
+$this->element('ajaxtable');
 
 //トライキーを自由選択でインプット
  echo $this->element('Input', Array('ulist' => $ulist,'model' => 'Article','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>
 
 <script>
     window.onload=function(){
-
-
         var f=document.getElementById("keyid");
         checkSelect(f.elements["keyid"],"<?php echo $trikeyID; ?>");
     }

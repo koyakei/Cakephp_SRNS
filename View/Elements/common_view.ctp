@@ -9,6 +9,19 @@ $(document).ready(function()
         $(".myTable").tablesorter();
     }
 );
+function ajaxtable(id){
+	$.ajax({
+    	url: '/cakephp/tagusers/mapft?id='+ id +'&keyid=' + keyid,
+    	dataType: 'json',
+    	success: function(obj) {
+			graphData(obj);
+		}
+		,
+		error: function(obj) {
+			graphData(obj.responseJSON);
+		}
+	});
+}
 </script>
 </head>
 <body>

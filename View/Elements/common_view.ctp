@@ -85,7 +85,7 @@ echo $this->AutoComplete->input(
 <?php
 
 //view as specified trikey
-echo $this->element('ajaxtable');
+//echo $this->element('ajaxtable');
 
 //トライキーを自由選択でインプット
  echo $this->element('Input', Array('ulist' => $ulist,'model' => 'Article','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>

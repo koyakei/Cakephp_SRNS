@@ -7,24 +7,26 @@
 $(document).ready(function()
     {
         $(".myTable").tablesorter();
+            var newTagNodeSubmit = document.getElementById('trikey_submit')
+var submttingTagID = document.getElementById('tag_id');
+newTagNodeSubmit.onclick = function(){ajaxtable(submttingTagID.value)};
     }
+
 );
 function ajaxtable(keyid){
 	$.ajax({
     	url: '/cakephp/tagusers/mapft?id=<? echo $idre; ?>&keyid=' + keyid,
     	dataType: 'json',
     	success: function(obj) {
-			getTable(obj);
+			genTable(obj);
 		}
 		,
 		error: function(obj) {
-			getTable(obj.responseJSON);
+			genTable(obj.responseJSON);
 		}
 	});
 }
-var newTagNodeSubmit = document.getElementById('trikey_submit')
-var submttingTagID = document.getElementById('tag_id');
-newTagNodeSubmit.onclick = function(){ajaxtable(submttingTagID.value)};
+
 </script>
 </head>
 <body>
@@ -79,7 +81,7 @@ echo $this->AutoComplete->input(
     )
 );
 ?>
-<input type="button" value="new tag node" id="trikey_submit"></button>
+<input type="button" value="new tag node" id="trikey_submit" onclick="" />
 <?php
 
 //view as specified trikey

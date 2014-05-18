@@ -45,6 +45,15 @@ $(document).ready(function()
         <?php echo $this->element('inputind', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>
     </a>
 <?php endforeach; ?>
+<!-- 現存するタグだけ表示して、　
+基本タグをプルダウンでサジェストして、
+-->
+<?php //view as specified trikey
+$this->element('ajaxtable'));
+
+//トライキーを自由選択でインプット
+ echo $this->element('Input', Array('ulist' => $ulist,'model' => 'Article','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>
+
 <script>
     window.onload=function(){
 

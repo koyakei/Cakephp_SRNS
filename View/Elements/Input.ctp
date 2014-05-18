@@ -7,7 +7,21 @@
 	    'options' => $ulist,
 	  'selected' => $currentUserID//['userselected']
 	)); ?>
-	<?php echo $this->element('keylist', Array('keylist' => $keylist)); ?>
+	<?php
+echo $this->AutoComplete->input(
+    'Tag.name',
+    array(
+        'autoCompleteUrl'=>$this->Html->url(
+            array(
+                'controller'=>'tagusers',
+                'action'=>'auto_complete',
+            )
+        ),
+        'autoCompleteRequestItem'=>'autoCompleteText',
+        'houtput' => 'keyid'
+    )
+);
+?>
 		<legend><?php echo __($model); ?></legend>
 	<?php
 		$targetid = $this->params['pass'][0];

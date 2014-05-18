@@ -58,7 +58,6 @@ body {
   <table style="margin:auto;">
     <tr>
       <td>label</td><td><input id="label" value="reply"> </td>
-
     </tr>
     <tr>
       <td>label</td><td><input id="unername" value="koyakei"> </td>

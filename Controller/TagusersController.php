@@ -147,13 +147,26 @@ class TagusersController extends AppController {
 		$this->layout = 'ajax';
 
 	}
+	/**
+	 * addnode method
+	 * ft tf return both
+	 * @throws NotFoundException
+	 * @param int $this->params['url']['id']
+	 * @param int $this->params['url']['keyid']
+	 * @return ajax
+	 */
+
+	public function addnode(){
+
+	}
 
 	/**
-	 * delete method
-	 *
+	 * map method
+	 * ft tf return both
 	 * @throws NotFoundException
-	 * @param string $id
-	 * @return void
+	 * @param int $this->params['url']['id']
+	 * @param int $this->params['url']['keyid']
+	 * @return ajax
 	 */
 
 	public function map() {
@@ -176,17 +189,23 @@ class TagusersController extends AppController {
 		$this->layout = 'ajax';
 	}
 	public function maptf() {
-		// 		$to = $this->Link->find('all',
-		// 				array('conditions' => array('Taguser.'. $this->primaryKey => $id) //from と　toに分けるか？
-		// 		));
-// 		$FT['Article'] = $this->Basic->tribasicfiderbyid($that,null,"Article","Article.ID",$this->params['url']['id']);
-// 		$FT['Tag'] = $this->Basic->tribasicfiderbyid($that,null,"Tag","Tag.ID",$this->params['url']['id']);
-				$TF['Tag'] = $this->Basic->tribasicfiderbyidTF($that,null,"Tag","Tag.ID",$this->params['url']['id']);
-				$TF['Article'] = $this->Basic->tribasicfiderbyidTF($that,null,"Article","Article.ID",$this->params['url']['id']);
-		//制限要素　user_id.trikey_id
 
-				$this->set('TF', $TF);
-// 		$this->set('FT', $FT);
+			$this->set('TF', $TF);
+		$this->response->type('json');
+		$this->layout = 'ajax';
+	}
+	/**
+	 * map method
+	 * ft tf return both
+	 * @throws NotFoundException
+	 * @param int $this->params['url']['id']
+	 * @param int $this->params['url']['keyid']
+	 * @return ajax
+	 */
+	public function mapft() {
+		$JSON['Article'] = $this->Basic->tribasicfiderbyid($that,$this->params['url']['keyid'],"Article","Article.ID",$this->params['url']['id']);
+		$JSON['Tag'] = $this->Basic->tribasicfiderbyid($that,$this->params['url']['keyid'],"Tag","Tag.ID",$this->params['url']['id']);
+		$this->set('JSON', $JSON);
 		$this->response->type('json');
 		$this->layout = 'ajax';
 	}

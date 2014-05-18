@@ -246,7 +246,7 @@ class BasicComponent extends Component {
 		$modelSe = new $modelSe();
 		$option = array(
 				'conditions'=> array(
-				        	"Link.LFrom = $Ltotarget"
+				        	"Link.LTo = $Ltotarget"
 			        	 ),
 				'fields' => array('*'		),
 				'joins'
@@ -256,7 +256,7 @@ class BasicComponent extends Component {
 		                    'alias' => 'Link',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
-					array("$id = Link.LTo")
+					array("$id = Link.LFrom")
 					)
 		                ),
 				array(
@@ -265,22 +265,23 @@ class BasicComponent extends Component {
 		                    'type' => 'INNER',
 		                    'conditions' => array(
 					array("Link.ID = taglink.LTo"),
-		                    		($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")
+		                    		($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
 					)
 		                ),
 				),
 				'order' => ''
 			);
 		$that->returntribasic = $modelSe->find('all',$option);
+// 		debug($that->returntribasic[0]['Article']['name']); // URL
 		return $that->returntribasic;
 	}
-	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe = null,$Lfromtarget = null ,$id) {
+	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe = null,$Ltotarget = null ,$id) {
 		// 		$that->loadModel($modelSe);
 		$modelSe = new $modelSe();
 		$option = array(
 				'conditions'=> array(
-				        	"Link.LTo = $Lfromtarget"
-			        	 ),
+						"Link.LFrom = $Ltotarget"
+				),
 				'fields' => array('*'		),
 				'joins'
 				=> array(
@@ -289,9 +290,7 @@ class BasicComponent extends Component {
 								'alias' => 'Link',
 								'type' => 'INNER',
 								'conditions' => array(
-										array("$id = Link.LFrom"),
-
-
+										array("$id = Link.LTo")
 								)
 						),
 						array(
@@ -306,8 +305,9 @@ class BasicComponent extends Component {
 				),
 				'order' => ''
 		);
-	    return $modelSe->find('all',$option);
-
+		$that->returntribasic = $modelSe->find('all',$option);
+		// 		debug($that->returntribasic[0]['Article']['name']); // URL
+		return $that->returntribasic;
 	}
 	public function triupperfiderbyid(&$that = null,$trikeyID,$modelSe,$id) {
 		$that->loadModel($modelSe);

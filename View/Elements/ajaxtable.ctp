@@ -1,5 +1,4 @@
-<html>
-<head>
+
 <script>
 function genTable(json) {
   var data = json['Test'];
@@ -23,9 +22,6 @@ function genTable(json) {
   table.innerHTML = '<table><thead>' + thead + '</thead><tbody>' + tbody + '</tbody></table>';
 }
 </script>
-</head>
-<body>
+
 <div id="table"></div>
 <input type="button" value="テーブル生成" onclick='genTable({"Test":[{Id:1,Data:"foo"}, {Id:2,Data:"bar"}, {Id:3,Data:"piyo"}]});' />
-</body>
-</html>

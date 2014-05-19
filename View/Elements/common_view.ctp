@@ -10,6 +10,9 @@ $(document).ready(function()
             var newTagNodeSubmit = document.getElementById('trikey_submit');
 //var submttingTagID = document.getElementById('tag_id');
 //newTagNodeSubmit.onclick = function(){ajaxtable(submttingTagID.value)};
+var specifiedTrikeyLink = document.getElementById('spesifiedtrikeylink');
+        specifiedTrikeyLink.href = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
+        document.getElementById('spesifiedtrikeylink').innerHTML = document.getElementById('tag_id').value
     }
 
 );
@@ -92,8 +95,7 @@ echo $this->AutoComplete->input(
     window.onload=function(){
         var f=document.getElementById("keyid");
         checkSelect(f.elements["keyid"],"<?php echo $trikeyID; ?>");
-        var specifiedTrikeyLink = document.getElementById('spesifiedtrikeylink');
-        specifiedTrikeyLink.href = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
+
     }
     function checkSelect(obj,val){
         for(var i=0;i<obj.length;i++){

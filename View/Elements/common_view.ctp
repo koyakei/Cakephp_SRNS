@@ -11,8 +11,8 @@ $(document).ready(function()
 //var submttingTagID = document.getElementById('tag_id');
 //newTagNodeSubmit.onclick = function(){ajaxtable(submttingTagID.value)};
 var specifiedTrikeyLink = document.getElementById('spesifiedtrikeylink');
-        specifiedTrikeyLink.href = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
-        document.getElementById('spesifiedtrikeylink').innerHTML = document.getElementById('tag_id').value
+        //specifiedTrikeyLink.href = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
+        specifiedTrikeyLink.innerHTML = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
     }
 
 );

@@ -10,10 +10,12 @@ $(document).ready(function()
             var newTagNodeSubmit = document.getElementById('trikey_submit');
 //var submttingTagID = document.getElementById('tag_id');
 //newTagNodeSubmit.onclick = function(){ajaxtable(submttingTagID.value)};
-var specifiedTrikeyLink = document.getElementById('spesifiedtrikeylink');
+
         //specifiedTrikeyLink.href = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
         document.getElementById('tag_id').onchange = function() {
+        var specifiedTrikeyLink = document.getElementById('spesifiedtrikeylink');
         	specifiedTrikeyLink.innerHTML = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
+
         };
 
     }

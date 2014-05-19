@@ -7,9 +7,9 @@
 $(document).ready(function()
     {
         $(".myTable").tablesorter();
-            var newTagNodeSubmit = document.getElementById('trikey_submit')
-var submttingTagID = document.getElementById('tag_id');
-newTagNodeSubmit.onclick = function(){ajaxtable(submttingTagID.value)};
+            var newTagNodeSubmit = document.getElementById('trikey_submit');
+//var submttingTagID = document.getElementById('tag_id');
+//newTagNodeSubmit.onclick = function(){ajaxtable(submttingTagID.value)};
     }
 
 );
@@ -81,19 +81,19 @@ echo $this->AutoComplete->input(
     )
 );
 ?>
-<input type="button" value="new tag node" id="trikey_submit" onclick="" />
-<?php
+<script>
 
-//view as specified trikey
-//echo $this->element('ajaxtable');
+</script>
+<a id="spesifiedtrikeylink" >個別trikey</a>
 
-//トライキーを自由選択でインプット
- echo $this->element('Input', Array('ulist' => $ulist,'model' => 'Article','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>
+
 
 <script>
     window.onload=function(){
         var f=document.getElementById("keyid");
         checkSelect(f.elements["keyid"],"<?php echo $trikeyID; ?>");
+        var specifiedTrikeyLink = document.getElementById('spesifiedtrikeylink');
+        specifiedTrikeyLink.href = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
     }
     function checkSelect(obj,val){
         for(var i=0;i<obj.length;i++){

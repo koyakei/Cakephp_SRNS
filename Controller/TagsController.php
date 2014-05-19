@@ -2,7 +2,7 @@
 App::import('Vendor', 'DebugKit.FireCake');
 App::uses('AppController', 'Controller');
 App::uses('Link', 'Model');
-
+App::uses('User', 'Model');
 App::uses('Tagauthcounts', 'Model');
 Configure::load("static");
 App::uses('Article','Model');
@@ -583,6 +583,18 @@ public function beforeFilter() {
         		}
         	}
         	$this->redirect($this->referer());
+        }
+
+
+
+        public function singletrikeytable($id = null,$trikey = null){
+        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+        	$key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
+        	$this->set( 'keylist', $key);
+        	$options = array('key' => $trikey);
+        	$this->Common->trifinderbyid($this,$id,$options);
+        	$tableresults = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
+        	$this->set('value',$tableresults);
         }
 
         public function tagdel($id = null) {

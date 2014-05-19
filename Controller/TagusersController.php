@@ -203,8 +203,12 @@ class TagusersController extends AppController {
 	 * @return ajax
 	 */
 	public function mapft() {
-		$JSON['Article'] = $this->Basic->tribasicfiderbyid($that,$this->params['url']['keyid'],"Article","Article.ID",$this->params['url']['id']);
-		$JSON['Tag'] = $this->Basic->tribasicfiderbyid($that,$this->params['url']['keyid'],"Tag","Tag.ID",$this->params['url']['id']);
+		if ($id >= 100000) {
+			$this->Basic->tribasicfiderbyid($that,$this->params['url']['keyid'],"Article","Article.ID",$this->params['url']['id']);
+		}else {
+			$this->Basic->tribasicfiderbyid($that,$this->params['url']['keyid'],"Tag","Tag.ID",$this->params['url']['id']);
+		}
+		$JSON = array('ID'=>$this->params['url']['keyid'],'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
 		$this->set('JSON', $JSON);
 		$this->response->type('json');
 		$this->layout = 'ajax';

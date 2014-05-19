@@ -12,15 +12,16 @@ $(document).ready(function()
 //newTagNodeSubmit.onclick = function(){ajaxtable(submttingTagID.value)};
 
         //specifiedTrikeyLink.href = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
-        document.getElementById('tag_id').onchange = function() {
-        var specifiedTrikeyLink = document.getElementById('spesifiedtrikeylink');
-        	specifiedTrikeyLink.innerHTML = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
+        document.getElementById('tag_id').value.onchange = function() {
+        	document.getElementById('spesifiedtrikeylink').innerHTML = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
 
         };
-
     }
 
 );
+function jumpStrikey(){
+	document.getElementById('spesifiedtrikeylink').href = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
+}
 function ajaxtable(keyid){
 	$.ajax({
     	url: '/cakephp/tagusers/mapft?id=<? echo $idre; ?>&keyid=' + keyid,
@@ -92,7 +93,7 @@ echo $this->AutoComplete->input(
 <script>
 
 </script>
-<a id="spesifiedtrikeylink" >個別trikey</a>
+<a id="spesifiedtrikeylink" onclick ="jumpStrikey()" >個別trikey</a>
 
 
 

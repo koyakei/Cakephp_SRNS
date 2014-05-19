@@ -588,9 +588,11 @@ public function beforeFilter() {
 
 
         public function singletrikeytable($id = null,$trikey = null){
-        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-        	$key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
-        	$this->set( 'keylist', $key);
+        	$this->loadModel('User');
+         $this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+         $this->loadModel('Key');
+         $key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
+         $this->set( 'keylist', $key);
         	$options = array('key' => $trikey);
         	$this->Common->trifinderbyid($this,$id,$options);
         	$tableresults = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
@@ -598,7 +600,7 @@ public function beforeFilter() {
         }
 
         public function tagdel($id = null) {
-        	$this->loadModel('Link');
+
         	//$options = array('conditions' => array('.'.$this->Aurh->primaryKey => $this->request->data['Tag']['']));
         	//$this->Link->find('first',$option);
         	debug($this->request->data('Link.ID'));

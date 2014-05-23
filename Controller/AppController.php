@@ -137,7 +137,7 @@ public function isAuthorized($user) {
     		if (!($this->name == 'Articles' && $key == Configure::read('tagID.search'))) {
     			$options = array('key' => $keyid);
 	    		$this->Common->trifinderbyid($this,$id,$options);
-	    		$tableresults[$i] = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
+	    		$tableresults[$i] = array('ID'=>$keyid,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
 	    		$i++;
     		}
 

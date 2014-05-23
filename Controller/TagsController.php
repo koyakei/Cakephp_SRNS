@@ -465,7 +465,6 @@ public function beforeFilter() {
         		$req = array_merge($req, array("word" => $word));
         	}
         	$that->paginate = array(
-//         	$that->Authpaginator->paginate = array(
         			'Tag' =>
         			array(
         					'conditions' => array(

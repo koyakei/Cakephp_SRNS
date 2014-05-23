@@ -34,6 +34,7 @@ $(document).ready(function(){
                           }
                         }
                     );
+			
                     // Remove busy flag
                     $(this).data('autoCompleteBusy',false);
                 }else{

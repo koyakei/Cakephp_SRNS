@@ -1,7 +1,7 @@
 <html>
 <head>
 <?php echo $this->Html->charset("utf-8"); ?>
-<?php echo $this->Html->css('cake.generic'); ?> 
+<?php echo $this->Html->css('cake.generic'); ?>
 
 <?php
 $this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', null, array('block' => 'css'));
@@ -75,20 +75,11 @@ $this->Html->css('http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', nu
 			    <div class="control-group">
 			        <?php echo $this->Form->label('keyword', 'キーワード', array('class' => 'control-label')); ?>
 			        <div class="controls">
-			        <?php  
-echo $this->AutoComplete->input( 
-    'keyword', 
-    array( 
-        'autoCompleteUrl'=>$this->Html->url(  
-            array( 
-                'controller'=>'tags', 
-                'action'=>'auto_complete', 
-            ) 
-        ), 
-        'autoCompleteRequestItem'=>'autoCompleteText', 
-    ) 
-); 
-?> 
+			        <?php
+echo $this->Form->input(
+    'keyword'
+);
+?>
 			        <?php
 			            $options = array('and' => 'AND', 'or' => 'OR');
 			            $attributes = array('default' => 'and', 'class' => 'radio inline');

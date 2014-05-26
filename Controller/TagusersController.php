@@ -216,5 +216,8 @@ class TagusersController extends AppController {
 		$this->response->type('json');
 		$this->layout = 'ajax';
 	}
+	public function node(){
+
+	}
 
 }

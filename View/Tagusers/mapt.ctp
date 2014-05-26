@@ -96,6 +96,7 @@ $.ajaxSetup({
 });
 var nodes = [];
 var edges = [];
+var ajaxDelEdge =[];
 var duringManip = false;
 var previousNodeId = null;
 var options = {
@@ -145,20 +146,20 @@ var options = {
         duringManip = false;
         //idも作ったやつを返したい
         },
-        onDelete: function(data,callback) {
-        	$.getJSON('/cakephp/tagusers/addentity',data,
+        onDelete: function(data,callback) {/*
+        ajaxDelEdge['id'] = data['edges']['0'];
+        	$.getJSON('/cakephp/links/edgedel',ajaxDelEdge,
         		function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
-                	if(res !== null) {
-                    	var result = res["result"];
-
-                    if (result) {
-
-                   	 } else {
-
-                    	}
+                	if(res) {
                 	}
         		}
-        	)
+        	)*/
+        	$.ajax({
+    	url: '/cakephp/links/edgedel?id='+ data['edges']['0'],
+    	dataType: 'json',
+    	success: function(obj) {
+		}
+	});
         }
 
       };
@@ -182,6 +183,7 @@ var options = {
                 }
         	}
         )
+
         return false;
 
       }

@@ -133,6 +133,20 @@ class LinksController extends AppController {
 		}
 		$this->redirect($this->referer());
 	}
+	public function edgedel(){
+		$id = $_REQUEST['id'];
+		$this->response->type('json');
+		$this->layout = 'ajax';
+		$this->Link->id = $id;
+		$result = $this->Link->find('first',array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id')));
+		if ($this->Auth->user('id') == $result['Link']['user_id']) {
+			if ($this->Link->delete()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
 
 /**
  * edit method

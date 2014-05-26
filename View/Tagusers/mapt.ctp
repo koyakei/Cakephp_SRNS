@@ -152,7 +152,8 @@ var options = {
     	url: '/cakephp/links/edgedel?id='+ data['edges']['0'],
     	dataType: 'json',
     	success: function(obj) {
-			alert(obj);
+
+			callback(data);
 		}
 	});
         }

@@ -173,7 +173,8 @@ var options = {
         $.getJSON('/cakephp/tagusers/addentity',data,
         	function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
                 if(res !== null) {
-                    return res;
+                     data.id = res;
+    callback(data);
                 }
         	}
         )
@@ -317,7 +318,7 @@ function getInfo(id){
         var labelInput = document.getElementById('label');
         data.label = labelInput.value;
         data.color = (new jsSHA(data.label,'ASCII')).getHash('SHA-384','HEX').substr(1,6);
-        //data.id = addLinkSQL(data);
+        data.id = addLinkSQL(data,callback);
 		callback(data);
       }
 

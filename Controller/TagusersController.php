@@ -141,7 +141,6 @@ class TagusersController extends AppController {
 					)
 			);
 	}
-		debug($res);
 		$options['authCheck'] = false;
 
 			//成功したら、成功した情報を返す。
@@ -216,8 +215,6 @@ class TagusersController extends AppController {
 		$this->response->type('json');
 		$this->layout = 'ajax';
 	}
-	public function node(){
 
-	}
 
 }

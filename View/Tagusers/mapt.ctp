@@ -145,16 +145,17 @@ var options = {
         div.style.display = 'block';
         duringManip = false;
         //idも作ったやつを返したい
-        }/*,
+        },
         onDelete: function(data,callback) {
         ajaxDelEdge['id'] = data['edges']['0'];
         	$.ajax({
     	url: '/cakephp/links/edgedel?id='+ data['edges']['0'],
     	dataType: 'json',
     	success: function(obj) {
+			alert(obj);
 		}
 	});
-        }*/
+        }
 
       };
       //2つの違うツリーを読み込む方法 getJson を別にするselect 以外のタイミングでgetInfoがはりるように
@@ -165,7 +166,7 @@ var options = {
  * @string option['color']
  * return added Link info @string //追加に成功したら追加した情報が帰ってくるようにしたい。
  */
-      function addLinkSQL(data){
+      function addLinkSQL(data,callback){
 
         // array('cntroller'=>'tagusers' ,'action' => 'addentity') に送る
         //data= {from:id,to:id,trikeyname:string} で渡ってくる　trikey も渡せるようにしたい。label の追加が必要だろう。なければreply にするか。
@@ -178,8 +179,6 @@ var options = {
                 }
         	}
         )
-
-        return false;
 
       }
 /* function addNodes

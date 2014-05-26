@@ -141,9 +141,9 @@ class LinksController extends AppController {
 		$result = $this->Link->find('first',array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id')));
 		if ($this->Auth->user('id') == $result['Link']['user_id']) {
 			if ($this->Link->delete()) {
-				return true;
+				$this->set('res',true);
 			} else {
-				return false;
+				$this->set('res',false);
 			}
 		}
 	}

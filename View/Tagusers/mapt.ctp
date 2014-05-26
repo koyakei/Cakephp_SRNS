@@ -145,22 +145,16 @@ var options = {
         div.style.display = 'block';
         duringManip = false;
         //idも作ったやつを返したい
-        },
-        onDelete: function(data,callback) {/*
+        }/*,
+        onDelete: function(data,callback) {
         ajaxDelEdge['id'] = data['edges']['0'];
-        	$.getJSON('/cakephp/links/edgedel',ajaxDelEdge,
-        		function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
-                	if(res) {
-                	}
-        		}
-        	)*/
         	$.ajax({
     	url: '/cakephp/links/edgedel?id='+ data['edges']['0'],
     	dataType: 'json',
     	success: function(obj) {
 		}
 	});
-        }
+        }*/
 
       };
       //2つの違うツリーを読み込む方法 getJson を別にするselect 以外のタイミングでgetInfoがはりるように
@@ -235,7 +229,7 @@ function addNodes(obj, entity, option) {
 			if (edges[j]["id"] == lId) isEdge = true;
 		}
 		if (!isEdge) {
-			edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, length: Math.random()*200+40, /*color: (new jsSHA(tName,'ASCII')).getHash('SHA-384','HEX').substr(1,6)*/});
+			edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, length: Math.random()*200+40, color: (new jsSHA(tName,'ASCII')).getHash('SHA-384','HEX').substr(1,6)});
 
 		}
 		//edges.push({ from: lLFrom, to: lLTo });
@@ -323,7 +317,7 @@ function getInfo(id){
         var labelInput = document.getElementById('label');
         data.label = labelInput.value;
         data.color = (new jsSHA(data.label,'ASCII')).getHash('SHA-384','HEX').substr(1,6);
-        data.id = addLinkSQL(data);
+        //data.id = addLinkSQL(data);
 		callback(data);
       }
 

@@ -73,6 +73,21 @@ function ajaxtable(keyid){
     </table>
         <?php echo $this->element('inputind', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>
         <?php echo $this->element('inputind', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>
+        <?php
+echo $this->AutoComplete->input(
+    'Tag.name',
+    array(
+        'autoCompletesUrl'=>$this->Html->url(
+            array(
+                'controller'=>'tagusers',
+                'action'=>'auto_complete',
+            )
+        ),
+        'autoCompleteRequestItem'=>'autoCompleteText',
+        'houtput' => 'tag_id'
+    )
+);
+?>
     </a>
 <?php endforeach; ?>
 <!-- 現存するタグだけ表示して、　

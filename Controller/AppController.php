@@ -91,6 +91,7 @@ public function isAuthorized($user) {
 
     function view($id = NULL){
     	$headresults = $this->headview($id);
+    	$this->id = $id;
     	$this->pageTitle = $headresults["$this->modelClass"]['name'];
     	$this->set('headresults',$headresults);
     	if (!$this->{$this->modelClass}->exists($id)) {
@@ -150,20 +151,17 @@ public function isAuthorized($user) {
     	$this->set('currentUserID', $this->Auth->user('id'));
     }
     public function edit($id = null){
-    	debug($this->Session->read());
     	if (null != ($this->Session->read('beforeURL'))) {
     		$referer = $this->Session->read('beforeURL');
-    		debug("read=" . $referer);
     	}else {
-    		$referer = $this->referer();
+    		debug($this->referer());
     		if (!preg_match('/edit/', $referer)) {
     			$this->Session->write('beforeURL', $referer);
-    			debug("write=" . $referer);
-    			debug($this->Session->read());
+
     		} else {
-    			debug("no write=" . $referer);
-    			debug($this->Session->read());
+    			$this->redirect($this->referer());
     		}
+
     	}
     }
 }

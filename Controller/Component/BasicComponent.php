@@ -149,12 +149,11 @@ class BasicComponent extends Component {
 				if(null == $LE){
 					$tagIDd = $tagID['Tag']['ID'];
 					if($that->Basic->trilinkAdd($that,$tagIDd,$LinkLTo,$trikeyID)){
-						debug(debug("sucsess"));
+						$that->Session->setFlash(__('成功'));
 						return true;
 					}
 				}else{
 					$that->Session->setFlash(__('関連付け済み'));
-					debug("already exist");
 				}
 			}
 		}else {
@@ -272,7 +271,6 @@ class BasicComponent extends Component {
 				'order' => ''
 			);
 		$that->returntribasic = $modelSe->find('all',$option);
-// 		debug($that->returntribasic[0]['Article']['name']); // URL
 		return $that->returntribasic;
 	}
 	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe = null,$Ltotarget = null ,$id) {

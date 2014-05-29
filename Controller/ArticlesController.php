@@ -162,19 +162,10 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		session_start();
 		parent::edit($id);
-// 		if ($this->Auth->user('id') == $this->taghashgen['owner_id'] && $this->request->data('auth') !) {
-// 			$this->Article->save($this->request->data('auth'));
-// 		}
-	if (null != ($_SESSION['Article']['beforeURL'])) {
-		$this->Session->write(`beforeURL`,$this->referer());
-	}
+
 	$this->Session->write(`before.URL`,"a");
-	debug($this->Session->read('before.URL'));
-// 		$redirect = $this->referer();
-// 		debug($redirect);
-
-
 		if (!$this->Article->exists($id)) {
 			throw new NotFoundException(__('Invalid article'));
 		}
@@ -182,13 +173,17 @@ class ArticlesController extends AppController {
 			if ($this->Article->save($this->request->data)) {
 
 			$this->Session->setFlash(__('The article has been saved.'));
-				$this->referer($refrer);
+				$this->redirect($_SESSION['Article']['beforeURL']);
+
 			} else {
 				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
 			}
 		} else {
 			$options = array('conditions' => array('Article.' . $this->Article->primaryKey => $id));
 			$this->request->data = $this->Article->find('first', $options);
+			if (null == ($_SESSION['Article']['beforeURL'])) {
+				$_SESSION['Article']['beforeURL'] = $this->referer();
+			}
 		}
 	}
 

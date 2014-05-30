@@ -61,12 +61,12 @@ $(document).ready(function(){
             (updateDiv).hide();
         }
         // Attach a function to click to transfer value to the text box
-        $(this).parent().parent('a[autoCompleteItem='+tag+']').click(function(){
-        	$(this).parent().parent('input[update='+tag+']').val( $(this).attr('suggest'));
-        	$(this).parent().parent('.tag_id').val($(this).attr('id'));
+        $('a[autoCompleteItem='+tag+']').click(function(){
+        	$(this).parent().parent().find('input[update='+tag+']').val( $(this).attr('suggest'));
+        	$(this).parent().parent().find('.tag_id').val($(this).attr('id'));
             //IDを下に表示
-        	$(this).parent().parent('#tag_id').html($(this).attr('id'));
-        	$(this).parent().parent('input[update='+tag+']').focus();
+        	$(this).parent().parent().find('#tag_id').html($(this).attr('id'));
+        	$(this).parent().parent().find('input[update='+tag+']').focus();
 
             return false;
         });

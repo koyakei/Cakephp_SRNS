@@ -230,8 +230,11 @@ function addNodes(obj, entity, option) {
 			if (edges[j]["id"] == lId) isEdge = true;
 		}
 		if (!isEdge) {
+			if(tName != undefined){
 			edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, length: Math.random()*200+40, color: (new jsSHA(tName,'ASCII')).getHash('SHA-384','HEX').substr(1,6)});
-
+			} else {
+				edges.push({ id: lId, from: lLFrom, to: lLTo, label: tName, length: Math.random()*200+40});
+			}
 		}
 		//edges.push({ from: lLFrom, to: lLTo });
 	}

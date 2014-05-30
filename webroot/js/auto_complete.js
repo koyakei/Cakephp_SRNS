@@ -61,7 +61,7 @@ $(document).ready(function(){
             (updateDiv).hide();
         }
         // Attach a function to click to transfer value to the text box
-        $('a[autoCompleteItem='+tag+']').click(function(){
+        $(this).parent().parent('a[autoCompleteItem='+tag+']').click(function(){
         	$(this).parent().parent('input[update='+tag+']').val( $(this).attr('suggest'));
         	$(this).parent().parent('.tag_id').val($(this).attr('id'));
             //IDを下に表示

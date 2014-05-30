@@ -72,7 +72,8 @@ function ajaxtable(keyid){
         </tbody>
     </table>
         <?php echo $this->element('inputind', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>
-        <?php echo $this->element('inputind', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Tag','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>
+        <?php echo $this->Form->create('Tag'); ?>
+<fieldset>
         <?php
 echo $this->AutoComplete->input(
     'Tag.name',
@@ -88,6 +89,13 @@ echo $this->AutoComplete->input(
     )
 );
 ?>
+</fieldset>
+<?php echo $this->form->hidden($model.'.keyid' ,array('value' => $key)); ?>
+		<legend><?php echo __($model); ?></legend>
+	<?php
+		$targetid = $this->params['pass'][0];
+	?>
+<?php echo $this->Form->end(__('Submit')); ?>
     </a>
 <?php endforeach; ?>
 <!-- 現存するタグだけ表示して、　

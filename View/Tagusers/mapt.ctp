@@ -95,6 +95,7 @@ $.ajaxSetup({
     timeout: 10000
 });
 var nodes = [];
+nodes.push({ id: <?php echo $id; ?>, label: '<?php echo $headresult[$firstModel]['name']; ?>'});
 var edges = [];
 var ajaxDelEdge =[];
 var duringManip = false;

@@ -120,6 +120,9 @@ class TagusersController extends AppController {
 	}
 	public function mapt($id = null){
 			$this->set('id',$id);
+			debug($this->headview($id));
+			$this->set('headresult',$this->headview($id));
+			$this->set('firstModel',$this->modelClass);
 	}
 	public function anonymous_mapt($id = null){
 		$this->set('id',$id);

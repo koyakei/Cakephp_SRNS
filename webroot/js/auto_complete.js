@@ -3,14 +3,14 @@ $(document).ready(function(){
     // Get a ref to the update div, set minWidth to the text item
     $('input[autoCompleteText]').each(function(){
 
-        var updateDiv = '#'+$(this).attr('update');
-        $(updateDiv).css('minWidth',$(this).width());
+        var updateDiv = $(this).parent().parent().children('#autoCompleteDiv');;
+        (updateDiv).css('minWidth',$(this).width());
         var autoCompleteRequestItem = $(this).attr('autoCompleteRequestItem');
         // Add a function to key up
         $(this).bind('keyup', function(event){
             // On escape key, hide the suggestions
             if(event.keyCode==27) {
-                $(updateDiv).hide();
+                (updateDiv).hide();
             }else if($(this).val().length>0) {
                 // If a request is in process, return
                 if ( $(this).data('autoCompleteBusy') ) {
@@ -24,30 +24,30 @@ $(document).ready(function(){
                     // Record the search term
                     $(this).data('lastAutoComplete',$(this).val());
                     // Call the function and get a JSON object
-                    $.getJSON($(this).attr('autoCompleteUrl'),
+                    $.getJSON($(this).attr('autoCompletesUrl'),
                         autoCompleteRequestItem+"="+$(this).val(),
                         function(itemList) {
                           if(itemList !== null) {
                             populateAutoComplete(itemList,updateDiv);
                           } else {
-                            $(updateDiv).hide();
+                            (updateDiv).hide();
                           }
                         }
                     );
-			
+
                     // Remove busy flag
                     $(this).data('autoCompleteBusy',false);
                 }else{
-                    $(updateDiv).show();
+                    (updateDiv).show();
                 }
             }else{
-                $(updateDiv).hide();
+                (updateDiv).hide();
             }
         });
     });
 
     function populateAutoComplete(itemList,updateDiv) {
-        var tag = updateDiv.substring(1);
+        var tag = 'autoCompleteDiv'
         // Build a list of links from the terms, set href equal to the term
         var options = '';
         $.each(itemList, function(index, name) {
@@ -55,18 +55,18 @@ $(document).ready(function(){
             });
         // Show them or hide div if nothing to show
         if(options!=''){
-            $(updateDiv).html(options);
-            $(updateDiv).show();
+            (updateDiv).html(options);
+            (updateDiv).show();
         } else {
-            $(updateDiv).hide();
+            (updateDiv).hide();
         }
         // Attach a function to click to transfer value to the text box
         $('a[autoCompleteItem='+tag+']').click(function(){
-            $('input[update='+tag+']').val( $(this).attr('suggest'));
-            $('.tag_id').val($(this).attr('id'));
+        	$(this).parent().parent('input[update='+tag+']').val( $(this).attr('suggest'));
+        	$(this).parent().parent('.tag_id').val($(this).attr('id'));
             //IDを下に表示
-            $('#tag_id').html($(this).attr('id'));
-            $('input[update='+tag+']').focus();
+        	$(this).parent().parent('#tag_id').html($(this).attr('id'));
+        	$(this).parent().parent('input[update='+tag+']').focus();
 
             return false;
         });

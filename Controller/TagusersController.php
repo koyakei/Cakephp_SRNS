@@ -1,5 +1,7 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('Article','Model');
+App::uses('Tag','Model');
 /**
  * Tagusers Controller
  *
@@ -120,9 +122,18 @@ class TagusersController extends AppController {
 	}
 	public function mapt($id = null){
 			$this->set('id',$id);
-			debug($this->headview($id));
-			$this->set('headresult',$this->headview($id));
-			$this->set('firstModel',$this->modelClass);
+			if ($id < Configure::read('tagID.End')) {
+				$firstModel = 'Tag';
+
+			}else {
+				$firstModel = 'Article';
+			}
+			$this->loadModel($firstModel);
+			$headresult = $this->{$firstModel}->find('first',
+					array('conditions' => array(
+							$firstModel.'.ID' => $id)));
+			$this->set('headresult', $headresult);
+			$this->set('firstModel',$firstModel);
 	}
 	public function anonymous_mapt($id = null){
 		$this->set('id',$id);
@@ -208,7 +219,7 @@ class TagusersController extends AppController {
 	 * @return ajax
 	 */
 	public function mapft() {
-		if ($id >= 100000) {
+		if ($id >= Configure::read('tagID.End')) {
 			$this->Basic->tribasicfiderbyid($that,$this->params['url']['keyid'],"Article","Article.ID",$this->params['url']['id']);
 		}else {
 			$this->Basic->tribasicfiderbyid($that,$this->params['url']['keyid'],"Tag","Tag.ID",$this->params['url']['id']);

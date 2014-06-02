@@ -9,6 +9,7 @@ App::uses('Tagauthcount', 'Model');
 Configure::load("static");
 class BasicComponent extends Component {
 	public $components = array('Auth');
+	
 	public function social(&$that,$userID){
 		$data['Social']['vaction'] = $that->action;
 		$data['Social']['vplugin'] = $that->plugin;

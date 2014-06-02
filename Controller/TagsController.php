@@ -479,7 +479,6 @@ public function beforeFilter() {
         	$this->psearch($this);
         	$tags = $this->paginate();
         	$this->set('tags', $tags);
-//         	$this->set('tags', $this->Authpaginator->paginate());
 
         }
 

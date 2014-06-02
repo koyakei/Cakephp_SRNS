@@ -22,6 +22,9 @@
 App::uses('Controller', 'Controller');
 App::uses('User', 'Model');
 App::uses('Key', 'Model');
+App::uses('Article','Model');
+App::uses('Tag','Model');
+
 /**
  * Application Controller
  *

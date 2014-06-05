@@ -587,14 +587,47 @@ public function beforeFilter() {
 
         public function singletrikeytable($id = null,$trikey = null){
         	$this->loadModel('User');
-         $this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-         $this->loadModel('Key');
-         $key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
-         $this->set( 'keylist', $key);
+	        $this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+	        $this->loadModel('Key');
+	        $key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
+	        $this->set( 'keylist', $key);
         	$options = array('key' => $trikey);
         	$this->Common->trifinderbyid($this,$id,$options);
         	$tableresults = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
         	$this->set('value',$tableresults);
+        	$this->set('model',$this->modelClass);
+        	if (!$this->{$this->modelClass}->exists($id)) {
+        		throw new NotFoundException(__('Invalid tag'));
+        	}
+        	if($this->request->data['tagRadd']['add'] == true){
+        		if($this->Basic->tagRadd($this)){
+        			if($this->Basic->social($this)){
+        				debug("tag relation added.");
+        			}
+        		}
+        	}elseif ($this->request->data['Tag']['max_quant'] != null){
+        		if ($this->Auth->user('id')==$resultForChange['Tag']['user_id']) {
+        			if($this->Tag->save($this->request->data())){
+        				$that->Session->setFlash(__('Max quant changed.'));
+        			}
+        		}else {
+        			debug("fail no Auth");
+        		}
+        	} elseif($this->request->data['Link']['quant'] != null){
+        		if($this->Basic->quant($this) && $this->Basic->social($this)){
+        			$that->Session->setFlash(__('Quant changed.'));
+        		}
+        	}
+        	if($this->request->data['Article']['name'] != null){
+        		$options['key'] = $this->request->data['Article']['keyid'];
+        		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
+        		$this->Basic->social($this);
+        	}
+        	if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
+        		$options['key'] = $this->request->data['Tag']['keyid'];
+        		$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],$id,$this->request->data['Tag']['name'],$options);
+        		$this->Basic->social($this,$userID);
+        	}
         }
 
         public function tagdel($id = null) {

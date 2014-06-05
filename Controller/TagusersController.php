@@ -204,9 +204,25 @@ class TagusersController extends AppController {
 		$this->response->type('json');
 		$this->layout = 'ajax';
 	}
-	public function maptf() {
+	/**
+	 * venn method
+	 *
+	 * @param string $id
+	 * @return array
+	 */
+	public function venn($id = NULL){
+		$this->Taguser->find('all',array('conditions' => ));
+		$this->set('results', $results);
+		$this->response->type('json');
+		$this->layout = 'ajax';
+	}
 
-			$this->set('TF', $TF);
+	public function vennt($id = NULL){
+		$this->set('id',$id);
+	}
+
+	public function maptf() {
+		$this->set('TF', $TF);
 		$this->response->type('json');
 		$this->layout = 'ajax';
 	}

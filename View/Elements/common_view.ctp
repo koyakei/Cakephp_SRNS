@@ -62,7 +62,7 @@ function ajaxtable(keyid){
 	<?php foreach($tableresults as $value):
 
 	 ?>
-<a name="<?php echo $value['ID'] ?>">
+<a name="<?php echo $value['ID']; ?>">
     <h2><?php echo $value['name'] ?></h2>
     <table class="myTable" cellpadding="0" cellspacing="0">
         <?php echo $this->element('tablehead', Array('taghashes'=>$value['head'])); ?>
@@ -88,24 +88,26 @@ echo $this->AutoComplete->input(
         'houtput' => 'tag_id'
     )
 );
+
 ?>
 </fieldset>
-<?php echo $this->form->hidden($model.'.keyid' ,array('value' => $key)); ?>
+<?php echo $this->form->hidden($model.'.keyid' ,array('value' => $value['ID'])); ?>
 		<legend><?php echo __($model); ?></legend>
 	<?php
 		$targetid = $this->params['pass'][0];
 	?>
+	<?php //echo $this->form->hidden('keyid',array('value' => $value['ID'])); ?>
 <?php echo $this->Form->end(__('Submit')); ?>
     </a>
 <?php endforeach; ?>
 <!-- 現存するタグだけ表示して、　
 基本タグをプルダウンでサジェストして、
 -->
-<?php
+        <?php
 echo $this->AutoComplete->input(
     'Tag.name',
     array(
-        'autoCompleteUrl'=>$this->Html->url(
+        'autoCompletesUrl'=>$this->Html->url(
             array(
                 'controller'=>'tagusers',
                 'action'=>'auto_complete',
@@ -115,10 +117,8 @@ echo $this->AutoComplete->input(
         'houtput' => 'tag_id'
     )
 );
-?>
-<script>
 
-</script>
+?>
 <a id="spesifiedtrikeylink" onclick ="jumpStrikey()" >個別trikey</a>
 
 

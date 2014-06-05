@@ -29,8 +29,9 @@
 	<ul>
 	<?php if($idre != null): ?>
 		<li><?php echo $this->Html->link(__('New user'), array('plugin' =>  'users','controller' => 'users','action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('MindMap'), array('controller' => 'tagusers','action' => 'mapt', $idre)); ?> </li>
+		<li><?php echo $this->Html->link(__('Mind Map'), array('controller' => 'tagusers','action' => 'mapt', $idre)); ?> </li>
 		<li><?php echo $this->Html->link(__('Edit ' .$firstModel), array('action' => 'edit', $idre)); ?> </li>
+		<li><?php echo $this->Html->link(__('Venn diagram'), array('controller' => 'tagusers','action' => 'vennt', $idre)); ?> </li>
 		<li><?php echo $this->Form->postLink(__('Delete'. $firstModel), array('action' => 'delete',$idre), null, __('Are you sure you want to delete # %s?', $idre)); ?> </li>
 	<?php if($firstModel == "Tag"): ?>
 		<li><?php echo $this->Html->link(__('Exchange'), array('controller' => 'tags','action' => 'exchange',$idre)); ?> </li>

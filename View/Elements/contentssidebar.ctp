@@ -38,7 +38,8 @@
 		<?php endif; ?>
 	<?php endif; ?>
 		<li><?php echo $this->Html->link(__('List Tags'), array('controller' => 'tags','action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New '.$firstModel), array('controller' => $firstModel.'s','action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Articles'), array('controller' => 'tags','action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Tags'), array('controller' => 'tags','action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('Tag search'), array('controller' => 'tags','action' => 'search')); ?> </li>
 
 		<li><?php echo $this->Html->link(__('List Article'), array('controller' => 'articles','action' => 'index')); ?> </li>

@@ -211,7 +211,7 @@ class TagusersController extends AppController {
 	 * @return array
 	 */
 	public function venn($id = NULL){
-		$this->Taguser->find('all',array('conditions' => ));
+// 		$this->Taguser->find('all',array('conditions' => ));
 		$this->set('results', $results);
 		$this->response->type('json');
 		$this->layout = 'ajax';

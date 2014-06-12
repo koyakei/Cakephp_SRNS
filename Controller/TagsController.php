@@ -624,7 +624,7 @@ public function beforeFilter() {
         		$this->Basic->social($this);
         	}
         	if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
-        		$options['key'] = $this->request->data['Tag']['keyid'];
+        		$options['key'] = $trikey;
         		$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],$id,$this->request->data['Tag']['name'],$options);
         		$this->Basic->social($this,$userID);
         	}

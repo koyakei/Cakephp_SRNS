@@ -599,27 +599,9 @@ public function beforeFilter() {
         	if (!$this->{$this->modelClass}->exists($id)) {
         		throw new NotFoundException(__('Invalid tag'));
         	}
-        	if($this->request->data['tagRadd']['add'] == true){
-        		if($this->Basic->tagRadd($this)){
-        			if($this->Basic->social($this)){
-        				debug("tag relation added.");
-        			}
-        		}
-        	}elseif ($this->request->data['Tag']['max_quant'] != null){
-        		if ($this->Auth->user('id')==$resultForChange['Tag']['user_id']) {
-        			if($this->Tag->save($this->request->data())){
-        				$that->Session->setFlash(__('Max quant changed.'));
-        			}
-        		}else {
-        			debug("fail no Auth");
-        		}
-        	} elseif($this->request->data['Link']['quant'] != null){
-        		if($this->Basic->quant($this) && $this->Basic->social($this)){
-        			$that->Session->setFlash(__('Quant changed.'));
-        		}
-        	}
+        	tagRadd($this);
         	if($this->request->data['Article']['name'] != null){
-        		$options['key'] = $this->request->data['Article']['keyid'];
+        		$options['key'] = $trikey;
         		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
         		$this->Basic->social($this);
         	}

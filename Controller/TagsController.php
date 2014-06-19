@@ -599,7 +599,7 @@ public function beforeFilter() {
         	if (!$this->{$this->modelClass}->exists($id)) {
         		throw new NotFoundException(__('Invalid tag'));
         	}
-        	tagRadd($this);
+        	$this->Common->tagRadd($this);
         	if($this->request->data['Article']['name'] != null){
         		$options['key'] = $trikey;
         		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);

@@ -9,8 +9,13 @@
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,
-	  'selected' => $currentUserID//['userselected']  
-	)); ?>
+	  'selected' => $currentUserID//['userselected']
+	));
+	echo $this->Form->input('auth',array(
+    'type' => 'select',
+    'options' => array( 0 => 'public',1 => 'private'),
+  'selected' => 0));
+	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>

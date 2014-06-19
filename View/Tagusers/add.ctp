@@ -8,6 +8,8 @@
 		echo $this->Form->input('user_id');
 		echo $this->Form->input('max_quant');
 		echo $this->Form->input('username');
+
+
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

@@ -6,7 +6,10 @@
 		echo $this->Form->input('ID');
 		echo $this->Form->input('name');
 		echo $this->Form->input('owner_id');
-		echo $this->Form->input('auth');
+		echo $this->Form->input('auth',array(
+    'type' => 'select',
+    'options' => array( 0 => 'public',1 => 'private'),
+  'selected' => 0));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

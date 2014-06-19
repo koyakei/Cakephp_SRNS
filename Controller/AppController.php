@@ -92,27 +92,7 @@ public function isAuthorized($user) {
     					 		$this->modelClass.'.'.$this->{$this->modelClass}->primaryKey => $id)));
     }
 
-	function tagRadd(&$that){
-		if($that->request->data['tagRadd']['add'] == true){
-			if($that->Basic->tagRadd($that)){
-				if($that->Basic->social($that)){
-					debug("tag relation added.");
-				}
-			}
-		}elseif ($that->request->data['Tag']['max_quant'] != null){
-			if ($that->Auth->user('id')==$resultForChange['Tag']['user_id']) {
-				if($that->Tag->save($that->request->data())){
-					$that->Session->setFlash(__('Max quant changed.'));
-				}
-			}else {
-				debug("fail no Auth");
-			}
-		} elseif($that->request->data['Link']['quant'] != null){
-			if($that->Basic->quant($that) && $that->Basic->social($that)){
-				$that->Session->setFlash(__('Quant changed.'));
-			}
-		}
-	}
+
 
     function view($id = NULL){
     	$headresults = $this->headview($id);
@@ -122,7 +102,7 @@ public function isAuthorized($user) {
     	if (!$this->{$this->modelClass}->exists($id)) {
     		throw new NotFoundException(__('Invalid tag'));
     	}
-    	tagRadd($this);
+    	$this->Common->tagRadd($this);
     	if($this->request->data['Article']['name'] != null){
     		$options['key'] = $this->request->data['Article']['keyid'];
     		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);

@@ -111,7 +111,27 @@ class CommonComponent extends Component {
 		}
 
 	}
-
+	public function tagRadd(&$that){
+		if($that->request->data['tagRadd']['add'] == true){
+			if($that->Basic->tagRadd($that)){
+				if($that->Basic->social($that)){
+					debug("tag relation added.");
+				}
+			}
+		}elseif ($that->request->data['Tag']['max_quant'] != null){
+			if ($that->Auth->user('id')==$resultForChange['Tag']['user_id']) {
+				if($that->Tag->save($that->request->data())){
+					$that->Session->setFlash(__('Max quant changed.'));
+				}
+			}else {
+				debug("fail no Auth");
+			}
+		} elseif($that->request->data['Link']['quant'] != null){
+			if($that->Basic->quant($that) && $that->Basic->social($that)){
+				$that->Session->setFlash(__('Quant changed.'));
+			}
+		}
+	}
 	public function triAddbyid(&$that = null,$userID,$FromID,$ToID,$options) {
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');

@@ -28,7 +28,7 @@
 
 	<ul>
 	<?php if($idre != null): ?>
-		<li><?php echo $this->Html->link(__('New user'), array('plugin' =>  'users','controller' => 'users','action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('New user'), array('anonymous'=> false,'plugin' =>  'users','controller' => 'users','action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('Mind Map'), array('controller' => 'tagusers','action' => 'mapt', $idre)); ?> </li>
 		<li><?php echo $this->Html->link(__('Edit ' .$firstModel), array('action' => 'edit', $idre)); ?> </li>
 		<li><?php echo $this->Html->link(__('Venn diagram'), array('controller' => 'tagusers','action' => 'vennt', $idre)); ?> </li>

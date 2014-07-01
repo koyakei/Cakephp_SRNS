@@ -23,6 +23,9 @@
 		__d('cake', 'The requested address %s was not found on this server.'),
 		"<strong>'{$url}'</strong>"
 	); ?>
+	regist from here
+	<?php echo $this->Html->link(__('New user'), array('anonymous'=> false,'plugin' =>  'users','controller' => 'users','action' => 'add')); ?>
+	or contact twitter @koyakei
 </p>
 <?php
 if (Configure::read('debug') > 0):

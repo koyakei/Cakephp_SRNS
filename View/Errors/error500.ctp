@@ -20,6 +20,9 @@
 <p class="error">
 	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
 	<?php echo __d('cake', 'An Internal Error Has Occurred.'); ?>
+	regist from here
+	<?php echo $this->Html->link(__('New user'), array('anonymous'=> false,'plugin' =>  'users','controller' => 'users','action' => 'add')); ?>
+	or contact twitter @koyakei
 </p>
 <?php
 if (Configure::read('debug') > 0):

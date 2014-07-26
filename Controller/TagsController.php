@@ -612,12 +612,12 @@ public function beforeFilter() {
         	}
         }
 
-        public function tagdel($id = null) {
+        public function tagdel() {
 
         	//$options = array('conditions' => array('.'.$this->Aurh->primaryKey => $this->request->data['Tag']['']));
         	//$this->Link->find('first',$option);
-        	debug($this->request->data('Link.ID'));
-        	if ($this->Link->delete($this->request->data('Link.ID'))){
+        	debug($this->request->data());
+        	if ($this->Link->delete()){
         		if($this->Basic->taglimitcountup($this)){
         			$this->Session->setFlash(__('削除完了.'));
         			debug("sucsess");

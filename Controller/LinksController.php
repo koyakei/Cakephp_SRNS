@@ -186,11 +186,16 @@ class LinksController extends AppController {
 		}
 		$this->request->onlyAllow('post', 'delete');
 		$result = $this->Link->find('first',array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id')));
-		if ($this->Auth->user('id') == $result['Link']['user_id']) {
+		if ($this->Auth->user('id') == $result['Link']['user_id'] && $this->Tagauth->find('first',
+			array('conditions' => array('Tagauth.ID' => $id),'fields' => array('Link.user_id'))
+		)) {
 			if ($this->Link->delete()) {
 				$this->Session->setFlash(__('The link has been deleted.'));
+				return true;
+
 			} else {
 				$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
+				return false;
 			}
 		}
 		debug($this->referer());

@@ -9,7 +9,7 @@ App::uses('Tagauthcount', 'Model');
 Configure::load("static");
 class BasicComponent extends Component {
 	public $components = array('Auth');
-	
+
 	public function social(&$that,$userID){
 		$data['Social']['vaction'] = $that->action;
 		$data['Social']['vplugin'] = $that->plugin;
@@ -94,12 +94,15 @@ class BasicComponent extends Component {
 				$data['User']['tlimit'] = $that->Auth->user('tlimit')- 1;
 				if($that->User->save($data)){
 					$that->Session->setFlash(__('タグ追加成功　残りタグ数'.$that->Auth->user('tlimit')));
+					return true;
 				}
 			}else {
 				$that->Session->setFlash(__('タグ追加失敗　'));
+				return false;
 			}
 		}else {
 			$that->Session->setFlash(__('タグ追加失敗　発行上限に達しています'));
+			return false;
 		}
 	}
 	public function tagLimitCountDel(&$that){

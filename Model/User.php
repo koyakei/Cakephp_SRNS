@@ -38,8 +38,8 @@ class User extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-	);
 
+	);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
@@ -47,7 +47,7 @@ class User extends AppModel {
  *
  * @var array
  */
-	public $hasMany = array(
+ public $hasMany = array(
 		'Article' => array(
 			'className' => 'Article',
 			'foreignKey' => 'user_id',
@@ -61,71 +61,71 @@ class User extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'Follow' => array(
-			'className' => 'Follow',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'Link' => array(
-			'className' => 'Link',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'Social' => array(
-			'className' => 'Social',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'Tag' => array(
-			'className' => 'Tag',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'UserDetail' => array(
-			'className' => 'UserDetail',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
+ 		'Follow' => array(
+ 				'className' => 'Follow',
+ 				'foreignKey' => 'user_id',
+ 				'dependent' => false,
+ 				'conditions' => '',
+ 				'fields' => '',
+ 				'order' => '',
+ 				'limit' => '',
+ 				'offset' => '',
+ 				'exclusive' => '',
+ 				'finderQuery' => '',
+ 				'counterQuery' => ''
+ 		),
+ 		'Link' => array(
+ 				'className' => 'Link',
+ 				'foreignKey' => 'user_id',
+ 				'dependent' => false,
+ 				'conditions' => '',
+ 				'fields' => '',
+ 				'order' => '',
+ 				'limit' => '',
+ 				'offset' => '',
+ 				'exclusive' => '',
+ 				'finderQuery' => '',
+ 				'counterQuery' => ''
+ 		),
+ 		'Social' => array(
+ 				'className' => 'Social',
+ 				'foreignKey' => 'user_id',
+ 				'dependent' => false,
+ 				'conditions' => '',
+ 				'fields' => '',
+ 				'order' => '',
+ 				'limit' => '',
+ 				'offset' => '',
+ 				'exclusive' => '',
+ 				'finderQuery' => '',
+ 				'counterQuery' => ''
+ 		),
+ 		'Tag' => array(
+ 				'className' => 'Tag',
+ 				'foreignKey' => 'user_id',
+ 				'dependent' => false,
+ 				'conditions' => '',
+ 				'fields' => '',
+ 				'order' => '',
+ 				'limit' => '',
+ 				'offset' => '',
+ 				'exclusive' => '',
+ 				'finderQuery' => '',
+ 				'counterQuery' => ''
+ 		),
+ 		'UserDetail' => array(
+ 				'className' => 'UserDetail',
+ 				'foreignKey' => 'user_id',
+ 				'dependent' => false,
+ 				'conditions' => '',
+ 				'fields' => '',
+ 				'order' => '',
+ 				'limit' => '',
+ 				'offset' => '',
+ 				'exclusive' => '',
+ 				'finderQuery' => '',
+ 				'counterQuery' => ''
+ 		)
 	);
 
 

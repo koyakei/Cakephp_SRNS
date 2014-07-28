@@ -112,8 +112,7 @@ class UsersController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
-	function home(){
-	}
+
 	function search(){
 		if ( $this->RequestHandler->isAjax() ) {
 			Configure::write ( 'debug', 0 );
@@ -132,6 +131,58 @@ class UsersController extends AppController {
 			}
 		}
 	}
+	/**
+	 * follow method
+	 *
+	 * @throws NotFoundException
+	 * There is not such user.
+	 * @param string $user_id
+	 * I will follow this.
+	 * @return true
+	 * already followed
+	 * @return false
+	 * can't follow
+	 */
+	public function follow($user_id){
+		$this->User->id = $id;
+		if (!$this->User->exists()) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+// 		if ($this->followCheck($this->Auth->user('id'),$user_id)) {
+			$Follow = new Follow();
+			return $Follow->save(
+				array('Follow' =>
+					array(
+						'user_id'=> $user_id,
+						'target' => $this->Auth->user('id')
+					)
+				)
+			);
+// 		}
+		return false;
+	}
+
+	/**
+	 * followCheck method
+	 *
+	 *
+	 * @param string $user_id
+	 * I will follow this.
+	 * @return true
+	 * already followed
+	 * @return false
+	 * can't follow
+	 */
+	private function followCheck(&$follow_target,&$follower){
+		$Follow = new Follow();
+		return $Follow->find('first',array(
+				'conditions' => array('Follow.user_id' => $follower,'Follow.target'=>$follow_target)
+			)
+		);
+	}
+
+
+
 	public function autoSuggest() {
 		$this->layout = 'ajax';
 		$data = ''; $json = '';

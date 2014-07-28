@@ -32,4 +32,15 @@ App::uses('Model', 'Model');
 class AppModel extends Model {
 	public $useDbConfig = 'test';
 
+	function checkUnique($data, $fields) {
+		if (!is_array($fields)) {
+			$fields = array($fields);
+		}
+		foreach($fields as $key) {
+			$tmp[$key] = $this->data[$this->name][$key];
+		}
+		return $this->isUnique($tmp, false);
+
+	}
+
 }

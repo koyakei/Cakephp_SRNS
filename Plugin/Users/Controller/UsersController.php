@@ -281,20 +281,43 @@ class UsersController extends UsersAppController {
 			$this->set('tag', $this->Tag->find('first',$options));
 			$this->set('user', $user);
 			$tuserid = $this->{$this->modelClass}->view($slug)[$this->modelClass]['id'];
-		$this->loadModel('Socialuser');
+			$this->loadModel('Socialuser');
 			$this->Paginator->settings = array(
 				'conditions' => array(
 						"Socialuser.user_id" => $slug),
 				'order' => array('Socialuser.created' => 'desc')
-		);
-			//debug($this->Paginator->paginate('Socialuser'));
+			);
 			$this->set('socials',$this->Paginator->paginate('Socialuser'));
-// 			$this->set('myactivity',$this->Paginator->paginate('Socialuser'));
 		} catch (Exception $e) {
 			$this->Session->setFlash($e->getMessage());
 			$this->redirect('/');
 		}
 	}
+
+/**
+ * all timeline method
+ * @return void
+ */
+
+	public function alltimeline(){
+		$this->loadModel('Socialuser');
+		$this->Paginator->settings = array(
+				'conditions' => $this->timeline(null),
+				'order' => array('Socialuser.created' => 'desc')
+		);
+
+		$this->set('socials',$this->Paginator->paginate('Socialuser'));
+	}
+
+	public  function timeline($user_id){
+		if (is_null($user_id)) return null;
+		foreach($user_id as $value){
+			$conditions[]['or'] = array("Socialuser.user_id" => $value);
+		}
+		return $conditions;
+
+	}
+
 
 /**
  * Edit

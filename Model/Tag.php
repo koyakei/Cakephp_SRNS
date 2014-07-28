@@ -61,16 +61,7 @@ class Tag extends Date {
  *
  * @var array
  */
- function checkUnique($data, $fields) {
-    if (!is_array($fields)) {
-        $fields = array($fields);
-    }
-    foreach($fields as $key) {
-        $tmp[$key] = $this->data[$this->name][$key];
-    }
-    return $this->isUnique($tmp, false);
-
- }
+ 
 	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(

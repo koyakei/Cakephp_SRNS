@@ -10,6 +10,7 @@
  */
 ?>
 <div class="users index">
+<?php echo $this->Html->link('All users timeline', array('action' => 'alltimeline')); ?>
 	<h2><?php echo __d('users', 'Users'); ?></h2>
 
 	<p><?php

@@ -302,39 +302,11 @@ class CommonComponent extends Component {
 		$that->articleparentres = $that->returntribasic;
 
 		$that->taghash = array();
-		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
+// 		$trikeyID = Configure::read('tagID.search');
 		list($that->articleparentres,$that->taghash) = $this->getSearchRelation($that, $that->articleparentres, $that->taghash, "Article");
-// 		$that->i = 0;
-// 		foreach ($that->articleparentres as $result){
-// 			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result['Article']['ID'],"Tag.ID");//
-// 			$that->taghashgen = $that->returntribasic;
-// 			foreach ($that->taghashgen as $tag){
-// 				$that->subtagID = $tag['Tag']['ID'];
-// 				$that->articleparentres[$that->i]['subtag'][$that->subtagID] = $tag;
-// 				if ($that->taghash[$that->subtagID] == null) {
-// 					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
-// 				}
-// 			}
-// 			$that->i++;
-// 		}
-
 		$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
 		$that->tagparentres = $that->returntribasic;
-		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
 		list($that->tagparentres,$that->taghash) = $this->getSearchRelation($that, $that->tagparentres, $that->taghash, "Tag");
-// 		$that->i = 0;
-// 		foreach ($that->tagparentres as $result){
-// 			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result['Tag']['ID'],"Tag.ID");//ここのtribasicfinderbyidの使い方が大事
-// 			$that->taghashgen = $that->returntribasic;
-// 			foreach ($that->taghashgen as $tag){
-// 				$that->subtagID = $tag['Tag']['ID'];
-// 				$that->tagparentres[$that->i]['subtag'][$that->subtagID] = $tag;
-// 				if ($that->taghash[$that->subtagID] == null) {
-// 					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
-// 				}
-// 			}
-// 			$that->i++;
-// 		}
 	}
 
 	private function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel){

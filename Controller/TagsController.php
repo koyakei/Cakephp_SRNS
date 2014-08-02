@@ -613,8 +613,8 @@ public function beforeFilter() {
         }
 
         public function tagdel($id = NULL) {
-        	debug($id);
-        	debug($this->request->data());
+//         	debug($id);
+//         	debug($this->request->data());
         	$this->Link = new Link();
         	//$options = array('conditions' => array('.'.$this->Aurh->primaryKey => $this->request->data['Tag']['']));
 //         	$Link->find('all');

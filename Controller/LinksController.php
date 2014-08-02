@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('TagauthsController', 'Controller');
 Configure::load("static");
 
 /**
@@ -185,12 +186,14 @@ class LinksController extends AppController {
 			throw new NotFoundException(__('Invalid link'));
 		}
 		$this->request->onlyAllow('post', 'delete');
+		$this->loadModel('Tagauth');
 		$result = $this->Link->find('first',array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id')));
-		if ($this->Auth->user('id') == $result['Link']['user_id'] && $this->Tagauth->find('first',
-			array('conditions' => array('Tagauth.ID' => $id),'fields' => array('Link.user_id'))
+		if ($this->Auth->user('id') == $result['Link']['user_id'] && $this->Link->find('first',
+			array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id'))
 		)) {
 			if ($this->Link->delete()) {
 				$this->Session->setFlash(__('The link has been deleted.'));
+				$this->redirect($this->referer());
 				return true;
 
 			} else {

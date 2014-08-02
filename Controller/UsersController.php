@@ -143,8 +143,8 @@ class UsersController extends AppController {
 	 * @return false
 	 * can't follow
 	 */
-	public function follow($user_id){
-		$this->User->id = $id;
+	public function follow(&$user_id){
+		$this->User->id = $user_id;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -160,6 +160,21 @@ class UsersController extends AppController {
 			);
 // 		}
 		return false;
+	}
+	public function unfollow(&$target_id){
+		$this->User->id = $user_id;
+		if (!$this->User->exists()) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		$Follow = new Follow();
+		return $Follow->delete()(
+				array('Follow' =>
+						array(
+								'user_id'=> $user_id,
+								'target' => $this->Auth->user('id')
+						)
+				)
+		);
 	}
 
 	/**

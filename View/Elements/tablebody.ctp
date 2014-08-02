@@ -4,7 +4,10 @@
 <div id="draggble">
 				<tr>
 					<td><?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
-					<td><?php echo $this->element('URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>
+					<td>
+					<?php if(!is_null($leaf)){ echo "<b>"; } ?>
+					<?php echo $this->element('URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>
+					<?php if(!is_null($leaf)){ echo "</b>"; } ?>
 						<?php echo $this->Form->hidden($firstModel.'.ID', array('value'=>$result[$firstModel]['ID'])); ?></td>
 					<td><?php echo h($result[$userCallAssosiation]['username']); ?>&nbsp;</td>
 					<td class="actions">

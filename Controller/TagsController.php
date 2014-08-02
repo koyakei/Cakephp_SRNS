@@ -87,9 +87,8 @@ public function beforeFilter() {
          */
         public function view($id = null) {
         	parent::view($id);
-//         	$this->Tag->cachedName = $this->name;
         	$this->request->data['keyid']['keyid'] =$trikeyID;
-        	if ($trikeyID == NULL){//$serchID;//tagConst()['searchID'];
+        	if ($trikeyID == NULL){
         		$trikeyID = Configure::read('tagID.search');
         	}
         	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id);

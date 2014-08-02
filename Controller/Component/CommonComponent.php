@@ -300,38 +300,58 @@ class CommonComponent extends Component {
 		}
 		$this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);//どんな記事がぶら下がっているか探す
 		$that->articleparentres = $that->returntribasic;
-		$that->i = 0;
+
 		$that->taghash = array();
 		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
-		foreach ($that->articleparentres as $result){
-			$res = $result['Article']['ID'];
-			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$res,"Tag.ID");//
-			$that->taghashgen = $that->returntribasic;
-			foreach ($that->taghashgen as $tag){
-				$that->subtagID = $tag['Tag']['ID'];
-				$that->articleparentres[$that->i]['subtag'][$that->subtagID] = $tag;
-				if ($that->taghash[$that->subtagID] == null) {
-					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
-				}
-			}
-			$that->i++;
-		}
-		$that->i = 0;
+		list($that->articleparentres,$that->taghash) = $this->getSearchRelation($that, $that->articleparentres, $that->taghash, "Article");
+// 		$that->i = 0;
+// 		foreach ($that->articleparentres as $result){
+// 			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result['Article']['ID'],"Tag.ID");//
+// 			$that->taghashgen = $that->returntribasic;
+// 			foreach ($that->taghashgen as $tag){
+// 				$that->subtagID = $tag['Tag']['ID'];
+// 				$that->articleparentres[$that->i]['subtag'][$that->subtagID] = $tag;
+// 				if ($that->taghash[$that->subtagID] == null) {
+// 					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
+// 				}
+// 			}
+// 			$that->i++;
+// 		}
+
 		$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
 		$that->tagparentres = $that->returntribasic;
 		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
-		foreach ($that->tagparentres as $result){
-			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result['Tag']['ID'],"Tag.ID");//ここのtribasicfinderbyidの使い方が大事
+		list($that->tagparentres,$that->taghash) = $this->getSearchRelation($that, $that->tagparentres, $that->taghash, "Tag");
+// 		$that->i = 0;
+// 		foreach ($that->tagparentres as $result){
+// 			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result['Tag']['ID'],"Tag.ID");//ここのtribasicfinderbyidの使い方が大事
+// 			$that->taghashgen = $that->returntribasic;
+// 			foreach ($that->taghashgen as $tag){
+// 				$that->subtagID = $tag['Tag']['ID'];
+// 				$that->tagparentres[$that->i]['subtag'][$that->subtagID] = $tag;
+// 				if ($that->taghash[$that->subtagID] == null) {
+// 					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
+// 				}
+// 			}
+// 			$that->i++;
+// 		}
+	}
+
+	private function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel){
+		$i = 0;
+		foreach ($targetParent as $result){
+			$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result[$targetModel]['ID'],"Tag.ID");//
 			$that->taghashgen = $that->returntribasic;
 			foreach ($that->taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];
-				$that->tagparentres[$that->i]['subtag'][$that->subtagID] = $tag;
-				if ($that->taghash[$that->subtagID] == null) {
-					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
+				$targetParent[$i]['subtag'][$that->subtagID] = $tag;
+				if ($taghash[$that->subtagID] == null) {
+					$taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
 				}
 			}
-			$that->i++;
+			$i++;
 		}
+		return array($targetParent,$taghash );
 	}
 
 	public function SecondDem(&$that,$model,$order,$keyID,$id){

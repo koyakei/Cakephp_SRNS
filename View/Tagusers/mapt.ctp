@@ -70,21 +70,24 @@ body {
 <div id="mygraph"></div>
 <div id="info"></div>
 <input type="button" value="Test" />
-<?php
+
+ <?php
 echo $this->AutoComplete->input(
     'Tag.name',
     array(
-        'autoCompleteUrl'=>$this->Html->url(
+        'autoCompletesUrl'=>$this->Html->url(
             array(
                 'controller'=>'tagusers',
                 'action'=>'auto_complete',
             )
         ),
         'autoCompleteRequestItem'=>'autoCompleteText',
-        'houtput' => 'ID'
+        'houtput' => 'tag_id'
     )
 );
+
 ?>
+<br>
 <input type="button" value="new tag node" id="tag_id_submit"></button>
 <script>
 //次にやること　var data を array('cntroller'=>'tagusers' ,'action' => 'addentity') に渡して、そっくりそのまま返す。

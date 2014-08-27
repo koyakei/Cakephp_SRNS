@@ -92,6 +92,9 @@ class BasicComponent extends Component {
 				$that->last_id = $that->Tag->getLastInsertID();
 				$data['User']['id'] = $that->request->data['Tag']['user_id'];
 				$data['User']['tlimit'] = $that->Auth->user('tlimit')- 1;
+				if ($that->User == null) {
+					$that->User = $that->loadModel('User');
+				}
 				if($that->User->save($data)){
 					$that->Session->setFlash(__('タグ追加成功　残りタグ数'.$that->Auth->user('tlimit')));
 					return true;

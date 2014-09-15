@@ -587,6 +587,7 @@ public function beforeFilter() {
         public function singletrikeytable($id = null,$trikey = null){
         	$this->loadModel('User');
 	        $this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+	        $this->set( 'currentUserID', $this->Auth->user('id'));
 	        $this->loadModel('Key');
 	        $key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
 	        $this->set( 'keylist', $key);
@@ -595,9 +596,6 @@ public function beforeFilter() {
         	$tableresults = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
         	$this->set('value',$tableresults);
         	$this->set('model',$this->modelClass);
-//         	if (!$this->{$this->modelClass}->exists($id)) {
-//         		throw new NotFoundException(__('Invalid tag'));
-//         	}
         	$this->Common->tagRadd($this);
         	if($this->request->data['Article']['name'] != null){
         		$options['key'] = $trikey;

@@ -595,9 +595,9 @@ public function beforeFilter() {
         	$tableresults = array('ID'=>$key,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
         	$this->set('value',$tableresults);
         	$this->set('model',$this->modelClass);
-        	if (!$this->{$this->modelClass}->exists($id)) {
-        		throw new NotFoundException(__('Invalid tag'));
-        	}
+//         	if (!$this->{$this->modelClass}->exists($id)) {
+//         		throw new NotFoundException(__('Invalid tag'));
+//         	}
         	$this->Common->tagRadd($this);
         	if($this->request->data['Article']['name'] != null){
         		$options['key'] = $trikey;
@@ -609,6 +609,7 @@ public function beforeFilter() {
         		$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],$id,$this->request->data['Tag']['name'],$options);
         		$this->Basic->social($this,$userID);
         	}
+
         }
 
         public function tagdel($id = NULL) {

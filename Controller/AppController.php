@@ -62,7 +62,7 @@ public $components = array(
 	'csrfCheck' => false
 	)
 );
-public function isAuthorized($user) {
+	public function isAuthorized($user) {
 
 	    if ((isset($user['role']) && $user['role'] === 'admin') or (isset($user['role']) && $user['role'] === 'registered')) {
 	 		return true;
@@ -83,42 +83,97 @@ public function isAuthorized($user) {
 //         	$this->Auth->allow($this->params['action']);
 //         }
     }
+    /**
+     * beforeRender method
+     * 今は記事名+SRNSをページタイトルに表示するようにしている。
+     *
+     * @return void
+     *
+     */
     function beforeRender() {
     	$this->set('title_for_layout', $this->pageTitle);
     }
+    /**
+     * headview method
+     * 記事とタグに共通する情報を返す。
+     * @param string $id
+     * @return string
+     */
+
     public function headview($id = NULL){
     			return $this->{$this->modelClass}->find('first',
     					 array('conditions' => array(
     					 		$this->modelClass.'.'.$this->{$this->modelClass}->primaryKey => $id)));
     }
 
+    /**
+     * chechSrnsInstance method
+     *
+     * インスタンスを生成できているのか調べる
+     * @throws NotFoundException
+     * @param array $extended_Object
+     *  array ('id' => $id,,'model_name' => $model_name)
+     * @param array $creditedUsers
+     * @return bool
+     * 一致していなかったらfalse
+     */
+    function chechSrnsInstance($extended_Object = NULL,$creditedUsers = NULL){
+    	if ($extention === NULL) {
+    		throw new NotFoundException(__('no heritage 継承がない'));
+    	}
+    	//継承があったら、そのパターンと同じタクソノミーを拾ってくる。
+    	$options = array($extended_Object['model_name'], $extended_Object['id']);
+    	$extended_Object = $this->{$this->modelClass}->find('all',array('conditions' => array($options)));
+
+    	$options = array($extended_Object['model_name'], $extended_Object['id']);
+    	$incetance = $this->{$this->modelClass}->find('all',array('conditions' => array($options)));
+    	if ($extended_Object == $incetance){
+    		return ture;
+    	}
+    	return false;
+    }
+
+    /**
+     * allKeyList method
+     *
+     * @throws NotFoundException
+     * @param void
+     * @return array  keyList
+     */
+    function allKeyList(){
+    	return $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
+    }
+
+    /**
+     * view method
+     *
+     * @throws NotFoundException
+     * @param string $id
+     * @return void
+     */
 
 
     function view($id = NULL){
-    	$headresults = $this->headview($id);
-    	$this->id = $id;
-    	$this->pageTitle = $headresults["$this->modelClass"]['name'];
-    	$this->set('headresults',$headresults);
+//     	$this->loadModel('User');
+//     	$this->loadModel('Key');
+//     	$this->id = $id; // 消したい
     	if (!$this->{$this->modelClass}->exists($id)) {
     		throw new NotFoundException(__('Invalid tag'));
     	}
+    	$headresults = $this->headview($id);
+
+
     	$this->Common->tagRadd($this);
     	if($this->request->data['Article']['name'] != null){
     		$options['key'] = $this->request->data['Article']['keyid'];
     		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
     		$this->Basic->social($this);
-    	}
-    	if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
+    	} elseif($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
     		$options['key'] = $this->request->data['Tag']['keyid'];
     		$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],$id,$this->request->data['Tag']['name'],$options);
     		$this->Basic->social($this,$userID);
     	}
-    	$this->set('idre', $id);
-    	$this->loadModel('User');
-    	$this->loadModel('Key');
-    	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-    	$key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
-    	$this->set( 'keylist', $key);
+    	$key = $this->allKeyList();
     	$i = 0;
     	foreach ($key as $keyid => $value){
     		if (!($this->name == 'Articles' && $key == Configure::read('tagID.search'))) {
@@ -127,12 +182,15 @@ public function isAuthorized($user) {
 	    		$tableresults[$i] = array('ID'=>$keyid,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
 	    		$i++;
     		}
-
     	}
-    	$this->set('tableresults', $tableresults);
-
+    	$this->set('idre', $id);
+    	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+    	$this->set( 'keylist', $key);
+    	$this->set('idre', $id);
     	$this->pageTitle = $headresults[$this->modelClass]['name'];
     	$this->Common->SecondDem($this,"Tag","Tag.ID",Configure::read('tagID.search'),$id);
+    	$this->set('headresults',$headresults);
+    	$this->set('tableresults', $tableresults);
     	$this->set('SecondDems', $this->returntribasic);
     	$this->set('currentUserID', $this->Auth->user('id'));
     	$this->set('model',$this->modelClass);

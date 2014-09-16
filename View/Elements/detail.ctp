@@ -1,6 +1,9 @@
 <?php $controller_name = lcfirst ($firstModel) ?>
 <?php if ($upperIdeas) {
-echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre)); 
+echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre));
+} ?>
+<?php if ($extends) {
+echo $this->element('extends', Array('ulist' => $extends));
 } ?>
 		<dt><?php echo __('ID');  ?></dt>
 		<dd>

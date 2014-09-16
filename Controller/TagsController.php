@@ -91,8 +91,8 @@ public function beforeFilter() {
         	if ($trikeyID == NULL){
         		$trikeyID = Configure::read('tagID.search');
         	}
-        	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id);
-        	$this->set('upperIdeas', $this->returntribasic);
+        	$this->set('upperIdeas', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id));
+        	$this->set('extends', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.extend'),"Tag",$id));
         	$this->set('trikeyID', $trikeyID);
         }
         /**

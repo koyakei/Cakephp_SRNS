@@ -136,6 +136,8 @@ public function isAuthorized($user) {
     	$this->set('SecondDems', $this->returntribasic);
     	$this->set('currentUserID', $this->Auth->user('id'));
     	$this->set('model',$this->modelClass);
+    	$this->set('upperIdeas', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id));
+    	$this->set('extends', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.extend'),"Tag",$id));
     }
     public function edit($id = null){
     	if (null != ($this->Session->read('beforeURL'))) {

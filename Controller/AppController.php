@@ -107,30 +107,31 @@ public $components = array(
     }
 
     /**
-     * chechSrnsInstance method
+     * srns_member_check method
      *
      * インスタンスを生成できているのか調べる
      * @throws NotFoundException
      * @param array $extended_Object
-     *  array ('id' => $id,,'model_name' => $model_name)
+     *  array ('id' => $id,,'model_name' => $model_name,'creditedUsersID')
      * @param array $creditedUsers
+     * @param array $instance
+     * array ('id' => $id,,'model_name' => $model_name,'creditedUsersID')
      * @return bool
      * 一致していなかったらfalse
      */
-    function chechSrnsInstance($extended_Object = NULL,$creditedUsers = NULL){
-    	if ($extention === NULL) {
-    		throw new NotFoundException(__('no heritage 継承がない'));
-    	}
+    function srns_member_check($extended_Object = NULL,$instance= NULL){
+//     	$this->loadModel('Tag');
     	//継承があったら、そのパターンと同じタクソノミーを拾ってくる。
-    	$options = array($extended_Object['model_name'], $extended_Object['id']);
-    	$extended_Object = $this->{$this->modelClass}->find('all',array('conditions' => array($options)));
+//     	$options = array($extended_Object['model_name'], $extended_Object['id']);
+//     	$extended_Object = $this->{$this->modelClass}->find('all',array('conditions' => array($options)));
 
-    	$options = array($extended_Object['model_name'], $extended_Object['id']);
-    	$incetance = $this->{$this->modelClass}->find('all',array('conditions' => array($options)));
-    	if ($extended_Object == $incetance){
-    		return ture;
-    	}
+//     	$options = array($instance['model_name'], $instance['id']);
+//     	$incetance = $this->{$this->modelClass}->find('all',array('conditions' => array($options)));
+//     	if ($extended_Object == $incetance){
+//     		return ture;
+//     	}
     	return false;
+
     }
 
     /**
@@ -140,7 +141,8 @@ public $components = array(
      * @param void
      * @return array  keyList
      */
-    function allKeyList(){
+    public function allKeyList(){
+    	$this->loadModel('Key');
     	return $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
     }
 
@@ -154,8 +156,8 @@ public $components = array(
 
 
     function view($id = NULL){
-//     	$this->loadModel('User');
-//     	$this->loadModel('Key');
+    	$this->loadModel('User');
+    	$this->loadModel('Key');
 //     	$this->id = $id; // 消したい
     	if (!$this->{$this->modelClass}->exists($id)) {
     		throw new NotFoundException(__('Invalid tag'));
@@ -175,14 +177,29 @@ public $components = array(
     	}
     	$key = $this->allKeyList();
     	$i = 0;
+    	$extended_objects = $this->Basic->triupperfiderbyid($this,Configure::read('tagID.extend'),"Tag",$id);
     	foreach ($key as $keyid => $value){
     		if (!($this->name == 'Articles' && $key == Configure::read('tagID.search'))) {
     			$options = array('key' => $keyid);
 	    		$this->Common->trifinderbyid($this,$id,$options);
-	    		$tableresults[$i] = array('ID'=>$keyid,'name' => $value ,'head' =>$this->taghash,'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
+
+	    			$tableresults[$i] = array('ID'=>$keyid,'name' => $value ,'head' =>$this->taghash,
+	    					'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
+
 	    		$i++;
     		}
     	}
+    	foreach ($tableresults as $parent_key => $parent_value){
+    		if ($parent_value['ID'] == Configure::read('tagID.definition')) {
+    				foreach ($parent_value['tag'] as $child_key => $child_value){
+    					$tableresults[$parent_key]['tag'][$child_key]['Article']['srns_code_member'] = $this->srns_member_check(array('id'=>$extended_objects,'model_name'=> 'Tag','creditedUsersID'=>$this->Auth->user('id')),array('id'=>$id,'model_name'=> 'Tag','creditedUsersID'=>$this->Auth->user('id')));;
+
+    				}
+    		}
+    	}
+
+//     	$srns_checked_array[$checked_id] = $this->checkSrnsInstance(array('id' => $extends['Tag']['ID'],'model_name' => 'Tag'));
+    	$this->set('check_srns_inherit',$srns_checked_array);
     	$this->set('idre', $id);
     	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
     	$this->set( 'keylist', $key);
@@ -195,7 +212,7 @@ public $components = array(
     	$this->set('currentUserID', $this->Auth->user('id'));
     	$this->set('model',$this->modelClass);
     	$this->set('upperIdeas', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id));
-    	$this->set('extends', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.extend'),"Tag",$id));
+    	$this->set('extends', $extended_objects);
     }
     public function edit($id = null){
     	if (null != ($this->Session->read('beforeURL'))) {

@@ -141,10 +141,7 @@ public $components = array(
     	$options = array('key' => Configure::read('tagID.SRNS_Code'));
     	$extended_Object = $this->Common->trifinderbyid($this,$extended_Object['id'],$options);
 
-
-
     	$options = array('key' => Configure::read('tagID.equal'));
-
     	$instance = $this->Common->trifinderbyid($this,$instance['id'],$options);
     	foreach ($instance as $instance_value){
     		foreach ($instance_value as $child_instance_value){
@@ -159,7 +156,6 @@ public $components = array(
     		}
     	}
     	return false;
-
     }
 
     /**

@@ -106,6 +106,23 @@ public $components = array(
     					 		$this->modelClass.'.'.$this->{$this->modelClass}->primaryKey => $id)));
     }
 
+    function flatten($arr) {
+    	$array = new RecursiveIteratorIterator(
+    			new RecursiveArrayIterator($arr),
+    			RecursiveIteratorIterator::LEAVES_ONLY
+    	);
+    	return iterator_to_array($arr, false);
+    }
+    function array_values_recursive ($a = array()) {
+    	$r = function ($a) use (&$r) {
+    		static $v = array();
+    		foreach ($a as $ary) {
+    			is_array($ary) ? $r($ary) : $v[] = $ary;
+    		}
+    		return $v;
+    	};
+    	return $r($a);
+    }
     /**
      * srns_member_check method
      *
@@ -113,23 +130,34 @@ public $components = array(
      * @throws NotFoundException
      * @param array $extended_Object
      *  array ('id' => $id,,'model_name' => $model_name,'creditedUsersID')
-     * @param array $creditedUsers
      * @param array $instance
      * array ('id' => $id,,'model_name' => $model_name,'creditedUsersID')
      * @return bool
      * 一致していなかったらfalse
      */
     function srns_member_check($extended_Object = NULL,$instance= NULL){
-//     	$this->loadModel('Tag');
-    	//継承があったら、そのパターンと同じタクソノミーを拾ってくる。
-//     	$options = array($extended_Object['model_name'], $extended_Object['id']);
-//     	$extended_Object = $this->{$this->modelClass}->find('all',array('conditions' => array($options)));
+    	$this->loadModel('Tag');
+//     	継承があったら、そのパターンと同じタクソノミーを拾ってくる。
+    	$options = array('key' => Configure::read('tagID.SRNS_Code'));
+    	$extended_Object = $this->Common->trifinderbyid($this,$extended_Object['id'],$options);
 
-//     	$options = array($instance['model_name'], $instance['id']);
-//     	$incetance = $this->{$this->modelClass}->find('all',array('conditions' => array($options)));
-//     	if ($extended_Object == $incetance){
-//     		return ture;
-//     	}
+
+
+    	$options = array('key' => Configure::read('tagID.equal'));
+
+    	$instance = $this->Common->trifinderbyid($this,$instance['id'],$options);
+    	foreach ($instance as $instance_value){
+    		foreach ($instance_value as $child_instance_value){
+		    	foreach ($extended_Object as $extended_Object_value){
+		    		foreach ($extended_Object_value as $child_extended_Object_value){
+				    	if ($this->array_values_recursive($this->array_id_reterner($child_instance_value))
+				    			== $this->array_values_recursive($this->array_id_reterner($child_extended_Object_value))){
+				    		return ture;
+				    	}
+		    		}
+    			}
+    		}
+    	}
     	return false;
 
     }
@@ -178,6 +206,7 @@ public $components = array(
     	$key = $this->allKeyList();
     	$i = 0;
     	$extended_objects = $this->Basic->triupperfiderbyid($this,Configure::read('tagID.extend'),"Tag",$id);
+
     	foreach ($key as $keyid => $value){
     		if (!($this->name == 'Articles' && $key == Configure::read('tagID.search'))) {
     			$options = array('key' => $keyid);
@@ -189,14 +218,22 @@ public $components = array(
 	    		$i++;
     		}
     	}
-    	foreach ($tableresults as $parent_key => $parent_value){
-    		if ($parent_value['ID'] == Configure::read('tagID.definition')) {
-    				foreach ($parent_value['tag'] as $child_key => $child_value){
-    					$tableresults[$parent_key]['tag'][$child_key]['Article']['srns_code_member'] = $this->srns_member_check(array('id'=>$extended_objects,'model_name'=> 'Tag','creditedUsersID'=>$this->Auth->user('id')),array('id'=>$id,'model_name'=> 'Tag','creditedUsersID'=>$this->Auth->user('id')));;
+    	if (!is_null($extended_objects)) {
+    		foreach ($extended_objects as $extended_object){
+	    		foreach ($tableresults as $parent_key => $parent_value){
+	    			if ($parent_value['ID'] == Configure::read('tagID.definition')) {
+	    				foreach ($parent_value['tag'] as $child_key => $child_value){
+	    					$tableresults[$parent_key]['tag'][$child_key]['Article']['srns_code_member']
+	    					= $this->srns_member_check(
+	    							array('id'=> $this->array_id_reterner($extended_object),'model_name'=> 'Tag','creditedUsersID'=>$this->Auth->user('id')),
+	    							array('id'=> $this->array_id_reterner($child_value),'model_name'=> 'Tag','creditedUsersID'=>$this->Auth->user('id')));
 
-    				}
+	    				}
+	    			}
+    			}
     		}
     	}
+
 
 //     	$srns_checked_array[$checked_id] = $this->checkSrnsInstance(array('id' => $extends['Tag']['ID'],'model_name' => 'Tag'));
     	$this->set('check_srns_inherit',$srns_checked_array);
@@ -213,6 +250,19 @@ public $components = array(
     	$this->set('model',$this->modelClass);
     	$this->set('upperIdeas', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id));
     	$this->set('extends', $extended_objects);
+    }
+    /**
+     * array_id_reterner method
+     * どのモデルでもIDを返す
+     * @param array $array
+     * @return array
+     */
+    public function array_id_reterner($array){
+    	if(empty($array['Tag']['ID'])){
+			return $array['Article']['ID'];
+    	} else {
+    		return $array['Tag']['ID'];
+    	}
     }
     public function edit($id = null){
     	if (null != ($this->Session->read('beforeURL'))) {

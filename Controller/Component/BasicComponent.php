@@ -347,8 +347,13 @@ class BasicComponent extends Component {
 				),
 				'order' => ''
 			);
-		$that->returntribasic = $that->$modelSe->find('all',$option);
-		return $that->returntribasic;
+		$returntribasic = $that->$modelSe->find('all',$option);
+		if(!empty($returntribasic)){
+			return $returntribasic;
+		} else {
+			return null;
+		}
+
 	}
 	public function tribasicfixverifybyid(&$that = null,$trikeyID,$LinkLTo) {
 		$that->loadModel('Link');

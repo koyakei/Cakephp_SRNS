@@ -3,7 +3,7 @@
 <?php if($firstModel == 'Tag'){$userCallAssosiation = 'O';} else {$userCallAssosiation = 'O';} // アソシエーションの名前を一緒にしたが後で別にするかも?>
 <div id="draggble">
 				<tr>
-					<td><?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
+					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
 					<td>
 					<?php if(!is_null($leaf)){ echo "<b>"; } ?>
 					<?php echo $this->element('URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>

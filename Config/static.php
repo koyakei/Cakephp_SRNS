@@ -5,9 +5,11 @@ $config['tagID'] = array(
 	'owner' => 1,//��l�̎��ɊǗ��җp�ɌŒ肷��
 	'search' => 2146,
 	'upperIdea' => 2183,
-	'definition' => 2183,
+	'definition' => 2191,
 	'URL' => 2299,
 	'extend' => 2535,
+	'SRNS_Code' => 2539,
+	'equal' => 2327,
 	'End' => 100000
 
 );

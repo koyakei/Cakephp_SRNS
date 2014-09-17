@@ -307,6 +307,8 @@ class CommonComponent extends Component {
 		$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
 		$that->tagparentres = $that->returntribasic;
 		list($that->tagparentres,$that->taghash) = $this->getSearchRelation($that, $that->tagparentres, $that->taghash, "Tag");
+		$results = array_merge($that->tagparentres,$that->articleparentres);
+		return array($results,$that->taghash);
 	}
 
 	private function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel){

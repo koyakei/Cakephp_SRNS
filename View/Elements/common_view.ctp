@@ -63,8 +63,8 @@ function ajaxtable(keyid){
     <table class="myTable" cellpadding="0" cellspacing="0">
         <?php echo $this->element('tablehead', Array('taghashes'=>$value['head'])); ?>
         <tbody>
-        <?php echo $this->element('tablebody', Array('results' => $value['tag'],'taghashes'=>$value['head'],'firstModel' => 'Article','currentUserID' => $currentUserID)); ?>
-        <?php echo $this->element('tablebody', Array('results' => $value['article'],'taghashes'=>$value['head'],'firstModel' => 'Tag','currentUserID' => $currentUserID)); ?>
+        <?php echo $this->element('tablebody', Array('results' => $value['tag'],'taghashes'=>$value['head'],'firstModel' => 'Article','currentUserID' => $currentUserID,'srns_code_member'=>$value['srns_code_member'])); ?>
+        <?php echo $this->element('tablebody', Array('results' => $value['article'],'taghashes'=>$value['head'],'firstModel' => 'Tag','currentUserID' => $currentUserID,'srns_code_member'=>$value['srns_code_member'])); ?>
         </tbody>
     </table>
         <?php echo $this->element('inputind', Array('ulist' => $ulist,'keylist' => $keylist,'selected' => $_SESSION['selected'],'model' => 'Article','currentUserID' => $currentUserID,'key' => $value['ID'])); ?>

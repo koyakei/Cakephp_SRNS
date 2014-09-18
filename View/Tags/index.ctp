@@ -5,11 +5,11 @@
 			<th><?php echo $this->Paginator->sort('ID'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('owner_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('modified'); ?></th>
+			<th><?php echo $this->Paginator->sort('created',array('order' => 'desc')); ?></th>
+			<th><?php echo $this->Paginator->sort('modified' ); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
-	
+
 	<?php foreach ($tags as $tag): ?>
 	<tr>
 		<td><?php echo h($tag['Tag']['ID']); ?>&nbsp;</td>

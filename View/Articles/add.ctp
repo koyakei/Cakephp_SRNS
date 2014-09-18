@@ -9,7 +9,7 @@
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,
-	  'selected' => $currentUserID//['userselected']  
+	  'selected' => $currentUserID//['userselected']
 	)); ?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
@@ -18,6 +18,7 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 
-		<li><?php echo $this->Html->link(__('List Articles'), array('action' => 'index')); ?></li>
+		<li><?php echo $this->Html->link(__('List Articles'),
+		 array('action' => 'index',"sort:modified","direction:desc")); ?></li>
 	</ul>
 </div>

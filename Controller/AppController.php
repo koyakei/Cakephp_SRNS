@@ -35,7 +35,12 @@ App::uses('Tag','Model');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-// 	public $helpers = array( 'Javascript', 'Ajax');
+// 	public $paginate = array(
+// 			'conditions' => array('order' =>
+// 					'modified DESC'
+// 				)
+// 			);
+
 	public $helpers = array('Js','AutoComplete');
 public $components = array(
     'Session',
@@ -74,6 +79,7 @@ public $components = array(
 
     public function beforeFilter() {
     	parent::beforeFilter();
+		$this->paginate->setting = array('order'=> array('Tag.modified' => 'DESC'));
     	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
 	);

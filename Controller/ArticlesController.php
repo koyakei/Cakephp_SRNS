@@ -65,6 +65,7 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function index() {
+		parent::index();
 		$this->Article->recursive = 0;
 		$this->paginate->setting = array('order'=> array('Article.modified' => 'DESC'));
 
@@ -172,9 +173,15 @@ class ArticlesController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Article->save($this->request->data)) {
-
-			$this->Session->setFlash(__('The article has been saved.'));
-				$this->redirect($_SESSION['Article']['beforeURL']);
+				debug($this->Session->read('beforeURL'));
+				if (!preg_match('[/edit/]', $this->Session->read('beforeURL'))
+				or preg_match('[/view/]', $this->Session->read('beforeURL'))
+				or preg_match('[s/\z]', $this->Session->read('beforeURL'))
+				) {
+					$this->redirect($this->Session->read('beforeURL'));
+				} else {
+					$this->redirect($this->referer());
+				}
 
 			} else {
 				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
@@ -182,9 +189,9 @@ class ArticlesController extends AppController {
 		} else {
 			$options = array('conditions' => array('Article.' . $this->Article->primaryKey => $id));
 			$this->request->data = $this->Article->find('first', $options);
-			if (null == ($_SESSION['Article']['beforeURL'])) {
-				$_SESSION['Article']['beforeURL'] = $this->referer();
-			}
+// 			if (null == ($_SESSION['Article']['beforeURL'])) {
+// 				$_SESSION['Article']['beforeURL'] = $this->referer();
+// 			}
 		}
 	}
 

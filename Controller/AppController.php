@@ -129,6 +129,10 @@ public $components = array(
     	};
     	return $r($a);
     }
+    public function index(){
+    	debug(Router::url(null,true));
+    	$this->Session->write('beforeURL', Router::url(null,true));
+    }
     /**
      * srns_member_check method
      *
@@ -267,17 +271,20 @@ public $components = array(
     	}
     }
     public function edit($id = null){
+    	debug($this->Session->read('beforeURL'));
     	if (null != ($this->Session->read('beforeURL'))) {
     		$referer = $this->Session->read('beforeURL');
-    	}else {
+    	}
     		debug($this->referer());
-    		if (!preg_match('/edit/', $referer)) {
+
+    		if (!preg_match('[/edit/]', $referer)
+    		or preg_match('[/view/]', $referer)
+    		or preg_match('[s/\z]', $referer)
+    		) {
     			$this->Session->write('beforeURL', $referer);
 
-    		} else {
-    			$this->redirect($this->referer());
+    		}else {
+    			$this->Session->write('beforeURL', null);
     		}
-
-    	}
     }
 }

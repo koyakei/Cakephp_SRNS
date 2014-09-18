@@ -74,6 +74,7 @@ public function beforeFilter() {
 
 		public function index() {
 			$this->loadModel('Article');
+			parent::index();
 			$this->paginate->setting = array('order'=> array('Tag.modified' => 'DESC'));
 			$this->set('tags', $this->paginate('Tag'));
 		}
@@ -356,7 +357,6 @@ public function beforeFilter() {
          * @return void
          */
         public function edit($id = null) {
-        	//$this->set('idre', $id);
         	$this->set('userinfo', array('ID' => $this->Auth->user('ID')));
 
         	if (!$this->Tag->exists($id)) {

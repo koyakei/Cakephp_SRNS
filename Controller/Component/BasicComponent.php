@@ -353,8 +353,9 @@ class BasicComponent extends Component {
 		} else {
 			return null;
 		}
-
 	}
+	
+	
 	public function tribasicfixverifybyid(&$that = null,$trikeyID,$LinkLTo) {
 		$that->loadModel('Link');
 		//$trikeyID = tagConst()[$trykeyname];

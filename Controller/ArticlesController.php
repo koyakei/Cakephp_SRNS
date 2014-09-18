@@ -173,25 +173,13 @@ class ArticlesController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Article->save($this->request->data)) {
-				debug($this->Session->read('beforeURL'));
-				if (!preg_match('[/edit/]', $this->Session->read('beforeURL'))
-				or preg_match('[/view/]', $this->Session->read('beforeURL'))
-				or preg_match('[s/\z]', $this->Session->read('beforeURL'))
-				) {
-					$this->redirect($this->Session->read('beforeURL'));
-				} else {
-					$this->redirect($this->referer());
-				}
-
+				$this->redirect($this->Session->read('beforeURL'));
 			} else {
 				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
 			}
 		} else {
 			$options = array('conditions' => array('Article.' . $this->Article->primaryKey => $id));
 			$this->request->data = $this->Article->find('first', $options);
-// 			if (null == ($_SESSION['Article']['beforeURL'])) {
-// 				$_SESSION['Article']['beforeURL'] = $this->referer();
-// 			}
 		}
 	}
 

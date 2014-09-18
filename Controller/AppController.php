@@ -130,7 +130,7 @@ public $components = array(
     	return $r($a);
     }
     public function index(){
-    	debug(Router::url(null,true));
+    	debug($this->Session->read('beforeURL'));
     	$this->Session->write('beforeURL', Router::url(null,true));
     }
     /**
@@ -271,20 +271,26 @@ public $components = array(
     	}
     }
     public function edit($id = null){
-    	debug($this->Session->read('beforeURL'));
     	if (null != ($this->Session->read('beforeURL'))) {
     		$referer = $this->Session->read('beforeURL');
     	}
-    		debug($this->referer());
+    	$this->Session->write('beforeURL', $this->beforeURL_pregmuch($referer));
+    }
 
-    		if (!preg_match('[/edit/]', $referer)
-    		or preg_match('[/view/]', $referer)
-    		or preg_match('[s/\z]', $referer)
-    		) {
-    			$this->Session->write('beforeURL', $referer);
-
-    		}else {
-    			$this->Session->write('beforeURL', null);
-    		}
+    /**
+     * beforeURL_pregmuch method
+     * 前のURLが
+     * @param string $beforeURL
+     * @return string fullpath of before url
+     */
+    public function beforeURL_pregmuch ($beforeURL){
+    	if (!preg_match('[/edit/]', $beforeURLr)
+    	or preg_match('[/view/]', $beforeURLr)
+    	or preg_match('[s/\z]', $beforeURLr)
+    	) {
+    		return $beforeURL;
+    	}else {
+    		return $this->referer();
+    	}
     }
 }

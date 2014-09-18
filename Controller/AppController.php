@@ -130,7 +130,6 @@ public $components = array(
     	return $r($a);
     }
     public function index(){
-    	debug($this->Session->read('beforeURL'));
     	$this->Session->write('beforeURL', Router::url(null,true));
     }
     /**

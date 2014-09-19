@@ -79,7 +79,6 @@ public $components = array(
 
     public function beforeFilter() {
     	parent::beforeFilter();
-		$this->paginate->setting = array('order'=> array('Tag.modified' => 'DESC'));
     	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
 	);
@@ -149,7 +148,8 @@ public $components = array(
 //     	継承があったら、そのパターンと同じタクソノミーを拾ってくる。
     	$options = array('key' => Configure::read('tagID.SRNS_Code'));
     	$extended_Object = $this->Common->trifinderbyid($this,$extended_Object['id'],$options);
-
+    	$extended_Object = array_merge($extended_Object['tagparentres'],
+				$extended_Object['articleparentres']);
     	$options = array('key' => Configure::read('tagID.equal'));
     	$instance = $this->Common->trifinderbyid($this,$instance['id'],$options);
     	foreach ($instance as $instance_value){
@@ -189,14 +189,12 @@ public $components = array(
 
 
     function view($id = NULL){
-    	$this->loadModel('User');
-    	$this->loadModel('Key');
-//     	$this->id = $id; // 消したい
     	if (!$this->{$this->modelClass}->exists($id)) {
     		throw new NotFoundException(__('Invalid tag'));
     	}
+    	$this->loadModel('User');
+    	$this->loadModel('Key');
     	$headresults = $this->headview($id);
-
 
     	$this->Common->tagRadd($this);
     	if($this->request->data['Article']['name'] != null){
@@ -215,14 +213,13 @@ public $components = array(
     	foreach ($key as $keyid => $value){
     		if (!($this->name == 'Articles' && $key == Configure::read('tagID.search'))) {
     			$options = array('key' => $keyid);
-	    		$this->Common->trifinderbyid($this,$id,$options);
-
-	    			$tableresults[$i] = array('ID'=>$keyid,'name' => $value ,'head' =>$this->taghash,
-	    					'tag' =>$this->articleparentres, 'article'=>$this->tagparentres);
-
+	    		$temp  = $this->Common->trifinderbyid($this,$id,$options);
+	    			$tableresults[$i] = array('ID'=>$keyid,'name' => $value ,'head' =>$temp['taghash'],
+	    				'tag' =>$temp['articleparentres'], 'article'=>$temp['tagparentres']);
 	    		$i++;
     		}
     	}
+
     	if (!is_null($extended_objects)) {
     		foreach ($extended_objects as $extended_object){
 	    		foreach ($tableresults as $parent_key => $parent_value){
@@ -239,18 +236,14 @@ public $components = array(
     		}
     	}
 
-
-//     	$srns_checked_array[$checked_id] = $this->checkSrnsInstance(array('id' => $extends['Tag']['ID'],'model_name' => 'Tag'));
     	$this->set('check_srns_inherit',$srns_checked_array);
     	$this->set('idre', $id);
     	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
     	$this->set( 'keylist', $key);
     	$this->set('idre', $id);
     	$this->pageTitle = $headresults[$this->modelClass]['name'];
-    	$this->Common->SecondDem($this,"Tag","Tag.ID",Configure::read('tagID.search'),$id);
     	$this->set('headresults',$headresults);
     	$this->set('tableresults', $tableresults);
-    	$this->set('SecondDems', $this->returntribasic);
     	$this->set('currentUserID', $this->Auth->user('id'));
     	$this->set('model',$this->modelClass);
     	$this->set('upperIdeas', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id));

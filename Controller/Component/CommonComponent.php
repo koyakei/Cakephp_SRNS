@@ -298,13 +298,15 @@ class CommonComponent extends Component {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-		$that->articleparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);//どんな記事がぶら下がっているか探す
-		$that->taghash = array();
-		list($that->articleparentres,$that->taghash) = $this->getSearchRelation($that, $that->articleparentres, $that->taghash, "Article");
-		$that->tagparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
-		list($that->tagparentres,$that->taghash) = $this->getSearchRelation($that, $that->tagparentres, $that->taghash, "Tag");
-		$results = array_merge($that->tagparentres,$that->articleparentres);
-		return array($results,$that->taghash);
+		$articleparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);//どんな記事がぶら下がっているか探す
+		$taghash = array();
+		list($articleparentres,$taghash) = $this->getSearchRelation($that, $articleparentres, $taghash, "Article");
+		$tagparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
+		list($tagparentres,$taghash) =
+		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
+		return array('tagparentres'=>$tagparentres,
+				'articleparentres'=> $articleparentres,
+				 'taghash' => $taghash);
 	}
 
 	private function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel){
@@ -323,18 +325,5 @@ class CommonComponent extends Component {
 		return array($targetParent,$taghash );
 	}
 
-	public function SecondDem(&$that,$model,$order,$keyID,$id){
-		$taghashgen = $that->Basic->tribasicfiderbyid($that,$keyID,$model,$id,$order);
-			foreach ($taghashgen as $tag){
-				$that->subtagID = $id;
-				$taghashgen[$that->i]['subtag'][$that->subtagID] = $tag;
-				if ($that->taghash[$that->subtagID] == null) {
-					$that->taghash[$that->subtagID] = array( 'ID' => $id,
-							 'name' =>  $taghashgen[0]['Tag']['name']);
-				}
-			}
-			$that->i++;
-		return $that->taghash;
-		//return $that->returntribasic;
-	}
+
 }

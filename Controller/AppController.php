@@ -204,7 +204,7 @@ public $components = array(
     	} elseif($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
     		$options['key'] = $this->request->data['Tag']['keyid'];
     		$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],$id,$this->request->data['Tag']['name'],$options);
-    		$this->Basic->social($this,$userID);
+    		$this->Basic->social($this,$this->Auth->user('id'));
     	}
     	$key = $this->allKeyList();
     	$i = 0;
@@ -238,6 +238,7 @@ public $components = array(
 
     	$this->set('check_srns_inherit',$srns_checked_array);
     	$this->set('idre', $id);
+    	$this->set('SecondDems',$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$id,"Tag.ID"));
     	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
     	$this->set( 'keylist', $key);
     	$this->set('idre', $id);

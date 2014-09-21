@@ -309,7 +309,7 @@ class CommonComponent extends Component {
 				 'taghash' => $taghash);
 	}
 
-	private function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel){
+	public function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel){
 		$i = 0;
 		foreach ($targetParent as $result){
 			$that->taghashgen = $this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result[$targetModel]['ID'],"Tag.ID");//

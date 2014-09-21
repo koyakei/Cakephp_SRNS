@@ -78,6 +78,7 @@ public $components = array(
 
 
     public function beforeFilter() {
+
     	parent::beforeFilter();
     	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
@@ -249,6 +250,7 @@ public $components = array(
     	$this->set('model',$this->modelClass);
     	$this->set('upperIdeas', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id));
     	$this->set('extends', $extended_objects);
+    	$this->Session->write('beforeURL', Router::url(null,true));
     }
     /**
      * array_id_reterner method

@@ -16,7 +16,7 @@ $(document).ready(function()
 
 );
 function jumpStrikey(){
-	document.getElementById('spesifiedtrikeylink').href = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
+	document.getElementById('spesifiedtrikeylink').href = '/cakephp/<?php echo $model; ?>s/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
 }
 function ajaxtable(keyid){
 	$.ajax({

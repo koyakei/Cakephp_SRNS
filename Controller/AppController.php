@@ -132,6 +132,39 @@ public $components = array(
     public function index(){
     	$this->Session->write('beforeURL', Router::url(null,true));
     }
+
+
+    public function singletrikeytable($id = null,$trikey = null){
+    	if($this->request->data['Article']['name'] != null){
+    		$options['key'] = $trikey;
+    		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
+    		$this->Basic->social($this);
+    	}
+    	if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
+    		$options['key'] = $trikey;
+    		$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],$id,$this->request->data['Tag']['name'],$options);
+    		$this->Basic->social($this,$userID);
+    	}
+    	$this->loadModel('User');
+
+    	$this->loadModel('Key');
+    	$key = $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
+
+    	$options = array('key' => $trikey);
+    	$results = $this->Common->trifinderbyid($this,$id,$options);
+    	$tableresults = array('ID'=>$key
+    			,'name' => $value
+    			,'head' =>$results['taghash']
+    			,'article' =>$results['articleparentres']
+    			,'tag' =>$results['tagparentres']);
+    	debug($results);
+    	$this->set( 'keylist', $key);
+    	$this->set('value',$tableresults);
+    	$this->set('model',$this->modelClass);
+    	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+    	$this->set( 'currentUserID', $this->Auth->user('id'));
+    	$this->Common->tagRadd($this);
+    }
     /**
      * srns_member_check method
      *

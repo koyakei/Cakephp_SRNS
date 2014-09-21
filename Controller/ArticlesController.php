@@ -59,6 +59,10 @@ class ArticlesController extends AppController {
 			'Html',
 			'Session'
 	);
+
+	public function singletrikeytable($id = null,$trikey = null){
+		parent::singletrikeytable($id,$trikey);
+	}
 /**
  * index method
  *

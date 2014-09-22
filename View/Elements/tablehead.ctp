@@ -7,7 +7,7 @@
 				<?php if($taghashes != null and $this->action != 'transmitter'){ ?>
 				<?php foreach ($taghashes  as $hash): ?>
 				<th>量</th>
-				<th><?php echo $hash['name']; ?><?php echo $this->Html->link(__('View'), array('controller'=> "tags",'action' => 'view', $hash['ID'])); ?></th>
+				<th><?php echo $hash['name']; ?><?php echo $this->Html->link(__('Open'), array('controller'=> "tags",'action' => 'view', $hash['ID'])); ?></th>
 				<?php endforeach; ?>
 				<?php } ?>
 			</tr>

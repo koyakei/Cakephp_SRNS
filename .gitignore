@@ -222,5 +222,5 @@ app/Config/database.php
 !empty
 
 # allow any
-!app/Config/static.php
+!Config/static.php
 !static.php

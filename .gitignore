@@ -222,4 +222,4 @@ app/Config/database.php
 !empty
 
 # allow any
-Config/static.php
+app/Config/static.php

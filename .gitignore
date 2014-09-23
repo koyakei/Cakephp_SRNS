@@ -220,3 +220,6 @@ app/tmp/*
 app/Config/core.php
 app/Config/database.php
 !empty
+
+# allow any
+Config/static.php

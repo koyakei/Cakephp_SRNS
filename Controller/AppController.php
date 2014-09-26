@@ -99,6 +99,35 @@ public $components = array(
     function beforeRender() {
     	$this->set('title_for_layout', $this->pageTitle);
     }
+
+    /**
+     * view_2 method
+     * 全部GETで情報を渡す
+     * POSTだとリンクで同じタグを表示できない。
+     * REQUEST array Searching_tags 検索中のタグ
+     * 	array("OR"=> (array("AND"=> (int $tag_id ,) ),"NOT" => array()),
+     * REQUEST array Sorting_tags 並べ替え中のタグ
+     *  array(int tag_id)
+     * @return void
+     *
+     */
+    public function view_2() {
+    	$request = $this->request;
+		$replys = $this->getreplys;
+
+		$this->set(compact("Searching_tags"));
+
+    }
+    /**
+     * searchTagAndText method
+     * 全部ポストで情報を渡す
+     * post array tag_id
+     *　REQUEST array Searching_strings
+     * @return void
+     *
+     */
+    function searchTagAndText() {
+    }
     /**
      * headview method
      * 記事とタグに共通する情報を返す。

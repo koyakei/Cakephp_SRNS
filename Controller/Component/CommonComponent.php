@@ -294,6 +294,19 @@ class CommonComponent extends Component {
 		$that->set('taghashes', $that->taghash);
 		$that->set('results', $that->parentres);
 	}
+
+	/**
+	 * trifinderbyid method
+	 * id と　trikey を指定すると　結果が帰ってくる
+	 * @var this
+	 * @var id
+	 * @var option ['key']
+	 * @return array('tagparentres'
+				'articleparentres',
+				 'taghash' );
+	 *
+	 */
+
 	public function trifinderbyid(&$that = null,$id,&$option) {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');

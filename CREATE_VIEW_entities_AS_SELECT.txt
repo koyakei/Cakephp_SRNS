@@ -1,0 +1,4 @@
+CREATE VIEW  `entities` AS SELECT * 
+FROM  `article` 
+UNION SELECT    `ID` ,`name` ,`user_id`,   `created`, `modified` ,     `auth`   
+FROM  `tag`

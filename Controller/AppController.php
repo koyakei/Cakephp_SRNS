@@ -104,20 +104,63 @@ public $components = array(
      * view_2 method
      * 全部GETで情報を渡す
      * POSTだとリンクで同じタグを表示できない。
-     * REQUEST array Searching_tags 検索中のタグ
+     * REQUEST array Searching
+     * array tags 検索中のタグ
      * 	array("OR"=> (array("AND"=> (int $tag_id ,) ),"NOT" => array()),
-     * REQUEST array Sorting_tags 並べ替え中のタグ
+     * array users
+     * ユーザーのホワイト/ブラックリストの方式を考える必要がある。
+     * REQUEST array Sorting
+     * array tags 並べ替え中のタグ
+     * array users 優先表示するユーザー
+     * array colmun modified or created or id
+     *
      *  array(int tag_id)
      * @return void
      *
      */
     public function view_2() {
-    	$request = $this->request;
-		$replys = $this->getreplys;
-
-		$this->set(compact("Searching_tags"));
+		$replys = $this->GET_all_reply($this->request->Searching['tags'],$this->request->Sorting);
+		//入れ子で続きを読もうか？
+		$this->set("replys",$replys);
 
     }
+    /**
+     * GET_all_reply method
+     * ajaxで読み込んだリプライが実際にはどのような構造で配置されているのかを
+     *一階層ごとに返していく。
+     *複数のidが来たときにforeach出張らして流す
+     * @return results
+     *
+     */
+    function GET_all_reply($Searching_tags,$Sorting_tags) {
+    	foreach ($Searching_tags as $tag_id){
+    		$result = $this->replyFinder($tag_id);
+    	}
+    	return $results;
+    }
+    /**
+     * replyFinder method
+     * @return results
+     *
+     */
+    function replyFinder($Searching_tags,$Sorting_tags) {
+
+    	return $results;
+    }
+
+    /**
+     * GET_reply method
+     * 読み込まれた情報の中にすでにあるのか判定
+     *
+     * @return bool
+     *
+     */
+    function dobbled_info() {
+
+		$bool = array_search($needle, $haystack);
+    	return $bool;
+    }
+
     /**
      * searchTagAndText method
      * 全部ポストで情報を渡す

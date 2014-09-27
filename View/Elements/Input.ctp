@@ -26,8 +26,6 @@ echo $this->AutoComplete->input(
 	<?php
 		$targetid = $this->params['pass'][0];
 		echo $this->Form->input('name');
-		//echo $this->Form->hidden('id', array('value'=> $targetid));
-		//echo $this->Form->hidden('replyarticleadd', array('value'=> true));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

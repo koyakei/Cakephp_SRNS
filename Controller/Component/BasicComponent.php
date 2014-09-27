@@ -279,6 +279,52 @@ class BasicComponent extends Component {
 			);
 		return $modelSe->find('all',$option);
 	}
+
+	/**
+	 * tribasicfiderbyidAndSet method
+	 *
+	 * @throws NotFoundException
+	 * @param mix $that
+	 * @param int $trikeyID
+	 * @param string $modelSe
+	 * @param string $Ltotarget //target colmunn 探すID
+	 * @param array $ids and set
+	 * @return $that->returntribasic
+	 */
+	public function tribasicfiderbyidAndSet(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$ids) {
+		$modelSe = new $modelSe();
+		foreach ($ids as $id){
+			$andSet += array("$id = Link.LFrom");
+		}
+		$option = array(
+				'conditions'=> array(
+						"Link.LTo = $Ltotarget"
+				),
+				'fields' => array('*'		),
+				'joins'
+				=> array(
+						array(
+								'table' => 'link',
+								'alias' => 'Link',
+								'type' => 'INNER',
+								'conditions' => array('and'=> $andSet
+
+								)
+						),
+						array(
+								'table' => 'taglinks',
+								'alias' => 'taglink',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Link.ID = taglink.LTo"),
+										($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
+								)
+						),
+				),
+				'order' => ''
+		);
+		return $modelSe->find('all',$option);
+	}
 	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe = null,$Ltotarget = null ,$id) {
 		// 		$that->loadModel($modelSe);
 		$modelSe = new $modelSe();
@@ -351,6 +397,7 @@ class BasicComponent extends Component {
 			return null;
 		}
 	}
+
 
 
 	public function tribasicfixverifybyid(&$that = null,$trikeyID,$LinkLTo) {

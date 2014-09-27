@@ -100,30 +100,7 @@ public $components = array(
     	$this->set('title_for_layout', $this->pageTitle);
     }
 
-    /**
-     * view_2 method
-     * 全部GETで情報を渡す
-     * POSTだとリンクで同じタグを表示できない。
-     * REQUEST array Searching
-     * array tags 検索中のタグ
-     * 	array("OR"=> (array("AND"=> (int $tag_id ,) ),"NOT" => array()),
-     * array users
-     * ユーザーのホワイト/ブラックリストの方式を考える必要がある。
-     * REQUEST array Sorting
-     * array tags 並べ替え中のタグ
-     * array users 優先表示するユーザー
-     * array colmun modified or created or id
-     *
-     *  array(int tag_id)
-     * @return void
-     *
-     */
-    public function view_2() {
-		$replys = $this->GET_all_reply($this->request->Searching['tags'],$this->request->Sorting);
-		//入れ子で続きを読もうか？
-		$this->set("replys",$replys);
 
-    }
     /**
      * GET_all_reply method
      * ajaxで読み込んだリプライが実際にはどのような構造で配置されているのかを
@@ -132,20 +109,28 @@ public $components = array(
      * @return results
      *
      */
-    function GET_all_reply($Searching_tags,$Sorting_tags) {
-    	foreach ($Searching_tags as $tag_id){
-    		$result = $this->replyFinder($tag_id);
+    function GET_all_reply($Searching_tags=NULL,$Sorting_tags=NULL) {
+    	if($Searching_tags == null){
+    		$Searching_tags = $this->request->data['Search'];
+    	}
+    	foreach ($Searching_tags as $andSet){
+    		$result = $this->replyFinder($andSet);
+    		array_merge($results,$result);
     	}
     	return $results;
     }
     /**
      * replyFinder method
+     * @var tag_id
      * @return results
      *
      */
-    function replyFinder($Searching_tags,$Sorting_tags) {
+    function replyFinder($andSet_ids) {
+//     	foreach ($andSet_ids as $id){
+//     		$result[] = $this->Basic->tribasicfiderbyidAndSet($this,Configure::read('tagID.reply'),"Entity","Entity.ID",$id);
+//     	}
 
-    	return $results;
+    	return $this->Basic->tribasicfiderbyidAndSet($this,Configure::read('tagID.reply'),"Entity","Entity.ID",$andSet_ids);
     }
 
     /**

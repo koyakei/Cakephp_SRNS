@@ -1,0 +1,5 @@
+<?php $i = array(1);
+foreach($i as $a): ?>
+<?php echo $this->element('tagIdSuggest', Array('houtput'=>'keyid')); ?>
+<?php endforeach; ?>
+<br>

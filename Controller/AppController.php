@@ -126,9 +126,7 @@ public $components = array(
      *
      */
     function replyFinder($andSet_ids) {
-//     	foreach ($andSet_ids as $id){
-//     		$result[] = $this->Basic->tribasicfiderbyidAndSet($this,Configure::read('tagID.reply'),"Entity","Entity.ID",$id);
-//     	}
+//
 
     	return $this->Basic->tribasicfiderbyidAndSet($this,Configure::read('tagID.reply'),"Entity","Entity.ID",$andSet_ids);
     }

@@ -41,7 +41,7 @@
  *    }
  *
  */
-    class AutoCompleteHelper extends AppHelper {
+    class AutoCompleteNoHiddenHelper extends AppHelper {
         var $helpers = array('Html','Form');
 
     /**
@@ -71,8 +71,6 @@
 
             #-- Return the html
             $html .= $this->Form->input( $name, $options );
-            $html .= $this->Form->hidden($houtput,array('value' => '','class' => 'tag_id','id' => 'or1_1'));
-//
             $html .= $this->Html->div('','',array('id'=>$options['update'],'class'=>'autoCompleteDiv'));
             return $html;
         }

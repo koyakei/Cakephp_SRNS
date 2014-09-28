@@ -115,7 +115,6 @@ public function beforeFilter() {
          *
          */
         public function view2() {
-        	debug($this->request->data);
         	//         	$replys = $this->GET_all_reply($this->request->Searching['tags'],$this->request->Sorting);
         	//         	//入れ子で続きを読もうか？
         	//         	$this->set("replys",$replys);

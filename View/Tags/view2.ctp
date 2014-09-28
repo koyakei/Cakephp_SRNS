@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<?php echo $this->Html->script(array('view2')); ?>
     <script type="text/javascript">
 
 $(document).ready(function()
@@ -18,13 +19,12 @@ $(document).ready(function()
 
 
 </script>
+
 </head>
 <body>
-
-<?php echo $this->Form->create('Search'); ?>
 	<fieldset>
         <?php
-echo $this->AutoComplete->input(
+echo $this->AutoCompleteNoHidden->input(
     'or1.1',
     array(
         'autoCompletesUrl'=>$this->Html->url(
@@ -34,18 +34,21 @@ echo $this->AutoComplete->input(
             )
         ),
         'autoCompleteRequestItem'=>'autoCompleteText',
-        'houtput' => 'c'
     )
 );
-
 ?>
+<div class="search_tag_id">
+<?php
+echo $this->Form->hidden('or0.',array('value' => '','class' => 'tag_id','id' => 'or1'));
+?>
+</div>
 </fieldset>
 AND
-<?php echo $this->form->hidden('b' ,array('value' => $value['ID'])); ?>
+
 	<fieldset>
         <?php
-echo $this->AutoComplete->input(
-    'or1.2',
+echo $this->AutoCompleteNoHidden->input(
+    'or1.1',
     array(
         'autoCompletesUrl'=>$this->Html->url(
             array(
@@ -54,17 +57,19 @@ echo $this->AutoComplete->input(
             )
         ),
         'autoCompleteRequestItem'=>'autoCompleteText',
-        'houtput' => 'c'
     )
 );
-
 ?>
+<div class="search_tag_id">
+<?php
+echo $this->Form->hidden('or0.',array('value' => '','class' => 'tag_id','id' => 'or2'));
+?>
+</div>
 </fieldset>
-<?php echo $this->form->hidden('b' ,array('value' => $value['ID'])); ?>
 	<fieldset>
         <?php
-echo $this->AutoComplete->input(
-    'or2.1',
+echo $this->AutoCompleteNoHidden->input(
+    'or1.1',
     array(
         'autoCompletesUrl'=>$this->Html->url(
             array(
@@ -73,19 +78,21 @@ echo $this->AutoComplete->input(
             )
         ),
         'autoCompleteRequestItem'=>'autoCompleteText',
-        'houtput' => 'c'
     )
 );
-
 ?>
+<div class="search_tag_id">
+<?php
+echo $this->Form->hidden('or1.',array('value' => '','class' => 'tag_id','id' => 'or1'));
+?>
+</div>
 </fieldset>
-
-<?php echo $this->form->hidden('b' ,array('value' => $value['ID'])); ?>
 AND
+
 	<fieldset>
         <?php
-echo $this->AutoComplete->input(
-    'or2.2',
+echo $this->AutoCompleteNoHidden->input(
+    'or1.1',
     array(
         'autoCompletesUrl'=>$this->Html->url(
             array(
@@ -94,34 +101,19 @@ echo $this->AutoComplete->input(
             )
         ),
         'autoCompleteRequestItem'=>'autoCompleteText',
-        'houtput' => 'c'
     )
 );
-
 ?>
-</fieldset>
-<?php echo $this->form->hidden('b' ,array('value' => $value['ID'])); ?>
-NOT
-<fieldset>
-        <?php
-echo $this->AutoComplete->input(
-    'not.1',
-    array(
-        'autoCompletesUrl'=>$this->Html->url(
-            array(
-                'controller'=>'tagusers',
-                'action'=>'auto_complete',
-            )
-        ),
-        'autoCompleteRequestItem'=>'autoCompleteText',
-        'houtput' => 'c'
-    )
-);
-
+<div class="search_tag_id">
+<?php
+echo $this->Form->hidden('or1.',array('value' => '','class' => 'tag_id','id' => 'or2'));
 ?>
+</div>
 </fieldset>
-<?php echo $this->form->hidden('b' ,array('value' => $value['ID'])); ?>
-<?php echo $this->Form->end(__('Search')); ?>
 
+<BUTTON type="button" id="search">検索</BUTTON>
+<div class="body">
+
+</div>
 </body>
 </html>

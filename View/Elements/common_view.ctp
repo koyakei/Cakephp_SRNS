@@ -92,7 +92,6 @@ echo $this->AutoComplete->input(
 	<?php
 		$targetid = $this->params['pass'][0];
 	?>
-	<?php //echo $this->form->hidden('keyid',array('value' => $value['ID'])); ?>
 <?php echo $this->Form->end(__('Submit')); ?>
     </a>
 <?php endforeach; ?>

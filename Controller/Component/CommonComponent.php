@@ -322,6 +322,21 @@ class CommonComponent extends Component {
 				 'taghash' => $taghash);
 	}
 
+	public function trifinderbyidAndSet(&$that = null,$id,&$option) {
+		if ($option['key'] == null) {
+			$option['key'] = Configure::read('tagID.reply');
+		}
+		$articleparentres = $this->Basic->tribasicfiderbyidAndSet($that,$option['key'],"Article","Article.ID",$id);//どんな記事がぶら下がっているか探す
+		$taghash = array();
+		list($articleparentres,$taghash) = $this->getSearchRelation($that, $articleparentres, $taghash, "Article");
+		$tagparentres = $this->Basic->tribasicfiderbyidAndSet($that,$option['key'],"Tag","Tag.ID",$id);
+		list($tagparentres,$taghash) =
+		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
+		return array('tagparentres'=>$tagparentres,
+				'articleparentres'=> $articleparentres,
+				'taghash' => $taghash);
+	}
+
 	public function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel){
 		$i = 0;
 		foreach ($targetParent as $result){

@@ -125,10 +125,64 @@ public $components = array(
      * @return results
      *
      */
-    function replyFinder($andSet_ids) {
-//
+    function replyFinder($andSet_ids = null ,$sorting_tags = null) {
+    	if(is_null($andSet_ids)){
+			$andSet_ids = $this->request->data['andSet_ids'];
+    	}
+    	if(is_null($sorting_tags)){
 
-    	return $this->Basic->tribasicfiderbyidAndSet($this,Configure::read('tagID.reply'),"Entity","Entity.ID",$andSet_ids);
+    	}
+    	$taghash = array();
+    	$options = array('key' => Configure::read('tagID.reply'));
+    	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
+
+    	$sorter_mended_results = $this->sorting_taghash_gen($temp['articleparentres'],$temp['taghash'],$sorting_tags);
+    	$tableresults = array('taghash' =>$sorter_mended_results['taghash'],
+    			'tag' =>$temp['articleparentres'], 'article'=>$temp['tagparentres']);
+		//$non_sorter_tagid
+
+    	//sorting_tagに含まれているtagだけハッシュとして渡す
+		$currentUserID = $this->Auth->user('id');
+    	$this->layout = "";
+    	$this->autoRender = false;
+    	$this->set(compact($currentUserID,$tableresults,$sorting_tags));
+    }
+
+    /**
+     *
+     * @param array $taghashes
+     * @param array $sorting_tags
+     * $sorting_tags= array ('ID');
+     * @return array
+     */
+    function taghashes_cutter($taghashes,$sorting_tags){
+    	foreach ($sorting_tags as $sorting_tag){
+			unset($taghashes[$sorting_tag['ID']]);
+    	}
+    	return $taghashes;
+    }
+
+    /**
+     * @param results 結果
+     * @param taghashes
+     * この二つに分けると思ったが上だけでいい
+     * $targetParent[$i]['no_sort_subtag'][$that->subtagID]['Tag']['ID']
+     * //$targetParent[$i]['sort_subtag'][$that->subtagID]['Tag']['ID']
+     * @return array('results','taghashes')
+     *
+     */
+    function sorting_taghash_gen($results,$taghashes,$sorting_tags){
+    	foreach  ($temp['articleparentres'] as $subtags){
+    		foreach ($temp['taghash'] as $hashid => $hashval){
+    			if (in_array($subtags['subtag']['Tag']['ID'], $sorting_tags['ID'])) {
+    				$sorting_hashes;
+    			}
+
+    		}
+    	}
+
+    	$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);
+    	return array('results'=> $results,'taghashes'=>$taghashes);
     }
 
     /**

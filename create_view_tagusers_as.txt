@@ -1,0 +1,3 @@
+create view `tagusers` as
+select tag.*,users.username as username from `tag`,`users` 
+where tag.user_id = users.id

@@ -1,0 +1,2 @@
+
+document.getElementsByName("data[or1]"),getElementsById("or1").value;

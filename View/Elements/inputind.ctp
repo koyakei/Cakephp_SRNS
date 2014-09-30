@@ -1,6 +1,5 @@
 <?php echo $this->Form->create($model); ?>
 <fieldset>
-<?php echo ); ?>
     		<?php echo $this->element('tablebody',
     	 array('ulist' => $ulist,
     	 'currentUserID'=>$currentUserID,

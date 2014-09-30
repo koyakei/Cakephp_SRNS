@@ -27,6 +27,9 @@
 
 	<div id="inputfield">
 	<input type="buttun" value="Add Article" onClick="inputArticle(this)">
+	<!-- 下に　$user_id $name $target_ids array リンクする対象id配列
+	これをどうにかして取り出して投げる
+	-->
 		<?php echo $this->element('Input',
     	 array('ulist' => $ulist,
     	 'currentUserID'=>$currentUserID,

@@ -17,19 +17,7 @@ $(document).ready(function()
 
 );
 
-function inputArticle(obj) {
- var ch = obj.parentNode.children;
- for (var i = 0, len = ch.length; i < len; i++) {
-    if (ch[i].getAttribute("id") == "inputfield") {
-      var element = ch[i];
-         if (element.style.display == 'none') {
-           element.style.display='block';
-         } else {
-           element.style.display='none';
-         }
-       }
-    }
- }
+
 </script>
 
 </head>

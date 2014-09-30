@@ -1,31 +1,12 @@
-<?php echo $this->Form->create($model); ?>
-<fieldset>
-
 <?php echo $this->Form->input('user_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,
 	  'selected' => $currentUserID//['userselected']
-	)); ?>
-	<?php
-echo $this->AutoComplete->input(
-    'Tag.name',
-    array(
-        'autoCompleteUrl'=>$this->Html->url(
-            array(
-                'controller'=>'tagusers',
-                'action'=>'auto_complete',
-            )
-        ),
-        'autoCompleteRequestItem'=>'autoCompleteText',
-        'houtput' => 'keyid'
-    )
-);
-?>
+	,'id'=>'user_id')); ?>
+	<?php echo $this->form->hidden($model.'.keyid' ,array('value' => $key)); ?>
 		<legend><?php echo __($model); ?></legend>
 	<?php
 		$targetid = $this->params['pass'][0];
-		echo $this->Form->input('name');
+		echo $this->Form->input('name' array('id'=> 'name'));
 	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>

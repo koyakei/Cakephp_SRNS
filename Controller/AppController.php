@@ -161,7 +161,59 @@ public $components = array(
     	}
     	return $taghashes;
     }
-
+    /**
+     *
+     * @param int $target_ids
+     * @param int $trikey
+     * @param int $user_id
+     */
+	function addArticle($target_ids,$trikey,$user_id,$name,$options = NULL){
+		$last_id = addSingleArticle($name,$user_id,$options);
+		$options['key'] = $trikey;
+		foreach ($target_ids as $target_id){
+			$this->Common->triAddbyid($this,
+					$user_id,
+					$target_id
+					,$last_id,
+					$options);
+			//$this->Basic->social2($this);
+		}
+	}
+	/**
+	 *
+	 * @param string $name
+	 * @param int $user_id
+	 */
+	function addSingleArticle($name,$user_id,$options= null){
+		$data['Article'] = array('name' =>$name,'users_id'=>$user_id,'auth'=> $options['auth']);
+		$Article = new Article();
+		$Article->create;
+		$Article->save($data);
+		return $Article->getLastInsertID();
+	}
+	/**
+	 *
+	 * @param array $target_ids
+	 * @param int $trikey
+	 * @param int $user_id
+	 */
+	function linker($target_ids,$trikey,$user_id){
+		$options['key'] = $trikey;
+		foreach ($target_ids as $target_id){
+			$this->Common->triAddbyid($this,
+					$user_id,
+					$target_id['from']
+					,$target_id['to'],
+					$options);
+		}
+	}
+	/**
+	 *
+	 * @param unknown $link_ids
+	 */
+	function unlinker($link_ids){
+		return ;
+	}
     /**
      * @param results 結果
      * @param taghashes
@@ -172,14 +224,20 @@ public $components = array(
      *
      */
     function sorting_taghash_gen($results,$taghashes,$sorting_tags){
-    	foreach  ($temp['articleparentres'] as $subtags){
-    		foreach ($temp['taghash'] as $hashid => $hashval){
-    			if (in_array($subtags['subtag']['Tag']['ID'], $sorting_tags['ID'])) {
-    				$sorting_hashes;
+    	$i =0;
+    	foreach  ($results as $result){
+    		foreach ($result['no_sort_subtag'] as $sub_tag_key => $sub_tag_value){
+    			foreach ($sorting_tags as $hashval){
+    				if ($results[$i]['subtag'][$sub_tag_key]['Tag']['ID']
+    					!== $hashval['ID']) {
+    					$results[$i]['no_sort_subtag'][$sub_tag_key]['Tag']
+    					 = $results[$i]['subtag'][$sub_tag_key]['Tag'];
+    				}
     			}
-
     		}
+    		$i++;
     	}
+
 
     	$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);
     	return array('results'=> $results,'taghashes'=>$taghashes);

@@ -54,7 +54,33 @@ function child_nester(data){
 
 	}
 }
-//JSON を投げてPHPでHTMLにしてもらう
+/**
+ *
+ * @param obj
+ * @returns
+ */
+	function inputArticle(obj) {
+		var element = null;
+	 var inputData = obj.parentNode.children;
+	    ("#selected_ids")
+	    $.ajax({
+	        type: "POST",
+	        url: "cakephp/tags/ajaxInput.php",
+	        data:inputData,
+	        success: function(){
+	        	return true;
+	        },
+	        error:function(){
+	        	return false;
+	        }
+	    });
+
+	}
+/**
+ *
+ * @param data
+ * @returns
+ */
 function table_perser(data){
 	$.ajax({
         type: "POST",
@@ -69,8 +95,9 @@ function table_perser(data){
 /**
  * GET_FT method
  *
- * @parm
- * @return From To
+ * @parm data  array[n] = int ID
+ * @return array
+ * From To関係
  */
 
 function GET_FT(data){

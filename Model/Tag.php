@@ -46,7 +46,7 @@ class Tag extends Date {
  *
  * @var mixed False or table name
  */
-	public $useTable = 'tag';
+	public $useTable = 'tagusers';
 
 /**
  * Primary key field

@@ -17,3 +17,21 @@
     	'srns_code_member'=>$tableresults['srns_code_member'])); ?>
 	</tbody>
 </table>
+
+<!-- ボタンを押したら ajaxInput(this)
+-->
+<div onClick='toggleShow(this);' >
+	add
+	</div>
+	<div id='HSfield' style='display: none;'>
+
+	<div id="inputfield">
+	<input type="buttun" value="Add Article" onClick="inputArticle(this)">
+		<?php echo $this->element('Input',
+    	 array('ulist' => $ulist,
+    	 'currentUserID'=>$currentUserID,
+    	 'model'=>'Article',
+    	 )); ?>
+	</div>
+
+	</div>

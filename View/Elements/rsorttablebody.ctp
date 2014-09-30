@@ -17,10 +17,11 @@
 						tagged
 						</div>
 						<div id='HSfield' style='display: none;'>
-							<?php foreach ($taghashes  as $taghash): ?>
-								<?php foreach ($sorting_tags  as $sorting_tag): ?>
+							<?php foreach ($result['no_sort_subtag'] as $taghash): ?>
 									<?php if($taghash !== $sorting_tag): ?>
-										<?php echo echo $this->Html->link($taghash['name'], array('controller'=> "tags",'action' => 'view', $hash['ID'])); ?>
+										<?php echo echo $this->Html->link($taghash['name'],
+										 array('controller'=> "tags",'action' => 'view', $taghash['ID'])); ?>
+										 <?php echo $taghash['Link']['quant'] + ":" + $taghash['Tag']['namename']; ?>
 										<br>
 									<?php endif; ?>
 								<?php endforeach; ?>

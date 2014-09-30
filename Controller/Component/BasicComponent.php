@@ -280,6 +280,13 @@ class BasicComponent extends Component {
 		return $modelSe->find('all',$option);
 	}
 
+	public function social2($searching_tags,$sorting_tags,$selectings){
+		$data['Social'] = array();
+		$Social = new Social();
+		$Social->create();
+		return $Social->save($data);
+	}
+
 	/**
 	 * tribasicfiderbyidAndSet method
 	 *

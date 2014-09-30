@@ -132,6 +132,14 @@ class CommonComponent extends Component {
 			}
 		}
 	}
+	/**
+	 *
+	 * @param string $that
+	 * @param int $userID
+	 * @param int $FromID
+	 * @param int $ToID
+	 * @param array $options $options['key']
+	 */
 	public function triAddbyid(&$that = null,$userID,$FromID,$ToID,$options) {
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');
@@ -141,7 +149,6 @@ class CommonComponent extends Component {
 		}
 
 		if ($FromID != null) {
-			debug("byid");
 			$that->request->data = null;
 			$that->request->data['Link'] = array(
 					'user_id' => $userID,
@@ -154,8 +161,6 @@ class CommonComponent extends Component {
 			if ($Link->save($that->request->data)) {
 
 				$that->last_id = $Link->getLastInsertID();
-
-				debug($that->last_id);
 				$that->request->data = null;
 				$that->request->data['Link'] = array(
 						'user_id' => $userID,

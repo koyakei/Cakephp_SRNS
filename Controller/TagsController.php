@@ -75,7 +75,7 @@ public function beforeFilter() {
 		public function index() {
 			$this->loadModel('Article');
 			parent::index();
-			$this->paginate->setting = array('order'=> array('Tag.modified' => 'DESC'));
+			//$this->paginate->setting = array('order'=> array('Tag.modified' => 'DESC'));
 			$this->set('tags', $this->paginate('Tag'));
 		}
         /**

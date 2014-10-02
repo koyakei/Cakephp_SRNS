@@ -158,7 +158,6 @@ class TagusersController extends AppController {
 		$options['authCheck'] = false;
 
 			//成功したら、成功した情報を返す。
-// 		$this->render('addEntity', 'ajax');
 		$this->set('json', $this->Basic->trilinkAdd($this,$_REQUEST['from'],$_REQUEST['to'],$res['Taguser']['ID'],$options));
 		$this->layout = 'ajax';
 

@@ -207,13 +207,7 @@ public $components = array(
 					$options);
 		}
 	}
-	/**
-	 *
-	 * @param unknown $link_ids
-	 */
-	function unlinker($link_ids){
-		return ;
-	}
+
     /**
      * @param results 結果
      * @param taghashes

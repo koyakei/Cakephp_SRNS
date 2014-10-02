@@ -61,13 +61,15 @@ class BasicComponent extends Component {
 	 * @return boolean
 	 */
 	public function tagAuthCountdown(&$that,$FromID,$target_user_id,$quant){
+		//ignore check special tags
+// 		if (in_array($FromID, Configure::read('tagID'))){
+// 			return true;
+// 		}
 		$that->Tagauthcount = new Tagauthcount();
 		$options = array('conditions' => array('Tagauthcount.tag_id'=> $FromID
 				,'Tagauthcount.user_id'=> $target_user_id
 		));
 		$result = $that->Tagauthcount->find('first',$options);
-		debug($result);
-		//$data['Auth'] = array('id'=>$result['Auth']['id'],'quant'=> $that->request->data['Auth']['quant']);
 		$result['Tagauthcount']['quant'] = $result['Tagauthcount']['quant'] - $quant;//動かし分だけquantを消費　==
 		if ($result['Tagauthcount']['quant'] >= 0) {//払っても借金でないことを確認。借金を実装するときはここを変える。
 			if(null != $result['Tagauthcount']['user_id']){

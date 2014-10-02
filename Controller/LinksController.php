@@ -206,6 +206,14 @@ class LinksController extends AppController {
 		return $this->redirect($this->referer());
 	}
 /**
+ *
+ * 予定　@param mix options　権限を確かめる予定
+ */
+	function addTriLink(){
+		$this->set('json', $this->Basic->trilinkAdd($this,$_REQUEST['from'],$_REQUEST['to'],$_REQUEST['trikey_id'],$options));
+		$this->layout = 'ajax';
+	}
+/**
  * singlelink method
  *
  *

@@ -29,7 +29,8 @@ $(function() {
             	//
             	$(".body").textContent = nester(data);
             	//ただ入れるだけが一番楽
-            }
+            },
+        dataType: "html"
         });
 
     });
@@ -38,15 +39,14 @@ $(function() {
 //構成を変えたディレクトリを渡すと　整形してくれる関数
 
 //data ==
-var test_non_nest_data = JSON[0]{
-	Columuns: string_data
-
-	};
+//var test_non_nest_data = JSON[0]{
+//	Columuns: string_data
+//
+//	};
 function nester(data){
 	var val = null;
 	for(val in data){
-		val['ID']
-
+		val['ID'];
 	}
 }
 function child_nester(data){
@@ -59,22 +59,32 @@ function child_nester(data){
  * @param obj
  * @returns
  */
-	function inputArticle(obj) {
-		var element = null;
-	 var inputData = obj.parentNode.children;
-	    ("#selected_ids")
-	    $.ajax({
-	        type: "POST",
-	        url: "cakephp/tags/ajaxInput.php",
-	        data:inputData,
-	        success: function(){
-	        	return true;
-	        },
-	        error:function(){
-	        	return false;
-	        }
-	    });
+	function addArticle(obj) {
 
+	 var inputData = obj.parentNode.children;
+	 var parent = null;
+	 if(parent.parentNode.parentNode.parentNode.$(".tag_id_for_reply").checked){
+	    try{
+	    	parent = parent.parentNode.parentNode.parentNode.$(".tag_id_for_reply").checked;
+	    	$.ajax({
+		        type: "POST",
+		        url: "cakephp/tags/ajaxInput.php",
+		        data:inputData,
+		       /** success: function(){
+		        	return true;
+		        },
+		        error:function(){
+		        	return false;
+		        }**/
+		    });
+	    	}
+	    catch(Exception){                           /* Exception例外クラス */
+            return true;                      /* スタックトレースの出力 */
+        }
+	    for(from_id in obj){
+
+	    }
+	 }
 	}
 /**
  *
@@ -91,7 +101,52 @@ function table_perser(data){
         }
     });
 }
+/**
+ *
+ * @param obj
+ * @returns 追加されたリンクIDを返す
+ */
+function add_single_tag(obj){
+	var target = obj.parentNode.children;
+	var data = {
+			from:target.$("#from_id"),
+			to:target.$("#tag_id"),
+			trikey_id: target.$("#trikey_id"),
+			};
+	triLinker(data,callbaack);
+}
+/**
+ * @param array data= {from:id,to:id,trikey_id;int}
+ * @returns bool
+ */
+function triLinker(data,callback){
+    // array('cntroller'=>'tagusers' ,'action' => 'addentity') に送る
+    // で渡ってくる　trikey も渡せるようにしたい。label の追加が必要だろう。なければreply にするか。
+    //Json post を飛ばす。
+    $.getJSON(
+    		'/cakephp/Link/addTriLink',
+    		data,
+    	function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
+            if(res !== null) {
+                 data.id = res;
+                 callback(data);
+            }
+    	}
+    );
 
+  }
+
+function deleteLink(data,callback) {
+    ajaxDelEdge['id'] = data['edges']['0'];
+    	$.ajax({
+	url: '/cakephp/links/edgedel?id='+ data['edges']['0'],
+	dataType: 'json',
+	success: function(obj) {
+
+		callback(data);
+	}
+    	});
+}
 /**
  * GET_FT method
  *

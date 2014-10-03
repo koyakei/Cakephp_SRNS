@@ -2,23 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<?php echo $this->Html->script(array('view2')); ?>
-    <script type="text/javascript">
+<?php echo $this->Html->script("view2"); ?>
 
-$(document).ready(function()
-    {
-        $(".myTable").tablesorter();
-            var newTagNodeSubmit = document.getElementById('trikey_submit');
-        	document.getElementById('tag_id').value.onchange = function() {
-        	document.getElementById('spesifiedtrikeylink').innerHTML = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
-
-        };
-    }
-
-);
-
-
-</script>
 
 </head>
 <body>
@@ -111,7 +96,7 @@ echo $this->Form->hidden('or1.',array('value' => '','class' => 'tag_id','id' => 
 </div>
 </fieldset>
 
-<BUTTON type="button" id="search">検索</BUTTON>
+<BUTTON type="button" id="search" onclick="all_reply_find()">検索</BUTTON>
 <div class="body">
 
 </div>

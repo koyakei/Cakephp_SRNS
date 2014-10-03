@@ -1,4 +1,4 @@
-<!-- 
+<!--
     -->
 <?php echo $this->Form->input('user_id', array(
 	    'type' => 'select',
@@ -10,5 +10,5 @@
 		<legend><?php echo __($model); ?></legend>
 	<?php
 		$targetid = $this->params['pass'][0];
-		echo $this->Form->input('name' array('id'=> 'name'));
+		echo $this->Form->input('name' array('class'=> 'reply_article_name'));
 	?>

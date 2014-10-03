@@ -167,7 +167,10 @@ public $components = array(
      * @param int $trikey
      * @param int $user_id
      */
-	function addArticle($target_ids,$trikey,$user_id,$name,$options = NULL){
+	function addArticle(
+			$target_ids= NULL,
+			$trikey= NULL,$user_id= NULL,$name= NULL,$options = NULL){
+
 		$last_id = addSingleArticle($name,$user_id,$options);
 		$options['key'] = $trikey;
 		foreach ($target_ids as $target_id){

@@ -3,7 +3,16 @@
 <?php if($firstModel == 'Tag'){$userCallAssosiation = 'O';} else {$userCallAssosiation = 'O';} // アソシエーションの名前を一緒にしたが後で別にするかも?>
 <div id="draggble">
 				<tr>
-					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <input type="checkbox" class="tag_id_for_reply" value="<?php echo $result[$firstModel]['ID']; ?>" checked><?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
+					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> >
+					echo $this->Form->input( 'entity_id', array(
+    'type' => 'checkbox',
+  'checked' => true,    // 初期表示で選択させる場合
+  'value' => $result[$firstModel]['ID']
+    'label' => true,
+    'class' = 'tag_id_for_reply'
+
+));
+					<?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
 					<td>
 					<?php if(!is_null($leaf)){ echo "<b>"; } ?>
 					<?php echo $this->element('URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>

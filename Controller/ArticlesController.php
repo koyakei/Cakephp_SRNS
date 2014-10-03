@@ -159,6 +159,9 @@ class ArticlesController extends AppController {
 			}
 		}
 	}
+	function addArticles($target_ids= NULL,$trikey= NULL,$user_id= NULL,$name= NULL,$options = NULL){
+		parent::vaddArticles($target_ids,$trikey,$user_id,$name,$options);
+	}
 
 /**
  * edit method

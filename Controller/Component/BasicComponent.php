@@ -297,13 +297,13 @@ class BasicComponent extends Component {
 	 * @param int $trikeyID
 	 * @param string $modelSe
 	 * @param string $Ltotarget //target colmunn 探すID
-	 * @param array $ids and set
+	 * @param array $ids and set array(int , int) 連想配列ではないただの配列
 	 * @return $that->returntribasic
 	 */
 	public function tribasicfiderbyidAndSet(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$ids) {
 		$modelSe = new $modelSe();
 		foreach ($ids as $id){
-			$andSet += array("$id = Link.LFrom");
+			array_push($andSet, array("$id = Link.LFrom"));
 		}
 		$option = array(
 				'conditions'=> array(

@@ -67,7 +67,7 @@ $(document).ready(function(){
             //IDを下に表示
         	$(this).parent().parent().find('#tag_id').html($(this).attr('id'));
         	$(this).parent().parent().find('input[update='+tag+']').focus();
-        	all_reply_finder();
+
             return false;
         });
 

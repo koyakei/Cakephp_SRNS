@@ -50,7 +50,7 @@
      *
      */
         public $update='autoCompleteDiv';
-        public $scriptPath = 'views/helpers/auto_complete.js';
+        public $scriptPath = 'views/helpers/auto_complete_no_hidden.js';
         private $jsIncluded = false;
 
         function input($name, $options) {

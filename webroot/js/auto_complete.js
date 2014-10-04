@@ -51,7 +51,7 @@ $(document).ready(function(){
         // Build a list of links from the terms, set href equal to the term
         var options = '';
         $.each(itemList, function(index, name) {
-              options += '<a autoCompleteItem='+tag+' href="'+name['ID']+'" id="'+name['ID']+'" suggest="'+  name['name'] + ":" + name['username'] +'" >' +  name['name'] + ":" + name['username'] + '</a>';
+              options += '<a autoCompleteItem='+tag+' id="'+name['ID']+'" suggest="'+  name['name'] + ":" + name['username'] +'" >' +  name['name'] + ":" + name['username'] + '</a>';
             });
         // Show them or hide div if nothing to show
         if(options!=''){
@@ -68,8 +68,39 @@ $(document).ready(function(){
         	$(this).parent().parent().find('#tag_id').html($(this).attr('id'));
         	$(this).parent().parent().find('input[update='+tag+']').focus();
         	all_reply_finder();
+
+        	function all_reply_finder(){
+        		var i = null;
+//        		var Search_conditions = {};
+        		var Ary = [];
+        		var Search_conditions = Ary.concat();;
+//        		Search_conditions['Searching'] = {tags:null};
+//        		Search_conditions['Searching']['tags']= {or:null};
+//        		Search_conditions['Searching']['tags']['or'] = [];
+	        	for(i=0;i<=1;i++){
+	        		var j = $(".search_tag_id").children("input[name*='data[or]["+ i +"]']").map(function(index, el) { return $(this).val();});
+
+	        		Search_conditions.push(j);
+	        	}
+
+	        	$.ajax({
+	                type: "POST",
+	                url: "GET_all_reply",
+	                data: Search_conditions,
+	                dataType:'html',
+	                success: function(data){
+	                		//帰ってきたデータでリプライをテーブルに流す
+	                	//期待する戻り値
+	                	//
+	                	$(".body").textContent = data;
+	                	//ただ入れるだけが一番楽
+	                },
+
+	            });
+        	}
             return false;
         });
 
     }
 });
+

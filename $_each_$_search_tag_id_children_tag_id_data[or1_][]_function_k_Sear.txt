@@ -1,0 +1,1 @@
+$.each($(".search_tag_id").children(".tag_id")("data[or1"][]"),function(k){ Search_conditions["Searching"]["tags"]["or1"][k] = $(".search_tag_id").children(".tag_id")("data[or1"][]");});

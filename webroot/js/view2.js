@@ -5,33 +5,8 @@ jQuery.postJSON = function(url, data, callback) {
 $.ajaxSetup({
     timeout: 10000
 });
-/**
- *
- */
-var search_tag_id_fields = $(".search_tag_id").children(".tag_id");
-var tag = 'autoCompleteDiv';
-function all_reply_finder(){
-	var Search_conditions = null;
-	var i = null;
-	for(i = 0; i < 1; i = i +1){
-    	$.each(search_tag_id_fields("data[or" + i +"][]")
-    			, function(k){ Search_conditions["Searching"]["tags"]["or" + i][k] = each_or_id.value;});
-	}
-    $.ajax({
-        type: "POST",
-        url: "cakephp/tags/GET_all_reply.php",
-        data:
-        	Search_conditions,
-        success: function(data){
-        		//帰ってきたデータでリプライをテーブルに流す
-        	//期待する戻り値
-        	//
-        	$(".body").textContent = nester(data);
-        	//ただ入れるだけが一番楽
-        },
-    dataType: "html",
-    });
-};
+
+
 $(document).ready(function(){
 	    $(".myTable").tablesorter();
 	    if(document.getElementById('tag_id') != null){
@@ -40,14 +15,43 @@ $(document).ready(function(){
 	    	document.getElementById('spesifiedtrikeylink').innerHTML = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
 	    	}
 	    };
-
-
 	}
 
-
-
 );
+function all_reply_finder(){
+	var i = null;
+	var Search_conditions = {};
+	Search_conditions['Searching'] = {tags:null};
+	Search_conditions['Searching']['tags']= {or:null};
+	Search_conditions['Searching']['tags']['or'] = [];
+	for(i=0;i<=1;i++){
+		Search_conditions['Searching']['tags']['or'][i] = $(".search_tag_id").children("input[name*='data[or]["+ i +"]']").map(function(index, el) { return $(this).val();});
+	}
 
+	$.ajax({
+        type: "POST",
+        url: "GET_all_reply",
+//        data:Search_conditions,
+//        success: function(data){
+//        		//帰ってきたデータでリプライをテーブルに流す
+//        	//期待する戻り値
+//        	//
+////        	$(".body").textContent = data;
+//        	//ただ入れるだけが一番楽
+//        },
+//        complete: function(data){
+////        	$(".body").textContent = data;
+//        },
+//        error: function(data){
+////        	$(".body").textContent = data;
+//        },
+
+    });
+}
+function get_type(thing){
+    if(thing===null)return "[object Null]"; // special case
+    return Object.prototype.toString.call(thing);
+}
 
 
 
@@ -81,7 +85,6 @@ function child_nester(data){
 	 obj = obj.$closet.$("tr");
 	 array_make_reply_ids(obj,reply_ids);
 	 //traverse して代入
-
 	    $.ajax({
 	        type: "POST",
 	        url: "cakephp/articles/addArticles.php",

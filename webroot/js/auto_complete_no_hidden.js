@@ -47,11 +47,11 @@ $(document).ready(function(){
     });
 
     function populateAutoComplete(itemList,updateDiv) {
-        var tag = 'autoCompleteDiv'
+        var tag = 'autoCompleteDiv';
         // Build a list of links from the terms, set href equal to the term
         var options = '';
         $.each(itemList, function(index, name) {
-              options += '<a autoCompleteItem='+tag+' href="'+name['ID']+'" id="'+name['ID']+'" suggest="'+  name['name'] + ":" + name['username'] +'" >' +  name['name'] + ":" + name['username'] + '</a>';
+              options += '<a autoCompleteItem='+tag+'" href="'+name['ID']+'" id="'+name['ID']+'" suggest="'+  name['name'] + ":" + name['username'] +'" >' +  name['name'] + ":" + name['username'] + '</a>';
             });
         // Show them or hide div if nothing to show
         if(options!=''){
@@ -67,7 +67,7 @@ $(document).ready(function(){
             //IDを下に表示
         	$(this).parent().parent().find('#tag_id').html($(this).attr('id'));
         	$(this).parent().parent().find('input[update='+tag+']').focus();
-
+        	all_reply_finder();
             return false;
         });
 

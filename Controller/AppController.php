@@ -101,27 +101,12 @@ public $components = array(
     }
 
 
-    /**
-     * GET_all_reply method
-     * ajaxで読み込んだリプライが実際にはどのような構造で配置されているのかを
-     *一階層ごとに返していく。
-     *複数のidが来たときにforeach出張らして流す
-     * @return results
-     *
-     */
-    function GET_all_reply($Searching_tags=NULL,$Sorting_tags=NULL) {
-    	if($Searching_tags == null){
-    		$Searching_tags = $this->request->data['Search'];
-    	}
-    	foreach ($Searching_tags as $andSet){
-    		$result = $this->replyFinder($andSet);
-    		array_merge($results,$result);
-    	}
-    	return $results;
-    }
+
     /**
      * replyFinder method
-     * @var tag_id
+     * @var andSet_ids
+     *  array
+     * @var sorting_tags
      * @return results
      *
      */
@@ -167,7 +152,7 @@ public $components = array(
      * @param int $trikey
      * @param int $user_id
      */
-	function addArticle(
+	function addArticles(
 			$target_ids= NULL,
 			$trikey= NULL,$user_id= NULL,$name= NULL,$options = NULL){
 

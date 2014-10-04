@@ -632,24 +632,6 @@ public function beforeFilter() {
         	}
         	//$this->redirect($this->referer());
         }
-        /**
-         * GET_all_reply method
-         * ajaxで読み込んだリプライが実際にはどのような構造で配置されているのかを
-         *一階層ごとに返していく。
-         *複数のidが来たときにforeach出張らして流す
-         * @return results
-         *
-         */
-        function GET_all_reply($Searching_tags=NULL,$Sorting_tags=NULL) {
-        	if($Searching_tags == null){
-        		$Searching_tags = $this->request->data['Search'];
-        	}
-        	foreach ($Searching_tags as $andSet){
-        		$result = $this->replyFinder($andSet,$Sorting_tags);
-        		array_merge($results,$result);
-        	}
-        	return $results;
-        }
 
         public function result($id = null) {
         	$this->Common->trifinder($this);
@@ -673,5 +655,3 @@ public function beforeFilter() {
         	$this->RememberMe->destroyCookie();
         	$this->Session->setFlash(sprintf(__d('users', '%s you have successfully logged out'), $user[$this->{$this->modelClass}->displayField]));
         	$this->redirect("/tags/search");
-        }
-}

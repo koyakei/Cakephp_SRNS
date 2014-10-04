@@ -98,25 +98,25 @@ public function beforeFilter() {
         }
         /**
          * view2 method
-         * å…¨éƒ¨GETã§æƒ…å ±ã‚’æ¸¡ã™
-         * POSTã ã¨ãƒªãƒ³ã‚¯ã§åŒã˜ã‚¿ã‚°ã‚’è¡¨ç¤ºã§ããªã„ã€‚
+         * ‘S•”GET‚Åî•ñ‚ğ“n‚·
+         * POST‚¾‚ÆƒŠƒ“ƒN‚Å“¯‚¶ƒ^ƒO‚ğ•\¦‚Å‚«‚È‚¢B
          * REQUEST array Searching
-         * array tags æ¤œç´¢ä¸­ã®ã‚¿ã‚°
+         * array tags ŒŸõ’†‚Ìƒ^ƒO
          * 	array("OR"=> (array("AND"=> (int $tag_id ,) ),"NOT" => array()),
          * array users
-         * ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ãƒ›ãƒ¯ã‚¤ãƒˆ/ãƒ–ãƒ©ãƒƒã‚¯ãƒªã‚¹ãƒˆã®æ–¹å¼ã‚’è€ƒãˆã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
+         * ƒ†[ƒU[‚ÌƒzƒƒCƒg/ƒuƒ‰ƒbƒNƒŠƒXƒg‚Ì•û®‚ğl‚¦‚é•K—v‚ª‚ ‚éB
          * REQUEST array Sorting
-         * array tags ä¸¦ã¹æ›¿ãˆä¸­ã®ã‚¿ã‚°
-         * array users å„ªå…ˆè¡¨ç¤ºã™ã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼
+         * array tags •À‚×‘Ö‚¦’†‚Ìƒ^ƒO
+         * array users —Dæ•\¦‚·‚éƒ†[ƒU[
          * array colmun modified or created or id
-         * ã‚¿ã‚°ã®å½“ãŸã‚Šã‚’ã¤ã‘ã‚‹ãŸã‚ã®å…¨æ–‡æ¤œç´¢ã€€æ¤œç´¢ã«ä½¿ç”¨ã—ãŸã‚¿ã‚°ã‚’æŠ•ç¨¿
+         * ƒ^ƒO‚Ì“–‚½‚è‚ğ‚Â‚¯‚é‚½‚ß‚Ì‘S•¶ŒŸõ@ŒŸõ‚Ég—p‚µ‚½ƒ^ƒO‚ğ“Še
          *  array(int tag_id)
          * @return void
          *
          */
         public function view2() {
         	//         	$replys = $this->GET_all_reply($this->request->Searching['tags'],$this->request->Sorting);
-        	//         	//å…¥ã‚Œå­ã§ç¶šãã‚’èª­ã‚‚ã†ã‹ï¼Ÿ
+        	//         	//“ü‚êq‚Å‘±‚«‚ğ“Ç‚à‚¤‚©H
         	//         	$this->set("replys",$replys);
 
         }
@@ -146,15 +146,15 @@ public function beforeFilter() {
         	$this->set('tagauths',$tagauth
         			);
 
-        	//è¡¨ç¤ºéƒ¨åˆ†ã“ã“ã¾ã§
-        	//ä»¥ä¸‹æ¨©é™å¤‰æ›´éƒ¨åˆ†
+        	//•\¦•”•ª‚±‚±‚Ü‚Å
+        	//ˆÈ‰ºŒ ŒÀ•ÏX•”•ª
 
 
         	if ($this->request->is(array('post', 'put'))) {
         		$targetTagauthcounts=$this->Tagauth->find('first',array('conditions'=>array('Tagauthcount' => array('tag_id'=>$id,
         			'username'=> $this->request->data['username']))))['Tagauth']['id'];
-        	//max_quant ã‚’è¶…ãˆãªã„ã‚ˆã†ã«ã™ã‚‹ãƒã‚§ãƒƒã‚¯ã€€ã„ã¤ã‚‚å…¨éƒ¨ã®è¡Œã‚’åˆè¨ˆã™ã‚‹å‡¦ç†ã¯é‡ãŸã„ã®ã§ã‚„ã‚‰ãªã„ã€‚ä¸€å›ä¸€å›ã®å‡¦ç†ã®æ•´åˆæ€§ã‚’å–ã£ã¦ã„ãã€‚
-	        	if ($this->Basic->tagAuthCountdown($this,$id,$targetTagauthcounts,$this->request->data['Tagauthcount'][`quant`])) {//ç›¸æ‰‹ãŒç‰¹å®šã§ãã¦ã„ã‚‹ã‹
+        	//max_quant ‚ğ’´‚¦‚È‚¢‚æ‚¤‚É‚·‚éƒ`ƒFƒbƒN@‚¢‚Â‚à‘S•”‚Ìs‚ğ‡Œv‚·‚éˆ—‚Íd‚½‚¢‚Ì‚Å‚â‚ç‚È‚¢Bˆê‰ñˆê‰ñ‚Ìˆ—‚Ì®‡«‚ğæ‚Á‚Ä‚¢‚­B
+	        	if ($this->Basic->tagAuthCountdown($this,$id,$targetTagauthcounts,$this->request->data['Tagauthcount'][`quant`])) {//‘Šè‚ª“Á’è‚Å‚«‚Ä‚¢‚é‚©
 	           		$that->Session->setFlash(__('The tag has been saved.'));
 	        		return true;
 	        	} else {
@@ -255,10 +255,10 @@ public function beforeFilter() {
          * @return void
          */
         public function transmitter($leftID = null,$leftKeyID = null,$rightID = null,$rightKeyID = null ){
-			//view method ã‚’èª­ã¿è¾¼ã‚€ã€€å·¦
-			//å·¦å³ã‚’åŒã˜elemrnt ã§æ§‹æˆã™ã‚‹ã€€ãã®ç”»é¢ã‚’å‘¼ã³å‡ºã™æ–¹æ³•ã‚’è€ƒãˆã‚‹ã€‚
-			//ãƒšãƒ¼ã‚¸ã‚’å›ºå®šã—ãŸã¾ã¾æ¤œç´¢ã™ã‚‹æ–¹æ³•ã‚’è€ƒãˆã‚‹ã€‚
-			//togetter ã®å·¦ã¯ç·¨é›†å…ˆã«ãªã£ã¦ã„ã‚‹ã€‚
+			//view method ‚ğ“Ç‚İ‚Ş@¶
+			//¶‰E‚ğ“¯‚¶elemrnt ‚Å\¬‚·‚é@‚»‚Ì‰æ–Ê‚ğŒÄ‚Ño‚·•û–@‚ğl‚¦‚éB
+			//ƒy[ƒW‚ğŒÅ’è‚µ‚½‚Ü‚ÜŒŸõ‚·‚é•û–@‚ğl‚¦‚éB
+			//togetter ‚Ì¶‚Í•ÒWæ‚É‚È‚Á‚Ä‚¢‚éB
 			//debug($this->request->data['to']);
         	//debug($this->request->data['from']);
         	debug($this->request->data);
@@ -400,18 +400,6 @@ public function beforeFilter() {
         		$this->set('users', $this->request->data['W']);
         	}
         }
-
-        public function GET_all_reply(){
-        	debug($this->request->query);
-			$this->layout = "";
-    		$this->autoRender = false;
-			foreach ($this->request->data() as $and_set){
-				$result = $this->replyFinder($and_set,$sorting_tags);
-				array_push($tableresults, $result['$tableresults']);
-				array_push($sorting_tags, $result['$sorting_tags']);
-			}
-			$this->set(compact($tableresults,$sorting_tags));
-        }
         /**
          * autoSuggest method
          *
@@ -471,16 +459,16 @@ public function beforeFilter() {
 	        		$data['User']['tlimit'] = $this->Auth->user('tlimit') + 1;
 	        		$data['User']['id'] = $this->request->data['Tag']['user_id'];
 	        		if($this->User->save($data)){
-	        			$this->Session->setFlash(__('The tag has been deleted.æ®‹ã‚Šã‚¿ã‚°æ•°'.$this->Auth->user('tlimit')));
+	        			$this->Session->setFlash(__('The tag has been deleted.c‚èƒ^ƒO”'.$this->Auth->user('tlimit')));
 	        		}else {
-	        			$this->Session->setFlash(__('deleted but can not count up..æ®‹ã‚Šã‚¿ã‚°æ•°'.$this->Auth->user('tlimit')));
+	        			$this->Session->setFlash(__('deleted but can not count up..c‚èƒ^ƒO”'.$this->Auth->user('tlimit')));
 	        		}
 	        	} else {
 	        		$this->Session->setFlash(__('The article could not be deleted. Please, try again.'));
 	        	}
         	}
         	debug($this->referer());
-        	print_r("æˆ»ã‚‹ã§æˆ»ã£ã¦");
+        	print_r("–ß‚é‚Å–ß‚Á‚Ä");
         	return $this->redirect($this->referer());
         }
         public function articleview($id) {
@@ -538,10 +526,10 @@ public function beforeFilter() {
          * @return void
          */
 		public function articletransmitter($leftID = null,$leftKeyID = null){
-			//view method ã‚’èª­ã¿è¾¼ã‚€ã€€å·¦
-			//å·¦å³ã‚’åŒã˜elemrnt ã§æ§‹æˆã™ã‚‹ã€€ãã®ç”»é¢ã‚’å‘¼ã³å‡ºã™æ–¹æ³•ã‚’è€ƒãˆã‚‹ã€‚
-			//ãƒšãƒ¼ã‚¸ã‚’å›ºå®šã—ãŸã¾ã¾æ¤œç´¢ã™ã‚‹æ–¹æ³•ã‚’è€ƒãˆã‚‹ã€‚
-			//togetter ã®å·¦ã¯ç·¨é›†å…ˆã«ãªã£ã¦ã„ã‚‹ã€‚
+			//view method ‚ğ“Ç‚İ‚Ş@¶
+			//¶‰E‚ğ“¯‚¶elemrnt ‚Å\¬‚·‚é@‚»‚Ì‰æ–Ê‚ğŒÄ‚Ño‚·•û–@‚ğl‚¦‚éB
+			//ƒy[ƒW‚ğŒÅ’è‚µ‚½‚Ü‚ÜŒŸõ‚·‚é•û–@‚ğl‚¦‚éB
+			//togetter ‚Ì¶‚Í•ÒWæ‚É‚È‚Á‚Ä‚¢‚éB
         	if($this->request->data['from'] == null){
         		$this->request->data['from'] = array();
         	}
@@ -633,13 +621,13 @@ public function beforeFilter() {
 
         	if ($this->Link->delete($this->request->data('Link.ID'))){
         		if($this->Basic->taglimitcountup($this)){
-        			$this->Session->setFlash(__('å‰Šé™¤å®Œäº†.'));
+        			$this->Session->setFlash(__('íœŠ®—¹.'));
         			debug("sucsess");
         		}else{
         			debug("auth fail");
         		}
         	} else {
-        		$this->Session->setFlash(__('å‰Šé™¤å¤±æ•—.'));
+        		$this->Session->setFlash(__('íœ¸”s.'));
         		debug("fail");
         	}
         	//$this->redirect($this->referer());
@@ -667,7 +655,3 @@ public function beforeFilter() {
         	$this->RememberMe->destroyCookie();
         	$this->Session->setFlash(sprintf(__d('users', '%s you have successfully logged out'), $user[$this->{$this->modelClass}->displayField]));
         	$this->redirect("/tags/search");
-        }
-}
-
-

@@ -72,21 +72,20 @@ $(document).ready(function(){
         	function all_reply_finder(){
         		var i = null;
 //        		var Search_conditions = {};
-        		var Ary = [];
-        		var Search_conditions = Ary.concat();;
+//        		var Ary = [];
+        		var Search_conditions = [];
 //        		Search_conditions['Searching'] = {tags:null};
 //        		Search_conditions['Searching']['tags']= {or:null};
 //        		Search_conditions['Searching']['tags']['or'] = [];
 	        	for(i=0;i<=1;i++){
-	        		var j = $(".search_tag_id").children("input[name*='data[or]["+ i +"]']").map(function(index, el) { return $(this).val();});
-
-	        		Search_conditions.push(j);
+	        		Search_conditions[i] = $(".search_tag_id").children("input[name*='data[or]["+ i +"]']").map(function() { return $(this).val();});
 	        	}
-
+	        	console.log(Search_conditions[0][0]);
 	        	$.ajax({
-	                type: "POST",
+	                type: "GET",
 	                url: "GET_all_reply",
-	                data: Search_conditions,
+//	                ?serching_tag_ids[]="+ Search_conditions[0][0] +"
+	                data: {searching_tag_ids:[[Search_conditions[0][0],Search_conditions[0][1]],[Search_conditions[1][0],Search_conditions[1][1]]]},
 	                dataType:'html',
 	                success: function(data){
 	                		//帰ってきたデータでリプライをテーブルに流す

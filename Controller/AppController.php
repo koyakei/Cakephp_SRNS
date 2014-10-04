@@ -130,7 +130,7 @@ public $components = array(
 		$currentUserID = $this->Auth->user('id');
     	$this->layout = "";
     	$this->autoRender = false;
-    	$this->set(compact($currentUserID,$tableresults,$sorting_tags));
+    	return array(compact($currentUserID,$tableresults,$sorting_tags));
     }
 
     /**

@@ -3,15 +3,15 @@
          Array('taghashes'=>$taghash)); ?>
     <tbody>
     	<?php echo $this->element('rsorttablebody',
-    	 Array('results' => $tableresults'articleparentres',
-    	 'taghashes'=>$tableresults['taghash],
+    	 Array('results' => $tableresults['articleparentres'],
+    	 'taghashes'=>$tableresults['taghash'],
     	 'firstModel' => 'Article',
     	 'currentUserID' => $currentUserID,
     	'srns_code_member'=>$tableresults['srns_code_member']
     	,$sorting_tags)); ?>
     		<?php echo $this->element('tablebody',
     	 Array('results' => $tableresults['tagparentres'],
-    	 'taghashes'=>$tableresults['taghash],
+    	 'taghashes'=>$tableresults['taghash'],
     	 'firstModel' => 'Tag',
     	 'currentUserID' => $currentUserID,
     	'srns_code_member'=>$tableresults['srns_code_member'])); ?>
@@ -28,8 +28,7 @@
 	<div id="inputfield">
 	<input type="buttun" value="Add Article" onClick="addArticle(this)">
 	<!-- 下に　$user_id $name $target_ids array リンクする対象id配列
-	これをどうにかして取り出して投げる
-	-->
+	これをどうにかして取り出して投げる-->
 		<?php echo $this->element('Input',
     	 array('ulist' => $ulist,
     	 'currentUserID'=>$currentUserID,

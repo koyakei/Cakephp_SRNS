@@ -402,10 +402,11 @@ public function beforeFilter() {
         }
 
         public function GET_all_reply(){
-        	debug($this->request->query);
-			$this->layout = "";
-    		$this->autoRender = false;
-			foreach ($this->request->data() as $and_set){
+        	$tableresults = [];
+        	$sorting_tags = [];
+// 			$this->layout = "";
+//     		$this->autoRender = false;
+			foreach ($this->request->query['searching_tag_ids'] as $and_set){
 				$result = $this->replyFinder($and_set,$sorting_tags);
 				array_push($tableresults, $result['$tableresults']);
 				array_push($sorting_tags, $result['$sorting_tags']);

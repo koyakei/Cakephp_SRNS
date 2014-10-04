@@ -141,8 +141,10 @@ public $components = array(
      * @return array
      */
     function taghashes_cutter($taghashes,$sorting_tags){
-    	foreach ($sorting_tags as $sorting_tag){
-			unset($taghashes[$sorting_tag['ID']]);
+    	if (!is_null($sorting_tags)) {
+	    	foreach ($sorting_tags as $sorting_tag){
+				unset($taghashes[$sorting_tag['ID']]);
+	    	}
     	}
     	return $taghashes;
     }
@@ -208,20 +210,24 @@ public $components = array(
     function sorting_taghash_gen($results,$taghashes,$sorting_tags){
     	$i =0;
     	foreach  ($results as $result){
-    		foreach ($result['no_sort_subtag'] as $sub_tag_key => $sub_tag_value){
-    			foreach ($sorting_tags as $hashval){
-    				if ($results[$i]['subtag'][$sub_tag_key]['Tag']['ID']
-    					!== $hashval['ID']) {
-    					$results[$i]['no_sort_subtag'][$sub_tag_key]['Tag']
-    					 = $results[$i]['subtag'][$sub_tag_key]['Tag'];
-    				}
-    			}
+    		if(!$result['no_sort_subtag'] == null){
+	    		foreach ($result['no_sort_subtag'] as $sub_tag_key => $sub_tag_value){
+	    			foreach ($sorting_tags as $hashval){
+	    				if ($results[$i]['subtag'][$sub_tag_key]['Tag']['ID']
+	    					!== $hashval['ID']) {
+	    					$results[$i]['no_sort_subtag'][$sub_tag_key]['Tag']
+	    					 = $results[$i]['subtag'][$sub_tag_key]['Tag'];
+	    				}
+	    			}
+	    		}
     		}
     		$i++;
     	}
 
 
-    	$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);
+
+    		$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);;
+
     	return array('results'=> $results,'taghashes'=>$taghashes);
     }
 

@@ -3,39 +3,28 @@
 <?php if($firstModel == 'Tag'){$userCallAssosiation = 'O';} else {$userCallAssosiation = 'O';} // アソシエーションの名前を一緒にしたが後で別にするかも?>
 <div id="draggble">
 				<tr>
-					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> >
-					echo $this->Form->input( 'entity_id', array(
-    'type' => 'checkbox',
-  'checked' => true,    // 初期表示で選択させる場合
-  'value' => $result[$firstModel]['ID']
-    'label' => true,
-    'class' = 'tag_id_for_reply'
-
-));
-					<?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
+					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
 					<td>
 					<?php if(!is_null($leaf)){ echo "<b>"; } ?>
 					<?php echo $this->element('URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>
 					<?php if(!is_null($leaf)){ echo "</b>"; } ?>
 						<?php echo $this->Form->hidden($firstModel.'.ID', array('value'=>$result[$firstModel]['ID'])); ?>
-
-						</td>
-
-					<td class="actions">
-					<div onClick='toggleShow(this);' >
+						<div onClick='toggleShow(this);' >
 						tagged
 						</div>
 						<div id='HSfield' style='display: none;'>
 							<?php foreach ($result['no_sort_subtag'] as $taghash): ?>
-									<?php if($taghash !== $sorting_tag): ?>
-										<?php echo echo $this->Html->link($taghash['name'],
+								<?php if($taghash !== $sorting_tag): ?>
+									<?php echo $this->Html->link($taghash['name'],
 										 array('controller'=> "tags",'action' => 'view', $taghash['ID'])); ?>
-										 <?php echo $taghash['Link']['quant'] + ":" + $taghash['Tag']['namename']; ?>
-										<br>
-									<?php endif; ?>
-								<?php endforeach; ?>
+									<?php echo $taghash['Link']['quant'] + ":" + $taghash['Tag']['namename']; ?>
+									<br>
+								<?php endif; ?>
 							<?php endforeach; ?>
 						</div>
+						</td>
+
+					<td class="actions">
 					<?php echo h($result[$userCallAssosiation]['username']); ?>&nbsp;
 						<div onClick='toggleShow(this);' >
 						Action

@@ -302,8 +302,11 @@ class BasicComponent extends Component {
 	 */
 	public function tribasicfiderbyidAndSet(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$ids) {
 		$modelSe = new $modelSe();
+		$andSet = [];
 		foreach ($ids as $id){
-			array_push($andSet, array("$id = Link.LFrom"));
+			if (!$id == '') {
+				array_push($andSet, array("$id = Link.LFrom"));
+			}
 		}
 		$option = array(
 				'conditions'=> array(

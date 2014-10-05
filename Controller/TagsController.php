@@ -400,18 +400,23 @@ public function beforeFilter() {
         		$this->set('users', $this->request->data['W']);
         	}
         }
-
+        function replysingle(){
+        	$options = array('key' => Configure::read('tagID.reply'));
+        	debug($this->Common->trifinderbyidAndSet($this,array(1),$options));
+        }
+        // 			$this->laysout = "";
+        //     		$this->autoRender = false;
         public function GET_all_reply(){
         	$tableresults = [];
-        	$sorting_tags = [];
-// 			$this->layout = "";
-//     		$this->autoRender = false;
+        	$sorting_tags = $this->request->query['searching_tag_ids'][0];
+
 			foreach ($this->request->query['searching_tag_ids'] as $and_set){
 				$result = $this->replyFinder($and_set,$sorting_tags);
-				array_push($tableresults, $result['$tableresults']);
-				array_push($sorting_tags, $result['$sorting_tags']);
+				array_push($tableresults, $result);
 			}
-			$this->set(compact($tableresults,$sorting_tags));
+			$this->set('t','o-i');
+			$this->set('tableresults',$tableresults);
+			$this->set('sorting_tags',$sorting_tags);
         }
         /**
          * autoSuggest method

@@ -1,6 +1,10 @@
+<?php debug($tableresults); ?>
+<?php debug($t); ?>
+dfdfdfdf
 <table class="myTable" cellpadding="0" cellspacing="0">
         <?php echo $this->element('tablehead',
          Array('taghashes'=>$taghash)); ?>
+
     <tbody>
     	<?php echo $this->element('rsorttablebody',
     	 Array('results' => $tableresults['articleparentres'],

@@ -78,11 +78,10 @@ public $components = array(
 
 
     public function beforeFilter() {
-
     	parent::beforeFilter();
     	$this->Auth->authenticate = array(
 			'Basic' => array('user' => 'admin'),
-	);
+		);
         $this->Auth->allow('login','anonymous_view','logout','ac');
 //         if (empty($this->params['registerd'])) {
 //         	// adminルーティングではない場合、認証を通さない（allow）
@@ -123,15 +122,16 @@ public $components = array(
 
     	$sorter_mended_results = $this->sorting_taghash_gen($temp['articleparentres'],$temp['taghash'],$sorting_tags);
     	$tableresults = array('taghash' =>$sorter_mended_results['taghash'],
-    			'tag' =>$temp['articleparentres'], 'article'=>$temp['tagparentres']);
+    			'articleparentres' =>$temp['articleparentres'], 'tagparentres'=>$temp['tagparentres']);
 		//$non_sorter_tagid
 
     	//sorting_tagに含まれているtagだけハッシュとして渡す
 		$currentUserID = $this->Auth->user('id');
     	$this->layout = "";
     	$this->autoRender = false;
-    	return array(compact($currentUserID,$tableresults,$sorting_tags));
+    	return $tableresults;
     }
+
 
     /**
      *

@@ -120,15 +120,13 @@ public $components = array(
     	$options = array('key' => Configure::read('tagID.reply'));
     	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
 
-    	$sorter_mended_results = $this->sorting_taghash_gen($temp['articleparentres'],$temp['taghash'],$sorting_tags);
-    	$tableresults = array('taghash' =>$sorter_mended_results['taghash'],
+//     	$sorter_mended_results = $this->sorting_taghash_gen($temp['articleparentres'],$temp['taghash'],$sorting_tags);
+    	$tableresults = array('taghash' =>$temp['taghash'],
     			'articleparentres' =>$temp['articleparentres'], 'tagparentres'=>$temp['tagparentres']);
 		//$non_sorter_tagid
 
     	//sorting_tagに含まれているtagだけハッシュとして渡す
 		$currentUserID = $this->Auth->user('id');
-    	$this->layout = "";
-    	$this->autoRender = false;
     	return $tableresults;
     }
 
@@ -143,7 +141,7 @@ public $components = array(
     function taghashes_cutter($taghashes,$sorting_tags){
     	if (!is_null($sorting_tags)) {
 	    	foreach ($sorting_tags as $sorting_tag){
-				unset($taghashes[$sorting_tag['ID']]);
+				unset($taghashes[$sorting_tag]);
 	    	}
     	}
     	return $taghashes;
@@ -214,7 +212,7 @@ public $components = array(
 	    		foreach ($result['no_sort_subtag'] as $sub_tag_key => $sub_tag_value){
 	    			foreach ($sorting_tags as $hashval){
 	    				if ($results[$i]['subtag'][$sub_tag_key]['Tag']['ID']
-	    					!== $hashval['ID']) {
+	    					!== $hashval) {
 	    					$results[$i]['no_sort_subtag'][$sub_tag_key]['Tag']
 	    					 = $results[$i]['subtag'][$sub_tag_key]['Tag'];
 	    				}

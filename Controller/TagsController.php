@@ -408,15 +408,14 @@ public function beforeFilter() {
         //     		$this->autoRender = false;
         public function GET_all_reply(){
         	$tableresults = [];
-        	$sorting_tags = $this->request->query['searching_tag_ids'][0];
+        	$sorting_tags = [];
 
 			foreach ($this->request->query['searching_tag_ids'] as $and_set){
 				$result = $this->replyFinder($and_set,$sorting_tags);
 				array_push($tableresults, $result);
 			}
-			$this->set('t','o-i');
-			$this->set('tableresults',$tableresults);
-			$this->set('sorting_tags',$sorting_tags);
+			$this->set('array_tableresults',$tableresults);
+// 			$this->set('sorting_tags',$sorting_tags);
         }
         /**
          * autoSuggest method

@@ -1,11 +1,10 @@
-<?php debug($tableresults); ?>
-<?php debug($t); ?>
-dfdfdfdf
 <table class="myTable" cellpadding="0" cellspacing="0">
         <?php echo $this->element('tablehead',
          Array('taghashes'=>$taghash)); ?>
 
     <tbody>
+    <?php foreach($array_tableresults as $tableresults): ?>
+    <?php debug($tableresults); ?>
     	<?php echo $this->element('rsorttablebody',
     	 Array('results' => $tableresults['articleparentres'],
     	 'taghashes'=>$tableresults['taghash'],
@@ -13,12 +12,8 @@ dfdfdfdf
     	 'currentUserID' => $currentUserID,
     	'srns_code_member'=>$tableresults['srns_code_member']
     	,$sorting_tags)); ?>
-    		<?php echo $this->element('tablebody',
-    	 Array('results' => $tableresults['tagparentres'],
-    	 'taghashes'=>$tableresults['taghash'],
-    	 'firstModel' => 'Tag',
-    	 'currentUserID' => $currentUserID,
-    	'srns_code_member'=>$tableresults['srns_code_member'])); ?>
+
+    <?php endforeach; ?>
 	</tbody>
 </table>
 
@@ -53,6 +48,7 @@ echo $this->AutoCompleteNoHidden->input(
     )
 );
 ?>
+
 <?php
 echo $this->Form->hidden('add_tag_id.',array('value' => '','class' => 'tag_id','id' => 'tag_id'));
 echo $this->Form->hidden('add_trikey_id.',

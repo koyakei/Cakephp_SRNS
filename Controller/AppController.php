@@ -181,14 +181,16 @@ public $components = array(
     function sorting_taghash_gen($results,&$taghashes,$sorting_tags){
     	$i =0;
     	foreach  ($results as $result){
-    		foreach ($result['subtag'] as $sub_tag_key => $sub_tag_val){
-    			foreach ($sorting_tags as $hashval){
-	    			if ($results[$i]['subtag'][$sub_tag_key]['Tag']['ID']
-	    			!== $hashval) {
-	    				$results[$i]['no_sort_subtag'][$sub_tag_key]
-	    				= $results[$i]['subtag'][$sub_tag_key];
+    		if (!is_null($result['subtag'])){
+	    		foreach ($result['subtag'] as $sub_tag_key => $sub_tag_val){
+	    			foreach ($sorting_tags as $hashval){
+		    			if ($results[$i]['subtag'][$sub_tag_key]['Tag']['ID']
+		    			!== $hashval) {
+		    				$results[$i]['no_sort_subtag'][$sub_tag_key]
+		    				= $results[$i]['subtag'][$sub_tag_key];
+		    			}
 	    			}
-    			}
+	    		}
     		}
     		$i++;
     	}

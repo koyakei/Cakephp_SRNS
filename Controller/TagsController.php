@@ -407,6 +407,7 @@ public function beforeFilter() {
         // 			$this->laysout = "";
         //     		$this->autoRender = false;
         public function GET_all_reply(){
+        	$this->loadModel('User');
         	$this->request->query['searching_tag_ids'] = array(array(1));
         	$tableresults = [];
         	$i = $this->request->query['searching_tag_ids'];
@@ -417,6 +418,8 @@ public function beforeFilter() {
 				$result = $this->replyFinder($and_set,$sorting_tags,$taghash);
 				array_push($tableresults, $result);
 			}
+			$this->set('currentUserID', $this->Auth->user('id'));
+			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 			$this->set('array_tableresults',$tableresults);
 			$this->set('sorting_tags',$sorting_tags);
 			$this->set('taghash',$taghash);

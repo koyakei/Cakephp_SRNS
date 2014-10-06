@@ -7,14 +7,14 @@
 
     	<?php echo $this->element('rsorttablebody',
     	 Array('results' => $tableresults['articleparentres'],
-    	 'taghashes'=>$tableresults['taghash'],
+    	 'taghashes'=>$taghash,
     	 'firstModel' => 'Article',
     	 'currentUserID' => $currentUserID,
     	'srns_code_member'=>$tableresults['srns_code_member']
     	,$sorting_tags)); ?>
 		<?php echo $this->element('rsorttablebody',
     	 Array('results' => $tableresults['tagparentres'],
-    	 'taghashes'=>$tableresults['taghash'],
+    	 'taghashes'=>$taghash,
     	 'firstModel' => 'Tag',
     	 'currentUserID' => $currentUserID,
     	'srns_code_member'=>$tableresults['srns_code_member'],

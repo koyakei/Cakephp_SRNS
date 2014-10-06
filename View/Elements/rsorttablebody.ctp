@@ -9,19 +9,21 @@
 					<?php echo $this->element('URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>
 					<?php if(!is_null($leaf)){ echo "</b>"; } ?>
 						<?php echo $this->Form->hidden($firstModel.'.ID', array('value'=>$result[$firstModel]['ID'])); ?>
-						<div onClick='toggleShow(this);' >
-						tagged
-						</div>
-						<div id='HSfield' style='display: none;'>
-							<?php foreach ($result['no_sort_subtag'] as $taghash): ?>
-								<?php if(!in_array($taghash,$sorting_tags)): ?>
-									<?php echo $this->Html->link($taghash['Tag']['name'],
-										 array('controller'=> "tags",'action' => 'view', $taghash['Tag']['ID'])); ?>
-									<?php echo $taghash['Link']['quant'] + ":" + $taghash['Tag']['namename']; ?>
-									<br>
-								<?php endif; ?>
-							<?php endforeach; ?>
-						</div>
+						<?php  if($result['no_sort_subtag'] != null): ?>
+							<div onClick='toggleShow(this);' >
+								tagged
+							</div>
+							<div id='HSfield' style='display: none;'>
+								<?php foreach ($result['no_sort_subtag'] as $taghash): ?>
+									<?php if(!in_array($taghash,$sorting_tags)): ?>
+										<?php echo $this->Html->link($taghash['Tag']['name'],
+											 array('controller'=> "tags",'action' => 'view', $taghash['Tag']['ID'])); ?>
+										<?php echo $taghash['Link']['quant'] + ":" + $taghash['Tag']['namename']; ?>
+										<br>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</div>
+						<?php endif; ?>
 						</td>
 
 					<td class="actions">

@@ -411,14 +411,15 @@ public function beforeFilter() {
         	$tableresults = [];
         	$i = $this->request->query['searching_tag_ids'];
         	$sorting_tags = array($i[0][0],$i[0][1],$i[1][0],$i[1][1]);
-
+        	$taghash = array();
 			foreach ($this->request->query['searching_tag_ids'] as $and_set){
 
-				$result = $this->replyFinder($and_set,$sorting_tags);
+				$result = $this->replyFinder($and_set,$sorting_tags,$taghash);
 				array_push($tableresults, $result);
 			}
 			$this->set('array_tableresults',$tableresults);
-// 			$this->set('sorting_tags',$sorting_tags);
+			$this->set('sorting_tags',$sorting_tags);
+			$this->set('taghash',$taghash);
         }
         /**
          * autoSuggest method

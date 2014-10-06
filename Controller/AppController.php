@@ -178,7 +178,7 @@ public $components = array(
      * @return array('results','taghashes')
      *
      */
-    function sorting_taghash_gen($results,$taghashes,$sorting_tags){
+    function sorting_taghash_gen($results,&$taghashes,$sorting_tags){
     	$i =0;
     	foreach  ($results as $result){
     		foreach ($result['subtag'] as $sub_tag_key => $sub_tag_val){
@@ -192,7 +192,6 @@ public $components = array(
     		}
     		$i++;
     	}
-    	debug($results);
     	$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);;
     	return array('results'=> $results,'taghashes'=>$taghashes);
     }
@@ -204,22 +203,22 @@ public $components = array(
      * @return results
      *
      */
-    function replyFinder($andSet_ids = null ,$sorting_tags = null) {
+    function replyFinder($andSet_ids = null ,$sorting_tags = null,&$taghash) {
     	if(is_null($andSet_ids)){
     		$andSet_ids = $this->request->data['andSet_ids'];
     	}
     	if(is_null($sorting_tags)){
 
     	}
-    	$taghash = array();
     	$options = array('key' => Configure::read('tagID.reply'));
     	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
 //     	debug($temp['articleparentres']);
-    	$sorter_mended_results = $this->sorting_taghash_gen($temp['articleparentres'],$temp['taghash'],$sorting_tags);
+    	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
+    	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
     	//     	debug($sorter_mended_results);
-    	$tableresults = array('taghash' =>$temp['taghash'],
-    			'articleparentres' =>$temp['articleparentres'], 'tagparentres'=>$temp['tagparentres']
-    			,'no_sort_subtag'=>$sorter_mended_results['no_sort_subtag']);
+    	$tableresults = array(
+    			'articleparentres' =>$sorter_mended_results['article']['results']
+    			,'tagparentres'=>$sorter_mended_results['tag']['results']);
     	//$non_sorter_tagid
 
     	//sorting_tagに含まれているtagだけハッシュとして渡す

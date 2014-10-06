@@ -14,9 +14,9 @@
 						</div>
 						<div id='HSfield' style='display: none;'>
 							<?php foreach ($result['no_sort_subtag'] as $taghash): ?>
-								<?php if($taghash !== $sorting_tag): ?>
-									<?php echo $this->Html->link($taghash['name'],
-										 array('controller'=> "tags",'action' => 'view', $taghash['ID'])); ?>
+								<?php if(!in_array($taghash,$sorting_tags)): ?>
+									<?php echo $this->Html->link($taghash['Tag']['name'],
+										 array('controller'=> "tags",'action' => 'view', $taghash['Tag']['ID'])); ?>
 									<?php echo $taghash['Link']['quant'] + ":" + $taghash['Tag']['namename']; ?>
 									<br>
 								<?php endif; ?>

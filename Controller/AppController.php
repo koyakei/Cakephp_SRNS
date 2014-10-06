@@ -101,34 +101,7 @@ public $components = array(
 
 
 
-    /**
-     * replyFinder method
-     * @var andSet_ids
-     *  array
-     * @var sorting_tags
-     * @return results
-     *
-     */
-    function replyFinder($andSet_ids = null ,$sorting_tags = null) {
-    	if(is_null($andSet_ids)){
-			$andSet_ids = $this->request->data['andSet_ids'];
-    	}
-    	if(is_null($sorting_tags)){
 
-    	}
-    	$taghash = array();
-    	$options = array('key' => Configure::read('tagID.reply'));
-    	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
-
-//     	$sorter_mended_results = $this->sorting_taghash_gen($temp['articleparentres'],$temp['taghash'],$sorting_tags);
-    	$tableresults = array('taghash' =>$temp['taghash'],
-    			'articleparentres' =>$temp['articleparentres'], 'tagparentres'=>$temp['tagparentres']);
-		//$non_sorter_tagid
-
-    	//sorting_tagに含まれているtagだけハッシュとして渡す
-		$currentUserID = $this->Auth->user('id');
-    	return $tableresults;
-    }
 
 
     /**
@@ -208,27 +181,51 @@ public $components = array(
     function sorting_taghash_gen($results,$taghashes,$sorting_tags){
     	$i =0;
     	foreach  ($results as $result){
-    		if(!$result['no_sort_subtag'] == null){
-	    		foreach ($result['no_sort_subtag'] as $sub_tag_key => $sub_tag_value){
-	    			foreach ($sorting_tags as $hashval){
-	    				if ($results[$i]['subtag'][$sub_tag_key]['Tag']['ID']
-	    					!== $hashval) {
-	    					$results[$i]['no_sort_subtag'][$sub_tag_key]['Tag']
-	    					 = $results[$i]['subtag'][$sub_tag_key]['Tag'];
-	    				}
+    		foreach ($result['subtag'] as $sub_tag_key => $sub_tag_val){
+    			foreach ($sorting_tags as $hashval){
+	    			if ($results[$i]['subtag'][$sub_tag_key]['Tag']['ID']
+	    			!== $hashval) {
+	    				$results[$i]['no_sort_subtag'][$sub_tag_key]
+	    				= $results[$i]['subtag'][$sub_tag_key];
 	    			}
-	    		}
+    			}
     		}
     		$i++;
     	}
-
-
-
-    		$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);;
-
+    	debug($results);
+    	$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);;
     	return array('results'=> $results,'taghashes'=>$taghashes);
     }
+    /**
+     * replyFinder method
+     * @var andSet_ids
+     *  array
+     * @var sorting_tags
+     * @return results
+     *
+     */
+    function replyFinder($andSet_ids = null ,$sorting_tags = null) {
+    	if(is_null($andSet_ids)){
+    		$andSet_ids = $this->request->data['andSet_ids'];
+    	}
+    	if(is_null($sorting_tags)){
 
+    	}
+    	$taghash = array();
+    	$options = array('key' => Configure::read('tagID.reply'));
+    	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
+//     	debug($temp['articleparentres']);
+    	$sorter_mended_results = $this->sorting_taghash_gen($temp['articleparentres'],$temp['taghash'],$sorting_tags);
+    	//     	debug($sorter_mended_results);
+    	$tableresults = array('taghash' =>$temp['taghash'],
+    			'articleparentres' =>$temp['articleparentres'], 'tagparentres'=>$temp['tagparentres']
+    			,'no_sort_subtag'=>$sorter_mended_results['no_sort_subtag']);
+    	//$non_sorter_tagid
+
+    	//sorting_tagに含まれているtagだけハッシュとして渡す
+    	$currentUserID = $this->Auth->user('id');
+    	return $tableresults;
+    }
     /**
      * GET_reply method
      * 読み込まれた情報の中にすでにあるのか判定
@@ -272,6 +269,7 @@ public $components = array(
     	);
     	return iterator_to_array($arr, false);
     }
+
     function array_values_recursive ($a = array()) {
     	$r = function ($a) use (&$r) {
     		static $v = array();

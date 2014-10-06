@@ -407,10 +407,13 @@ public function beforeFilter() {
         // 			$this->laysout = "";
         //     		$this->autoRender = false;
         public function GET_all_reply(){
+        	$this->request->query['searching_tag_ids'] = array(array(1));
         	$tableresults = [];
-        	$sorting_tags = [];
+        	$i = $this->request->query['searching_tag_ids'];
+        	$sorting_tags = array($i[0][0],$i[0][1],$i[1][0],$i[1][1]);
 
 			foreach ($this->request->query['searching_tag_ids'] as $and_set){
+
 				$result = $this->replyFinder($and_set,$sorting_tags);
 				array_push($tableresults, $result);
 			}

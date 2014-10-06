@@ -300,12 +300,14 @@ class BasicComponent extends Component {
 	 * @param array $ids and set array(int , int) 連想配列ではないただの配列
 	 * @return $that->returntribasic
 	 */
-	public function tribasicfiderbyidAndSet(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$ids) {
+	public function tribasicfiderbyidAndSet(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$ids= null) {
 		$modelSe = new $modelSe();
 		$andSet = [];
 		foreach ($ids as $id){
 			if (!$id == '') {
 				array_push($andSet, array("$id = Link.LFrom"));
+			}else {
+				return null;
 			}
 		}
 		$option = array(

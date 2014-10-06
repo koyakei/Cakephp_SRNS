@@ -4,7 +4,7 @@
 
     <tbody>
     <?php foreach($array_tableresults as $tableresults): ?>
-    <?php debug($tableresults); ?>
+
     	<?php echo $this->element('rsorttablebody',
     	 Array('results' => $tableresults['articleparentres'],
     	 'taghashes'=>$tableresults['taghash'],
@@ -12,7 +12,13 @@
     	 'currentUserID' => $currentUserID,
     	'srns_code_member'=>$tableresults['srns_code_member']
     	,$sorting_tags)); ?>
-
+		<?php echo $this->element('rsorttablebody',
+    	 Array('results' => $tableresults['tagparentres'],
+    	 'taghashes'=>$tableresults['taghash'],
+    	 'firstModel' => 'Tag',
+    	 'currentUserID' => $currentUserID,
+    	'srns_code_member'=>$tableresults['srns_code_member'],
+    	$sorting_tags)); ?>
     <?php endforeach; ?>
 	</tbody>
 </table>

@@ -111,12 +111,26 @@ public $components = array(
      * $sorting_tags= array ('ID');
      * @return array
      */
-    function taghashes_cutter($taghashes,$sorting_tags){
-    	if (!is_null($sorting_tags)) {
-	    	foreach ($sorting_tags as $sorting_tag){
-				unset($taghashes[$sorting_tag]);
-	    	}
+    function taghashes_cutter(&$taghashes,$sorting_tags){
+    	if (is_null($sorting_tags)) {
+	    	return null;
+    	}else{
+    		//　sorging　tags が hashになかったら削除
+
+
+    		foreach ($taghashes as $taghash_key => $taghash_val){
+//     			$switch = null;
+//     			foreach ($sorting_tags as $sorting_tag){
+//     				if(array_search( $taghashes[$taghash_key]['Tag']['ID'],$sorting_tags)){
+//     					$switch = $switch++;
+//     				}
+//     			}
+    			if (array_search( $taghashes[$taghash_key]['Tag']['ID'],$sorting_tags)){
+    				unset($taghashes[$taghash_key]);
+    			}
+    		}
     	}
+
     	return $taghashes;
     }
     /**

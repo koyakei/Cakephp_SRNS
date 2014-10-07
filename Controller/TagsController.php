@@ -78,6 +78,9 @@ public function beforeFilter() {
 			//$this->paginate->setting = array('order'=> array('Tag.modified' => 'DESC'));
 			$this->set('tags', $this->paginate('Tag'));
 		}
+		public function test($test){
+			return $test;
+		}
         /**
          * view method
          *
@@ -417,12 +420,14 @@ public function beforeFilter() {
 
 				$result = $this->replyFinder($and_set,$sorting_tags,$taghash);
 				array_push($tableresults, $result);
+
 			}
 			$this->set('currentUserID', $this->Auth->user('id'));
 			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 			$this->set('array_tableresults',$tableresults);
 			$this->set('sorting_tags',$sorting_tags);
 			$this->set('taghash',$taghash);
+
         }
         /**
          * autoSuggest method

@@ -322,7 +322,6 @@ class CommonComponent extends Component {
 		$tagparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
 		list($tagparentres,$taghash) =
 		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
-
 		return array('tagparentres'=>$tagparentres,
 				'articleparentres'=> $articleparentres,
 				 'taghash' => $taghash);
@@ -339,22 +338,31 @@ class CommonComponent extends Component {
 			$option['key'] = Configure::read('tagID.reply');
 		}
 		$articleparentres = $this->Basic->tribasicfiderbyidAndSet($that,$option['key'],"Article","Article.ID",$andSet_ids);//どんな記事がぶら下がっているか探す
-		$taghash = array();
+
 		list($articleparentres,$taghash) = $this->getSearchRelation($that, $articleparentres, $taghash, "Article");
 		$tagparentres = $this->Basic->tribasicfiderbyidAndSet($that,$option['key'],"Tag","Tag.ID",$andSet_ids);
-
 		list($tagparentres,$taghash) =
 		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
 		return array('tagparentres'=>$tagparentres,
 				'articleparentres'=> $articleparentres,
 				'taghash' => $taghash);
 	}
+	/**
+	 *
+	 * @param unknown $that
+	 * @param unknown $targetParent
+	 * @param unknown $taghash
+	 * @param unknown $targetModel
+	 * @return multitype:multitype:NULL  unknown
+	 */
 
 	public function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel){
 		$i = 0;
+
 		foreach ($targetParent as $result){
-			$that->taghashgen = $this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result[$targetModel]['ID'],"Tag.ID");//
-			foreach ($that->taghashgen as $tag){
+			$taghashgen = $this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result[$targetModel]['ID'],"Tag.ID");//
+
+			foreach ($taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];
 				$targetParent[$i]['subtag'][$that->subtagID] = $tag;
 				if ($taghash[$that->subtagID] == null) {
@@ -363,6 +371,7 @@ class CommonComponent extends Component {
 			}
 			$i++;
 		}
+
 		return array($targetParent,$taghash );
 	}
 

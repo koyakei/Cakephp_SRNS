@@ -71,7 +71,7 @@ class ArticlesController extends AppController {
 	public function index() {
 		parent::index();
 		$this->Article->recursive = 0;
-		$this->paginate->setting = array('order'=> array('Article.modified' => 'DESC'));
+// 		$this->paginate->setting = array('order'=> array('Article.modified' => 'DESC'));
 
 		$this->set('articles', $this->Paginator->paginate());
 	}

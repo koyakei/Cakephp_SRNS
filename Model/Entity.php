@@ -9,25 +9,13 @@ class Entity extends Date {
 
 	public $actsAs = array('Search.Searchable');
 	public $filterArgs = array(
-	        'word' => array(,
- 'type' => 'value'
-, 'field' => array('tag.name')
-, 'connectorAnd' => '+', 'connectorOr' => ','
+			'word' => array(
+	    	'type' => 'value'
+		, 	'field' => array('tag.name')
+			, 'connectorAnd' => '+', 'connectorOr' => ','
 ),
 	);
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'test';
 
-/**
- * Use table
- *
- * @var mixed False or table name
- */
-	public $useTable = 'entities';
 
 /**
  * Primary key field

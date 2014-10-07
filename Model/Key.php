@@ -8,12 +8,6 @@ App::uses('User', 'Model');
  */
 class Key extends AppModel {
 
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'test';
 
 /**
  * Use table

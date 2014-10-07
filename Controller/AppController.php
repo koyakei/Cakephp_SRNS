@@ -194,7 +194,7 @@ public $components = array(
     		}
     		$i++;
     	}
-    	$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);;
+    	$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);
     	return array('results'=> $results,'taghashes'=>$taghashes);
     }
     /**
@@ -214,16 +214,15 @@ public $components = array(
     	}
     	$options = array('key' => Configure::read('tagID.reply'));
     	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
-//     	debug($temp['articleparentres']);
+		$taghash = $temp['taghash'];
     	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
     	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
-    	//     	debug($sorter_mended_results);
+
+
     	$tableresults = array(
     			'articleparentres' =>$sorter_mended_results['article']['results']
     			,'tagparentres'=>$sorter_mended_results['tag']['results']);
-    	//$non_sorter_tagid
 
-    	//sorting_tagに含まれているtagだけハッシュとして渡す
     	$currentUserID = $this->Auth->user('id');
     	return $tableresults;
     }

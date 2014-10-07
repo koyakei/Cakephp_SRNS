@@ -9,12 +9,6 @@ App::uses('Date', 'Model');
 class Link extends Date {
 	public $actsAs = array('Search.Searchable');
 
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'test';
 
 /**
  * Use table

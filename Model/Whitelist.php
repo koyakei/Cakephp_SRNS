@@ -6,12 +6,6 @@ App::uses('AppModel', 'Model');
  */
 class Whitelist extends AppModel {
 
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'test';
 
 /**
  * Display field

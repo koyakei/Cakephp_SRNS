@@ -9,12 +9,6 @@ Configure::load("static");
  */
 class Social extends Date {
 
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'test';
 
 /**
  * Use table

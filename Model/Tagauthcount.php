@@ -6,11 +6,6 @@ App::uses('AppModel', 'Model');
  */
 class Tagauthcount extends AppModel {
 
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'test';
+
 
 }

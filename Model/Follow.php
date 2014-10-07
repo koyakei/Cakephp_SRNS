@@ -7,12 +7,6 @@ App::uses('Date', 'Model');
  */
 class Follow extends Date {
 
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'test';
 
 /**
  * Use table

@@ -34,12 +34,6 @@ class Tag extends Date {
 		return $keyword;
 	}
 
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'test';
 
 /**
  * Use table

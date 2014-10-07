@@ -17,12 +17,6 @@ class Article extends Date {
 , 'connectorAnd' => '+', 'connectorOr' => ','
 ),
 	);
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'test';
 
 /**
  * Use table

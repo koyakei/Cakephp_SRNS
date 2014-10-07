@@ -1,5 +1,6 @@
 <?php
 App::uses('TagsController', 'Controller');
+App::uses('Tag','Model');
 
 /**
  * TagsController Test Case
@@ -15,6 +16,7 @@ class TagsControllerTest extends ControllerTestCase {
 	public $fixtures = array(
 		'app.tag'
 	);
+	public $autoRender = FALSE;
 
 // 	public function testReplysingle() {
 // 		// テストデータを準備
@@ -27,8 +29,14 @@ class TagsControllerTest extends ControllerTestCase {
 // 		// 期待される結果が得られたか？
 // 		debug($result);
 // 	}
-	public function testIndex() {
-		$result = $this->testAction('/tags/index');
-		debug($result);
+	public function testTest() {
+// 		$Posts = $this->generate('Tags', array(
+// 				'models' => array(
+// 						'isAuthorized'=>true
+// 				),
+
+// 		));
+		$test = 1;
+		$this->assertContains($test, $result);
 	}
 }

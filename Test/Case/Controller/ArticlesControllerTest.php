@@ -22,6 +22,8 @@ class ArticlesControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function testIndex() {
+		$result = $this->Article->index();
+		debug($result);
 	}
 
 /**

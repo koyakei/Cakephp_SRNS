@@ -91,7 +91,7 @@ $(document).ready(function(){
 	                		//帰ってきたデータでリプライをテーブルに流す
 	                	//期待する戻り値
 	                	//
-	                	$(".body").textContent = data;
+	                	document.getElementById("body").innerHTML = data;
 	                	//ただ入れるだけが一番楽
 	                },
 

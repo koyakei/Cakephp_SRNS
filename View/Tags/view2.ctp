@@ -115,8 +115,8 @@ echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' =>
 </div>
 </fieldset>
 <BUTTON type="button" id="search" onclick="all_reply_find()">検索</BUTTON>
-<div class="body">
-
+<div id="body">
+aa
 </div>
 </body>
 </html>

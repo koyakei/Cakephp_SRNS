@@ -84,7 +84,6 @@ $(document).ready(function(){
 	        	$.ajax({
 	                type: "GET",
 	                url: "GET_all_reply",
-//	                ?serching_tag_ids[]="+ Search_conditions[0][0] +"
 	                data: {searching_tag_ids:[[Search_conditions[0][0],Search_conditions[0][1]],[Search_conditions[1][0],Search_conditions[1][1]]]},
 	                dataType:'html',
 	                success: function(data){

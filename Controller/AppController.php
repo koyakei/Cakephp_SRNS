@@ -112,6 +112,9 @@ public $components = array(
      * @return array
      */
     function taghashes_cutter(&$taghashes,$sorting_tags){
+    	if (!is_array($taghashes)) {
+    		return ;
+    	}
     	if (is_null($sorting_tags)) {
 	    	return null;
     	}else{
@@ -194,6 +197,7 @@ public $components = array(
      */
     function sorting_taghash_gen($results,&$taghashes,$sorting_tags){
     	$i =0;
+    	if (!is_array($results)) return ;
     	foreach  ($results as $result){
     		if (!is_null($result['subtag'])){
 	    		foreach ($result['subtag'] as $sub_tag_key => $sub_tag_val){
@@ -226,6 +230,7 @@ public $components = array(
     	if(is_null($sorting_tags)){
 
     	}
+
     	$options = array('key' => Configure::read('tagID.reply'));
     	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
 		$taghash = $temp['taghash'];

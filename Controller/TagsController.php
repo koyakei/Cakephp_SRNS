@@ -411,7 +411,6 @@ public function beforeFilter() {
         //     		$this->autoRender = false;
         public function GET_all_reply(){
         	$this->loadModel('User');
-        	$this->request->query['searching_tag_ids'] = array(array(1));
         	$tableresults = [];
         	$i = $this->request->query['searching_tag_ids'];
         	$sorting_tags = array($i[0][0],$i[0][1],$i[1][0],$i[1][1]);

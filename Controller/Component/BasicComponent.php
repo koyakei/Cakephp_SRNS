@@ -301,15 +301,16 @@ class BasicComponent extends Component {
 	 * @return $that->returntribasic
 	 */
 	public function tribasicfiderbyidAndSet(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$ids= null) {
+		if($ids[0] == '')return ;
 		$modelSe = new $modelSe();
 		$andSet = [];
 		foreach ($ids as $id){
-			if (!$id == '') {
-				array_push($andSet, array("$id = Link.LFrom"));
-			}else {
-				return null;
+			if ($id != '') {
+				debug($id);
+				$andSet += array("Link.LFrom =$id" );
 			}
 		}
+		debug($andSet);
 		$option = array(
 				'conditions'=> array(
 						"Link.LTo = $Ltotarget"

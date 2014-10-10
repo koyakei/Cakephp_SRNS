@@ -28,15 +28,19 @@
 </div>
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">
-	<input type="button" value="Add Article" onClick="addArticle(this)">
-	<!-- 下に　$user_id $name $target_ids array リンクする対象id配列
-	これをどうにかして取り出して投げる-->
-		<?php echo $this->Form->input('user_id', array(
+	<fieldset>
+	<?php echo $this->Form->input("Add Article", array('type'=> 'text','placeholder' => '記事　内容')); ?>
+	<?php echo $this->Form->input("Add Article", array('type'=> 'button', 'onClick' => 'addArticle(this)')); ?>
+	<?php echo $this->Form->input('user_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,
 	  'selected' => $currentUserID//['userselected']
 	,'id'=>'user_id')); ?>
+	</fieldset>
+	<!-- 下に　$user_id $name $target_ids array リンクする対象id配列
+	これをどうにかして取り出して投げる-->
+
 		<fieldset>
 		        <?php echo $this->AutoCompleteNoHidden->input(
 			    'or1.1',
@@ -55,7 +59,8 @@
 				echo $this->Form->hidden('add_tag_id.',array('value' => '','class' => 'tag_id','id' => 'tag_id'));
 			echo $this->Form->hidden('add_trikey_id.',
 				array('value' => $trikey_id,'class' => 'tag_id','id' => 'add_trikey_id')); ?>
+				<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Tag','onClick' => 'add_single_tag(this)')); ?>
 		</fieldset>
-    	 <input type="button" value="Add Tag" onClick="add_single_tag(this)">
+
 	</div>
 </div>

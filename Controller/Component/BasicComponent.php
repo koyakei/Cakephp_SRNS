@@ -306,11 +306,9 @@ class BasicComponent extends Component {
 		$andSet = [];
 		foreach ($ids as $id){
 			if ($id != '') {
-				debug($id);
 				$andSet += array("Link.LFrom =$id" );
 			}
 		}
-		debug($andSet);
 		$option = array(
 				'conditions'=> array(
 						"Link.LTo = $Ltotarget"

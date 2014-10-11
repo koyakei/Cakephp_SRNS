@@ -250,7 +250,7 @@ class BasicComponent extends Component {
 	 * @return $that->returntribasic
 	 */
 	public function tribasicfiderbyid(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$id) {
-// 		$that->loadModel($modelSe);
+
 		$modelSe = new $modelSe();
 		$option = array(
 				'conditions'=> array(

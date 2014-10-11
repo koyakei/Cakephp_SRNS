@@ -13,41 +13,10 @@ $(document).ready(function(){
 	        var newTagNodeSubmit = document.getElementById('trikey_submit');
 	    	document.getElementById('tag_id').value.onchange = function() {
 	    	document.getElementById('spesifiedtrikeylink').innerHTML = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
-	    	}
+	    	};
 	    };
-	}
 
-);
-function all_reply_finder(){
-	var i = null;
-	var Search_conditions = {};
-	Search_conditions['Searching'] = {tags:null};
-	Search_conditions['Searching']['tags']= {or:null};
-	Search_conditions['Searching']['tags']['or'] = [];
-	for(i=0;i<=1;i++){
-		Search_conditions['Searching']['tags']['or'][i] = $(".search_tag_id").children("input[name*='data[or]["+ i +"]']").map(function(index, el) { return $(this).val();});
-	}
-
-	$.ajax({
-        type: "POST",
-        url: "GET_all_reply",
-//        data:Search_conditions,
-//        success: function(data){
-//        		//帰ってきたデータでリプライをテーブルに流す
-//        	//期待する戻り値
-//        	//
-////        	$(".body").textContent = data;
-//        	//ただ入れるだけが一番楽
-//        },
-//        complete: function(data){
-////        	$(".body").textContent = data;
-//        },
-//        error: function(data){
-////        	$(".body").textContent = data;
-//        },
-
-    });
-}
+});
 function get_type(thing){
     if(thing===null)return "[object Null]"; // special case
     return Object.prototype.toString.call(thing);
@@ -68,10 +37,25 @@ function nester(data){
 	return nested;
 }
 
+
 function child_nester(data){
 	for(val in val['child']){
 
 	}
+}
+
+/**
+ * ネストを開く
+ * @param trikey 開くときのトライキー　
+ */
+function open_nest(trikey){
+
+}
+/**
+ * 今現在開いているトライキー
+ */
+function trikey_printer(){
+
 }
 /**
  *

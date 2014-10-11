@@ -37,6 +37,7 @@
 	    'options' => $ulist,
 	  'selected' => $currentUserID//['userselected']
 	,'id'=>'user_id')); ?>
+	<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
 	</fieldset>
 	<!-- 下に　$user_id $name $target_ids array リンクする対象id配列
 	これをどうにかして取り出して投げる-->
@@ -60,6 +61,7 @@
 			echo $this->Form->hidden('add_trikey_id.',
 				array('value' => $trikey_id,'class' => 'tag_id','id' => 'add_trikey_id')); ?>
 				<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Tag','onClick' => 'add_single_tag(this)')); ?>
+				<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
 		</fieldset>
 
 	</div>

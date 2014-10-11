@@ -407,6 +407,7 @@ public function beforeFilter() {
         	$options = array('key' => Configure::read('tagID.reply'));
         	debug($this->Common->trifinderbyidAndSet($this,array(1),$options));
         }
+
         // 			$this->laysout = "";
         //     		$this->autoRender = false;
         public function GET_all_reply(){
@@ -428,6 +429,28 @@ public function beforeFilter() {
 			$this->set('taghash',$taghash);
 
         }
+		/**
+		 * 一回のSQLで全部のネスト構造を一度に取ってくる
+		 * 与えられるのは検索タグの集合
+		 *
+		 */
+        public function GET_all_reply_and_nest(){
+        	$this->set('taghash',$taghash);
+
+        }
+
+        /**
+         *
+         * @param int $id
+         * @param int $trikey
+         * @return html <results, table>
+         *
+         */
+        public function get_specified_reply_by_id_and_trikey($id,$trikey){
+        	$option['key'] = trikey;
+			return $this->Common->trifinderbyid($this,$id,$option);
+        }
+
         /**
          * autoSuggest method
          *

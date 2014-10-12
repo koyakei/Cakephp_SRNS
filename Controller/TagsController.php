@@ -118,10 +118,17 @@ public function beforeFilter() {
          * @return void
          *
          */
-        public function view2() {
-        	//         	$replys = $this->GET_all_reply($this->request->Searching['tags'],$this->request->Sorting);
-        	//         	//入れ子で続きを読もうか？
-        	//         	$this->set("replys",$replys);
+        public function view2($id) {
+        	$this->loadModel("User");
+        	if ($id ==null) {
+        		$id = $this->request->query["id"];;
+        	}
+        	$result = $this->get_specified_reply_by_id_and_trikey($id,Configure::read("tagID.reply"));
+        	$this->set('currentUserID', $this->Auth->user('id'));
+        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+        	$this->set('tableresults',$result);
+        	$this->set('sorting_tags',$sorting_tags);
+        	$this->set('taghash',$result["taghash"]);
 
         }
         public function search2(){
@@ -422,7 +429,7 @@ public function beforeFilter() {
         	$taghash = array();
 			foreach ($this->request->query['searching_tag_ids'] as $and_set){
 
-				$result = $this->replyFinder($and_set,$sorting_tags,$taghash);
+				$result = $this->serchFinder($and_set,$sorting_tags,$taghash);
 				array_push($tableresults, $result);
 
 			}
@@ -434,6 +441,28 @@ public function beforeFilter() {
 
         }
 
+        public function searchFinder($andSet_ids = null ,$sorting_tags = null,&$taghash) {
+        	if(is_null($andSet_ids)){
+        		$andSet_ids = $this->request->data['andSet_ids'];
+        	}
+        	if(is_null($sorting_tags)){
+
+        	}
+
+        	$options = array('key' => Configure::read('tagID.search'));
+        	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
+        	$taghash = $temp['taghash'];
+        	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
+        	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
+
+
+        	$tableresults = array(
+        			'articleparentres' =>$sorter_mended_results['article']['results']
+        			,'tagparentres'=>$sorter_mended_results['tag']['results']);
+
+        	$currentUserID = $this->Auth->user('id');
+        	return $tableresults;
+        }
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる
 		 * 与えられるのは検索タグの集合
@@ -441,13 +470,48 @@ public function beforeFilter() {
 		 * view でネストの塊を定義しておいて,
 		 * associationで引っ張ってみるか？
 		 * replyのview化
-		 */
-        public function GET_all_reply_and_nest(){
-        	$this->set('taghash',$taghash);
+		 *
         	"SELECT * FROM tag where";
+		 */
+        public function GET_all_reply_and_nest($id = null){
+        	if ($id ==null) {
+        		$id = $this->request->query["id"];;
+        	}
+        	$result = $this->get_specified_reply_by_id_and_trikey($id,Configure::read("tagID.reply"));
+        	$this->set('currentUserID', $this->Auth->user('id'));
+        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+        	$this->set('tableresults',$result);
+        	$this->set('sorting_tags',$sorting_tags);
+        	$this->set('taghash',$result["taghash"]);
 
         }
+        /**
+         * replyFinder method
+         * @var andSet_ids
+         *  array
+         * @var sorting_tags
+         * @return results
+         *
+         */
+        function replyFinder($id = null ,$sorting_tags = null,&$taghash) {
+        	if(is_null($id)){
+        		$id = $this->request->data['id'];
+        	}
+        	if(is_null($sorting_tags)){
 
+        	}
+        	$options = array('key' => Configure::read('tagID.reply'));
+        	$temp  = $this->Common->trifinderbyid($this,$id,$options);
+        	$taghash = $temp['taghash'];
+        	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
+        	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
+        	$tableresults = array(
+        			'articleparentres' =>$sorter_mended_results['article']['results']
+        			,'tagparentres'=>$sorter_mended_results['tag']['results']);
+
+        	$currentUserID = $this->Auth->user('id');
+        	return $tableresults;
+        }
         /**
          *
          * @param int $id
@@ -456,7 +520,7 @@ public function beforeFilter() {
          *
          */
         public function get_specified_reply_by_id_and_trikey($id,$trikey){
-        	$option['key'] = trikey;
+        	$option['key'] = $trikey;
 			return $this->Common->trifinderbyid($this,$id,$option);
         }
 

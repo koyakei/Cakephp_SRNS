@@ -5,118 +5,30 @@
 <?php echo $this->Html->script("view2"); ?>
 </head>
 <body>
-	<fieldset>
-        <?php
-echo $this->AutoCompleteNoHidden->input(
-    'or1.1',
-    array(
-        'autoCompletesUrl'=>$this->Html->url(
-            array(
-                'controller'=>'tagusers',
-                'action'=>'auto_complete',
-            )
-        ),
-        'autoCompleteRequestItem'=>'autoCompleteText',
-    )
-);
-?>
-<div class="search_tag_id">
-<?php
-echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or1'));
-?>
-</div>
-</fieldset>
-AND
+<table class="myTable" cellpadding="0" cellspacing="0">
+        <?php echo $this->element('tablehead',
+         Array('taghashes'=>$taghash)); ?>
 
-	<fieldset>
-        <?php
-echo $this->AutoCompleteNoHidden->input(
-    'or1.1',
-    array(
-        'autoCompletesUrl'=>$this->Html->url(
-            array(
-                'controller'=>'tagusers',
-                'action'=>'auto_complete',
-            )
-        ),
-        'autoCompleteRequestItem'=>'autoCompleteText',
-    )
-);
-?>
-<div class="search_tag_id">
-<?php
-echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or2'));
-?>
-</div>
-</fieldset>
-	<fieldset>
-        <?php
-echo $this->AutoCompleteNoHidden->input(
-    'or1.1',
-    array(
-        'autoCompletesUrl'=>$this->Html->url(
-            array(
-                'controller'=>'tagusers',
-                'action'=>'auto_complete',
-            )
-        ),
-        'autoCompleteRequestItem'=>'autoCompleteText',
-    )
-);
-?>
-<div class="search_tag_id">
-<?php
-echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' => 'or1'));
-?>
-</div>
-</fieldset>
-AND
+    <tbody>
+    	<?php echo $this->element('rsorttablebody',
+    	 Array('results' => $tableresults['articleparentres'],
+    	 'taghashes'=>$taghash,
+    	 'firstModel' => 'Article',
+    	 'currentUserID' => $currentUserID,
+    	'srns_code_member'=>$tableresults['srns_code_member']
+    	,$sorting_tags)); ?>
+		<?php echo $this->element('rsorttablebody',
+    	 Array('results' => $tableresults['tagparentres'],
+    	 'taghashes'=>$taghash,
+    	 'firstModel' => 'Tag',
+    	 'currentUserID' => $currentUserID,
+    	'srns_code_member'=>$tableresults['srns_code_member'],
+    	$sorting_tags)); ?>
 
-	<fieldset>
-        <?php
-echo $this->AutoCompleteNoHidden->input(
-    'or1.1',
-    array(
-        'autoCompletesUrl'=>$this->Html->url(
-            array(
-                'controller'=>'tagusers',
-                'action'=>'auto_complete',
-            )
-        ),
-        'autoCompleteRequestItem'=>'autoCompleteText',
-    )
-);
-?>
-<div class="search_tag_id">
-<?php
-echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' => 'or2'));
-?>
-</div>
-</fieldset>
-	<fieldset>
-        <?php
-echo $this->AutoCompleteNoHidden->input(
-    'or1.1',
-    array(
-        'autoCompletesUrl'=>$this->Html->url(
-            array(
-                'controller'=>'tagusers',
-                'action'=>'auto_complete',
-            )
-        ),
-        'autoCompleteRequestItem'=>'autoCompleteText',
-    )
-);
-?>
-<div class="search_tag_id">
-<?php
-echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' => 'or2'));
-?>
-</div>
-</fieldset>
-<BUTTON type="button" id="search" onclick="all_reply_find()">検索</BUTTON>
+	</tbody>
+</table>
 <div id="body">
-aa
+
 </div>
 </body>
 </html>

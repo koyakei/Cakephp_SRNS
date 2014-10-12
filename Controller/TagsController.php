@@ -81,6 +81,7 @@ public function beforeFilter() {
 		public function test($test){
 			return $test;
 		}
+
         /**
          * view method
          *
@@ -122,6 +123,9 @@ public function beforeFilter() {
         	//         	//入れ子で続きを読もうか？
         	//         	$this->set("replys",$replys);
 
+        }
+        public function search2(){
+        	;
         }
         /**
          * publish excange method
@@ -410,7 +414,7 @@ public function beforeFilter() {
 
         // 			$this->laysout = "";
         //     		$this->autoRender = false;
-        public function GET_all_reply(){
+        public function GET_all_search(){
         	$this->loadModel('User');
         	$tableresults = [];
         	$i = $this->request->query['searching_tag_ids'];
@@ -429,13 +433,18 @@ public function beforeFilter() {
 			$this->set('taghash',$taghash);
 
         }
+
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる
 		 * 与えられるのは検索タグの集合
-		 *
+		 * まずは　tag_hash 以外を取ってくる
+		 * view でネストの塊を定義しておいて,
+		 * associationで引っ張ってみるか？
+		 * replyのview化
 		 */
         public function GET_all_reply_and_nest(){
         	$this->set('taghash',$taghash);
+        	"SELECT * FROM tag where";
 
         }
 

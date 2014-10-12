@@ -7,7 +7,7 @@ $(document).ready(function auto_complete(){
     	}
     	$.ajax({
             type: "GET",
-            url: "GET_all_reply",
+            url: "GET_all_search",
             data: {searching_tag_ids:[[Search_conditions[0][0],Search_conditions[0][1]],[Search_conditions[1][0],Search_conditions[1][1]]]},
             dataType:'html',
             success: function(data){

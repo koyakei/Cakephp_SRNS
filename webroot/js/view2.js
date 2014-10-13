@@ -25,19 +25,78 @@ function get_type(thing){
 
 
 /**
+ * nester method
  * 構成を変えたディレクトリを渡すと　整形してくれる関数
+ * 一度GET_all_replyで出した<table>の各行のIDを再走査してネストして出力するか、
+ * これを廃止してSQLで一度にやるのか考える。
  *var test_non_nest_data = JSON[0]{
  *	Columuns: string_data
+ * @param array ids 全部のreply id
+ *@returns nested html <table></table>
+ *ネスト構造を複数のトライキーを持っていないentityについても含めた、
+ *そのまま　innerHtml = しても良い状態で返す。
+ *
  */
-function nester(data){
+function nester(ids){
+	//現在ページに読み込まれているidのリストが渡ってくる
 	var val = null;
-	for(val in data){
+	var val = null;
+	//リストをばらして一つづつネストする対象があるかどうか確かめる
+	for(val in ids){
 		val['ID'];
+		nested = nestExist(val['ID']);
 	}
+	//複数のネスト対象があった時の処理
 	return nested;
 }
 
+/**
+ * ネストの先が他のトライキーで親から紐付いていることを確認
+ * もし存在したら、
+ * sfrom_id,  検索キー　search trikey の場合
+from_id　trikey で指定されたfrom
+, trikey ,
+ id , name , mod ,created, auth 以下普通の内容
+ のセットで返す。
+ * id name tri
+ * @param id
+ * @returns {bool}
+ */
+function nestExist(id){
+	return bool;
+}
 
+var baceWindowId = null;
+function SelectorWindow(obj){
+	baceWindowId = obj.$("table").id;
+
+}
+/*
+ * アコーディオンでtrikey の数だけ項目を作る
+ * 一つのエンティティに対してどれだけのtrikey の種類がある亜k
+ * distinct で絞るview を作る　キーはfrom側のIDにしてリスト形式で出力
+ * reply 以外になければreply に返す
+ * 重複していれば2つのアコーディオンの中に返す
+ * 各retult{"subTrikeyTag"]に持つ
+ */
+/**
+ * 閉じるボタン　onclick で呼ばれる
+ * その時に選択されている基底テーブルのIDを同様んでくるのか？
+ * それの確保 = storageBaceTableId
+ * @param newBaceId
+ * @returns {Boolean}
+ */
+function windowCloser(newBaceId){
+//消すときに新しい基底状態のウィンドウがあるか？チェック
+	if(is_null(newBaceId)){return false;}
+	//結果を返すところは呼ぶところに書いておいた方がいい
+	$('#body').innerHtml = all_reply_finder(newBaceId);
+}
+
+
+function all_reply_finder(newBaceId){
+
+}
 function child_nester(data){
 	for(val in val['child']){
 

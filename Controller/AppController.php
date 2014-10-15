@@ -215,36 +215,7 @@ public $components = array(
     	$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);
     	return array('results'=> $results,'taghashes'=>$taghashes);
     }
-    /**
-     * replyFinder method
-     * @var andSet_ids
-     *  array
-     * @var sorting_tags
-     * @return results
-     *
-     */
-    function replyFinder($andSet_ids = null ,$sorting_tags = null,&$taghash) {
-    	if(is_null($andSet_ids)){
-    		$andSet_ids = $this->request->data['andSet_ids'];
-    	}
-    	if(is_null($sorting_tags)){
 
-    	}
-
-    	$options = array('key' => Configure::read('tagID.reply'));
-    	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
-		$taghash = $temp['taghash'];
-    	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
-    	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
-
-
-    	$tableresults = array(
-    			'articleparentres' =>$sorter_mended_results['article']['results']
-    			,'tagparentres'=>$sorter_mended_results['tag']['results']);
-
-    	$currentUserID = $this->Auth->user('id');
-    	return $tableresults;
-    }
     /**
      * GET_reply method
      * 読み込まれた情報の中にすでにあるのか判定
@@ -401,7 +372,9 @@ public $components = array(
     	$headresults = $this->headview($id);
 
     	$this->Common->tagRadd($this);
+    	debug($this->request->data);
     	if($this->request->data['Article']['name'] != null){
+    		debug("in");
     		$options['key'] = $this->request->data['Article']['keyid'];
     		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
     		$this->Basic->social($this);

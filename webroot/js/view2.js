@@ -25,7 +25,7 @@ function get_type(thing){
 
 
 /**
- * nester method
+ * acordionNester method
  * 構成を変えたディレクトリを渡すと　整形してくれる関数
  * 一度GET_all_replyで出した<table>の各行のIDを再走査してネストして出力するか、
  * これを廃止してSQLで一度にやるのか考える。
@@ -37,7 +37,7 @@ function get_type(thing){
  *そのまま　innerHtml = しても良い状態で返す。
  *
  */
-function nester(ids){
+function acordionNester(ids){
 	//現在ページに読み込まれているidのリストが渡ってくる
 	var val = null;
 	var val = null;

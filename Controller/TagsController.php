@@ -492,7 +492,7 @@ public function beforeFilter() {
         public function GET_all_search(){
         	$this->loadModel('User');
         	$tableresults = [];
-        	$i = $this->request->query['searching_tag_ids'];
+
         	$sorting_tags = array($i[0][0],$i[0][1],$i[1][0],$i[1][1]);
         	$taghash = array();
 			foreach ($this->request->query['searching_tag_ids'] as $and_set){
@@ -510,19 +510,11 @@ public function beforeFilter() {
         }
 
         public function searchFinder($andSet_ids = null ,$sorting_tags = null,&$taghash) {
-        	if(is_null($andSet_ids)){
-        		$andSet_ids = $this->request->data['andSet_ids'];
-        	}
-        	if(is_null($sorting_tags)){
-
-        	}
-
         	$options = array('key' => Configure::read('tagID.search'));
         	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
         	$taghash = $temp['taghash'];
         	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
         	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
-
 
         	$tableresults = array(
         			'articleparentres' =>$sorter_mended_results['article']['results']

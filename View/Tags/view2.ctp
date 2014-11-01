@@ -2,33 +2,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<?php echo $this->Html->script("view2"); ?>
+	<?php echo $this->Html->script(array("view2","accordion")); ?>
 </head>
 <body>
-<table class="myTable" cellpadding="0" cellspacing="0">
-<colgroup span="4"></colgroup>
-<colgroup class="taghash" span="15"></colgroup>
-        <?php echo $this->element('tablehead',
-         Array('taghashes'=>$taghash)); ?>
-    <tbody>
-    	<?php echo $this->element('rsorttablebody',
-    	 Array('results' => $tableresults['articleparentres'],
-    	 'taghashes'=>$taghash,
-    	 'firstModel' => 'Article',
-    	 'currentUserID' => $currentUserID,
-    	'srns_code_member'=>$tableresults['srns_code_member']
-    	,$sorting_tags)); ?>
-		<?php echo $this->element('rsorttablebody',
-    	 Array('results' => $tableresults['tagparentres'],
-    	 'taghashes'=>$taghash,
-    	 'firstModel' => 'Tag',
-    	 'currentUserID' => $currentUserID,
-    	'srns_code_member'=>$tableresults['srns_code_member'],
-    	$sorting_tags)); ?>
-
-	</tbody>
-</table>
-<div id="acordion">
+	<ul class="accordion">
+		<?php foreach ($all_results as $allresult): ?>
+			<?php echo $this->element('accordion/table_reply'); ?>
+		<?php endforeach; ?>
+	</ul>
 <!-- アコーディオンパネルをここに設置する
 taghashみたいに各ネストごとにループして配置
 ネストが入れ子になっている時の動作を考える。
@@ -39,6 +20,6 @@ taghashみたいに各ネストごとにループして配置
 
 -->
 
-</div>
+
 </body>
 </html>

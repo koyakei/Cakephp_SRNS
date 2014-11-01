@@ -1,44 +1,25 @@
-<table class="myTable" cellpadding="0" cellspacing="0">
-        <?php echo $this->element('tablehead',
-         Array('taghashes'=>$taghash)); ?>
-
-    <tbody>
-    <?php foreach($array_tableresults as $tableresults): ?>
-
-    	<?php echo $this->element('rsorttablebody',
-    	 Array('results' => $tableresults['articleparentres'],
-    	 'taghashes'=>$taghash,
-    	 'firstModel' => 'Article',
-    	 'currentUserID' => $currentUserID,
-    	'srns_code_member'=>$tableresults['srns_code_member']
-    	,$sorting_tags)); ?>
-		<?php echo $this->element('rsorttablebody',
-    	 Array('results' => $tableresults['tagparentres'],
-    	 'taghashes'=>$taghash,
-    	 'firstModel' => 'Tag',
-    	 'currentUserID' => $currentUserID,
-    	'srns_code_member'=>$tableresults['srns_code_member'],
-    	$sorting_tags)); ?>
-    <?php endforeach; ?>
-	</tbody>
-</table>
+<ul class="accordion">
+	<?php foreach ($all_results as $allresult): ?>
+		<?php echo $this->element('accordion/table_reply'); ?>
+	<?php endforeach; ?>
+</ul>
 
 <div onClick='toggleShow(this);' >
 	add
 </div>
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">
-	<fieldset>
-	<?php echo $this->Form->input("Add Article", array('type'=> 'text','placeholder' => '記事　内容')); ?>
-	<?php echo $this->Form->input("Add Article", array('type'=> 'button', 'onClick' => 'addArticle(this)')); ?>
-	<?php echo $this->Form->input('user_id', array(
-	    'type' => 'select',
-	    'multiple'=> false,
-	    'options' => $ulist,
-	  'selected' => $currentUserID//['userselected']
-	,'id'=>'user_id')); ?>
-	<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
-	</fieldset>
+		<fieldset>
+		<?php echo $this->Form->input("Add Article", array('type'=> 'text','placeholder' => '記事　内容')); ?>
+		<?php echo $this->Form->input("Add Article", array('type'=> 'button', 'onClick' => 'addArticle(this)')); ?>
+		<?php echo $this->Form->input('user_id', array(
+		    'type' => 'select',
+		    'multiple'=> false,
+		    'options' => $ulist,
+		  'selected' => $currentUserID//['userselected']
+		,'id'=>'user_id')); ?>
+		<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
+		</fieldset>
 	<!-- 下に　$user_id $name $target_ids array リンクする対象id配列
 	これをどうにかして取り出して投げる-->
 

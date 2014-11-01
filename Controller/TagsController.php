@@ -120,20 +120,21 @@ public function beforeFilter() {
          */
         public function view2($id) {
         	//$this->request->query('trikey_filter'); トライキーのフィルター
+        	$base_trikey = Configure::read("tagID.reply");
         	$this->loadModel("User");
         	if ($id ==null) {
         		$id = $this->request->query["id"];;
         	}
-        	$all_trikeis = $this->Trikey_list->find('all',array('conditions'=> array('Trikey_list.id' => $id)));
+        	//ここにNOTを入れるかな
+        	$all_trikeis = $this->Trikey_list->find('all',array('conditions'=>
+        			array('Trikey_list.id' => $id,'NOT' => array('Trikey_list.LFrom' => $base_trikey)))
+        	);
         	if(!is_null($all_trikeis)){
 	        	foreach ($all_trikeis as $trikey){
-	        		$result["$trikey"] = $this->get_specified_reply_by_id_and_trikey($id,$trikey);
+	        			$result["$trikey"] = $this->get_specified_reply_by_id_and_trikey($id,$trikey);
 	        	}
         	}
-        	$base_node =$result[Configure::read("tagID.reply")];
 			$non_base_result = $result;
-
-			unset($non_base_result[Configure::read("tagID.reply")]);
 			$collected_result = reply_node_cutter($non_base_result,$result[Configure::read("tagID.reply")]);
 
         	$this->set('currentUserID', $this->Auth->user('id'));
@@ -148,16 +149,10 @@ public function beforeFilter() {
         	if (is_null($base_trikey)){
         		$base_trikey = Configure::read("tagID.reply");
         	}
-        	$this->Trikey_list->find('all',
+        	$trikey_list = $this->Trikey_list->find('all',
         			array('condition' => array('id'=> $id ,'NOT'=> array('LFrom' =>$base_trikey)))
         	);
-        	foreach ($bace_node as $needle){
-        		$exsist_id = array_search($needle, $non_bace_node);
-        		if ($exsist_id) {
-        			unset($result[$base_trikey][$model]["ID"][$exsist_id]);
-        		}
-
-        	}
+        	//各trikey ごとに結果を取得
         	$collected_result = $non_bace_node;
         	//ベースノードを取得
         	$collected_result[$bace_trikey] = $this->get_specified_reply_by_id_and_trikey($id, $trikey);

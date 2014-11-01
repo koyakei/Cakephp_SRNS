@@ -119,16 +119,89 @@ public function beforeFilter() {
          *
          */
         public function view2($id) {
+        	//$this->request->query('trikey_filter'); トライキーのフィルター
         	$this->loadModel("User");
         	if ($id ==null) {
         		$id = $this->request->query["id"];;
         	}
-        	$result = $this->get_specified_reply_by_id_and_trikey($id,Configure::read("tagID.reply"));
+        	$all_trikeis = $this->Trikey_list->find('all',array('conditions'=> array('Trikey_list.id' => $id)));
+        	if(!is_null($all_trikeis)){
+	        	foreach ($all_trikeis as $trikey){
+	        		$result["$trikey"] = $this->get_specified_reply_by_id_and_trikey($id,$trikey);
+	        	}
+        	}
+        	$base_node =$result[Configure::read("tagID.reply")];
+			$non_base_result = $result;
+
+			unset($non_base_result[Configure::read("tagID.reply")]);
+			$collected_result = reply_node_cutter($non_base_result,$result[Configure::read("tagID.reply")]);
+
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-        	$this->set('tableresults',$result);
+        	//$collected_result[$trikey]["Model"}[ID] こんなかんじで
+        	$this->set('tableresults',$collected_result);
         	$this->set('sorting_tags',$sorting_tags);
         	$this->set('taghash',$result["taghash"]);
+
+        }
+        private function reply_node_cutter($non_bace_node,$bace_node,$base_trikey){
+        	if (is_null($base_trikey)){
+        		$base_trikey = Configure::read("tagID.reply");
+        	}
+        	$this->Trikey_list->find('all',
+        			array('condition' => array('id'=> $id ,'NOT'=> array('LFrom' =>$base_trikey)))
+        	);
+        	foreach ($bace_node as $needle){
+        		$exsist_id = array_search($needle, $non_bace_node);
+        		if ($exsist_id) {
+        			unset($result[$base_trikey][$model]["ID"][$exsist_id]);
+        		}
+
+        	}
+        	$collected_result = $non_bace_node;
+        	//ベースノードを取得
+        	$collected_result[$bace_trikey] = $this->get_specified_reply_by_id_and_trikey($id, $trikey);
+        	return $collected_result;
+        }
+        private function GET_base_node($id,$bace_trikey){
+        	$db_Base_trikey_tag = $this->Base_trikey_tag->getDataSource();
+        	$bace_id =
+        	$conditionsSubQuery['AND'] = array('"Trikey_list"."id"' => $id ,'`base_trikey_tag`.`trikey_id` !='.$bace_id);
+        	$subQuery = $db_Trikey_list->buildStatement(
+        			array(
+        					'fields'     => array('"Trikey_list"."LFrom"'),
+        					'table'      => $db->fullTableName($this->Trikey_list),
+        					'limit'      => null,
+        					'offset'     => null,
+        					'joins'      => array(),
+        					'conditions' => $conditionsSubQuery,
+        					'order'      => null,
+        					'group'      => null
+        			),
+        			$this->Base_trikey_tag
+        	);
+        	//一番親の　WHERE
+        	$subQuery = '`base_trikey_tag`.`trikey_id` = '. $base_trikey .'
+        			AND' .$this->and_gen($id) .' AND `base_trikey_tag`.`ID` NOT IN (' . $subQuery_parent . ')';
+        	$subQueryExpression = $db_Base_trikey_tag->expression($subQuery);
+
+        	$conditions[] = $subQueryExpression;
+        	return $this->Base_trikey_tag->find('all', compact('conditions'));
+        }
+        private function and_gen($id){
+        	if(!is_array($id)){
+        		return "`base_trikey_tag`.`link_LFrom` = '. $id .'";
+
+        	}else {
+        		$array_length = count($id);
+        		foreach ($id as $key => $value){
+        			$condition_query = $condition_query."`base_trikey_tag`.`link_LFrom` = '. $value .'";
+        			if($key < ($array_length - 1)){
+        				$condition_query = $condition_query. "AND";
+        			}
+        		}
+    			return $condition_query;
+        	}
 
         }
         public function search2(){

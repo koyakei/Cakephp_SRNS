@@ -66,9 +66,16 @@ function nestExist(id){
 	return bool;
 }
 
-var baceWindowId = null;
-function SelectorWindow(obj){
-	baceWindowId = obj.$("table").id;
+var rootWindowId = null; //ルートのターゲットを一意に決める
+
+/**
+ * 根本のIDを取ってくる
+ * 葉っぱと根本を結ぶとどのReplyIdをエンティティーとともに追加するか
+ * わかる
+ * @param obj
+ */
+function getRootId(obj){
+	rootWindowId = obj.$("table").id;
 
 }
 /*

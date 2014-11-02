@@ -334,7 +334,7 @@ class CommonComponent extends Component {
 	 * @param unknown $option
 	 * @return multitype:unknown multitype:multitype:NULL  unknown
 	 */
-	public function trifinderbyidAndSet(&$that = null,$andSet_ids,&$option) {
+	public function trifinderbyidAndSet(&$that,$andSet_ids,&$option = null) {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}

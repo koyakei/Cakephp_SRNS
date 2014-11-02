@@ -119,32 +119,80 @@ public function beforeFilter() {
          *
          */
         public function view2($id) {
+        	$all_node = $this->Tag->find('first','condition');//全部の情報
         	//$this->request->query('trikey_filter'); トライキーのフィルター
         	$base_trikey = Configure::read("tagID.reply");
         	$this->loadModel("User");
         	if ($id ==null) {
         		$id = $this->request->query["id"];;
         	}
-        	//ここにNOTを入れるかな
         	$all_trikeis = $this->Trikey_list->find('all',array('conditions'=>
         			array('Trikey_list.id' => $id,'NOT' => array('Trikey_list.LFrom' => $base_trikey)))
         	);
-        	if(!is_null($all_trikeis)){
-	        	foreach ($all_trikeis as $trikey){
-	        			$result["$trikey"] = $this->get_specified_reply_by_id_and_trikey($id,$trikey);
-	        	}
-        	}
-			$non_base_result = $result;
-			$collected_result = reply_node_cutter($non_base_result,$result[Configure::read("tagID.reply")]);
+        	//base_nodeを取得
+        	$all_node = $this->get_child("Tag",$all_node,$id,$base_id,$base_trikey);
+			//base_trikeyのみに関連付けられているエンティティーを取得
+			$all_node["$base_trikey"] = $this->get_reply_by_id_and_trikey_without_base($id,$base_trikey);
+// 			$non_base_result = $result;
+// 			$collected_result = reply_node_cutter($non_base_result,$result[Configure::read("tagID.reply")]);
 
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	//$collected_result[$trikey]["Model"}[ID] こんなかんじで
-        	$this->set('tableresults',$collected_result);
+        	$this->set('tableresults',all_node);
         	$this->set('sorting_tags',$sorting_tags);
         	$this->set('taghash',$result["taghash"]);
 
         }
+		/**
+		 * 子供を取得して親の[child_node][model]にくっつける
+		 * @param unknown $parent_entity
+		 * @param unknown $base_id
+		 * @param unknown $base_trikey
+		 */
+		public function get_reply_non_base_by_entity(&$parent_entity,$base_id,$base_trikey,$model = tag,$primarykey = id){
+			$parent_node_ids = $this->get_parent_id($parent_entity,"Base_trikey_tag".lcfirst("tag"),"id");
+			//取得した結果をforeachで回す
+			foreach ($parent_node_ids as $id){
+				//なんで子供への代入が二回出てくるんだ？
+				$entity["child_node"]["$model"]  = $this->get_child("tag",$parent_entity,$id,$base_id,$base_trikey);
+				//$this->get_child("article");
+			}
+		}
+
+		/**
+		 *
+		 * @param unknown $model
+		 * @param unknown $id
+		 * @param unknown $base_id
+		 * @param unknown $base_trikey
+		 * @return unknown
+		 */
+        public function get_child(&$model,$entity,$id,&$base_id,&$base_trikey){
+
+        	$child_node = get_child_node($id,$base_id,$base_trikey); //
+        	if(!is_null($child_node)){
+        		$entity["child_node"]["$model"] = $child_node;
+        		//子ノードがあれば孫ノードを探させる
+        		$this->get_reply_non_base_by_entity($entity["child_node"]["$model"], $base_id, $base_trikey);
+        	}
+			return $entity;
+        }
+
+        public function get_reply_by_trikeis($trikeis,$id){
+        	foreach ($all_trikeis as $trikey){
+        		$result["$trikey"] = $this->get_specified_reply_by_id_and_trikey($id,$trikey);
+        	}
+        	return $result;
+        }
+		public function get_parent_id($node,$model,$primary_key){
+			$node_id = array();
+			foreach ($node as $leaf){
+				$node_id += $leaf[$model][$primary_key];
+			}
+			return $node_id;
+		}
+
         private function reply_node_cutter($non_bace_node,$bace_node,$base_trikey){
         	if (is_null($base_trikey)){
         		$base_trikey = Configure::read("tagID.reply");
@@ -497,7 +545,7 @@ public function beforeFilter() {
         	$taghash = array();
 			foreach ($this->request->query['searching_tag_ids'] as $and_set){
 
-				$result = $this->serchFinder($and_set,$sorting_tags,$taghash);
+				$result = $this->GET_reply($and_set,$sorting_tags,$taghash);
 				array_push($tableresults, $result);
 
 			}
@@ -509,7 +557,7 @@ public function beforeFilter() {
 
         }
 
-        public function searchFinder($andSet_ids = null ,$sorting_tags = null,&$taghash) {
+        public function GET_reply($andSet_ids = null ,$sorting_tags = null,&$taghash) {
         	$options = array('key' => Configure::read('tagID.search'));
         	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
         	$taghash = $temp['taghash'];

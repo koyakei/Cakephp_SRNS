@@ -144,8 +144,26 @@ public function beforeFilter() {
         	$this->set('taghash',$result["taghash"]);
 
         }
+        /**
+         *　idを指定して子供を取得
+         * 子供を取得して親の[child_node][model]にくっつける
+         * @param unknown $model
+         * @param unknown $id
+         * @param unknown $base_id
+         * @param unknown $base_trikey
+         * @return unknown
+         */
+        public function get_child(&$model,$entity,$id,&$base_id,&$base_trikey){
+        	$child_node = get_child_node($id,$base_id,$base_trikey); //
+        	if(!is_null($child_node)){
+        		$entity["child_node"]["$model"] = $child_node;
+        		//子ノードがあれば孫ノードを探させる
+        		$this->get_reply_non_base_by_entity($entity["child_node"]["$model"], $base_id, $base_trikey);
+        	}
+        	return $entity;
+        }
 		/**
-		 * 子供を取得して親の[child_node][model]にくっつける
+		 *　データ配列からidを抽出して取得に回す
 		 * @param unknown $parent_entity
 		 * @param unknown $base_id
 		 * @param unknown $base_trikey
@@ -153,44 +171,11 @@ public function beforeFilter() {
 		public function get_reply_non_base_by_entity(&$parent_entity,$base_id,$base_trikey,$model = tag,$primarykey = id){
 			$parent_node_ids = $this->get_parent_id($parent_entity,"Base_trikey_tag".lcfirst("tag"),"id");
 			//取得した結果をforeachで回す
+			//id取得時もループを回しているのが気に入らないループは一回にしたい
 			foreach ($parent_node_ids as $id){
-				//なんで子供への代入が二回出てくるんだ？
-				$entity["child_node"]["$model"]  = $this->get_child("tag",$parent_entity,$id,$base_id,$base_trikey);
+				 $this->get_child("tag",$parent_entity,$id,$base_id,$base_trikey);
 				//$this->get_child("article");
 			}
-		}
-
-		/**
-		 *
-		 * @param unknown $model
-		 * @param unknown $id
-		 * @param unknown $base_id
-		 * @param unknown $base_trikey
-		 * @return unknown
-		 */
-        public function get_child(&$model,$entity,$id,&$base_id,&$base_trikey){
-
-        	$child_node = get_child_node($id,$base_id,$base_trikey); //
-        	if(!is_null($child_node)){
-        		$entity["child_node"]["$model"] = $child_node;
-        		//子ノードがあれば孫ノードを探させる
-        		$this->get_reply_non_base_by_entity($entity["child_node"]["$model"], $base_id, $base_trikey);
-        	}
-			return $entity;
-        }
-
-        public function get_reply_by_trikeis($trikeis,$id){
-        	foreach ($all_trikeis as $trikey){
-        		$result["$trikey"] = $this->get_specified_reply_by_id_and_trikey($id,$trikey);
-        	}
-        	return $result;
-        }
-		public function get_parent_id($node,$model,$primary_key){
-			$node_id = array();
-			foreach ($node as $leaf){
-				$node_id += $leaf[$model][$primary_key];
-			}
-			return $node_id;
 		}
 
         private function reply_node_cutter($non_bace_node,$bace_node,$base_trikey){

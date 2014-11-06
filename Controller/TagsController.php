@@ -118,8 +118,8 @@ public function beforeFilter() {
          * @return void
          *
          */
-        public function view2($id) {
-        	$all_node = $this->Tag->find('first','condition');//全部の情報
+        public function view2($id,$base_trikey) {
+        	$all_node = null;//全部の情報
         	//$this->request->query('trikey_filter'); トライキーのフィルター
         	$base_trikey = Configure::read("tagID.reply");
         	$this->loadModel("User");
@@ -130,20 +130,21 @@ public function beforeFilter() {
         			array('Trikey_list.id' => $id,'NOT' => array('Trikey_list.LFrom' => $base_trikey)))
         	);
         	//base_nodeを取得
-        	$all_node = $this->get_child("Tag",$all_node,$id,$base_id,$base_trikey);
+        	$base_id = $id;
+
+        	$all_node = $this->get_child("Base_trikey_entity",$all_node,$id,$base_id,$base_trikey);
 			//base_trikeyのみに関連付けられているエンティティーを取得
 			$all_node["$base_trikey"] = $this->get_reply_by_id_and_trikey_without_base($id,$base_trikey);
-// 			$non_base_result = $result;
-// 			$collected_result = reply_node_cutter($non_base_result,$result[Configure::read("tagID.reply")]);
 
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	//$collected_result[$trikey]["Model"}[ID] こんなかんじで
-        	$this->set('tableresults',all_node);
+        	$this->set('tableresults',$all_node);
         	$this->set('sorting_tags',$sorting_tags);
         	$this->set('taghash',$result["taghash"]);
 
         }
+
         /**
          *　idを指定して子供を取得
          * 子供を取得して親の[child_node][model]にくっつける
@@ -154,26 +155,119 @@ public function beforeFilter() {
          * @return unknown
          */
         public function get_child(&$model,$entity,$id,&$base_id,&$base_trikey){
-        	$child_node = get_child_node($id,$base_id,$base_trikey); //
+        	$child_node = get_child_each_model($id,$base_id,$base_trikey);
         	if(!is_null($child_node)){
-        		$entity["child_node"]["$model"] = $child_node;
-        		//子ノードがあれば孫ノードを探させる
-        		$this->get_reply_non_base_by_entity($entity["child_node"]["$model"], $base_id, $base_trikey);
+        		$entity["child_node"] = $child_node;
         	}
         	return $entity;
         }
+        /**
+         *  entity の切り替えのための残してある
+         * @param unknown $id
+         * @param unknown $base_id
+         * @param unknown $base_trikey
+         * @return multitype:
+         */
+        public function get_child_each_model($id,$base_id,$base_trikey){
+        	$child_node = get_child_node($id,$base_id,$base_trikey,"Base_trikey_entity");
+
+        	return compact($child_node);
+        }
+
+
 		/**
 		 *　データ配列からidを抽出して取得に回す
 		 * @param unknown $parent_entity
 		 * @param unknown $base_id
 		 * @param unknown $base_trikey
 		 */
-		public function get_reply_non_base_by_entity(&$parent_entity,$base_id,$base_trikey,$model = tag,$primarykey = id){
-			$parent_node_ids = $this->get_parent_id($parent_entity,"Base_trikey_tag".lcfirst("tag"),"id");
+		public function get_reply_non_base_by_entity(&$parent_entities,$base_id,$base_trikey,$model = "Base_trikey_tag",$primarykey = "id"){
 			//取得した結果をforeachで回す
 			//id取得時もループを回しているのが気に入らないループは一回にしたい
-			foreach ($parent_node_ids as $id){
-				 $this->get_child("tag",$parent_entity,$id,$base_id,$base_trikey);
+			foreach ($parent_entities as $parent_entity){
+				$parent_entities[] = $this->get_child($model,$parent_entity["$model"]["ID"],$id,$base_id,$base_trikey);
+				//$this->get_child("article");
+			}
+
+		}
+		/**
+		 * tag とarticle ２つ取ってくる必要がある
+		 * @param unknown $id
+		 * @param unknown $base_id
+		 * @param unknown $base_trikey
+		 * @param unknown $model
+		 * @return array(　"Base_trikey_tag" , "Base_trikey_article")
+		 */
+		public function get_child_node($id,$base_id,$base_trikey,$model){
+			$trikey = $this->Trikey_list->find('all',array('conditions' => array("Trikey_list.id" =>$id )));
+			$db_Base_trikey_tag = $this->Base_trikey_tag->getDataSource();
+			foreach ($trikeys as  $trikey){
+				$conditionsSubQuery['AND'] =
+				array('"Base_trikey_tag"."link_LFrom" ' => $base_id ,'"Base_trikey_tag"."trikey_id" ='.$trikey["Trikey_list"]["LFrom"]);
+				$subQuery = $db_Base_trikey_tag->buildStatement(
+						array(
+								'fields'     => array('"Trikey_list"."LFrom"'),
+								'table'      => $db->fullTableName($this->Base_trikey_tag),
+								'limit'      => null,
+								'offset'     => null,
+								'joins'      => array(),
+								'conditions' => $conditionsSubQuery,
+								'order'      => null,
+								'group'      => null
+						),
+						$this->Base_trikey_tag
+				);
+				//一番親の　WHERE
+				$subQuery = '"base_trikey_tag"."trikey_id" = '. $base_trikey .'
+	        			AND' .$this->and_gen($id) .' AND "base_trikey_tag"."ID" IN (' . $subQuery_parent . ')';
+				$subQueryExpression = $db_Base_trikey_tag->expression($subQuery);
+
+				$conditions[] = $subQueryExpression;
+				$results["$trikey"] = $this->Base_trikey_tag->find('all', compact('conditions'));
+				foreach ($results["$trikey"] as $iterator => $child_result){
+					$results["$trikey"][$iterator]
+					 = $this->get_child_each_model($child_result["Base_trikey_entity"], $base_id, $base_trikey);
+				}
+
+			}
+			//t and a 両方取る
+			return $results;
+		}
+		private function GET_base_node($id,$bace_trikey){
+
+		}
+		private function and_gen($id){
+			if(!is_array($id)){
+				return "`base_trikey_tag`.`link_LFrom` = '. $id .'";
+
+			}else {
+				$array_length = count($id);
+				foreach ($id as $key => $value){
+				$condition_query = $condition_query."`base_trikey_tag`.`link_LFrom` = '. $value .'";
+				if($key < ($array_length - 1)){
+				$condition_query = $condition_query. "AND";
+				}
+				}
+					return $condition_query;
+				}
+
+				}
+				public function search2(){
+					;
+				}
+		public function get_parent_id($parent_entities,$model,$primarykey){
+			if ($model == "Base_trikey_tag"){
+
+			}else {
+
+			}
+			foreach ($parent_entities as $parent_entity){
+				if (!is_null($parent_entity["$model"]["ID"])) {
+					$this->get_child($model,$parent_entity["$model"]["ID"],$id,$base_id,$base_trikey);
+				}else{
+					$this->get_child($model,$parent_entity["$2nd_model"]["ID"],$id,$base_id,$base_trikey);
+				}
+
 				//$this->get_child("article");
 			}
 		}
@@ -191,50 +285,8 @@ public function beforeFilter() {
         	$collected_result[$bace_trikey] = $this->get_specified_reply_by_id_and_trikey($id, $trikey);
         	return $collected_result;
         }
-        private function GET_base_node($id,$bace_trikey){
-        	$db_Base_trikey_tag = $this->Base_trikey_tag->getDataSource();
-        	$bace_id =
-        	$conditionsSubQuery['AND'] = array('"Trikey_list"."id"' => $id ,'`base_trikey_tag`.`trikey_id` !='.$bace_id);
-        	$subQuery = $db_Trikey_list->buildStatement(
-        			array(
-        					'fields'     => array('"Trikey_list"."LFrom"'),
-        					'table'      => $db->fullTableName($this->Trikey_list),
-        					'limit'      => null,
-        					'offset'     => null,
-        					'joins'      => array(),
-        					'conditions' => $conditionsSubQuery,
-        					'order'      => null,
-        					'group'      => null
-        			),
-        			$this->Base_trikey_tag
-        	);
-        	//一番親の　WHERE
-        	$subQuery = '`base_trikey_tag`.`trikey_id` = '. $base_trikey .'
-        			AND' .$this->and_gen($id) .' AND `base_trikey_tag`.`ID` NOT IN (' . $subQuery_parent . ')';
-        	$subQueryExpression = $db_Base_trikey_tag->expression($subQuery);
 
-        	$conditions[] = $subQueryExpression;
-        	return $this->Base_trikey_tag->find('all', compact('conditions'));
-        }
-        private function and_gen($id){
-        	if(!is_array($id)){
-        		return "`base_trikey_tag`.`link_LFrom` = '. $id .'";
 
-        	}else {
-        		$array_length = count($id);
-        		foreach ($id as $key => $value){
-        			$condition_query = $condition_query."`base_trikey_tag`.`link_LFrom` = '. $value .'";
-        			if($key < ($array_length - 1)){
-        				$condition_query = $condition_query. "AND";
-        			}
-        		}
-    			return $condition_query;
-        	}
-
-        }
-        public function search2(){
-        	;
-        }
         /**
          * publish excange method
          *

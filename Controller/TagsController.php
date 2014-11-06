@@ -169,45 +169,30 @@ public function beforeFilter() {
          * @return multitype:
          */
         public function get_child_each_model($id,$base_id,$base_trikey){
-        	$child_node = get_child_node($id,$base_id,$base_trikey,"Base_trikey_entity");
-
-        	return compact($child_node);
+//         	$res += get_child_node($id,$base_id,$base_trikey,"Base_trikey_tag");
+//         	$res += get_child_node($id,$base_id,$base_trikey,"Base_trikey_article");
+        	$res += get_child_node($id,$base_id,$base_trikey,"Base_trikey_entity");
+        	return $res;
         }
 
-
-		/**
-		 *　データ配列からidを抽出して取得に回す
-		 * @param unknown $parent_entity
-		 * @param unknown $base_id
-		 * @param unknown $base_trikey
-		 */
-		public function get_reply_non_base_by_entity(&$parent_entities,$base_id,$base_trikey,$model = "Base_trikey_tag",$primarykey = "id"){
-			//取得した結果をforeachで回す
-			//id取得時もループを回しているのが気に入らないループは一回にしたい
-			foreach ($parent_entities as $parent_entity){
-				$parent_entities[] = $this->get_child($model,$parent_entity["$model"]["ID"],$id,$base_id,$base_trikey);
-				//$this->get_child("article");
-			}
-
-		}
 		/**
 		 * tag とarticle ２つ取ってくる必要がある
 		 * @param unknown $id
 		 * @param unknown $base_id
 		 * @param unknown $base_trikey
-		 * @param unknown $model
+		 * @param string $model  child model name
 		 * @return array(　"Base_trikey_tag" , "Base_trikey_article")
 		 */
 		public function get_child_node($id,$base_id,$base_trikey,$model){
 			$trikey = $this->Trikey_list->find('all',array('conditions' => array("Trikey_list.id" =>$id )));
-			$db_Base_trikey_tag = $this->Base_trikey_tag->getDataSource();
+			$db_Base_trikey_entity = $this->{$model}->getDataSource();
 			foreach ($trikeys as  $trikey){
 				$conditionsSubQuery['AND'] =
-				array('"Base_trikey_tag"."link_LFrom" ' => $base_id ,'"Base_trikey_tag"."trikey_id" ='.$trikey["Trikey_list"]["LFrom"]);
+				array('"' . $model . '"."link_LFrom" ' => $base_id ,'"' . $model . '"."trikey_id" ='.$trikey["Trikey_list"]["LFrom"]);
 				$subQuery = $db_Base_trikey_tag->buildStatement(
 						array(
 								'fields'     => array('"Trikey_list"."LFrom"'),
-								'table'      => $db->fullTableName($this->Base_trikey_tag),
+								'table'      => $db->fullTableName($this->{$model}),
 								'limit'      => null,
 								'offset'     => null,
 								'joins'      => array(),
@@ -215,26 +200,26 @@ public function beforeFilter() {
 								'order'      => null,
 								'group'      => null
 						),
-						$this->Base_trikey_tag
-				);
+						$this->{$model}				);
 				//一番親の　WHERE
-				$subQuery = '"base_trikey_tag"."trikey_id" = '. $base_trikey .'
-	        			AND' .$this->and_gen($id) .' AND "base_trikey_tag"."ID" IN (' . $subQuery_parent . ')';
-				$subQueryExpression = $db_Base_trikey_tag->expression($subQuery);
-
+				$subQuery = '"' . $model . '"."trikey_id" = '. $base_trikey .'
+	        			AND' .$this->and_gen($id) .' AND "' . $model . '".."ID" IN (' . $subQuery_parent . ')';
+				$subQueryExpression = $db_Base_trikey_entity->expression($subQuery);
 				$conditions[] = $subQueryExpression;
-				$results["$trikey"] = $this->Base_trikey_tag->find('all', compact('conditions'));
-				foreach ($results["$trikey"] as $iterator => $child_result){
-					$results["$trikey"][$iterator]
-					 = $this->get_child_each_model($child_result["Base_trikey_entity"], $base_id, $base_trikey);
-				}
+				$results["$trikey"] = $this->{$model}->find('all', compact('conditions'));
 
+				if (is_null($results["$trikey"])) {
+					$results["$trikey"]["child_node"] = $this->get_grandSon($results["$trikey"], $model, $base_id, $base_trikey);
+				}
 			}
-			//t and a 両方取る
 			return $results;
 		}
-		private function GET_base_node($id,$bace_trikey){
-
+		private function get_grandSon($parent_node,&$model,&$base_id,&$base_trikey){
+			foreach ($parent_node as $iterator => $child_result){
+				$parent_node[$iterator]["child_node"]
+				= $this->get_child_each_model($child_result["$model"]["ID"], $base_id, $base_trikey);
+			}
+			return $parent_node;
 		}
 		private function and_gen($id){
 			if(!is_array($id)){

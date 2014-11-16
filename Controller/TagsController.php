@@ -214,6 +214,7 @@ public function beforeFilter() {
 			}
 			return $results;
 		}
+		
 		private function get_grandSon($parent_node,&$model,&$base_id,&$base_trikey){
 			foreach ($parent_node as $iterator => $child_result){
 				$parent_node[$iterator]["child_node"]
@@ -221,6 +222,7 @@ public function beforeFilter() {
 			}
 			return $parent_node;
 		}
+		
 		private function and_gen($id){
 			if(!is_array($id)){
 				return "`base_trikey_tag`.`link_LFrom` = '. $id .'";

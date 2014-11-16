@@ -167,7 +167,7 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$Follow = new Follow();
-		return $Follow->delete()(
+		return $Follow->delete(
 				array('Follow' =>
 						array(
 								'user_id'=> $user_id,

@@ -13,7 +13,7 @@
 	<tr>
 		<td><?php echo h($result['article']['ID']); ?>&nbsp;</td>
 		<td><?php echo h($result['article']['name']); ?>&nbsp;</td>
-		<td><?php echo h($result['article']['owner_id']); ?>&nbsp;</td
+		<td><?php echo h($result['article']['owner_id']); ?>&nbsp;</td>
 		<td><?php echo h($result['article']['created']); ?>&nbsp;</td>
 		<td><?php echo h($result['article']['modified']); ?>&nbsp;</td>
 		<td class="actions">

@@ -9,5 +9,5 @@
 		<legend><?php echo __($model); ?></legend>
 	<?php
 		$targetid = $this->params['pass'][0];
-		echo $this->Form->input('name' array('class'=> 'reply_article_name'));
+		echo $this->Form->input('name',array('class' => 'reply_article_name'));
 	?>

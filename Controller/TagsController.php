@@ -6,16 +6,16 @@ App::uses('User', 'Model');
 App::uses('Tagauthcounts', 'Model');
 Configure::load("static");
 App::uses('Article','Model');
-App::uses('Tagauthcount','Model');
 App::uses('Tagauth','Model');
+App::uses('Taguser','Model');
 App::uses('Key','Model');
 
 
 /*App::uses('Article', 'Model');
 /**
- * Tags Controller
+ * Tagusers Controller
  *
- * @property Tag $Tag
+ * @property Taguser $Taguser
  * @property PaginatorComponent $Paginator
  */
 /*class AppSession {
@@ -53,7 +53,7 @@ public function beforeFilter() {
 	public function isAuthorized($user) {
 		if (in_array($this->action, array('edit', 'delete'))) {
 			$postId = $this->request->params['pass'][0];
-			if ($this->Tag->isOwnedBy($postId, $user['id'])) {
+			if ($this->Taguser->isOwnedBy($postId, $user['id'])) {
 				return true;
 			}
 		}
@@ -75,8 +75,8 @@ public function beforeFilter() {
 		public function index() {
 			$this->loadModel('Article');
 			parent::index();
-			//$this->paginate->setting = array('order'=> array('Tag.modified' => 'DESC'));
-			$this->set('tags', $this->paginate('Tag'));
+			//$this->paginate->setting = array('order'=> array('Taguser.modified' => 'DESC'));
+			$this->set('tags', $this->paginate('Taguser'));
 		}
 		public function test($test){
 			return $test;
@@ -96,8 +96,8 @@ public function beforeFilter() {
         	if ($trikeyID == NULL){
         		$trikeyID = Configure::read('tagID.search');
         	}
-        	$this->set('upperIdeas', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id));
-        	$this->set('extends', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.extend'),"Tag",$id));
+        	$this->set('upperIdeas', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Taguser",$id));
+        	$this->set('extends', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.extend'),"Taguser",$id));
         	$this->set('trikeyID', $trikeyID);
         }
         /**
@@ -214,7 +214,7 @@ public function beforeFilter() {
 			}
 			return $results;
 		}
-		
+
 		private function get_grandSon($parent_node,&$model,&$base_id,&$base_trikey){
 			foreach ($parent_node as $iterator => $child_result){
 				$parent_node[$iterator]["child_node"]
@@ -222,7 +222,7 @@ public function beforeFilter() {
 			}
 			return $parent_node;
 		}
-		
+
 		private function and_gen($id){
 			if(!is_array($id)){
 				return "`base_trikey_tag`.`link_LFrom` = '. $id .'";
@@ -282,21 +282,21 @@ public function beforeFilter() {
          * @return boolean
          */
         public function exchange($id = NULL){
-        	if (!$this->Tag->exists($id)) {
+        	if (!$this->Taguser->exists($id)) {
         		throw new NotFoundException(__('Invalid tagauth'));
         	}
 			$this->set('headresults',$this->headview($id));
         	$this->set('idre', $id);
-        	$this->Tagauthcount = new Tagauthcount();
+        	$this->TaguserTagauthcountcount = new Tagauthcount();
         	$this->set('myauthresult',$this->Tagauthcount->find('first',array(
         			'conditions' => array('Tagauthcount.tag_id'=> $id,
         					'Tagauthcount.user_id'=> $this->Auth->user('id')
         			))));
         	debug($id);
-        	$this->loadModel('Tagauth');
+        	$this->loadModel('Taguserauth');
         	$this->Paginator->setting = array(
-        			"Tagauth.tag_id" => $id);
-        	$tagauth = $this->paginate('Tagauth',$this->Paginator->setting);
+        			"Taguserauth.tag_id" => $id);
+        	$tagauth = $this->paginate('Taguserauth',$this->Paginator->setting);
         	$this->set('tagauths',$tagauth
         			);
 
@@ -305,8 +305,8 @@ public function beforeFilter() {
 
 
         	if ($this->request->is(array('post', 'put'))) {
-        		$targetTagauthcounts=$this->Tagauth->find('first',array('conditions'=>array('Tagauthcount' => array('tag_id'=>$id,
-        			'username'=> $this->request->data['username']))))['Tagauth']['id'];
+        		$targetTagauthcounts=$this->Taguserauth->find('first',array('conditions'=>array('Tagauthcount' => array('tag_id'=>$id,
+        			'username'=> $this->request->data['username']))))['Taguserauth']['id'];
         	//max_quant を超えないようにするチェック　いつも全部の行を合計する処理は重たいのでやらない。一回一回の処理の整合性を取っていく。
 	        	if ($this->Basic->tagAuthCountdown($this,$id,$targetTagauthcounts,$this->request->data['Tagauthcount'][`quant`])) {//相手が特定できているか
 	           		$that->Session->setFlash(__('The tag has been saved.'));
@@ -317,8 +317,8 @@ public function beforeFilter() {
 	        } else {
 	        		$this->request->data = $this->headview($id);
         	}
-//         	$users = $this->Tagauth->User->find('list');
-//         	$tags = $this->Tagauth->Tag->find('list');
+//         	$users = $this->Taguserauth->User->find('list');
+//         	$tags = $this->Taguserauth->Taguser->find('list');
 //         	$this->set(compact('users', 'tags'));
 
 
@@ -334,19 +334,19 @@ public function beforeFilter() {
          * @return void
          */
         public function anonymous_view($id = null) {
-        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id),'order' => array('Tag.ID'));
-        	$resultForChange = $this->Tag->find('first', $options);
+        	$options = array('conditions' => array('Taguser.'.$this->Taguser->primaryKey => $id),'order' => array('Taguser.ID'));
+        	$resultForChange = $this->Taguser->find('first', $options);
 
         	$this->id =$id;
-        	$this->Tag->cachedName = $this->name;
+        	$this->Taguser->cachedName = $this->name;
         	$userID = $this->Auth->user('id');
         	if($this->request->data['tagRadd']['add'] == true){
         		$this->Basic->tagRadd($this);
         		$this->Basic->social($this);
         		$this->redirect($this->referer());
-        	}elseif ($this->request->data['Tag']['max_quant'] != null){
-        		if ($this->Auth->user('id')==$resultForChange['Tag']['user_id']) {
-        			$this->Tag->save($this->request->data());
+        	}elseif ($this->request->data['Taguser']['max_quant'] != null){
+        		if ($this->Auth->user('id')==$resultForChange['Taguser']['user_id']) {
+        			$this->Taguser->save($this->request->data());
         		}else {
         			debug("fail no Auth");
         		}
@@ -362,30 +362,30 @@ public function beforeFilter() {
         		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
         		$this->Basic->social($this);
         	}
-        	if($this->request->data['Tag']['name'] != null){
+        	if($this->request->data['Taguser']['name'] != null){
         		debug($this->request->data);
-        		$options['key'] = $this->request->data['Tag']['keyid'];
-        		$this->Common->tritagAdd($this,"Tag",$this->request->data['Tag']['user_id'],$id,$options);
+        		$options['key'] = $this->request->data['Taguser']['keyid'];
+        		$this->Common->tritagAdd($this,"Taguser",$this->request->data['Taguser']['user_id'],$id,$options);
         		$this->Basic->social($this);
         	}
         	$this->set('idre', $id);
-        	if (!$this->Tag->exists($id)) {
+        	if (!$this->Taguser->exists($id)) {
         		throw new NotFoundException(__('Invalid tag'));
         	}
         	$this->request->data['keyid']['keyid'] =$trikeyID;
         	if ($trikeyID == NULL){//$serchID;//tagConst()['searchID'];
         		$trikeyID = Configure::read('tagID.search');
         	}
-        	$this->Common->SecondDem($this,"Tag","Tag.ID",Configure::read('tagID.search'),$id);
+        	$this->Common->SecondDem($this,"Taguser","Taguser.ID",Configure::read('tagID.search'),$id);
 
         	$this->set('headresults', $this->returntribasic);
-        	$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $id));
-        	$tag = $this->Tag->find('first', $options);
+        	$options = array('conditions' => array('Taguser.'.$this->Taguser->primaryKey => $id));
+        	$tag = $this->Taguser->find('first', $options);
         	$this->set('tag', $tag);
-        	$this->pageTitle = $tag["Tag"]['name'];
+        	$this->pageTitle = $tag["Taguser"]['name'];
         	$this->set('currentUserID', $this->Auth->user('id'));
-        	$this->Session->write('userselected',$this->request->data['Tag']['user_id'] );
-        	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Tag",$id);
+        	$this->Session->write('userselected',$this->request->data['Taguser']['user_id'] );
+        	$this->Basic->triupperfiderbyid($this,Configure::read('tagID.upperIdea'),"Taguser",$id);
         	$this->set('upperIdeas', $this->returntribasic);
         	$this->set('trikeyID', $trikeyID);
         	$this->loadModel('User');
@@ -421,14 +421,14 @@ public function beforeFilter() {
         		$this->Common->trasmitterDiff($this,$leftID,$leftKeyID,$model_name);
 
 
-        	if($this->request->data['Tag']['lr'] == "left"){
+        	if($this->request->data['Taguser']['lr'] == "left"){
         		$leftID = null;
         		$leftKeyID = null;
 				$this->psearch($this);
 
 				$this->set('lefttagresults', $this->Paginator->paginate());
 				//left $leftID $leftKeyID del
-        	}elseif ($this->request->data['Tag']['lr'] == "right") {
+        	}elseif ($this->request->data['Taguser']['lr'] == "right") {
         		debug("isrs");
         		$rghitID = null;
         		$rightKeyID = null;
@@ -450,15 +450,15 @@ public function beforeFilter() {
         				$this->set('rightarticleresults', $this->articleparentres);
         				$this->set('righttagresults', $this->tagparentres);
         				if ($rightID <= 100000) {
-	        				$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $rightID),'order' => array('Tag.ID'));
-	        				$rightheadresults = $this->Tag->find('first', $options);
+	        				$options = array('conditions' => array('Taguser.'.$this->Taguser->primaryKey => $rightID),'order' => array('Taguser.ID'));
+	        				$rightheadresults = $this->Taguser->find('first', $options);
         				} else {
         					$options = array('conditions' => array('Article.'.$this->Article->primaryKey => $rightID),'order' => array('Article.ID'));
         					$rightheadresults = $this->Article->find('first', $options);
         				}
         				$this->set('rightheadresults', $rightheadresults);
-        				if(array_key_exists ( 'Tag' , $rightheadresults )){
-        					$this->set('rightheadmodel', 'Tag');
+        				if(array_key_exists ( 'Taguser' , $rightheadresults )){
+        					$this->set('rightheadmodel', 'Taguser');
         				}else {
         					$this->set('rightheadmodel', 'Article');
         				}
@@ -473,15 +473,15 @@ public function beforeFilter() {
 		        	$this->set('leftarticleresults', $this->articleparentres);
 		        	$this->set('lefttagresults', $this->tagparentres);
 		        		if ($leftID < 100000) {
-	        				$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $leftID),'order' => array('Tag.ID'));
-	        				$leftheadresults = $this->Tag->find('first', $options);
+	        				$options = array('conditions' => array('Taguser.'.$this->Taguser->primaryKey => $leftID),'order' => array('Taguser.ID'));
+	        				$leftheadresults = $this->Taguser->find('first', $options);
         				} else {
         					$options = array('conditions' => array('Article.'.$this->Article->primaryKey => $leftID),'order' => array('Article.ID'));
         					$leftheadresults = $this->Article->find('first', $options);
         				}
 					$this->set('leftheadresults', $leftheadresults);
-					if(array_key_exists ( 'Tag' , $leftheadresults )){
-						$this->set('leftheadmodel', 'Tag');
+					if(array_key_exists ( 'Taguser' , $leftheadresults )){
+						$this->set('leftheadmodel', 'Taguser');
 					}else {
 						$this->set('leftheadmodel', 'Article');
 					}
@@ -668,14 +668,14 @@ public function beforeFilter() {
         	$data = ''; $json = '';
         	if(!empty($this->params['url']['q'])){
         		$options = array(
-        				'field'     =>array('Tag.ID','Tag.name'),
+        				'field'     =>array('Taguser.ID','Taguser.name'),
         				'conditions' => array('or'=> array(
-        						array('Tag.name LIKE ?' => $this->params['url']['q'].'%')
+        						array('Taguser.name LIKE ?' => $this->params['url']['q'].'%')
         				),
         				),
         				'limit'     =>10
         		);
-        		$datas = $this->Tag->find('list', $options);
+        		$datas = $this->Taguser->find('list', $options);
 
         		foreach($datas as $key=>$val){
         			$data .= $val.'|'.$key."\n";
@@ -697,24 +697,26 @@ public function beforeFilter() {
          * @return void
          */
         public function delete($id = null) {
-        	$options = array('conditions' => array(
-        			'Tag.'.$this->Tag->primaryKey => $id),
-        			'order' => array('Tag.ID'),
-        	);
-        	$reslut = $this->Tag->find('first', $options);
-        	if ($reslut['Tag']['user_id'] == $this->Auth->user('id')) {
-	        	$this->Tag->id = $id;
-	        	if (!$this->Tag->exists()) {
-	        		throw new NotFoundException(__('Invalid tag'));
-	        	}
+        	$this->Tag->id = $id;
+        	if (!$this->Tag->exists()) {
+        		throw new NotFoundException(__('Invalid tag'));
+        	}
+//         	$options = array('conditions' => array(
+//         			'Taguser.'.$this->Taguser->primaryKey => $id),
+//         			'order' => array('Taguser.ID'),
+//         	);
+//         	$Taguser = $this->loadModel("Taguser");
+//         	$reslut = $Taguser->find('first', $options);
+//         	if ($reslut['Taguser']['user_id'] == $this->Auth->user('id')) {
+//         		$this->Tag = $this->loadModel("Tag");
+// 	        	$this->Tag->id = $id;
 	        	$this->request->onlyAllow('post', 'delete');
-	        	$this->loadModel('User');
-
 	        	if ($this->Tag->delete()){
-	        		$this->Session->setFlash(__('The article has been deleted.'));
+	        		$this->loadModel('User');
+	        		$this->Session->setFlash(__('The tag has been deleted.'));
 	        		$data['User']['tlimit'] = $this->Auth->user('tlimit') + 1;
-	        		$data['User']['id'] = $this->request->data['Tag']['user_id'];
-	        		if($this->User->save($data)){
+	        		$data['User']['id'] = $this->request->data['Taguser']['user_id'];
+	        		if($this->User->save(array('User'=>array('id'=>$this->Auth->user('id'),'tlimit'=>$data['User']['tlimit'])),false)){
 	        			$this->Session->setFlash(__('The tag has been deleted.残りタグ数'.$this->Auth->user('tlimit')));
 	        		}else {
 	        			$this->Session->setFlash(__('deleted but can not count up..残りタグ数'.$this->Auth->user('tlimit')));
@@ -722,8 +724,8 @@ public function beforeFilter() {
 	        	} else {
 	        		$this->Session->setFlash(__('The article could not be deleted. Please, try again.'));
 	        	}
-        	}
-        	debug($this->referer());
+//         	}
+//         	debug($this->referer());
         	print_r("戻るで戻って");
         	return $this->redirect($this->referer());
         }
@@ -762,17 +764,17 @@ public function beforeFilter() {
         }
 
        public function auto_complete() {
-        	$terms = $this->Tag->find('all', array(
+        	$terms = $this->Taguser->find('all', array(
         			'conditions' => array(
-        					'Tag.name LIKE BINARY' => '%'.$this->params['url']['autoCompleteText'].'%'
+        					'Taguser.name LIKE BINARY' => '%'.$this->params['url']['autoCompleteText'].'%'
         			),
         			'fields' => array('name','user_id'),
         			'limit' => 3,
         			'recursive'=>1,
         	));
         	debug($terms);
-        	$terms = Set::Extract($terms,'{n}.Tag');
-//         	$terms += Set::Extract($terms,'{n}.Tag.name');
+        	$terms = Set::Extract($terms,'{n}.Taguser');
+//         	$terms += Set::Extract($terms,'{n}.Taguser.name');
         	$this->set('terms', $terms);
 //         	$this->layout = 'ajax';
         }
@@ -800,7 +802,7 @@ public function beforeFilter() {
 				 $ToID= $var['ID'];
 				$this->Common->triAddbyid($this,$this->Auth->user('id'),$leftID,$ToID,$options);
 			}
-        	if($this->request->data['Tag']['lr'] == "left"){
+        	if($this->request->data['Taguser']['lr'] == "left"){
         		$leftID = null;
         		$leftKeyID = null;
 				$this->psearch($this);
@@ -813,8 +815,8 @@ public function beforeFilter() {
 	        	$this->set('lefttaghashes', $this->taghash);
 	        	$this->set('leftarticleresults', $this->articleparentres);
 	        	$this->set('lefttagresults', $this->tagparentres);
-				$options = array('conditions' => array('Tag.'.$this->Tag->primaryKey => $leftID),'order' => array('Tag.ID'));
-				$this->set('leftheadresults', $this->Tag->find('first', $options));
+				$options = array('conditions' => array('Taguser.'.$this->Taguser->primaryKey => $leftID),'order' => array('Taguser.ID'));
+				$this->set('leftheadresults', $this->Taguser->find('first', $options));
 			}
 			//$this->Article->recursive = 0;
 			//$conditions = array();//array('order' => array('Article.modified' => 'asc'));
@@ -872,7 +874,7 @@ public function beforeFilter() {
 //         	debug($id);
 //         	debug($this->request->data());
         	$this->Link = new Link();
-        	//$options = array('conditions' => array('.'.$this->Aurh->primaryKey => $this->request->data['Tag']['']));
+        	//$options = array('conditions' => array('.'.$this->Aurh->primaryKey => $this->request->data['Taguser']['']));
 //         	$Link->find('all');
 
         	if ($this->Link->delete($this->request->data('Link.ID'))){

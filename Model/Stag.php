@@ -7,7 +7,7 @@ Configure::load("static");
  *
  * @property Owner $Owner
  */
-class Tag extends Date {
+class Stag extends Date {
 
 /*
 	public function setValue($plugin = null,$name = null,$action = null,$view = null) {
@@ -149,13 +149,5 @@ institution'
 //    		)
 
    	);
-   public $hasMany= array(
-   		'W' => array(
-   				'className' => 'Whiteuser',
-   				'foreignKey' => 'entity_id',
-   				'dependent' => false,
-   				'conditions' => '',
-   				//'type' => 'inner'
-   		),
-   );
+
 }

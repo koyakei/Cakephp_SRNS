@@ -1,11 +1,12 @@
 <?php
+App::uses('Date', 'Model');
 App::uses('AppModel', 'Model');
 /**
  * Taguser Model
  *
  * @property User $User
  */
-class Taguser extends AppModel {
+class Taguser extends Date {
 
 /**
  * Validation rules

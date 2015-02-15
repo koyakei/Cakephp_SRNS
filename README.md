@@ -4,7 +4,7 @@ app
 cakephp app file SRNSin cake
  SRNS is the first maiking central bank of central bank software in the world.
  
-http://koyakeicybuster.ddo.jp/cakephp/tags/search
+http://srns.strikingly.com/
 
 Features
 

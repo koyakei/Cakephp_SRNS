@@ -282,21 +282,21 @@ public function beforeFilter() {
          * @return boolean
          */
         public function exchange($id = NULL){
-        	if (!$this->Taguser->exists($id)) {
+        	if (!$this->Tag->exists($id)) {
         		throw new NotFoundException(__('Invalid tagauth'));
         	}
 			$this->set('headresults',$this->headview($id));
         	$this->set('idre', $id);
-        	$this->TaguserTagauthcountcount = new Tagauthcount();
+        	$this->Tagauthcount = new Tagauthcount();
         	$this->set('myauthresult',$this->Tagauthcount->find('first',array(
         			'conditions' => array('Tagauthcount.tag_id'=> $id,
         					'Tagauthcount.user_id'=> $this->Auth->user('id')
         			))));
         	debug($id);
-        	$this->loadModel('Taguserauth');
+        	$this->loadModel('Tagauth');
         	$this->Paginator->setting = array(
-        			"Taguserauth.tag_id" => $id);
-        	$tagauth = $this->paginate('Taguserauth',$this->Paginator->setting);
+        			"Tagauth.tag_id" => $id);
+        	$tagauth = $this->paginate('Tagauth',$this->Paginator->setting);
         	$this->set('tagauths',$tagauth
         			);
 
@@ -305,8 +305,8 @@ public function beforeFilter() {
 
 
         	if ($this->request->is(array('post', 'put'))) {
-        		$targetTagauthcounts=$this->Taguserauth->find('first',array('conditions'=>array('Tagauthcount' => array('tag_id'=>$id,
-        			'username'=> $this->request->data['username']))))['Taguserauth']['id'];
+        		$targetTagauthcounts=$this->Tagauth->find('first',array('conditions'=>array('Tagauthcount' => array('tag_id'=>$id,
+        			'username'=> $this->request->data['username']))))['Tagauth']['id'];
         	//max_quant を超えないようにするチェック　いつも全部の行を合計する処理は重たいのでやらない。一回一回の処理の整合性を取っていく。
 	        	if ($this->Basic->tagAuthCountdown($this,$id,$targetTagauthcounts,$this->request->data['Tagauthcount'][`quant`])) {//相手が特定できているか
 	           		$that->Session->setFlash(__('The tag has been saved.'));
@@ -317,8 +317,8 @@ public function beforeFilter() {
 	        } else {
 	        		$this->request->data = $this->headview($id);
         	}
-//         	$users = $this->Taguserauth->User->find('list');
-//         	$tags = $this->Taguserauth->Taguser->find('list');
+//         	$users = $this->Tagauth->User->find('list');
+//         	$tags = $this->Tagauth->Taguser->find('list');
 //         	$this->set(compact('users', 'tags'));
 
 
@@ -326,7 +326,43 @@ public function beforeFilter() {
         }
 
         /**
-         * publish anonymous_view method
+		* notice method
+		* 通知
+		* @param array ids
+		* @param string $notice_contents
+		*
+         */
+        public function notice($ids,$notice_contents){
+        	foreach($ids as $id){
+        		$target_user_ids = $this->get_notice_target($id);
+        		foreach($target_user_ids as $target_user_id){
+        			$massage = "cake/" + $this->ATSwicher($id) + "/" + $id + ""
+        					+ "更新されました" + "<br>" + $notice_contents;
+        					$this->mail->send($target_user_id,$massage);
+        		}
+        	}
+        }
+/**
+ * ATSwicher
+ *  Article or Tag discreminate
+ *  static.END is upper limit of tag number
+ * @param unknown $id
+ * @return string "tag" or "article" or error is false
+ */
+        function ATSwicher($id){
+        	if ($id < Configure::read("tagID.END")){
+        		return "tag";
+
+        	}elseif($id > Configure::read("tagID.END")) {
+        		return "article";
+        	}else{
+        		return false;
+        	}
+
+        }
+
+        /**
+         * public anonymous_view method
          *
          * @throws NotFoundException
          * @param string $id

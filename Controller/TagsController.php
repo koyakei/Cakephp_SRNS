@@ -131,12 +131,13 @@ public function beforeFilter() {
         	}
         	$this->loadModel("Trikey_list");
         	$all_trikeis = $this->allKeyList();//すべてのトライキーを取得
-        	//base_nodeを取得
-        	$base_id = $id;
 
 //         	$all_node = $this->get_child("Base_trikey_entity",$all_node,$id,$base_id,$base_trikey);
 			//base_trikeyのみに関連付けられているエンティティーを取得
-			$all_node["$base_trikey"] = $this->get_reply_by_id_and_trikey_without_base($id,$base_trikey);
+
+			$that = $this;
+			$option = array('key' => $base_trikey);
+			$all_node["$base_trikey"] = $this->Common->trifinderbyid($that,$id,$option);
 
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
@@ -147,9 +148,7 @@ public function beforeFilter() {
 
         }
 
-        private function get_reply_by_id_and_trikey_without_base(&$id,&$base_trikey){
-			return $entity;
-        }
+
         /**
          *　idを指定して子供を取得
          * 子供を取得して親の[child_node][model]にくっつける

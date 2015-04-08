@@ -119,32 +119,37 @@ public function beforeFilter() {
          *
          */
         public function view2($id,$base_trikey) {
+//         	デフォルトで"リプライ"だけ読む
+        	if ($base_trikey == null) {
+        		$base_trikey = Configure::read("tagID.reply");
+        	}
         	$all_node = null;//全部の情報
         	//$this->request->query('trikey_filter'); トライキーのフィルター
-        	$base_trikey = Configure::read("tagID.reply");
         	$this->loadModel("User");
         	if ($id ==null) {
-        		$id = $this->request->query["id"];;
+        		$id = $this->request->query["id"];
         	}
-        	$all_trikeis = $this->Trikey_list->find('all',array('conditions'=>
-        			array('Trikey_list.id' => $id,'NOT' => array('Trikey_list.LFrom' => $base_trikey)))
-        	);
+        	$this->loadModel("Trikey_list");
+        	$all_trikeis = $this->allKeyList();//すべてのトライキーを取得
         	//base_nodeを取得
         	$base_id = $id;
 
-        	$all_node = $this->get_child("Base_trikey_entity",$all_node,$id,$base_id,$base_trikey);
+//         	$all_node = $this->get_child("Base_trikey_entity",$all_node,$id,$base_id,$base_trikey);
 			//base_trikeyのみに関連付けられているエンティティーを取得
 			$all_node["$base_trikey"] = $this->get_reply_by_id_and_trikey_without_base($id,$base_trikey);
 
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	//$collected_result[$trikey]["Model"}[ID] こんなかんじで
-        	$this->set('tableresults',$all_node);
+        	$this->set('tableresults',$all_node); //デフォルトのノードツリーを返す
         	$this->set('sorting_tags',$sorting_tags);
         	$this->set('taghash',$result["taghash"]);
 
         }
 
+        private function get_reply_by_id_and_trikey_without_base(&$id,&$base_trikey){
+			return $entity;
+        }
         /**
          *　idを指定して子供を取得
          * 子供を取得して親の[child_node][model]にくっつける
@@ -154,7 +159,7 @@ public function beforeFilter() {
          * @param unknown $base_trikey
          * @return unknown
          */
-        public function get_child(&$model,$entity,$id,&$base_id,&$base_trikey){
+        public function get_child(&$model,&$entity,&$id,&$base_id,&$base_trikey){
         	$child_node = get_child_each_model($id,$base_id,$base_trikey);
         	if(!is_null($child_node)){
         		$entity["child_node"] = $child_node;

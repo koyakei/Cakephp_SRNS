@@ -1,4 +1,3 @@
-<?php Configure::load("static"); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +18,11 @@ taghashみたいに各ネストごとにループして配置
 階層ごとに処理が違うのはまずそう
 
 -->
-
+<div class="root">
+	<?php $this->element('root')?>
+	<!-- プルダウンメニューを開くようにはしない。スクロールのみで対応
+	　プルダウンで閉じるメリットが少ない。クッキー制御で繊維をまたいで開閉-->
+</div>
 
 </body>
 </html>

@@ -138,11 +138,11 @@ public function beforeFilter() {
 			$that = $this;
 			$option = array('key' => $base_trikey);
 			$all_node["$base_trikey"] = $this->Common->trifinderbyid($that,$id,$option);
-
+			$this->set('base_trikey' ,$base_trikey);
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	//$collected_result[$trikey]["Model"}[ID] こんなかんじで
-        	$this->set('tableresults',$all_node); //デフォルトのノードツリーを返す
+        	$this->set('default_nodes',$all_node); //デフォルトのノードツリーを返す
         	$this->set('sorting_tags',$sorting_tags);
         	$this->set('taghash',$result["taghash"]);
 

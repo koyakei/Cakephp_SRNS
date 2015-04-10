@@ -8,6 +8,7 @@ $.ajaxSetup({
 
 
 $(document).ready(function(){
+	var selected_trikey ="";
 	    $(".myTable").tablesorter();
 	    if(document.getElementById('tag_id') != null){
 	        var newTagNodeSubmit = document.getElementById('trikey_submit');
@@ -15,6 +16,10 @@ $(document).ready(function(){
 	    	document.getElementById('spesifiedtrikeylink').innerHTML = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
 	    	};
 	    };
+	    if(selected_trikey == null ||selected_trikey == "" ){
+	    	selected_trikey = "official reply";
+	    }
+	    $(".selected_trikey").html(selected_trikey);
 
 });
 function get_type(thing){

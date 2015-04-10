@@ -59,6 +59,7 @@
                 'update'=>$this->update,
                 'label'=>false,
                 'autoCompleteText'=>1,
+                'class'=>'autoCompleteInputBox',
             );
             $options = array_replace($baseOptions,$options);
             $html = '';

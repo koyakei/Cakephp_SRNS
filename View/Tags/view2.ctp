@@ -2,8 +2,104 @@
 <html>
 <head>
 	<?php echo $this->Html->script(array("view2","accordion")); ?>
+	<style type="css">
+	.autoCompleteInputBox {
+		width: 50%;
+	}
+	</style>
 </head>
 <body>
+	<fieldset>
+	    <?php
+			echo $this->AutoCompleteNoHidden->input(
+			    'or1.1',
+			    array(
+			        'autoCompletesUrl'=>$this->Html->url(
+			            array(
+			                'controller'=>'tagusers',
+			                'action'=>'auto_complete',
+			            )
+			        ),
+			        'autoCompleteRequestItem'=>'autoCompleteText',
+			    )
+			);
+		?>
+		<div class="search_tag_id">
+		<?php
+			echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or1'));
+		?>
+		</div>
+	</fieldset>
+AND
+	<fieldset>
+        <?php
+echo $this->AutoCompleteNoHidden->input(
+    'or1.1',
+    array(
+        'autoCompletesUrl'=>$this->Html->url(
+            array(
+                'controller'=>'tagusers',
+                'action'=>'auto_complete',
+            )
+        ),
+        'autoCompleteRequestItem'=>'autoCompleteText',
+    )
+);
+?>
+<div class="search_tag_id">
+<?php
+echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or2'));
+?>
+</div>
+</fieldset>
+	<fieldset>
+        <?php
+echo $this->AutoCompleteNoHidden->input(
+    'or1.1',
+    array(
+        'autoCompletesUrl'=>$this->Html->url(
+            array(
+                'controller'=>'tagusers',
+                'action'=>'auto_complete',
+            )
+        ),
+        'autoCompleteRequestItem'=>'autoCompleteText',
+    )
+);
+?>
+<div class="search_tag_id">
+<?php
+echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' => 'or1'));
+?>
+</div>
+</fieldset>
+AND
+
+	<fieldset>
+        <?php
+echo $this->AutoCompleteNoHidden->input(
+    'or1.1',
+    array(
+        'autoCompletesUrl'=>$this->Html->url(
+            array(
+                'controller'=>'tagusers',
+                'action'=>'auto_complete',
+            )
+        ),
+        'autoCompleteRequestItem'=>'autoCompleteText',
+    )
+);
+?>
+<div class="search_tag_id">
+<?php
+echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' => 'or2'));
+?>
+</div>
+</fieldset>
+
+
+<BUTTON type="button" id="search" onclick="all_reply_find($('.search_tag_id'))">検索</BUTTON>
+	</div>
 
 <!-- アコーディオンパネルをここに設置する
 taghashみたいに各ネストごとにループして配置
@@ -28,7 +124,7 @@ taghashみたいに各ネストごとにループして配置
 			<td>
 				<p>
 				<div onClick='toggleShow(this);' >
-				trikey name default 2138 reply</div>
+				trikey name default <div class="selected_trikey" >aa</div> </div>
 				<div id='HSfield' style='display: none;'>
 				<input type="text"></div>
 

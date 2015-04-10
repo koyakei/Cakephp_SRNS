@@ -28,7 +28,6 @@ function get_type(thing){
 }
 
 
-
 /**
  * acordionNester method
  * 構成を変えたディレクトリを渡すと　整形してくれる関数
@@ -107,7 +106,15 @@ function windowCloser(newBaceId){
 
 
 function all_reply_finder(newBaceId){
-
+	$.ajax({
+		type: 'POST',
+    	url: '/cakephp/tags/all_reply',
+    	dataType: 'json',
+    	data: newBaceId,
+    	success: function(obj) {
+			callback(data);
+		}
+	});
 }
 function child_nester(data){
 	for(val in val['child']){

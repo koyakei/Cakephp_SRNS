@@ -4,7 +4,9 @@
 				<tr>
 					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
 					<td>
-					<?php if(!is_null($leaf)){ echo "<b>"; } ?>
+					<!-- $leaf　の形式　どんなsqlで呼び出しているのか思い出せない -->
+					<?php $leaf = $result["leaf"]; //leaf こうして　配列の何処かに隠しておくほかあるまい。　common component trifinder でそう渡すようにする　base trikey の仕様を考える。
+					if(!is_null($leaf)){ echo "<b>"; } ?>
 					<?php echo $this->element('URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>
 
 					<?php if(!is_null($leaf)){ echo "</b>"; } ?>
@@ -13,7 +15,21 @@
 								reply
 							</div>
 							<div id='HSfield' style='display: none;'>
-<!-- element でここにテーブルを呼んでくる？　accodion table?  -->
+<!-- このエレメントを再帰的に呼び出す  -->
+							<?php echo $this->element('accordion/rsorttablebody',
+					    	 Array('results' => $leaf['articleparentres'],
+					    	 'taghashes'=>$taghash,
+					    	 'firstModel' => 'Article',
+					    	 'currentUserID' => $currentUserID,
+					    	'srns_code_member'=>$leaf['srns_code_member']
+					    	,$sorting_tags)); ?>
+							<?php echo $this->element('accordion/rsorttablebody',
+					    	 Array('results' => $leaf['tagparentres'],
+					    	 'taghashes'=>$taghash,
+					    	 'firstModel' => 'Tag',
+					    	 'currentUserID' => $currentUserID,
+					    	'srns_code_member'=>$leaf['srns_code_member'],
+					    	$sorting_tags)); ?>
 							</div>
 					<?php endif; ?>
 						<?php echo $this->Form->hidden($firstModel.'.ID', array('value'=>$result[$firstModel]['ID'])); ?>

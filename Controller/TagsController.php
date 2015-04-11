@@ -216,7 +216,7 @@ public function beforeFilter() {
 					$results["$trikey"]["child_node"] = $this->get_grandSon($results["$trikey"], $model, $base_id, $base_trikey);
 				}
 			}
-			$this->set("res" => $results);
+			$this->set("res" , $results);
 			return $results;
 		}
 
@@ -602,42 +602,41 @@ public function beforeFilter() {
 
         // 			$this->laysout = "";
         //     		$this->autoRender = false;
+        /**
+         * @array $sorting_tags ソートに使っているタグ
+         */
+
         public function GET_all_search(){
         	$this->loadModel('User');
         	$tableresults = [];
 
         	$sorting_tags = array($i[0][0],$i[0][1],$i[1][0],$i[1][1]);
         	$taghash = array();
-			foreach ($this->request->query['searching_tag_ids'] as $and_set){
-
-				$result = $this->GET_reply($and_set,$sorting_tags,$taghash);
-				array_push($tableresults, $result);
-
-			}
+			$result = $this->GET_reply($this->request->data('searching_tag_ids'),$sorting_tags,$taghash);
 			$this->set('currentUserID', $this->Auth->user('id'));
 			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 			$this->set('array_tableresults',$tableresults);
 			$this->set('sorting_tags',$sorting_tags);
 			$this->set('taghash',$taghash);
+			$this->set("andSet_ids",$andSet_ids);
+			$this->set("tableresults",$tableresults);
 
         }
 
-        public function GET_reply($andSet_ids = null) {
-        	$andSet_ids = $this->request["andSet_ids"];
+        public function GET_reply($andSet_ids,$sorting_tags,$taghash) {
+        	$options = array('key' => Configure::read('tagID.search'));
+        	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
+        	$taghash = $temp['taghash'];
+        	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
+        	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
 
-//         	$options = array('key' => Configure::read('tagID.search'));
-//         	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
-//         	$taghash = $temp['taghash'];
-//         	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
-//         	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
 
-//         	$tableresults = array(
-//         			'articleparentres' =>$sorter_mended_results['article']['results']
-//         			,'tagparentres'=>$sorter_mended_results['tag']['results']);
 
-//         	$currentUserID = $this->Auth->user('id');
-//         	return $tableresults;
-			$this->set("andSet_ids",$andSet_ids)
+        	$currentUserID = $this->Auth->user('id');
+        	return  array(
+        			'articleparentres' =>$sorter_mended_results['article']['results']
+        			,'tagparentres'=>$sorter_mended_results['tag']['results']);;
+
         }
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる

@@ -6,7 +6,7 @@ $(document).ready(function auto_complete(){
     		Search_conditions[i] = $(".search_tag_id").children("input[name*='data[or]["+ i +"]']").map(function() { return $(this).val();});
     	}
     	$.ajax({
-            type: "GET",
+            type: "POST",
             url: "GET_all_search",
             data: {searching_tag_ids:[[Search_conditions[0][0],Search_conditions[0][1]],[Search_conditions[1][0],Search_conditions[1][1]]]},
             dataType:'html',
@@ -17,9 +17,7 @@ $(document).ready(function auto_complete(){
             	document.getElementById("body").innerHTML = data;
             	//ただ入れるだけが一番楽
             },
-
         });
-
 	}
     // Get a ref to the update div, set minWidth to the text item
     $('input[autoCompleteText]').each(function(){

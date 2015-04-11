@@ -1,11 +1,14 @@
+<?php
+			debug($tableresults);?>
 <ul class="accordion">
-	<?php foreach ($all_results as $allresult): ?>
-		<?php echo $this->element('accordion/table_reply'); ?>
-	<?php endforeach; ?>
+	<?php //foreach ($all_results as $allresult): ?>
+		<?php //echo $this->element('accordion/table_reply'); ?>
+	<?php //endforeach; ?>
 </ul>
 
 <div onClick='toggleShow(this);' >
 	add
+
 </div>
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">

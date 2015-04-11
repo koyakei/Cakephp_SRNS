@@ -108,11 +108,11 @@ function windowCloser(newBaceId){
 function all_reply_finder(newBaceId){
 	$.ajax({
 		type: 'POST',
-    	url: '/cakephp/tags/ET_reply/' ,
+    	url: '/cakephp/tags/GET_reply/' ,
     	dataType: 'html',
     	data: newBaceId,
     	success: function(obj) {
-			callback(data);
+    		//$('#body').innerHtml = all_reply_finder(obj);
 		}
 	});
 }

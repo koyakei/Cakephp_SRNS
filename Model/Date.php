@@ -2,6 +2,7 @@
 App::uses('AppModel', 'Model');
 App::uses('CommonComponent', 'Controller/Component');
 App::uses('BasicComponent', 'Controller/Component');
+App::uses('AuthComponent', 'Controller/Component');
 App::uses('ArticleModel', 'Model');
 class Date extends AppModel {
 	public $components = array('Auth','Common','Basic');

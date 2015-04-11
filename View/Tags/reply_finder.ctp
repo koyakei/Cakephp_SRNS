@@ -3,7 +3,8 @@
          Array('taghashes'=>$taghash)); ?>
     <tbody>
     	<?php echo $this->element('rsorttablebody',
-    	 Array('results' => $tableresults,'articleparentres',
+    	 Array('results' => $tableresults,
+//     	 		'articleparentres',
     	 'taghashes'=>$tableresults['taghash'],
     	 'firstModel' => 'Article',
     	 'currentUserID' => $currentUserID,

@@ -1,1 +1,2 @@
+ここだ
 <?php echo $res; ?>

@@ -339,8 +339,7 @@ class CommonComponent extends Component {
 			$option['key'] = Configure::read('tagID.reply');
 		}
 		$articleparentres = $this->Basic->tribasicfiderbyidAndSet($that,$option['key'],"Article","Article.ID",$andSet_ids);//どんな記事がぶら下がっているか探す
-
-		list($articleparentres,$taghash) = $this->getSearchRelation($that, $articleparentres, $taghash, "Article");
+				list($articleparentres,$taghash) = $this->getSearchRelation($that, $articleparentres, $taghash, "Article");
 		$tagparentres = $this->Basic->tribasicfiderbyidAndSet($that,$option['key'],"Tag","Tag.ID",$andSet_ids);
 		list($tagparentres,$taghash) =
 		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
@@ -348,6 +347,7 @@ class CommonComponent extends Component {
 				'articleparentres'=> $articleparentres,
 				'taghash' => $taghash);
 	}
+
 	/**
 	 *
 	 * @param unknown $that

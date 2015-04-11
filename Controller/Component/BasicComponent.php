@@ -304,9 +304,11 @@ class BasicComponent extends Component {
 		if($ids[0] == '')return ;
 		$modelSe = new $modelSe();
 		$andSet = [];
-		foreach ($ids as $id){
-			if ($id != '') {
-				$andSet += array("Link.LFrom =$id" );
+		foreach ($ids as $idOR){
+			foreach ($idOR as $id){
+				if ($id != '') {
+					$andSet += array("Link.LFrom =$id" );
+				}
 			}
 		}
 		$option = array(
@@ -320,7 +322,7 @@ class BasicComponent extends Component {
 								'table' => 'link',
 								'alias' => 'Link',
 								'type' => 'INNER',
-								'conditions' => array('and'=> $andSet
+								'conditions' => array('or'=> array($andSet),
 
 								)
 						),

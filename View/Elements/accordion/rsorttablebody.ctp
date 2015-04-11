@@ -6,7 +6,16 @@
 					<td>
 					<?php if(!is_null($leaf)){ echo "<b>"; } ?>
 					<?php echo $this->element('URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>
+
 					<?php if(!is_null($leaf)){ echo "</b>"; } ?>
+					<?php if(!is_null($reaf)): ?>
+						<div onClick='toggleShow(this);' >
+								reply
+							</div>
+							<div id='HSfield' style='display: none;'>
+<!-- element でここにテーブルを呼んでくる？　accodion table?  -->
+							</div>
+					<?php endif; ?>
 						<?php echo $this->Form->hidden($firstModel.'.ID', array('value'=>$result[$firstModel]['ID'])); ?>
 						<?php  if($result['no_sort_subtag'] != null): ?>
 							<div onClick='toggleShow(this);' >
@@ -17,7 +26,7 @@
 									<?php if(!in_array($taghash,$sorting_tags)): ?>
 										<?php echo $this->Html->link($taghash['Tag']['name'],
 											 array('controller'=> "tags",'action' => 'view', $taghash['Tag']['ID'])); ?>
-										<?php echo $taghash['Link']['quant'] + ":" + $taghash['Tag']['namename']; ?>
+										<?php echo $taghash['Link']['quant'] + ":" + $taghash['Tag']['name']; ?>
 										<br>
 									<?php endif; ?>
 								<?php endforeach; ?>

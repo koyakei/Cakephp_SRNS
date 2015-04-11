@@ -612,14 +612,14 @@ public function beforeFilter() {
 
         	$sorting_tags = array($i[0][0],$i[0][1],$i[1][0],$i[1][1]);
         	$taghash = array();
-			$result = $this->GET_reply($this->request->data('searching_tag_ids'),$sorting_tags,$taghash);
+			$allresults = $this->GET_reply($this->request->data('searching_tag_ids'),$sorting_tags,$taghash);
 			$this->set('currentUserID', $this->Auth->user('id'));
 			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 			$this->set('array_tableresults',$tableresults);
 			$this->set('sorting_tags',$sorting_tags);
 			$this->set('taghash',$taghash);
 			$this->set("andSet_ids",$andSet_ids);
-			$this->set("tableresults",$tableresults);
+			$this->set("allresults",$allresults);
 
         }
 

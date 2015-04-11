@@ -1,9 +1,16 @@
-<?php
-			debug($tableresults);?>
+
 <ul class="accordion">
-	<?php //foreach ($all_results as $allresult): ?>
-		<?php //echo $this->element('accordion/table_reply'); ?>
-	<?php //endforeach; ?>
+	<?php
+	echo $this->element('accordion/table_reply',
+		array('tableresults' => $allresults,
+			'taghashes'=>$taghash,
+		   	'currentUserID' => $currentUserID,
+		   	'srns_code_member'=>$tableresults['srns_code_member']
+		   	,$sorting_tags
+		)
+	);
+	?>
+
 </ul>
 
 <div onClick='toggleShow(this);' >

@@ -108,8 +108,8 @@ function windowCloser(newBaceId){
 function all_reply_finder(newBaceId){
 	$.ajax({
 		type: 'POST',
-    	url: '/cakephp/tags/all_reply',
-    	dataType: 'json',
+    	url: '/cakephp/tags/ET_reply/' ,
+    	dataType: 'html',
     	data: newBaceId,
     	success: function(obj) {
 			callback(data);

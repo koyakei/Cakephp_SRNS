@@ -150,7 +150,7 @@ public function beforeFilter() {
 
 
         /**
-         *　idを指定して子供を取得
+         *idを指定して子供を取得
          * 子供を取得して親の[child_node][model]にくっつける
          * @param unknown $model
          * @param unknown $id
@@ -175,7 +175,7 @@ public function beforeFilter() {
         public function get_child_each_model($id,$base_id,$base_trikey){
 //         	$res += get_child_node($id,$base_id,$base_trikey,"Base_trikey_tag");
 //         	$res += get_child_node($id,$base_id,$base_trikey,"Base_trikey_article");
-        	$res += get_child_node($id,$base_id,$base_trikey,"Base_trikey_entity");
+        	$res += get_child_node($id,$base_trikey,"Base_trikey_entity");
         	return $res;
         }
 
@@ -185,14 +185,14 @@ public function beforeFilter() {
 		 * @param unknown $base_id
 		 * @param unknown $base_trikey
 		 * @param string $model  child model name
-		 * @return array(　"Base_trikey_tag" , "Base_trikey_article")
+		 * @return array("Base_trikey_tag" , "Base_trikey_article")
 		 */
-		public function get_child_node($id,$base_id,$base_trikey,$model){
+		public function get_child_node($id,$base_trikey,$model){
 			$trikey = $this->Trikey_list->find('all',array('conditions' => array("Trikey_list.id" =>$id )));
 			$db_Base_trikey_entity = $this->{$model}->getDataSource();
 			foreach ($trikeys as  $trikey){
 				$conditionsSubQuery['AND'] =
-				array('"' . $model . '"."link_LFrom" ' => $base_id ,'"' . $model . '"."trikey_id" ='.$trikey["Trikey_list"]["LFrom"]);
+				array('"' . $model . '"."link_LFrom" ' => $id ,'"' . $model . '"."trikey_id" ='.$trikey["Trikey_list"]["LFrom"]);
 				$subQuery = $db_Base_trikey_tag->buildStatement(
 						array(
 								'fields'     => array('"Trikey_list"."LFrom"'),
@@ -216,6 +216,7 @@ public function beforeFilter() {
 					$results["$trikey"]["child_node"] = $this->get_grandSon($results["$trikey"], $model, $base_id, $base_trikey);
 				}
 			}
+			$this->set("res" => $results);
 			return $results;
 		}
 
@@ -243,9 +244,9 @@ public function beforeFilter() {
 				}
 
 				}
-				public function search2(){
-					;
-				}
+		public function search2(){
+			;
+		}
 		public function get_parent_id($parent_entities,$model,$primarykey){
 			if ($model == "Base_trikey_tag"){
 
@@ -279,7 +280,7 @@ public function beforeFilter() {
 
 
         /**
-         * publish excange method
+         * publish exchange method
          *
          * @throws NotFoundException
          * @param string $id
@@ -621,19 +622,22 @@ public function beforeFilter() {
 
         }
 
-        public function GET_reply($andSet_ids = null ,$sorting_tags = null,&$taghash) {
-        	$options = array('key' => Configure::read('tagID.search'));
-        	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
-        	$taghash = $temp['taghash'];
-        	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
-        	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
+        public function GET_reply($andSet_ids = null) {
+        	$andSet_ids = $this->request["andSet_ids"];
 
-        	$tableresults = array(
-        			'articleparentres' =>$sorter_mended_results['article']['results']
-        			,'tagparentres'=>$sorter_mended_results['tag']['results']);
+//         	$options = array('key' => Configure::read('tagID.search'));
+//         	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
+//         	$taghash = $temp['taghash'];
+//         	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
+//         	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
 
-        	$currentUserID = $this->Auth->user('id');
-        	return $tableresults;
+//         	$tableresults = array(
+//         			'articleparentres' =>$sorter_mended_results['article']['results']
+//         			,'tagparentres'=>$sorter_mended_results['tag']['results']);
+
+//         	$currentUserID = $this->Auth->user('id');
+//         	return $tableresults;
+			$this->set("andSet_ids",$andSet_ids)
         }
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる

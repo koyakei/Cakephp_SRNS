@@ -239,9 +239,8 @@ function getInfo(id){
 
 $(document).ready(function(){
 	var id = $(".server_data_handler#id1").val();
-getInfo(id);
-	$('input:button').click(getInfo(id)
-			);
+	getInfo(id);
+	$('input:button').click(getInfo(id));
 }
 
 		);

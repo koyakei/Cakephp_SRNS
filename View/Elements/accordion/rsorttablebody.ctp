@@ -15,7 +15,7 @@
 								reply
 							</div>
 							<div id='HSfield' style='display: none;'>
-<!-- このエレメントを再帰的に呼び出す  -->
+							<!-- このエレメントを再帰的に呼び出す  再帰的に呼び出した状態をテストする方法がわからない　 view のテストがないと不便だ。-->
 							<?php echo $this->element('accordion/rsorttablebody',
 					    	 Array('results' => $leaf['articleparentres'],
 					    	 'taghashes'=>$taghash,

@@ -10,6 +10,7 @@ var nodes = [];
 var edges = [];
 var duringManip = false;
 var previousNodeId = null;
+
 var options = {
         edges: {
           length: 50,
@@ -29,6 +30,7 @@ var options = {
           saveButton.onclick = saveData.bind(this,data,callback);
           cancelButton.onclick = clearPopUp.bind();
           div.style.display = 'block';
+
         },
         onEdit: function(data,callback) {
           var span = document.getElementById('operation');
@@ -236,11 +238,10 @@ function getInfo(id){
       }
 
 $(document).ready(function(){
-getInfo(<?php echo $id; ?>);
-	$('input:button').click(getInfo(<?php echo $id; ?>)
+	var id = $(".server_data_handler#id1").val();
+getInfo(id);
+	$('input:button').click(getInfo(id)
 			);
 }
 
 		);
-</script>
-</body>

@@ -15,6 +15,7 @@ $(document).ready(function()
     }
 
 );
+
 function jumpStrikey(){
 	document.getElementById('spesifiedtrikeylink').href = '/cakephp/<?php echo $model; ?>s/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('or1_1').value;
 }

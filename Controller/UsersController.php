@@ -166,15 +166,13 @@ class UsersController extends AppController {
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
 		}
-		$Follow = new Follow();
-		return $Follow->delete(
-				array('Follow' =>
+		$Follow = new Follow;
+		$Follow->delete(array('Follow' =>
 						array(
 								'user_id'=> $user_id,
 								'target' => $this->Auth->user('id')
 						)
-				)
-		);
+				));
 	}
 
 	/**

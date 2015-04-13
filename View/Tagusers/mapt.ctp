@@ -49,6 +49,8 @@ body {
     }
 </style>
 <?php echo $this->Html->css('vis'); ?>
+
+<input type="hidden" class="server_data_handler" id="id" value="<?php echo $id; ?>">
 </head>
 
 <body>

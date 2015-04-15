@@ -372,7 +372,6 @@ public $components = array(
     	$headresults = $this->headview($id);
 
     	$this->Common->tagRadd($this);
-    	debug($this->request->data);
     	if($this->request->data['Article']['name'] != null){
     		debug("in");
     		$options['key'] = $this->request->data['Article']['keyid'];

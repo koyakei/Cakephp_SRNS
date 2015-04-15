@@ -19,9 +19,8 @@ class Date extends AppModel {
 			return $query;
 		}
 		foreach ($results as $idx => $value){
-// 			$this->Common->getURL($Common,$value[$this->alias]['ID'],$this->alias);
-// 			debug($Common->returntribasic[0]['Article']['name']);
-			if (Router::getParams()['action'] != 'auto_complete') {
+			$view = Router::getParams();
+			if ($view['action'] != 'auto_complete') {
 					$results[$idx]['URL'] = $this->Common->getURL($Common,$value[$this->alias]['ID'],$this->alias);	;
 			}
 			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {

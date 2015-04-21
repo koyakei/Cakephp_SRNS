@@ -78,8 +78,38 @@ public function beforeFilter() {
 			//$this->paginate->setting = array('order'=> array('Taguser.modified' => 'DESC'));
 			$this->set('tags', $this->paginate('Taguser'));
 		}
-		public function test($test){
-			return $test;
+
+		/**
+		 *
+		 * @param unknown $befores
+		 * @param unknown $afters
+		 * @return multitype:
+		 */
+		function compare_delete($befores,$afters){
+			$res = array();
+			foreach($befores as $idx => $before){
+				$before_each = array('from' => $befores[$idx],'to'=>$befores[$idx++]);
+
+				if ($this->separeted_pair($before_each,$afters)){
+					array_push($res,$befores[$idx]["Taguser"]["trikey_id"]);
+				}
+			}
+			return $res;
+		}
+		/**
+		 *
+		 * @param unknown $before_each
+		 * @param unknown $afters
+		 * @return boolean
+		 */
+		function separeted_pair($before_each,$afters){
+			foreach($afters as $idx => $after){
+				$after_each = array('from' => $afters[$idx],'to'=>$afters[$idx++]);
+				if($before_each　== $after_each){
+					return true;
+				}
+			}
+			return false;
 		}
 
         /**

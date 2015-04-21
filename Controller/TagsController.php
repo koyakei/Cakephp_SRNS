@@ -81,11 +81,12 @@ public function beforeFilter() {
 
 		/**
 		 *
+		 * minused_set= $before(big) - $after(smal)
 		 * @param unknown $befores
 		 * @param unknown $afters
 		 * @return multitype:
 		 */
-		function compare_delete($befores,$afters){
+		function compare_order($befores,$afters){
 			$res = array();
 			foreach($befores as $idx => $before){
 				$before_each = array('from' => $befores[$idx],'to'=>$befores[$idx++]);
@@ -96,6 +97,7 @@ public function beforeFilter() {
 			}
 			return $res;
 		}
+
 		/**
 		 *
 		 * @param unknown $before_each
@@ -106,11 +108,12 @@ public function beforeFilter() {
 			foreach($afters as $idx => $after){
 				$after_each = array('from' => $afters[$idx],'to'=>$afters[$idx++]);
 				if($before_each　== $after_each){
-					return true;
+					return false;
 				}
 			}
-			return false;
+			return true;
 		}
+
 
         /**
          * view method

@@ -302,10 +302,28 @@ class BasicComponent extends Component {
 	 * @return $that->returntribasic
 	 */
 	public function tribasicfiderbyidAndSet(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$ids= null) {
-		if($ids[0] == '"')return ;
+		if($ids[0] == '"') return ;
 		$modelName = $modelSe;
 		$modelSe = new $modelSe();
 		$andSet = array();
+		$or =array();
+// 		foreach ($ids as $id){
+// 			debug($id[0] != '' || $id[1] != '');
+// 			if ($id[0] != '' || $id[1] != ''){
+// 				array_push($or, array("Link.LFrom" => $id));
+// 			}
+// 		}
+
+		foreach ($ids as $id){
+			$exist = 0;
+			foreach ($id as $i){
+// 				debug($i !='');
+				if ($i !=''){
+					array_push($or, array("Link.LFrom" => $i));
+				}
+			}
+				;
+		}
 		$option = array(
 		'conditions'=> array(
 				"Link.LTo = $Ltotarget"
@@ -317,9 +335,7 @@ class BasicComponent extends Component {
 				'alias' => 'Link',
 				'type' => 'INNER',
 				'conditions' => array(
-						"or"=>array(array("Link.LFrom" => $ids[0]),
-								array("Link.LFrom" => $ids[1])
-						)// 二重に検索　union して　distinct の逆
+						"or"=> $or// 二重に検索　union して　distinct の逆
 				),
 				array(
 						'table' => 'taglinks',
@@ -334,11 +350,9 @@ class BasicComponent extends Component {
 		),
 
 				);
-		debug(($ids[1][0] == ''));
 		if (($ids[0][0]!= '' || $ids[0][1]!= '') && ($ids[1][0]!= '' || $ids[1][1]!= '')){
 			$option = array_merge($option, array( 'group' => "$Ltotarget HAVING COUNT(*) > 1" ));
 		}
-		debug($option);
 		return $modelSe->find('all',$option);
 	}
 	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe = null,$Ltotarget = null ,$id) {

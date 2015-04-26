@@ -315,41 +315,41 @@ class BasicComponent extends Component {
 // 		}
 
 		foreach ($ids as $id){
-			$exist = 0;
-			foreach ($id as $i){
-// 				debug($i !='');
-				if ($i !=''){
-					array_push($or, array("Link.LFrom" => $i));
+			foreach ($id as $idx => $i){
+				if ($i == ''){
+					unset($id[$idx]);
 				}
+				$id = array_values($id);
 			}
-				;
+				array_push($or, array("Link.LFrom" => $id));
 		}
 		$option = array(
-		'conditions'=> array(
-				"Link.LTo = $Ltotarget"
-		),
-		'fields' => array('*'),
-		'joins'=> array(
+				'conditions'=> array(
+				        	"Link.LTo = $Ltotarget"
+			        	 ),
+				'fields' => array('*'		),
+				'joins'
+				 => array(
 				array(
-				'table' => 'link',
-				'alias' => 'Link',
-				'type' => 'INNER',
-				'conditions' => array(
-						"or"=> $or// 二重に検索　union して　distinct の逆
-				),
+		                    'table' => 'link',
+		                    'alias' => 'Link',
+		                    'type' => 'INNER',
+		                    'conditions' => array("or" => $or
+					)
+		                ),
 				array(
-						'table' => 'taglinks',
-						'alias' => 'taglink',
-						'type' => 'INNER',
-						'conditions' => array(
-								array("Link.ID = taglink.LTo"),
-								($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
-						)
+		                    'table' => 'taglinks',
+		                    'alias' => 'taglink',
+		                    'type' => 'INNER',
+		                    'conditions' => array(
+					array("Link.ID = taglink.LTo"),
+		                    		($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
+					)
+		                ),
 				),
-				)
-		),
-
-				);
+				'order' => ''
+			);
+		debug($option);
 		if (($ids[0][0]!= '' || $ids[0][1]!= '') && ($ids[1][0]!= '' || $ids[1][1]!= '')){
 			$option = array_merge($option, array( 'group' => "$Ltotarget HAVING COUNT(*) > 1" ));
 		}

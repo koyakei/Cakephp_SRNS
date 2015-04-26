@@ -6,7 +6,7 @@ $(document).ready(function auto_complete(){
     		Search_conditions[i] = $(".search_tag_id").children("input[name*='data[or]["+ i +"]']").map(function() { return $(this).val();});
     	}
     	$.ajax({
-            type: "POST",
+            type: "GET",
             url: "http://koyakei.0j0.jp/cakephp/tags/GET_all_search",
             data: {searching_tag_ids:[[Search_conditions[0][0],Search_conditions[0][1]],[Search_conditions[1][0],Search_conditions[1][1]]]},
             dataType:'html',
@@ -14,7 +14,7 @@ $(document).ready(function auto_complete(){
             		//帰ってきたデータでリプライをテーブルに流す
             	//期待する戻り値
             	//なぜか　jquery selectorが動かない
-            	$("body").innerHTML = data;
+            	$(".root").html(data)
             	//ただ入れるだけが一番楽
             },
         });

@@ -1,11 +1,8 @@
-<li>
-	<p><span>
+<span>
 		<?php echo $this->Html->link(__("$trikey_name"),
 				 array('controller' => 'tags','action' => 'view',$trikey_id)); ?>
-	</span></p>
-	<table class="myTable" cellpadding="0" cellspacing="0">
-		<colgroup span="4"></colgroup>
-		<colgroup class="taghash" span="15"></colgroup>
+	</span>
+	<table class="myTable" cellpadding="0" cellspacing="0" style ="background: white">
         <?php echo $this->element('tablehead',
          Array('taghashes'=>$taghash)); ?>
 	    <tbody>
@@ -25,4 +22,3 @@
 	    	$sorting_tags)); ?>
 		</tbody>
 	</table>
-</li>

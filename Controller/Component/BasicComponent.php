@@ -302,51 +302,10 @@ class BasicComponent extends Component {
 	 * @return $that->returntribasic
 	 */
 	public function tribasicfiderbyidAndSet(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$ids= null) {
-		if($ids[0] == '')return ;
+		if($ids[0] == '"')return ;
 		$modelName = $modelSe;
 		$modelSe = new $modelSe();
 		$andSet = array();
-// 		foreach ($ids as $idOR){
-// // 			foreach ($idOR as $idx => $id){
-// // 				if ($id != '') {
-// // 					$andSet += array("Link.LFrom =$id" );
-// // 				}
-// // 			}
-// 		}
-// 		$db = $modelSe->getDataSource();
-// 		$subQuery = $db->buildStatement(
-// 					array(
-// 						'conditions'=> array(
-// // 								"Link1.LTo = $Ltotarget"
-// 								"$Ltotarget = `Link1`.`LTo`"
-// 						),
-// 						'fields' => array('*'),
-// 						'table' =>"`SRNS_test`.`$modelName`",
-// 						'alias' =>"`$modelName`",
-// 						'joins'=> array(
-// 										array(
-// 												'table' => 'link',
-// 												'alias' => 'Link1',
-// 												'type' => 'INNER',
-// 												'conditions' => array(
-// 														"OR"=>array("Link1.LFrom"=>$ids[1])
-
-// 												)// 二重に検索　union して　distinct の逆
-// 										),
-// 										array(
-// 												'table' => 'taglinks',
-// 												'alias' => 'taglink1',
-// 												'type' => 'INNER',
-// 												'conditions' => array(
-// 														array("Link1.ID = taglink1.LTo"),
-// 														($trikeyID == null)?null:array($trikeyID." = taglink1.LFrom")//$trikeyID
-// 												)
-// 										),
-// 								)
-// 			),
-// 			$modelSe
-// 		);
-// 		debug($option);
 		$option = array(
 		'conditions'=> array(
 				"Link.LTo = $Ltotarget"
@@ -375,9 +334,11 @@ class BasicComponent extends Component {
 		),
 
 				);
-		if ($ids[1]!= null){
+		debug(($ids[1][0] == ''));
+		if (($ids[0][0]!= '' || $ids[0][1]!= '') && ($ids[1][0]!= '' || $ids[1][1]!= '')){
 			$option = array_merge($option, array( 'group' => "$Ltotarget HAVING COUNT(*) > 1" ));
 		}
+		debug($option);
 		return $modelSe->find('all',$option);
 	}
 	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe = null,$Ltotarget = null ,$id) {

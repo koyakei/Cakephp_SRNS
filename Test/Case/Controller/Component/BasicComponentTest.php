@@ -24,7 +24,7 @@ public function setUp() {
         $this->BasicComponent->startup($this->Controller);
     }
 
-    public function testTribasicfiderbyidAndSe() {
+    public function testTribasicfiderbyidAndSet() {
     	$andSet_ids = array(
 	(int) 0 => array(
 		(int) 0 => '2140',

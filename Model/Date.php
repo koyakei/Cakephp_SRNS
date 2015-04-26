@@ -6,44 +6,44 @@ App::uses('AuthComponent', 'Controller/Component');
 App::uses('ArticleModel', 'Model');
 class Date extends AppModel {
 	public $components = array('Auth','Common','Basic');
-// 	public $findMethods = array(
-// 			'auth' => true,
-// 	);
-	public function _findAll($state, $query, $results = array()){
-		$this->Common = new CommonComponent();
-		$this->Common->Basic = new BasicComponent();
-		$this->Common->Basic->Article = new Article();
+	public $findMethods = array(
+			'auth' => true,
+	);
+// 	public function _findAll($state, $query, $results = array()){
+// 		$this->Common = new CommonComponent();
+// 		$this->Common->Basic = new BasicComponent();
+// 		$this->Common->Basic->Article = new Article();
 
-		if ($state === 'before') {
+// 		if ($state === 'before') {
 
-			return $query;
-		}
-		foreach ($results as $idx => $value){
-			$view = Router::getParams();
-			if ($view['action'] != 'auto_complete') {
-					$results[$idx]['URL'] = $this->Common->getURL($Common,$value[$this->alias]['ID'],$this->alias);	;
-			}
-			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {
+// 			return $query;
+// 		}
+// 		foreach ($results as $idx => $value){
+// 			$view = Router::getParams();
+// 			if ($view['action'] != 'auto_complete') {
+// 					$results[$idx]['URL'] = $this->Common->getURL($Common,$value[$this->alias]['ID'],$this->alias);	;
+// 			}
+// 			if (AuthComponent::user('id') == $value[$this->alias]['user_id']) {
 
-			}elseif ($value[$this->alias]['auth'] == 1) {
-				foreach ($value['W'] as $whiteuser){
-					$list[] =$whiteuser['user_id'];
-				}
-				if (false === in_array(AuthComponent::user('id'),$list)) {
-					unset($results[$idx]);
-				}
-			}elseif ($value[$this->alias]['auth'] == 0){
-				// 				if (false == array_search(AuthComponent::user('id'),$value['B'])) {
-				// 					;
-				// 				}
-			}
+// 			}elseif ($value[$this->alias]['auth'] == 1) {
+// 				foreach ($value['W'] as $whiteuser){
+// 					$list[] =$whiteuser['user_id'];
+// 				}
+// 				if (false === in_array(AuthComponent::user('id'),$list)) {
+// 					unset($results[$idx]);
+// 				}
+// 			}elseif ($value[$this->alias]['auth'] == 0){
+// 				// 				if (false == array_search(AuthComponent::user('id'),$value['B'])) {
+// 				// 					;
+// 				// 				}
+// 			}
 
-		}
+// 		}
 
-		$results = array_values($results);
-		return $results;
+// 		$results = array_values($results);
+// 		return $results;
 
-	}
+// 	}
 	public function beforeSave($option = null){
 		parent::beforeSave();
 		$this->data[$this->alias]['modified'] = date("Y-m-d H:i:s");

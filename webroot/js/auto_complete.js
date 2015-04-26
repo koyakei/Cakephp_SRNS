@@ -7,14 +7,14 @@ $(document).ready(function auto_complete(){
     	}
     	$.ajax({
             type: "POST",
-            url: "GET_all_search",
+            url: "http://koyakei.0j0.jp/cakephp/tags/GET_all_search",
             data: {searching_tag_ids:[[Search_conditions[0][0],Search_conditions[0][1]],[Search_conditions[1][0],Search_conditions[1][1]]]},
             dataType:'html',
             success: function(data){
             		//帰ってきたデータでリプライをテーブルに流す
             	//期待する戻り値
             	//なぜか　jquery selectorが動かない
-            	document.getElementById("body").innerHTML = data;
+            	$("body").innerHTML = data;
             	//ただ入れるだけが一番楽
             },
         });

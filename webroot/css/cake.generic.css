@@ -740,3 +740,11 @@ pre {
 #url-rewriting-warning {
 	display:none;
 }
+	#globalnavi li{
+	 float: left;
+  width:30%;
+}
+
+#globalnavi input{
+	width: 30%
+}

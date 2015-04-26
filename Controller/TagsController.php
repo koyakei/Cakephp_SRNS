@@ -170,6 +170,7 @@ public function beforeFilter() {
 
 			$that = $this;
 			$option = array('key' => $base_trikey);
+			debug($id);
 			$all_node["$base_trikey"] = $this->Common->trifinderbyid($that,$id,$option);
 			$this->set('base_trikey' ,$base_trikey);
         	$this->set('currentUserID', $this->Auth->user('id'));
@@ -641,11 +642,14 @@ public function beforeFilter() {
 
         public function GET_all_search(){
         	$this->loadModel('User');
-        	$tableresults = [];
+        	$tableresults = array();
 
         	$sorting_tags = array($i[0][0],$i[0][1],$i[1][0],$i[1][1]);
         	$taghash = array();
+//         	$searching_tag_ids[0][]= 2140;
+//         	$searching_tag_ids[1][] = 2178;
 			$allresults = $this->GET_reply($this->request->data('searching_tag_ids'),$sorting_tags,$taghash);
+// 			$allresults = $this->GET_reply($searching_tag_ids,$sorting_tags,$taghash);
 			$this->set('currentUserID', $this->Auth->user('id'));
 			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 			$this->set('array_tableresults',$tableresults);
@@ -653,7 +657,7 @@ public function beforeFilter() {
 			$this->set('taghash',$taghash);
 			$this->set("andSet_ids",$andSet_ids);
 			$this->set("allresults",$allresults);
-
+			$autoRender= false;
         }
 
         public function GET_reply($andSet_ids,$sorting_tags,$taghash) {

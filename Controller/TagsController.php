@@ -151,7 +151,7 @@ public function beforeFilter() {
          * @return void
          *
          */
-        public function view2($id,$base_trikey) {
+        public function view2($id) {
 //         	デフォルトで"リプライ"だけ読む
         	if ($base_trikey == null) {
         		$base_trikey = Configure::read("tagID.reply");
@@ -178,7 +178,6 @@ public function beforeFilter() {
         	$this->set('default_nodes',$all_node); //デフォルトのノードツリーを返す
         	$this->set('sorting_tags',$sorting_tags);
         	$this->set('taghash',$result["taghash"]);
-
         }
 
 
@@ -278,7 +277,33 @@ public function beforeFilter() {
 
 				}
 		public function search2(){
-			;
+			//         	デフォルトで"リプライ"だけ読む
+        	if ($base_trikey == null) {
+        		$base_trikey = Configure::read("tagID.reply");
+        	}
+        	if ($id ==null) {
+        		$id = $this->request->query["id"];
+        	}
+        	$all_node = null;//全部の情報
+        	//$this->request->query('trikey_filter'); トライキーのフィルター
+        	$this->loadModel("User");
+
+        	$this->loadModel("Trikey_list");
+        	$all_trikeis = $this->allKeyList();//すべてのトライキーを取得
+
+//         	$all_node = $this->get_child("Base_trikey_entity",$all_node,$id,$base_id,$base_trikey);
+			//base_trikeyのみに関連付けられているエンティティーを取得
+
+			$that = $this;
+			$option = array('key' => $base_trikey);
+// 			$all_node["$base_trikey"] = $this->Common->trifinderbyid($that,$id,$option);
+			$this->set('base_trikey' ,$base_trikey);
+        	$this->set('currentUserID', $this->Auth->user('id'));
+        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+        	//$collected_result[$trikey]["Model"}[ID] こんなかんじで
+        	$this->set('default_nodes',$all_node); //デフォルトのノードツリーを返す
+        	$this->set('sorting_tags',$sorting_tags);
+        	$this->set('taghash',$result["taghash"]);
 		}
 		public function get_parent_id($parent_entities,$model,$primarykey){
 			if ($model == "Base_trikey_tag"){
@@ -640,7 +665,7 @@ public function beforeFilter() {
          */
 
         public function GET_all_search(){
-//         	$this->autoLayout = false;
+        	$this->autoLayout = false;
         	$this->loadModel('User');
         	$tableresults = array();
         	$sorting_tags = array($i[0][0],$i[0][1],$i[1][0],$i[1][1]);
@@ -653,7 +678,6 @@ public function beforeFilter() {
 			$this->set('taghash',$taghash);
 			$this->set("andSet_ids",$andSet_ids);
 			$this->set("allresults",$allresults);
-//
         }
 
         public function GET_reply($andSet_ids,$sorting_tags,$taghash) {
@@ -661,16 +685,13 @@ public function beforeFilter() {
         	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
         	$taghash = $temp['taghash'];
         	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
-        	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
-
-
-
-        	$currentUserID = $this->Auth->user('id');
+        	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);$currentUserID = $this->Auth->user('id');
         	return  array(
         			'articleparentres' =>$sorter_mended_results['article']['results']
-        			,'tagparentres'=>$sorter_mended_results['tag']['results']);;
-
+        			,'tagparentres'=>$sorter_mended_results['tag']['results']);
         }
+
+
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる
 		 * 与えられるのは検索タグの集合

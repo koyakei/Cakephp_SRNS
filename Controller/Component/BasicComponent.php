@@ -307,12 +307,6 @@ class BasicComponent extends Component {
 		$modelSe = new $modelSe();
 		$andSet = array();
 		$or =array();
-// 		foreach ($ids as $id){
-// 			debug($id[0] != '' || $id[1] != '');
-// 			if ($id[0] != '' || $id[1] != ''){
-// 				array_push($or, array("Link.LFrom" => $id));
-// 			}
-// 		}
 
 		foreach ($ids as $id){
 			foreach ($id as $idx => $i){
@@ -347,14 +341,15 @@ class BasicComponent extends Component {
 					)
 		                ),
 				),
-				'order' => ''
 			);
-		debug($option);
+// 		debug($option);
 		if (($ids[0][0]!= '' || $ids[0][1]!= '') && ($ids[1][0]!= '' || $ids[1][1]!= '')){
 			$option = array_merge($option, array( 'group' => "$Ltotarget HAVING COUNT(*) > 1" ));
 		}
 		return $modelSe->find('all',$option);
 	}
+
+
 	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe = null,$Ltotarget = null ,$id) {
 		// 		$that->loadModel($modelSe);
 		$modelSe = new $modelSe();

@@ -2,19 +2,21 @@ $(document).ready(function auto_complete(){
 	function all_reply_finder(){
 		var i = null;
 		var Search_conditions = [];
-    	for(i=0;i<=1;i++){
+		var sorting_tags = [];
+		var trikeys = [];
+		for(i=0;i<=1;i++){
     		Search_conditions[i] = $(".search_tag_id").children("input[name*='data[or]["+ i +"]']").map(function() { return $(this).val();});
     	}
     	$.ajax({
             type: "GET",
-            url: "http://koyakei.0j0.jp/cakephp/tags/GET_all_search",
+            url: "GET_all_search",
             data: {searching_tag_ids:[[Search_conditions[0][0],Search_conditions[0][1]],[Search_conditions[1][0],Search_conditions[1][1]]]},
             dataType:'html',
             success: function(data){
             		//帰ってきたデータでリプライをテーブルに流す
             	//期待する戻り値
             	//なぜか　jquery selectorが動かない
-            	$(".root").html(data)
+            	$(".root").html(data);
             	//ただ入れるだけが一番楽
             },
         });
@@ -87,7 +89,10 @@ $(document).ready(function auto_complete(){
             //IDを下に表示
         	$(this).parent().parent().find('#tag_id').html($(this).attr('id'));
         	$(this).parent().parent().find('input[update='+tag+']').focus();
-        	all_reply_finder();
+        	if($(this).parent().parent().parent().parent().parent().attr("id") == "globalnavi"){
+        		all_reply_finder();
+        	}
+
             return false;
         });
 

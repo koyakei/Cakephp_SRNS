@@ -1,33 +1,45 @@
-<?php Configure::load("static"); ?>
 <!DOCTYPE html>
 <html>
 <head>
-<?php echo $this->Html->script("view2"); ?>
+	<?php echo $this->Html->script(array("view2","accordion")); ?>
+	<style type="css">
+	.autoCompleteInputBox {
+		width: 50%;
+	}
+	table {
+  background: #E4F2F6;
+  }
+
+	</style>
 </head>
 <body>
+<div id="globalnavi">
+<ul>
+  <li>
 	<fieldset>
-        <?php
-echo $this->AutoCompleteNoHidden->input(
-    'or1.1',
-    array(
-        'autoCompletesUrl'=>$this->Html->url(
-            array(
-                'controller'=>'tagusers',
-                'action'=>'auto_complete',
-            )
-        ),
-        'autoCompleteRequestItem'=>'autoCompleteText',
-    )
-);
-?>
-<div class="search_tag_id">
-<?php
-echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or1'));
-?>
-</div>
-</fieldset>
+	    <?php
+			echo $this->AutoCompleteNoHidden->input(
+			    'or1.1',
+			    array(
+			        'autoCompletesUrl'=>$this->Html->url(
+			            array(
+			                'controller'=>'tagusers',
+			                'action'=>'auto_complete',
+			            )
+			        ),
+			        'autoCompleteRequestItem'=>'autoCompleteText',
+			    )
+			);
+		?>
+		<div class="search_tag_id">
+		<?php
+			echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or1'));
+		?>
+		</div>
+	</fieldset>
+	</li>
 AND
-
+<li>
 	<fieldset>
         <?php
 echo $this->AutoCompleteNoHidden->input(
@@ -48,7 +60,7 @@ echo $this->AutoCompleteNoHidden->input(
 echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or2'));
 ?>
 </div>
-</fieldset>
+</fieldset></li><li>
 	<fieldset>
         <?php
 echo $this->AutoCompleteNoHidden->input(
@@ -69,9 +81,9 @@ echo $this->AutoCompleteNoHidden->input(
 echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' => 'or1'));
 ?>
 </div>
-</fieldset>
+</fieldset></li>
 AND
-
+<li>
 	<fieldset>
         <?php
 echo $this->AutoCompleteNoHidden->input(
@@ -92,9 +104,25 @@ echo $this->AutoCompleteNoHidden->input(
 echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' => 'or2'));
 ?>
 </div>
-</fieldset>
+</fieldset></li>
+</ul>
 
-<div id="body">
+
+<BUTTON type="button" id="search" onclick="all_reply_find($('.search_tag_id'))">検索</BUTTON>
+</div>
+	</div>
+
+<!-- アコーディオンパネルをここに設置する
+taghashみたいに各ネストごとにループして配置
+ネストが入れ子になっている時の動作を考える。
+アコーディオンでネストさせてテーブルを表示する。
+ネストで更にネストしている時の処理
+１層目と２層目でテーブルの中にアコーディオンを作れない店が違う。
+階層ごとに処理が違うのはまずそう
+
+-->
+<div class="root">
+</div>
 <div onClick='toggleShow(this);' >
 	add
 
@@ -138,6 +166,5 @@ echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' =>
 		</fieldset>
 
 	</div>
-</div>
 </body>
 </html>

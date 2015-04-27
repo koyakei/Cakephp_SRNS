@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<?php echo $this->Html->script(array("view2","accordion")); ?>
 	<style type="css">
 	.autoCompleteInputBox {
@@ -14,6 +15,7 @@
 </head>
 <body>
 <div id="globalnavi">
+<div id="search_box">
 <ul>
   <li>
 	<fieldset>
@@ -38,7 +40,7 @@
 		</div>
 	</fieldset>
 	</li>
-AND
+
 <li>
 	<fieldset>
         <?php
@@ -51,6 +53,7 @@ echo $this->AutoCompleteNoHidden->input(
                 'action'=>'auto_complete',
             )
         ),
+    		'click_function' => 'test()',
         'autoCompleteRequestItem'=>'autoCompleteText',
     )
 );
@@ -82,12 +85,17 @@ echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' =>
 ?>
 </div>
 </fieldset></li>
-AND
+</ul>
+
+</div>
+<div class="trikeys">
+<p>trikeys</p>
+<ul>
 <li>
 	<fieldset>
         <?php
 echo $this->AutoCompleteNoHidden->input(
-    'or1.1',
+    'trikeys.0',
     array(
         'autoCompletesUrl'=>$this->Html->url(
             array(
@@ -101,16 +109,42 @@ echo $this->AutoCompleteNoHidden->input(
 ?>
 <div class="search_tag_id">
 <?php
-echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' => 'or2'));
+echo $this->Form->hidden('trikeys..',array('value' => '','class' => 'tag_id'));
 ?>
 </div>
 </fieldset></li>
 </ul>
-
-
-<BUTTON type="button" id="search" onclick="all_reply_find($('.search_tag_id'))">検索</BUTTON>
 </div>
-	</div>
+<div class="sorting_tags">
+<p>sorting tags</p>
+<ul>
+<li>
+	<fieldset>
+        <?php
+echo $this->AutoCompleteNoHidden->input(
+    'sorting_tags.0',
+    array(
+        'autoCompletesUrl'=>$this->Html->url(
+            array(
+                'controller'=>'tagusers',
+                'action'=>'auto_complete',
+            )
+
+        ),
+    	'click_function' => 'all_reply_finder()',
+        'autoCompleteRequestItem'=>'autoCompleteText',
+    )
+);
+?>
+<div class="search_tag_id">
+<?php
+echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id'));
+?>
+</div>
+</fieldset></li>
+</ul>
+</div>
+</div>
 
 <!-- アコーディオンパネルをここに設置する
 taghashみたいに各ネストごとにループして配置
@@ -165,6 +199,7 @@ taghashみたいに各ネストごとにループして配置
 				<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
 		</fieldset>
 
+	</div>
 	</div>
 </body>
 </html>

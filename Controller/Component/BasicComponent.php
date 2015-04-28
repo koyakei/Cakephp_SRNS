@@ -308,14 +308,18 @@ class BasicComponent extends Component {
 		$andSet = array();
 		$or =array();
 
-		foreach ($ids as $id){
+		foreach ($ids as $idxx =>$id){
+
 			foreach ($id as $idx => $i){
 				if ($i == ''){
 					unset($id[$idx]);
 				}
 				$id = array_values($id);
 			}
-				array_push($or, array("Link.LFrom" => $id));
+
+			if ($id !=  array('')){
+					array_push($or, array("Link.LFrom" => $id));
+			}
 		}
 		$option = array(
 				'conditions'=> array(

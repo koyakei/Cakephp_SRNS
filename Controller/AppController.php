@@ -111,31 +111,24 @@ public $components = array(
      * $sorting_tags= array ('ID');
      * @return array
      */
-    function taghashes_cutter(&$taghashes,$sorting_tags){
-    	if (!is_array($taghashes)) {
-    		return ;
-    	}
-    	if (is_null($sorting_tags)) {
-	    	return null;
-    	}else{
-    		//　sorging　tags が hashになかったら削除
+function taghashes_cutter(&$taghashes,$sorting_tags){
+		if (!is_array($taghashes)) {
+			return NotFoundException("no taghash array");
+		}
+// 		if (!is_array($sorting_tags)) {
+// // 			return NotFoundException("no sorting_tags array" + $sorting_tags);;
+// 		}else{
+			foreach ($taghashes as $taghash_key => $taghash_val){
+				foreach ($sorting_tags as $sorting_tag){
+					if ($sorting_tag != $taghash_val['ID']){
+						unset($taghashes[$taghash_key]);
+					}
+				}
+			}
+// 		}
+		return $taghashes;
+	}
 
-
-    		foreach ($taghashes as $taghash_key => $taghash_val){
-//     			$switch = null;
-//     			foreach ($sorting_tags as $sorting_tag){
-//     				if(array_search( $taghashes[$taghash_key]['Tag']['ID'],$sorting_tags)){
-//     					$switch = $switch++;
-//     				}
-//     			}
-    			if (array_search( $taghashes[$taghash_key]['Tag']['ID'],$sorting_tags)){
-    				unset($taghashes[$taghash_key]);
-    			}
-    		}
-    	}
-
-    	return $taghashes;
-    }
     /**
      *
      * @param int $target_ids
@@ -187,6 +180,8 @@ public $components = array(
 	}
 
     /**
+     * ソートタグに合わせてタグハッシュを切り詰める
+     * js でやることにした。クエリが飛びすぎる。
      * @param results 結果
      * @param taghashes
      * この二つに分けると思ったが上だけでいい
@@ -195,9 +190,9 @@ public $components = array(
      * @return array('results','taghashes')
      *
      */
-    function sorting_taghash_gen($results,&$taghashes,$sorting_tags){
+    public function sorting_taghash_gen($results,&$taghashes,$sorting_tags){
     	$i =0;
-    	if (!is_array($results)) return ;
+    	if (!is_array($results)) return Exception("not array");
     	foreach  ($results as $result){
     		if (!is_null($result['subtag'])){
 	    		foreach ($result['subtag'] as $sub_tag_key => $sub_tag_val){

@@ -1,7 +1,5 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('TagsController', 'Controller');
-App::uses('Tag','Model');
 
 /**
  * TagsController Test Case
@@ -400,46 +398,8 @@ class TagsControllerTest extends ControllerTestCase {
 	)
 );
 		$sorting_tags = array();
-		$res = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
+		$res = $this->AppController->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
 		debug($res);
-	}
-	public function sorting_taghash_gen($results,&$taghashes,$sorting_tags){
-		$i =0;
-		if (!is_array($results)) return Exception("not array");
-		foreach  ($results as $result){
-			if (!is_null($result['subtag'])){
-				foreach ($result['subtag'] as $sub_tag_key => $sub_tag_val){
-					foreach ($sorting_tags as $hashval){
-						if ($results[$i]['subtag'][$sub_tag_key]['Tag']['ID']
-								!== $hashval) {
-									$results[$i]['no_sort_subtag'][$sub_tag_key]
-									= $results[$i]['subtag'][$sub_tag_key];
-								}
-					}
-				}
-			}
-			$i++;
-		}
-		$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);
-		return array('results'=> $results,'taghashes'=>$taghashes);
-	}
-	function taghashes_cutter(&$taghashes,$sorting_tags){
-		if (!is_array($taghashes)) {
-			return NotFoundException("no taghash array");
-		}
-		if (!is_array($sorting_tags)) {
-			return NotFoundException("no sorting_tags array");;
-		}else{
-			foreach ($taghashes as $taghash_key => $taghash_val){
-				foreach ($sorting_tags as $sorting_tag){
-					if ($sorting_tag != $taghash_val['ID']){
-						unset($taghashes[$taghash_key]);
-					}
-				}
-			}
-		}
-
-		return $taghashes;
 	}
 	public function testTaghashes_cutter(){
 		$taghashes = array(
@@ -452,15 +412,18 @@ class TagsControllerTest extends ControllerTestCase {
 		'name' => '出現順'
 	),
 				);
-		$expect = array(
-	(int) 2140 => array(
-		'ID' => '2140',
-		'name' => 'SRNS'
-	)
-);
 		$sorting_tags = array(2140);
-		$taghashes = $this->taghashes_cutter($taghashes,$sorting_tags);
-		$this->assertEqual($expect,$taghashes);
+		$taghashes = $this->AppController->taghashes_cutter($taghashes,$sorting_tags);
+		debug($taghashes);
 	}
+	public function testTest() {
+// 		$Posts = $this->generate('Tags', array(
+// 				'models' => array(
+// 						'isAuthorized'=>true
+// 				),
 
+// 		));
+		$test = 1;
+		$this->assertContains($test, $result);
+	}
 }

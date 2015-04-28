@@ -286,7 +286,7 @@ public function beforeFilter() {
         	}
         	$all_node = null;//全部の情報
         	//$this->request->query('trikey_filter'); トライキーのフィルター
-        	$this->loadModel("User");
+//         	$this->loadModel("User");
 
         	$this->loadModel("Trikey_list");
         	$all_trikeis = $this->allKeyList();//すべてのトライキーを取得
@@ -294,16 +294,16 @@ public function beforeFilter() {
 //         	$all_node = $this->get_child("Base_trikey_entity",$all_node,$id,$base_id,$base_trikey);
 			//base_trikeyのみに関連付けられているエンティティーを取得
 
-			$that = $this;
-			$option = array('key' => $base_trikey);
-// 			$all_node["$base_trikey"] = $this->Common->trifinderbyid($that,$id,$option);
-			$this->set('base_trikey' ,$base_trikey);
-        	$this->set('currentUserID', $this->Auth->user('id'));
-        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-        	//$collected_result[$trikey]["Model"}[ID] こんなかんじで
-        	$this->set('default_nodes',$all_node); //デフォルトのノードツリーを返す
-        	$this->set('sorting_tags',$sorting_tags);
-        	$this->set('taghash',$result["taghash"]);
+// 			$that = $this;
+// 			$option = array('key' => $base_trikey);
+// // 			$all_node["$base_trikey"] = $this->Common->trifinderbyid($that,$id,$option);
+// 			$this->set('base_trikey' ,$base_trikey);
+//         	$this->set('currentUserID', $this->Auth->user('id'));
+//         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+//         	//$collected_result[$trikey]["Model"}[ID] こんなかんじで
+//         	$this->set('default_nodes',$all_node); //デフォルトのノードツリーを返す
+//         	$this->set('sorting_tags',$sorting_tags);
+//         	$this->set('taghash',$result["taghash"]);
 		}
 		public function get_parent_id($parent_entities,$model,$primarykey){
 			if ($model == "Base_trikey_tag"){
@@ -668,24 +668,25 @@ public function beforeFilter() {
         	$this->autoLayout = false;
         	$this->loadModel('User');
         	$tableresults = array();
-        	$sorting_tags = array($i[0][0],$i[0][1],$i[1][0],$i[1][1]);
+        	$sorting_tags = array($this->request->query('sorting_tags'));
         	$taghash = array();
 			$allresults = $this->GET_reply($this->request->query('searching_tag_ids'),$sorting_tags,$taghash);
 			$this->set('currentUserID', $this->Auth->user('id'));
 			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-			$this->set('array_tableresults',$tableresults);
 			$this->set('sorting_tags',$sorting_tags);
 			$this->set('taghash',$taghash);
 			$this->set("andSet_ids",$andSet_ids);
 			$this->set("allresults",$allresults);
+// 			debug($taghash);
         }
 
-        public function GET_reply($andSet_ids,$sorting_tags,$taghash) {
+        public function GET_reply($andSet_ids,$sorting_tags,&$taghash) {
         	$options = array('key' => Configure::read('tagID.search'));
         	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
         	$taghash = $temp['taghash'];
         	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
-        	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);$currentUserID = $this->Auth->user('id');
+        	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
+        	$currentUserID = $this->Auth->user('id');
         	return  array(
         			'articleparentres' =>$sorter_mended_results['article']['results']
         			,'tagparentres'=>$sorter_mended_results['tag']['results']);

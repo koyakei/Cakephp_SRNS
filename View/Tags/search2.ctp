@@ -106,11 +106,36 @@ echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' =>
 </div>
 </fieldset></li>
 </ul>
+<div class="sorting_tags">
+<p>sorting tags</p>
+<ul>
+<li>
+	<fieldset>
+        <?php
+echo $this->AutoCompleteNoHidden->input(
+    'sorting_tags.0',
+    array(
+        'autoCompletesUrl'=>$this->Html->url(
+            array(
+                'controller'=>'tagusers',
+                'action'=>'auto_complete',
+            )
 
-
-<BUTTON type="button" id="search" onclick="all_reply_find($('.search_tag_id'))">検索</BUTTON>
+        ),
+    	'click_function' => 'all_reply_finder()',
+        'autoCompleteRequestItem'=>'autoCompleteText',
+    )
+);
+?>
+<div class="search_tag_id">
+<?php
+echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id'));
+?>
 </div>
-	</div>
+</fieldset></li>
+</ul>
+</div>
+</div>
 
 <!-- アコーディオンパネルをここに設置する
 taghashみたいに各ネストごとにループして配置

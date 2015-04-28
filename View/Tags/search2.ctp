@@ -2,6 +2,15 @@
 <html>
 <head>
 	<?php echo $this->Html->script(array("view2","accordion")); ?>
+	<script type="text/javascript">
+	$(document).ready(function()
+		    {
+		        $(".myTable").tablesorter();
+
+		        };
+		    }
+		);
+	</script>
 	<style type="css">
 	.autoCompleteInputBox {
 		width: 50%;

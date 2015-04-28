@@ -1,19 +1,14 @@
 <?php Configure::load("static"); ?>
-<!DOCTYPE html>
 <html>
 <head>
     <script type="text/javascript">
-
 $(document).ready(function()
     {
-        $(".myTable").tablesorter();
             var newTagNodeSubmit = document.getElementById('trikey_submit');
         	document.getElementById('tag_id').value.onchange = function() {
         	document.getElementById('spesifiedtrikeylink').innerHTML = '/cakephp/tags/singletrikeytable/<?php echo $idre; ?>/' + document.getElementById('tag_id').value;
-
         };
     }
-
 );
 
 function jumpStrikey(){
@@ -32,7 +27,6 @@ function ajaxtable(keyid){
 		}
 	});
 }
-
 </script>
 </head>
 <body>

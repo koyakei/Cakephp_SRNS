@@ -49,7 +49,7 @@ function toggleShow(obj) {
 	<?php
 		echo $this->Html->meta('icon');
 		echo $this->Html->css('cake.generic');
-		echo $this->Html->script(array('jquery.autocomplete','auto_complete','vis','sha'));
+		echo $this->Html->script(array('auto_complete','vis','sha'));
 		echo $this->Js->writeBuffer( array( 'inline' => 'true'));
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -58,7 +58,10 @@ function toggleShow(obj) {
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
-
+    $(document).ready(function()
+    	    {
+    	        $(".myTable").tablesorter();
+    	    });
     </script>
 </head>
 <body>

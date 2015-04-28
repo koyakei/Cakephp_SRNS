@@ -665,7 +665,7 @@ public function beforeFilter() {
          */
 
         public function GET_all_search(){
-        	$this->autoLayout = false;
+//         	$this->autoLayout = false;
         	$this->loadModel('User');
         	$tableresults = array();
         	$sorting_tags = array($this->request->query('sorting_tags'));

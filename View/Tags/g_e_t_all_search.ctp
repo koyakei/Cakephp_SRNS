@@ -1,4 +1,5 @@
 
+
 	<?php
 	echo $this->element('accordion/table_reply',
 		array('tableresults' => $allresults,
@@ -9,7 +10,3 @@
 		)
 	);
 	?>
-
-
-
-</div>

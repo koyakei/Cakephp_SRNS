@@ -152,16 +152,17 @@ public function beforeFilter() {
          *
          */
         public function view2($id) {
+        	if ($id ==null) {
+        		$id = $this->request->query["id"];
+        	}
+        	$base_trikey = $this->request->query('trikey_filter'); //トライキーのフィルター
 //         	デフォルトで"リプライ"だけ読む
         	if ($base_trikey == null) {
         		$base_trikey = Configure::read("tagID.reply");
         	}
         	$all_node = null;//全部の情報
-        	//$this->request->query('trikey_filter'); トライキーのフィルター
         	$this->loadModel("User");
-        	if ($id ==null) {
-        		$id = $this->request->query["id"];
-        	}
+
         	$this->loadModel("Trikey_list");
         	$all_trikeis = $this->allKeyList();//すべてのトライキーを取得
 
@@ -658,41 +659,75 @@ public function beforeFilter() {
         	debug($this->Common->trifinderbyidAndSet($this,array(1),$options));
         }
 
-        // 			$this->laysout = "";
-        //     		$this->autoRender = false;
         /**
-         * @array $sorting_tags ソートに使っているタグ
+         * @post $this->request->query('sorting_tags') ソートに使っているタグ
+         * @post  $this->request->query('trikey') nullの場合配列じゃなくなるんだっけ？
+         * @post  $this->request->query('reply_owners') nullの場合配列じゃなくなるんだっけ？
+         *
          */
 
         public function GET_all_search(){
-//         	$this->autoLayout = false;
         	$this->loadModel('User');
         	$tableresults = array();
         	$sorting_tags = array($this->request->query('sorting_tags'));
         	$taghash = array();
-			$allresults = $this->GET_reply($this->request->query('searching_tag_ids'),$sorting_tags,$taghash);
+        	if (is_null($this->request->query('id'))){
+				$allresults = $this->GET_search($this->request->query('searching_tag_ids'),$sorting_tags,$taghash);
+        	} else {
+				$allresults = $this->GET_reply($id,$this->request->query('trikey'),$this->request->query('reply_owners'));
+        	}
 			$this->set('currentUserID', $this->Auth->user('id'));
 			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 			$this->set('sorting_tags',$sorting_tags);
 			$this->set('taghash',$taghash);
 			$this->set("andSet_ids",$andSet_ids);
 			$this->set("allresults",$allresults);
-// 			debug($taghash);
         }
 
-        public function GET_reply($andSet_ids,$sorting_tags,&$taghash) {
+        public function GET_search($andSet_ids,$sorting_tags,&$taghash) {
         	$options = array('key' => Configure::read('tagID.search'));
         	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
         	$taghash = $temp['taghash'];
         	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
         	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
-        	$currentUserID = $this->Auth->user('id');
+//         	$currentUserID = $this->Auth->user('id');
         	return  array(
         			'articleparentres' =>$sorter_mended_results['article']['results']
-        			,'tagparentres'=>$sorter_mended_results['tag']['results']);
+        			,'tagparentres'=>$sorter_mended_results['tag']['results']
+        	);
         }
+		/**
+		 *
+		 * @param int $id
+		 * @param array $trikey
+		 * @param array $reply_owners どのオーナーのreply を受け入れるのか？ 自分の友人のみとかにする
+		 * @throws NotFoundException　
+		 * @return array
+					'articleparentres' =>$sorter_mended_results['article']['results']
+					,'tagparentres'=>$sorter_mended_results['tag']['results']
 
+		 */
+		public  function GET_reply($id,$trikey = null,$reply_owners = NULL){
+			if (!$this->{$this->modelClass}->exists($id)) {
+				throw new NotFoundException(__('Invalid tag'));
+			}
+			if (!is_null($reply_owners)){
+				$reply_owners = array_push($reply_owners,$this->Auth->user('id'));
+			} else {
+				$reply_owners = array($this->Auth->user('id'));
+			}
 
+			$options = array('key' => Configure::read('tagID.reply'),'reply_owners' => $reply_owners);
+			$temp  = $this->Common->trifinderbyid($this,$id,$options);
+			$taghash = $temp['taghash'];
+			$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
+			$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
+			$currentUserID = $this->Auth->user('id');
+			return  array(
+					'articleparentres' =>$sorter_mended_results['article']['results']
+					,'tagparentres'=>$sorter_mended_results['tag']['results']
+			);
+		}
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる
 		 * 与えられるのは検索タグの集合

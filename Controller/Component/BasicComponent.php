@@ -290,6 +290,10 @@ class BasicComponent extends Component {
 		return $Social->save($data);
 	}
 
+	public function nestedtribasicfiderbyid(&$that,$trikeyID = null,$modelSe,$Ltotarget,$andSet_ids){
+
+	}
+
 	/**
 	 * tribasicfiderbyidAndSet method
 	 *

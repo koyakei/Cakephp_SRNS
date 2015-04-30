@@ -672,9 +672,13 @@ public function beforeFilter() {
         	$sorting_tags = array($this->request->query('sorting_tags'));
         	$taghash = array();
         	if (is_null($this->request->query('id'))){
-				$allresults = $this->GET_search($this->request->query('searching_tag_ids'),$sorting_tags,$taghash);
+				$allresults = $this->GET_search($this->request->query('searching_tag_ids'),Configure::read('tagID.search'),$sorting_tags,$taghash);
         	} else {
-				$allresults = $this->GET_reply($id,$this->request->query('trikey'),$this->request->query('reply_owners'));
+				$allresults = $this->GET_reply($this->request->query('id')
+						,array($this->request->query('trikey'))
+						,$sorting_tags
+						,$taghash
+				);
         	}
 			$this->set('currentUserID', $this->Auth->user('id'));
 			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
@@ -684,13 +688,12 @@ public function beforeFilter() {
 			$this->set("allresults",$allresults);
         }
 
-        public function GET_search($andSet_ids,$sorting_tags,&$taghash) {
-        	$options = array('key' => Configure::read('tagID.search'));
+        public function GET_search($andSet_ids,$trikey = null,$sorting_tags,&$taghash) {
+        	$options = array('key' => $trikey);
         	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
         	$taghash = $temp['taghash'];
         	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
         	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
-//         	$currentUserID = $this->Auth->user('id');
         	return  array(
         			'articleparentres' =>$sorter_mended_results['article']['results']
         			,'tagparentres'=>$sorter_mended_results['tag']['results']
@@ -700,14 +703,13 @@ public function beforeFilter() {
 		 *
 		 * @param int $id
 		 * @param array $trikey
-		 * @param array $reply_owners どのオーナーのreply を受け入れるのか？ 自分の友人のみとかにする
 		 * @throws NotFoundException　
 		 * @return array
 					'articleparentres' =>$sorter_mended_results['article']['results']
 					,'tagparentres'=>$sorter_mended_results['tag']['results']
 
 		 */
-		public  function GET_reply($id,$trikey = null,$reply_owners = NULL){
+		public  function GET_reply($id,$trikey = null,$sorting_tags,$taghash){
 			if (!$this->{$this->modelClass}->exists($id)) {
 				throw new NotFoundException(__('Invalid tag'));
 			}
@@ -717,12 +719,11 @@ public function beforeFilter() {
 				$reply_owners = array($this->Auth->user('id'));
 			}
 
-			$options = array('key' => Configure::read('tagID.reply'),'reply_owners' => $reply_owners);
-			$temp  = $this->Common->trifinderbyid($this,$id,$options);
+			$options = array('key' => $trikey);
+			$temp  = $this->Common->nestfinderbyid($this,$id,$options);
 			$taghash = $temp['taghash'];
 			$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
 			$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
-			$currentUserID = $this->Auth->user('id');
 			return  array(
 					'articleparentres' =>$sorter_mended_results['article']['results']
 					,'tagparentres'=>$sorter_mended_results['tag']['results']

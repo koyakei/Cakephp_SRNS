@@ -349,6 +349,34 @@ class CommonComponent extends Component {
 				'taghash' => $taghash);
 	}
 
+	public function nestfinderbyid(&$that,$id,&$option = null){
+		if ($option['key'] == null) {
+			$option['key'] = Configure::read('tagID.reply');
+		}
+		$articleparentres = $this->nestedtrifiderbyid($that,$id,$option['key'],"Article","Article.ID",$andSet_ids);//どんな記事がぶら下がっているか探す
+		list($articleparentres,$taghash) = $this->getSearchRelation($that, $articleparentres, $taghash, "Article");
+		$tagparentres = $this->nestedtrifiderbyid($that,$option['key'],"Tag","Tag.ID",$andSet_ids);
+		list($tagparentres,$taghash) = $this->getSearchRelation($that,$tagparentres,$taghash,"Tag");
+		$root = ;
+		return array('tagparentres'=>$tagparentres,
+				'articleparentres'=> $articleparentres,
+				'taghash' => $taghash);
+	}
+
+	public function nestedtrifiderbyid(&$that,$id,$trikeyID = null,$modelSe,$Ltotarget){
+		$leaf = self::nestfinderbyid($that, $id, array('key' => $trikeyID));
+		if ($leaf['articleparentres']  != ''){
+			foreach ($leaf['articleparentres'] as $node){
+
+			}
+		}
+		if ($leaf['tagparentres'] !=''){
+			foreach ($leaf['tagparentres'] as $node){
+
+			}
+		}
+		return $result; //leaf も含めて返す
+	}
 	/**
 	 *
 	 * @param unknown $that

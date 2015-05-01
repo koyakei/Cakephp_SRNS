@@ -671,13 +671,19 @@ public function beforeFilter() {
         	$tableresults = array();
         	$sorting_tags = array($this->request->query('sorting_tags'));
         	$taghash = array();
-        	if (is_null($this->request->query('id'))){
+        	$id = $this->request->query('id');
+        	if (is_null($id)|| $id == ''){
 				$allresults = $this->GET_search($this->request->query('searching_tag_ids'),Configure::read('tagID.search'),$sorting_tags,$taghash);
         	} else {
-				$allresults = $this->GET_reply($this->request->query('id')
+        		$temp  = $this->Common->trifinderbyid($this,$id,array('key'=>$this->request->query('trikey')));
+        		$root = array('tagparentres'=>$temp['tagparentres'],
+        				'articleparentres'=> $temp['articleparentres'],
+        				'taghash' => $temp['taghash']);
+				$allresults = self::GET_reply($id
 						,array($this->request->query('trikey'))
 						,$sorting_tags
 						,$taghash
+						,$root
 				);
         	}
 			$this->set('currentUserID', $this->Auth->user('id'));
@@ -687,18 +693,22 @@ public function beforeFilter() {
 			$this->set("andSet_ids",$andSet_ids);
 			$this->set("allresults",$allresults);
         }
+		public function result_converter($temp,&$taghash){
+			$taghash = $temp['taghash'];
+			$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
+			$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
+			return  array(
+					'articleparentres' =>$sorter_mended_results['article']['results']
+					,'tagparentres'=>$sorter_mended_results['tag']['results']
+			);
+		}
 
         public function GET_search($andSet_ids,$trikey = null,$sorting_tags,&$taghash) {
-        	$options = array('key' => $trikey);
-        	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,$options);
-        	$taghash = $temp['taghash'];
-        	$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
-        	$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
-        	return  array(
-        			'articleparentres' =>$sorter_mended_results['article']['results']
-        			,'tagparentres'=>$sorter_mended_results['tag']['results']
-        	);
+        	$temp  = $this->Common->trifinderbyidAndSet($this,$andSet_ids,array('key' => $trikey));
+        	return  self::result_converter($temp, $taghash);
         }
+
+
 		/**
 		 *
 		 * @param int $id
@@ -709,25 +719,13 @@ public function beforeFilter() {
 					,'tagparentres'=>$sorter_mended_results['tag']['results']
 
 		 */
-		public  function GET_reply($id,$trikey = null,$sorting_tags,$taghash){
+		public  function GET_reply(&$this,$trikey = null,$sorting_tags,&$taghash,&$root){
 			if (!$this->{$this->modelClass}->exists($id)) {
 				throw new NotFoundException(__('Invalid tag'));
 			}
-			if (!is_null($reply_owners)){
-				$reply_owners = array_push($reply_owners,$this->Auth->user('id'));
-			} else {
-				$reply_owners = array($this->Auth->user('id'));
-			}
+			$temp  = $this->Common->nestfinderbyid($this,$id,array('key' => $trikey));
+			$res =  self::result_converter($temp, $taghash);
 
-			$options = array('key' => $trikey);
-			$temp  = $this->Common->nestfinderbyid($this,$id,$options);
-			$taghash = $temp['taghash'];
-			$sorter_mended_results['article'] = $this->sorting_taghash_gen($temp['articleparentres'],$taghash,$sorting_tags);
-			$sorter_mended_results['tag'] = $this->sorting_taghash_gen($temp['tagparentres'],$taghash,$sorting_tags);
-			return  array(
-					'articleparentres' =>$sorter_mended_results['article']['results']
-					,'tagparentres'=>$sorter_mended_results['tag']['results']
-			);
 		}
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる

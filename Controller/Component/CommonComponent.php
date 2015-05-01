@@ -319,7 +319,6 @@ class CommonComponent extends Component {
 			$option['key'] = Configure::read('tagID.reply');
 		}
 		$articleparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);//どんな記事がぶら下がっているか探す
-
 		list($articleparentres,$taghash) = $this->getSearchRelation($that, $articleparentres, $taghash, "Article");
 		$tagparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
 		list($tagparentres,$taghash) =
@@ -353,14 +352,10 @@ class CommonComponent extends Component {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-		$articleparentres = $this->nestedtrifiderbyid($that,$id,$option['key'],"Article","Article.ID",$andSet_ids);//どんな記事がぶら下がっているか探す
-		list($articleparentres,$taghash) = $this->getSearchRelation($that, $articleparentres, $taghash, "Article");
-		$tagparentres = $this->nestedtrifiderbyid($that,$option['key'],"Tag","Tag.ID",$andSet_ids);
-		list($tagparentres,$taghash) = $this->getSearchRelation($that,$tagparentres,$taghash,"Tag");
-		$root = ;
-		return array('tagparentres'=>$tagparentres,
-				'articleparentres'=> $articleparentres,
-				'taghash' => $taghash);
+		$temp  = $this->Common->trifinderbyid($this,$id,$options);
+		return array('tagparentres'=>$temp['tagparentres'],
+				'articleparentres'=> $temp['articleparentres'],
+				'taghash' => $temp['taghash']);
 	}
 
 	public function nestedtrifiderbyid(&$that,$id,$trikeyID = null,$modelSe,$Ltotarget){

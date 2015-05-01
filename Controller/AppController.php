@@ -368,7 +368,6 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 
     	$this->Common->tagRadd($this);
     	if($this->request->data['Article']['name'] != null){
-    		debug("in");
     		$options['key'] = $this->request->data['Article']['keyid'];
     		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
     		$this->Basic->social($this);

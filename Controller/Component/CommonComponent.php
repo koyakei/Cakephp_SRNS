@@ -348,14 +348,18 @@ class CommonComponent extends Component {
 				'taghash' => $taghash);
 	}
 
-	public function nestfinderbyid(&$that,$id,&$option = null){
+	public function nestfinderbyid(&$that,&$root,$sorting_tags,$id,&$taghash,&$option = null){
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
 		$temp  = $this->Common->trifinderbyid($this,$id,$options);
+		if($temp['tagparentres'] != '' ||$temp['articleparentres'] != '' ){ //孫があったらもう一段入る
+			$taghash = $temp['taghash'];
+			$this->Tag->GET_sons_reply(
+					$this,$option['key'],$sorting_tags,$taghash,$root);
+		}
 		return array('tagparentres'=>$temp['tagparentres'],
-				'articleparentres'=> $temp['articleparentres'],
-				'taghash' => $temp['taghash']);
+				'articleparentres'=> $temp['articleparentres']);
 	}
 
 	public function nestedtrifiderbyid(&$that,$id,$trikeyID = null,$modelSe,$Ltotarget){

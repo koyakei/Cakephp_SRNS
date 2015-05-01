@@ -675,11 +675,12 @@ public function beforeFilter() {
         	if (is_null($id)|| $id == ''){
 				$allresults = $this->GET_search($this->request->query('searching_tag_ids'),Configure::read('tagID.search'),$sorting_tags,$taghash);
         	} else {
-        		$temp  = $this->Common->trifinderbyid($this,$id,array('key'=>$this->request->query('trikey')));
+        		$allresults  = $this->Common->trifinderbyid($this,$id,array('key'=>$this->request->query('trikey')));
         		$root = array('tagparentres'=>$temp['tagparentres'],
         				'articleparentres'=> $temp['articleparentres'],
         				'taghash' => $temp['taghash']);
-				$allresults = self::GET_reply($id
+        		$taghash = $temp['taghash'];
+				$allresults = self::GET_sons_reply($id
 						,array($this->request->query('trikey'))
 						,$sorting_tags
 						,$taghash
@@ -719,13 +720,22 @@ public function beforeFilter() {
 					,'tagparentres'=>$sorter_mended_results['tag']['results']
 
 		 */
-		public  function GET_reply(&$this,$trikey = null,$sorting_tags,&$taghash,&$root){
+		public  function GET_sons_reply(&$this,$trikey = null,$sorting_tags,&$taghash,&$root){
 			if (!$this->{$this->modelClass}->exists($id)) {
 				throw new NotFoundException(__('Invalid tag'));
 			}
-			$temp  = $this->Common->nestfinderbyid($this,$id,array('key' => $trikey));
-			$res =  self::result_converter($temp, $taghash);
+			$models = array('article','tag');
 
+			foreach ($models as $model){
+				$model_parent = $model + "parentres";
+				foreach ($root["$model"] as $idx => $son){ //子供ノードごとに孫を探す
+					$temp  = CommonComponent::nestfinderbyid($this,$root,$sorting_tags,$son[ucfirst($model)]['ID'],$taghash,array('key' => $trikey));
+					if($temp['tagparentres'] != '' ||$temp['articleparentres'] != '' ){ //孫があったらもう一段入る
+						$root["$model"][$idx]['leaf'] = $temp;
+					}
+				}
+			}
+// 			return $root　$taghash; 参照で返す
 		}
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる

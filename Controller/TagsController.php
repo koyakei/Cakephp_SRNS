@@ -605,19 +605,21 @@ public function beforeFilter() {
         /**
          * add method
          *
+         *
          * @return void
          */
         public function add() {
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->loadModel('User');
-        	$max_quant = 1000;
+
+
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	if ($this->request->is('post')) {
         		$this->Tag->create();
         		$this->request->data['Tag'] += array(
         				'created' => date("Y-m-d H:i:s"),
         				'modified' => date("Y-m-d H:i:s"),
-        				'max_quant' => $max_quant,
+        				'max_quant' => $this->request->query('max_quant'), // default はテーブルで制御
         		);
         		$this->Basic->taglimitcountup($this);
         		$data['Tagauthcount'] =array('user_id' => $this->request->data['Tag']['user_id'],'tag_id' =>$this->last_id,'quant' => $max_quant);
@@ -711,6 +713,7 @@ public function beforeFilter() {
 
 
 		/**
+		 * GET_sons_reply method
 		 *
 		 * @param int $id
 		 * @param array $trikey
@@ -719,6 +722,13 @@ public function beforeFilter() {
 					'articleparentres' =>$sorter_mended_results['article']['results']
 					,'tagparentres'=>$sorter_mended_results['tag']['results']
 
+		 *　トライキーを複数指定したり、ノードごとに違ったり、
+		 *　arrayで渡す必要が出てくる可能性があるのか？
+		 *　今のところさしあたりはそう感じない
+		 *　定義トラキーかつリプライの時にどうするかが問題だ。array
+		 *　それだけを抽出する必要が出てくるが、今の仕様ではそこだけ抽出不可能だ。array
+		 *すべてのリプライを並べるだけではなく、トライキーで検索して順番を付けられる必要がある。
+		 * *
 		 */
 		public  function GET_sons_reply(&$this,$trikey = null,$sorting_tags,&$taghash,&$root){
 			if (!$this->{$this->modelClass}->exists($id)) {

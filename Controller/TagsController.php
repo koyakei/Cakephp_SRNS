@@ -604,7 +604,9 @@ public function beforeFilter() {
 
         /**
          * add method
-         *
+         *　権限について
+         *　タグの管理モードはデフォルトでは　オーナーが全て動かせる設定
+         *　
          *
          * @return void
          */
@@ -615,11 +617,16 @@ public function beforeFilter() {
 
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	if ($this->request->is('post')) {
+        		if ($this->request->query('max_quant') == null){
+        			$max_q = 1000;
+        		} else {
+        			$max_q = $this->request->query('max_quant');
+        		}
         		$this->Tag->create();
         		$this->request->data['Tag'] += array(
         				'created' => date("Y-m-d H:i:s"),
         				'modified' => date("Y-m-d H:i:s"),
-        				'max_quant' => $this->request->query('max_quant'), // default はテーブルで制御
+        				'max_quant' => $max_q, // default はテーブルで制御
         		);
         		$this->Basic->taglimitcountup($this);
         		$data['Tagauthcount'] =array('user_id' => $this->request->data['Tag']['user_id'],'tag_id' =>$this->last_id,'quant' => $max_quant);
@@ -728,9 +735,9 @@ public function beforeFilter() {
 		 *　定義トラキーかつリプライの時にどうするかが問題だ。array
 		 *　それだけを抽出する必要が出てくるが、今の仕様ではそこだけ抽出不可能だ。array
 		 *すべてのリプライを並べるだけではなく、トライキーで検索して順番を付けられる必要がある。
-		 * *
+		 *
 		 */
-		public  function GET_sons_reply(&$this,$trikey = null,$sorting_tags,&$taghash,&$root){
+		public function GET_sons_reply(&$that, $trikey = null, $sorting_tags, &$taghash, &$root){
 			if (!$this->{$this->modelClass}->exists($id)) {
 				throw new NotFoundException(__('Invalid tag'));
 			}
@@ -745,7 +752,6 @@ public function beforeFilter() {
 					}
 				}
 			}
-// 			return $root　$taghash; 参照で返す
 		}
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる

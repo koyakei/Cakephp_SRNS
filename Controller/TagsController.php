@@ -618,15 +618,15 @@ public function beforeFilter() {
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	if ($this->request->is('post')) {
         		if ($this->request->query('max_quant') == null){
-        			$max_q = 1000;
+        			$max_quant = 1000;
         		} else {
-        			$max_q = $this->request->query('max_quant');
+        			$max_quant = $this->request->query('max_quant');
         		}
         		$this->Tag->create();
         		$this->request->data['Tag'] += array(
         				'created' => date("Y-m-d H:i:s"),
         				'modified' => date("Y-m-d H:i:s"),
-        				'max_quant' => $max_q, // default はテーブルで制御
+        				'max_quant' => $max_quant, // default はテーブルで制御
         		);
         		$this->Basic->taglimitcountup($this);
         		$data['Tagauthcount'] =array('user_id' => $this->request->data['Tag']['user_id'],'tag_id' =>$this->last_id,'quant' => $max_quant);

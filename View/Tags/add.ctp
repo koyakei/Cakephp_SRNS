@@ -15,7 +15,24 @@
     'type' => 'select',
     'options' => array( 0 => 'public',1 => 'private'),
   'selected' => 0));
+	// 三番目の選択肢として、タグの選択が可能にしたい
+	//jquery で
+	echo $this->Form->input('auth_move',array(
+			'type' => 'select',
+			'options' => array( 0 => 'public',1 => 'private'),
+			'selected' => 1));
+	echo $this->Form->input('auth_delegate',array(
+			'type' => 'select',
+			'options' => array( 0 => 'public',1 => 'private'),
+			'selected' => 1));
 	?>
+	<!--
+	<datalist id="auth">
+<option value="公開">
+<option value="自分だけ">
+</datalist>
+このデータリストを　append してタグの候補を表示したい　js.autocomplete でやろうかな
+-->
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>

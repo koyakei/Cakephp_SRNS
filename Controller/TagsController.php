@@ -626,10 +626,10 @@ public function beforeFilter() {
         		$this->request->data['Tag'] += array(
         				'created' => date("Y-m-d H:i:s"),
         				'modified' => date("Y-m-d H:i:s"),
-        				'max_quant' => $max_quant, // default はテーブルで制御
+        				'max_quant' => $this->request->query('max_quant'), // default はテーブルで制御
         		);
         		$this->Basic->taglimitcountup($this);
-        		$data['Tagauthcount'] =array('user_id' => $this->request->data['Tag']['user_id'],'tag_id' =>$this->last_id,'quant' => $max_quant);
+        		$data['Tagauthcount'] =array('user_id' => $this->request->data['Tag']['user_id'],'tag_id' =>$this->last_id,'quant' => $this->request->query('max_quant'));
         		$this->loadModel('Tagauthcount');
         		$this->Tagauthcount->create();
         		$this->Tagauthcount->save($data);

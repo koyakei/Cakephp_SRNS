@@ -15,6 +15,10 @@
     'type' => 'select',
     'options' => array( 0 => 'public',1 => 'private'),
   'selected' => 0));
+	echo $this->Form->input('max_quant',array(
+			'type' => 'number',
+			'value' => 1000,
+	));
 	// 三番目の選択肢として、タグの選択が可能にしたい
 	//jquery で
 	echo $this->Form->input('auth_move',array(

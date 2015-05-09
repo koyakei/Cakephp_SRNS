@@ -156,10 +156,13 @@ taghashみたいに各ネストごとにループして配置
 
 -->
 <div class="root">
+<!--  いちいち　get_all search に呼びに行くのも難だな
+初回のロードでajax を呼ばないようにでもするか？
+全部js で制御するのか？
+-->
 </div>
 <div onClick='toggleShow(this);' >
 	add
-
 </div>
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">

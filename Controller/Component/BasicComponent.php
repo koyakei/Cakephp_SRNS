@@ -283,6 +283,49 @@ class BasicComponent extends Component {
 		return $modelSe->find('all',$option);
 	}
 
+	/**
+	 * tribasicfiderbyid method
+	 *
+	 * @throws NotFoundException
+	 * @param mix $that
+	 * @param int $trikeyID
+	 * @param string $modelSe
+	 * @param string $Ltotarget //target colmunn 探すID
+	 * @param ind $id
+	 * @return $that->returntribasic
+	 */
+	public function tribasicRefiderbyid(&$that = null,$trikeyID = null,$modelSe,$LFromtarget,$id) {
+
+		$modelSe = new $modelSe();
+		$option = array(
+				'conditions'=> array(
+						"Link.LFrom = $LFromtarget"
+				),
+				'fields' => array('*'		),
+				'joins'
+				=> array(
+						array(
+								'table' => 'link',
+								'alias' => 'Link',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("$id = Link.LTo")
+								)
+						),
+						array(
+								'table' => 'taglinks',
+								'alias' => 'taglink',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Link.ID = taglink.LTo"),
+										($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
+								)
+						),
+				),
+				'order' => ''
+		);
+		return $modelSe->find('all',$option);
+	}
 	public function social2($searching_tags,$sorting_tags,$selectings){
 		$data['Social'] = array();
 		$Social = new Social();
@@ -290,9 +333,7 @@ class BasicComponent extends Component {
 		return $Social->save($data);
 	}
 
-	public function nestedtribasicfiderbyid(&$that,$trikeyID = null,$modelSe,$Ltotarget,$andSet_ids){
 
-	}
 
 	/**
 	 * tribasicfiderbyidAndSet method

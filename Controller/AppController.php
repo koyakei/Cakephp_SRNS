@@ -365,7 +365,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	$this->loadModel('User');
     	$this->loadModel('Key');
     	$headresults = $this->headview($id);
-
+		//追加ロジック
     	$this->Common->tagRadd($this);
     	if($this->request->data['Article']['name'] != null){
     		$options['key'] = $this->request->data['Article']['keyid'];
@@ -376,6 +376,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     		$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],$id,$this->request->data['Tag']['name'],$options);
     		$this->Basic->social($this,$this->Auth->user('id'));
     	}
+    	//表示取得
     	$key = $this->allKeyList();
     	$i = 0;
     	$extended_objects = $this->Basic->triupperfiderbyid($this,Configure::read('tagID.extend'),"Tag",$id);

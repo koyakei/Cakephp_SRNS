@@ -666,7 +666,7 @@ public function beforeFilter() {
          * @post $this->request->query('sorting_tags') ソートに使っているタグ
          * @post  $this->request->query('trikey') nullの場合配列じゃなくなるんだっけ？
          * @post  $this->request->query('reply_owners') nullの場合配列じゃなくなるんだっけ？
-         *
+         * @todo 本当は　AutocompleteHelper で　読み込むjsファイルを切り替えたいが、なぜかできない
          */
 
         public function GET_all_search(){
@@ -675,6 +675,7 @@ public function beforeFilter() {
         	$sorting_tags = array($this->request->query('sorting_tags'));
         	$taghash = array();
         	$id = $this->request->query('id');
+        	//リプライか　searchかをidのあるなしで判定　
         	if (is_null($id)|| $id == ''){
 				$allresults = $this->GET_search($this->request->query('searching_tag_ids'),Configure::read('tagID.search'),$sorting_tags,$taghash);
         	} else {

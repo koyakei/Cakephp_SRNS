@@ -347,12 +347,42 @@ class CommonComponent extends Component {
 				'articleparentres'=> $articleparentres,
 				'taghash' => $taghash);
 	}
-
-	public function nestfinderbyid(&$that,&$root,$sorting_tags,$id,&$taghash,&$option = null){
+	/**
+	 *
+	 * @param unknown $that
+	 * @param unknown $root　親ノード
+	 * @param unknown $sorting_tags
+	 * @param unknown $id
+	 * @param unknown $taghash
+	 * @param string $option
+	 * @return multitype:unknown
+	 * @var $temp 子供
+	 */
+	public function nestfinderbyid(&$that,&$root,$sorting_tags,$id,&$taghash,$parent,&$option = null){
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-		$temp  = $this->Common->trifinderbyid($this,$id,$options);
+		$temp  = self::trifinderbyid($this,$id,$options);
+		$model = "Tag";
+		//TODO: 親またはルートに子と同じ存在があったらカット
+
+			foreach ($temp['tagparentres'] as $child){
+				//親からの削除
+				foreach ($parent['tagparentres'] as $each_parent){
+					if ($each_parent[$model]['ID'] == $child[$model]['ID']){
+						unset($parent[array_search($child[$model]['ID'], $parent)]);
+					}
+				}
+				//root空の削除
+				foreach ($root['tagparentres'] as $each_parent){
+					if ($each_parent[$model]['ID'] == $child[$model]['ID']){
+						unset($parent[array_search($child[$model]['ID'], $parent)]);
+					}
+				}
+
+
+
+		}
 		if($temp['tagparentres'] != '' ||$temp['articleparentres'] != '' ){ //孫があったらもう一段入る
 			$taghash = $temp['taghash'];
 			$this->Tag->GET_sons_reply(

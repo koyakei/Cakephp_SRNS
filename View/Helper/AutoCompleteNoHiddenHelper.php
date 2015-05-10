@@ -50,7 +50,7 @@
      *
      */
         public $update='autoCompleteDiv';
-        public $scriptPath = 'views/helpers/auto_complete_no_hidden.js';
+        public $scriptPath = 'views/helpers/auto_complete_no_hidden.js'; //TODO:auto_complete.js　を呼んでしまう　なぜ？　jsだけ切り替えたい
         private $jsIncluded = false;
 
         function input($name, $options) {

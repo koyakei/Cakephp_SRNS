@@ -47,7 +47,7 @@ class FollowComponent extends Component {
 
 	/**
 	 *
-	 * @param unknown $that
+	 * @param Object $that
 	 * @param mixed $follower_ids array or int
 	 * @param string $name 更新した記事の要約 twitter連携の時はこれをポスト　140文字まで
 	 * @param unknown $option  controller  action id
@@ -57,18 +57,28 @@ class FollowComponent extends Component {
 		return $bool;
 	}
 
-
+/**
+ *
+ * @param unknown $that
+ * @param unknown $effected_ids
+ * @return Ambigous <multitype:, NULL>|Ambigous <multitype:, number>
+ *
+ * follower target <(follow)=  User
+ *
+ */
 	public function GETfollower(&$that,$effected_ids){
 		$follower_ids = array();
-		$Follow = new Follow();
-		$option = array();
+
 		if (is_array($effected_ids)){
 			foreach ($effected_ids as $effected_id){
-				//
-				$follower_ids =+ $Follow->find('all',$option);
+				$follower_ids =+ BasicComponent::tribasicRefiderbyid(
+						$that,Configure::read("tagID.follow"),
+						"User","User.id",$effected_id);;
 			}
 		} else {
-			return $follower_ids =+ $Follow->find('all',$option);
+			return BasicComponent::tribasicRefiderbyid(
+						$that,Configure::read("tagID.follow"),
+						"User","User.id",$effected_ids);;
 		}
 		return $follower_ids;
 	}

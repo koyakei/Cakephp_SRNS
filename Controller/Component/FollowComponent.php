@@ -50,10 +50,35 @@ class FollowComponent extends Component {
 	 * @param Object $that
 	 * @param mixed $follower_ids array or int
 	 * @param string $name 更新した記事の要約 twitter連携の時はこれをポスト　140文字まで
-	 * @param unknown $option  controller  action id
+	 * @param array $option  ctrl action id
 	 * @return boolean
+	 * 　どのページを帆湯辞させた方がいいのかわからない。
+	 * 更新した人間が操作している現在のアドレスと　捜査した対象を記録する
+	 * 　表示させるときは、更新した人間のいるページを表示して　更新対象をハイライトする
+	 * 　履歴を表示するときに　元のページのroot entity と更新した対象が関連性を持たない場合、どのように処理するのか？
+	 * 　関連性がない倍委、ページの下に無関係として　append する。
 	 */
 	public function pushFeed(&$that,$follower_ids,$name,$option){
+		$bool = false;
+		$data["Social"] = array(
+				'name' => $name,
+				'vaction' =>$option['action'],
+				'vctrl'  => $option['ctrl'],
+				'id' => $option['id'],
+		);
+		if (is_array($changed_ids)){
+			foreach ($follower_ids as $follower_id){
+			 	$data["Social"]['user_id'] = $follower_id;
+				$Social = new Social();
+				$Social->create();
+				$bool = $bool + $Social->Save($data);
+			}
+		} else {
+				$data["Social"]['user_id'] = $follower_ids;
+				$Social = new Social();
+				$Social->create();
+				return $Social->Save($data);
+		}
 		return $bool;
 	}
 
@@ -71,9 +96,9 @@ class FollowComponent extends Component {
 
 		if (is_array($effected_ids)){
 			foreach ($effected_ids as $effected_id){
-				$follower_ids =+ BasicComponent::tribasicRefiderbyid(
+				$follower_ids = array_merge($follower_ids,BasicComponent::tribasicRefiderbyid(
 						$that,Configure::read("tagID.follow"),
-						"User","User.id",$effected_id);;
+						"User","User.id",$effected_id)) ;
 			}
 		} else {
 			return BasicComponent::tribasicRefiderbyid(

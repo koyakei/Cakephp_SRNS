@@ -295,8 +295,6 @@ public function beforeFilter() {
 //         	$all_node = $this->get_child("Base_trikey_entity",$all_node,$id,$base_id,$base_trikey);
 			//base_trikeyのみに関連付けられているエンティティーを取得
 
-// 			$that = $this;
-// 			$option = array('key' => $base_trikey);
 // // 			$all_node["$base_trikey"] = $this->Common->trifinderbyid($that,$id,$option);
 // 			$this->set('base_trikey' ,$base_trikey);
 //         	$this->set('currentUserID', $this->Auth->user('id'));
@@ -381,10 +379,6 @@ public function beforeFilter() {
 	        } else {
 	        		$this->request->data = $this->headview($id);
         	}
-//         	$users = $this->Tagauth->User->find('list');
-//         	$tags = $this->Tagauth->Taguser->find('list');
-//         	$this->set(compact('users', 'tags'));
-
 
 
         }

@@ -27,13 +27,8 @@ class BasicComponent extends Component {
 		debug($data);
 		$Social = new Social();
 		$Social->create();
-		if($Social->Save($data,false)){
-			debug("social ok");
-			return true;
-		} else{
-			debug("social miss");
-			return FALSE;
-		}
+		return $Social->Save($data,false);
+
 	}
 
 	public function quant(&$that) {
@@ -500,7 +495,17 @@ class BasicComponent extends Component {
 		$that->returntribasic = $that->Link->find('first',$option);
 		return $that->returntribasic;
 	}
-	public function trilinkAdd(&$that,$FromID,$ToID,$keyID,$options) {
+
+	/**
+	 * 三角関係のリンク追加
+	 * @param unknown $that
+	 * @param unknown $FromID
+	 * @param unknown $ToID
+	 * @param unknown $keyID
+	 * @param unknown $options
+	 * @return boolean
+	 */
+	public function trilinkAdd(&$that,$FromID,$ToID,$keyID,$options = null) {
 		$quant = 1;
 		if ($that->request->data['Tag']['user_id'] == null) {
 			$that->request->data['Tag']['user_id'] = Configure::read('acountID.admin');

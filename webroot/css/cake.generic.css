@@ -748,3 +748,34 @@ pre {
 #globalnavi input{
 	width: 30%
 }
+.switch input {
+	display: none;
+}
+.switch label{
+	display: block;
+	float: left;
+	cursor: pointer;
+	width: 60px;
+	margin: 0;
+	padding: 10px;
+	background: #bdc3c7;
+	color: #869198;
+	font-size: 16px;
+	text-align: center;
+	line-height: 1;
+	transition: .2s;
+}
+.switch label:first-of-type{
+	border-radius: 3px 0 0 3px;
+}
+.switch label:last-of-type{
+	border-radius: 0 3px 3px 0;
+}
+.switch input[type="radio"]:checked + .switch-on {
+	background-color: #a1b91d;
+	color: #fff;
+}
+.switch input[type="radio"]:checked + .switch-off {
+	background-color: #e67168;
+	color: #fff;
+}

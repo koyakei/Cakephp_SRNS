@@ -1,3 +1,4 @@
+
 <?php foreach ($results  as $result): ?>
 <?php if($firstModel == 'Tag'){$userCallAssosiation = 'O';} else {$userCallAssosiation = 'O';} // アソシエーションの名前を一緒にしたが後で別にするかも?>
 <div id="draggble">
@@ -5,7 +6,8 @@
 					<!--  ここらへんに　trilink での関連性表示 -->
 					<!--
 				同じ階層同士の関連性がある時は　mindmap ボタンがハイライトされればOKとする
-				関連せにフラグ　$result["child_rel"] = bool で建てる
+				SHAで色生成　同色でもいいかも　グレースケールで黒方向の制限　文字とのコントラストを確保
+				関連性にフラグ　$result["child_rel"] = bool で建てる
 					-->
 					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
 					<td>

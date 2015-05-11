@@ -155,6 +155,12 @@ taghashみたいに各ネストごとにループして配置
 階層ごとに処理が違うのはまずそう
 
 -->
+<div class="switch">
+    <input type="radio" name="s2" id="on" value="1" checked="">
+    <label for="on" class="switch-on"><i class="fa fa-user fa-lg"></i></label>
+    <input type="radio" name="s2" id="off" value="0">
+    <label for="off" class="switch-off"><i class="fa fa-globe fa-lg"></i></label>
+</div>
 <div class="root">
 <!--  いちいち　get_all search に呼びに行くのも難だな
 初回のロードでajax を呼ばないようにでもするか？

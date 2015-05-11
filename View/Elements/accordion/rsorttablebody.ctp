@@ -3,7 +3,10 @@
 <div id="draggble">
 				<tr>
 					<!--  ここらへんに　trilink での関連性表示 -->
-					<!--  <td></td> でjsでappend する？　d3.jsでまたいでやるしか無いんじゃあ？ -->
+					<!--
+				同じ階層同士の関連性がある時は　mindmap ボタンがハイライトされればOKとする
+				関連せにフラグ　$result["child_rel"] = bool で建てる
+					-->
 					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
 					<td>
 					<!-- $leaf -->

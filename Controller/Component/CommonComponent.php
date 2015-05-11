@@ -367,20 +367,18 @@ class CommonComponent extends Component {
 		//TODO: 親またはルートに子と同じ存在があったらカット
 
 			foreach ($temp['tagparentres'] as $child){
-				//親からの削除
-				foreach ($parent['tagparentres'] as $each_parent){
-					if ($each_parent[$model]['ID'] == $child[$model]['ID']){
-						unset($parent[array_search($child[$model]['ID'], $parent)]);
-					}
-				}
-				//root空の削除
+				//親からの削除たぶんいらない　　articleparenters はまだ作っていない
+// 				foreach ($parent['tagparentres'] as $each_parent){
+// 					if ($each_parent[$model]['ID'] == $child[$model]['ID']){
+// 						unset($parent[array_search($child[$model]['ID'], $parent)]);
+// 					}
+// 				}
+				//rootの削除　　articleparenters はまだ作っていない
 				foreach ($root['tagparentres'] as $each_parent){
 					if ($each_parent[$model]['ID'] == $child[$model]['ID']){
 						unset($parent[array_search($child[$model]['ID'], $parent)]);
 					}
 				}
-
-
 
 		}
 		if($temp['tagparentres'] != '' ||$temp['articleparentres'] != '' ){ //孫があったらもう一段入る

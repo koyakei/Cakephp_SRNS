@@ -2,9 +2,11 @@
 <?php if($firstModel == 'Tag'){$userCallAssosiation = 'O';} else {$userCallAssosiation = 'O';} // アソシエーションの名前を一緒にしたが後で別にするかも?>
 <div id="draggble">
 				<tr>
+					<!--  ここらへんに　trilink での関連性表示 -->
+					<!--  <td></td> でjsでappend する？　d3.jsでまたいでやるしか無いんじゃあ？ -->
 					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
 					<td>
-					<!-- $leaf　の形式　どんなsqlで呼び出しているのか思い出せない -->
+					<!-- $leaf -->
 					<?php $leaf = $result["leaf"]; //leaf こうして　配列の何処かに隠しておくほかあるまい。　common component trifinder でそう渡すようにする　base trikey の仕様を考える。
 					if(!is_null($leaf)){ echo "<b>"; } ?>
 					<?php echo $this->element('URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>

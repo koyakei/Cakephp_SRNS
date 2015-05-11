@@ -27,12 +27,7 @@ class DemandComponent extends Component {
 	 *     前の値が継承されるようにした方が良い。
 	 *
 	 */
-	public function requestInsertDemands(&$that,$requests){
-		foreach ($requests as $request){
-			BasicComponent::trilinkAdd(&$that,$FromID,$ToID,$keyID);
 
-		}
-	}
 	// update と insert をどうやって区別をつけるのか？
 	//主にupdate が多いはずだが、
 	public function requestupdateDemands($requests){
@@ -40,10 +35,7 @@ class DemandComponent extends Component {
 
 		}
 	}
-	//単体の追加リクエスト
-	public function requestInsertDemand($request,$trikeys){
 
-	}
 
 	//複数のエンティティーの削除要請
 	public function requestDelDemand($request,$trikeys){
@@ -56,6 +48,17 @@ class DemandComponent extends Component {
 	}
 
 	public function acceptDemand(){
+
+	}
+	//追加リクエスト
+	public function requestInsertDemands(&$that,$requests){
+		foreach ($requests as $request){
+			BasicComponent::trilinkAdd(&$that,$FromID,$ToID,$keyID);
+
+		}
+	}
+	//単体の追加リクエスト
+	public function requestInsertDemand($request,$trikeys){
 
 	}
 

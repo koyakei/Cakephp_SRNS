@@ -78,7 +78,19 @@ public function beforeFilter() {
 			//$this->paginate->setting = array('order'=> array('Taguser.modified' => 'DESC'));
 			$this->set('tags', $this->paginate('Taguser'));
 		}
+		//demand は直接コンポーネントを呼ぶのか？呼ばないだろう
+		//TODO: save する形式に適応するように　view を書く
+		public function demand($insert = null , $update =null, $del = null){
+			$insert = $this->request->data("insert");
+			$update = $this->request->data("iupdate");
+			$del = $this->request->data("del");
 
+			DemandComponent::requestInsertDemands($this,$insert);
+			DemandComponent::requestUpdateDemands($this,$update);
+			DemandComponent::requestDelDemands($this,$update);
+
+			$this->redirect($this->referer());
+		}
 		/**
 		 *
 		 * minused_set= $before(big) - $after(smal)
@@ -748,6 +760,7 @@ public function beforeFilter() {
 				}
 			}
 		}
+		//
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる
 		 * 与えられるのは検索タグの集合

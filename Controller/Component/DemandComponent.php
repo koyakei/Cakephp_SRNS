@@ -30,7 +30,12 @@ class DemandComponent extends Component {
 
 	// update と insert をどうやって区別をつけるのか？
 	//主にupdate が多いはずだが、
-	public function requestupdateDemands($requests){
+	public function requestUpdateDemands($requests){
+		foreach ($requests as $request){
+
+		}
+	}
+	public function requestUpdateDemand($requests){
 		foreach ($requests as $request){
 
 		}

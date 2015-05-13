@@ -10,23 +10,23 @@ class BArticle extends CakeTestModel {
  *
  */
 class BtreeTest extends CakeTestCase {
-	
+
 /**
  * Model acting like the tested behavior
- * 
+ *
  * @var BArticle
  * @access public
  */
 	public $Model = null;
-	
+
 /**
  * Behavior being tested
- * 
+ *
  * @var BtreeBehavior
  * @access public
  */
 	public $Behavior = null;
-	
+
 /**
  * Fixtures
  *
@@ -61,8 +61,8 @@ class BtreeTest extends CakeTestCase {
 
 /**
  * Test beforeSave method
- * 
- * @TODO Assert lft / rght values
+ *
+ *
  * @return void
  * @access public
  */
@@ -77,7 +77,7 @@ class BtreeTest extends CakeTestCase {
 
 /**
  * Test children method
- * 
+ *
  * @return void
  * @access public
  */

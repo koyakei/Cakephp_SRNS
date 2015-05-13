@@ -335,7 +335,7 @@ class BasicComponent extends Component {
 	 *
 	 * @throws NotFoundException
 	 * @param mix $that
-	 * @param int $trikeyID
+	 * @param int $trikeyID　TODO:これを配列で渡せるようにしたい　返すのは両方のリンク
 	 * @param string $modelSe
 	 * @param string $Ltotarget //target colmunn 探すID
 	 * @param array $ids and set array(int , int) 連想配列ではないただの配列

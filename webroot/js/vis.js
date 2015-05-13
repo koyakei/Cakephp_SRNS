@@ -5982,7 +5982,7 @@ ItemBox.prototype = new Item (null);
  */
 ItemBox.prototype.isVisible = function isVisible (range) {
   // determine visibility
-  // TODO: account for the real width of the item. Right now we just add 1/4 to the window
+  // 
   var interval = (range.end - range.start) / 4;
   return (this.data.start > range.start - interval) && (this.data.start < range.end + interval);
 };

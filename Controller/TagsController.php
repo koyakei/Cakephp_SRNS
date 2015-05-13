@@ -80,11 +80,17 @@ public function beforeFilter() {
 		}
 		//demand は直接コンポーネントを呼ぶのか？呼ばないだろう
 		//TODO: save する形式に適応するように　view を書く
+		/**
+		 * @todo 今いじっている
+		 * @param string $insert
+		 * @param string $update
+		 * @param string $del
+		 */
 		public function demand($insert = null , $update =null, $del = null){
 			$insert = $this->request->data("insert");
 			$update = $this->request->data("iupdate");
 			$del = $this->request->data("del");
-
+			//TODO:view　で整形不可能ならここで整形する　整形してから下に渡す
 			DemandComponent::requestInsertDemands($this,$insert);
 			DemandComponent::requestUpdateDemands($this,$update);
 			DemandComponent::requestDelDemands($this,$update);

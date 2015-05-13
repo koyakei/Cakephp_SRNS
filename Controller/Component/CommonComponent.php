@@ -379,7 +379,6 @@ class CommonComponent extends Component {
 						unset($parent[array_search($child[$model]['ID'], $parent)]);
 					}
 				}
-
 		}
 		if($temp['tagparentres'] != '' ||$temp['articleparentres'] != '' ){ //孫があったらもう一段入る
 			$taghash = $temp['taghash'];

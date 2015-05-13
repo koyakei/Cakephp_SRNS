@@ -119,13 +119,13 @@ class ListBehavior extends ModelBehavior {
 			return true;
 		}
 
-		/* @todo: add transaction */
+		/*
 		$currData = $model->data;
 		$model->set($lowerItem);
 		$this->_decrementPosition($model);
 		$model->set($currData);
 		return $this->_incrementPosition($model);
-		/* @todo: add transaction */
+		/*
 	}
 	public function moveDown(Model $model, $id = null) {
 		return $this->moveLower($model, $id);
@@ -147,20 +147,20 @@ class ListBehavior extends ModelBehavior {
 			return true;
 		}
 
-		/* @todo: add transaction */
+		/*
 		$currData = $model->data;
 		$model->set($higherItem);
 		$this->_incrementPosition($model);
 		$model->set($currData);
 		return $this->_decrementPosition($model);
-		/* @todo: add transaction */
+		/*
 	}
 
 /**
  * Move Up
  *
- * @param string $model 
- * @param string $id 
+ * @param string $model
+ * @param string $id
  * @return bool
  */
 	public function moveUp(Model $model, $id = null) {
@@ -182,10 +182,10 @@ class ListBehavior extends ModelBehavior {
 		if (!$this->isInList($model)) {
 			return;
 		}
-		/* @todo: add transaction */
+		/*
 		$this->__decrementPositionsOnLowerItems($model);
 		return $this->__assumeBottomPosition($model);
-		/* @todo: add transaction */
+		/*
 	}
 
 /**
@@ -203,10 +203,10 @@ class ListBehavior extends ModelBehavior {
 		if (!$this->isInList($model)) {
 			return;
 		}
-		/* @todo: add transaction */
+		/*
 		$this->__incrementPositionsOnHigherItems($model);
 		return $this->__assumeTopPosition($model);
-		/* @todo: add transaction */
+		/*
 	}
 
 /**
@@ -398,7 +398,7 @@ class ListBehavior extends ModelBehavior {
 /**
  * Add to list top
  *
- * @param Model $model 
+ * @param Model $model
  * @return mixed
  */
 	private function __addToListTop($model) {
@@ -408,7 +408,7 @@ class ListBehavior extends ModelBehavior {
 /**
  * Add to list bottom
  *
- * @param Model $model 
+ * @param Model $model
  * @return mixed
  */
 	private function __addToListBottom($model) {
@@ -420,8 +420,8 @@ class ListBehavior extends ModelBehavior {
 /**
  * Bottom position in list
  *
- * @param Model $model 
- * @param string $except 
+ * @param Model $model
+ * @param string $except
  * @return void
  */
 	private function __bottomPositionInList(Model $model, $except = null) {
@@ -438,8 +438,8 @@ class ListBehavior extends ModelBehavior {
 /**
  * Bottom Item
  *
- * @param Model $model 
- * @param string $except 
+ * @param Model $model
+ * @param string $except
  * @return mixed
  */
 	private function __bottomItem(Model $model, $except = null) {
@@ -461,7 +461,7 @@ class ListBehavior extends ModelBehavior {
 /**
  * Assume Bottom position
  *
- * @param Model $model 
+ * @param Model $model
  * @return boolean
  */
 	private function __assumeBottomPosition($model) {
@@ -476,7 +476,7 @@ class ListBehavior extends ModelBehavior {
 /**
  * Pre-check for first list record
  *
- * @param Model $model 
+ * @param Model $model
  * @return boolean
  */
 	private function __assumeTopPosition($model) {

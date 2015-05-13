@@ -43,8 +43,8 @@ class I18nCountry extends Object {
 /**
  * Constructor
  *
- * @todo add default language of the country
- * @todo add default currency? http://www.xe.com/iso4217.php
+
+ *
  * @param array Options
  * @return object Country
  */

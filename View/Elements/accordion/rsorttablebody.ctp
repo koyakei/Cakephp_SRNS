@@ -9,7 +9,9 @@
 				SHAで色生成　同色でもいいかも　グレースケールで黒方向の制限　文字とのコントラストを確保
 				関連性にフラグ　$result["child_rel"] = bool で建てる
 					-->
-					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;</td>
+					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;
+
+					</td>
 					<td>
 					<!-- $leaf -->
 					<?php $leaf = $result["leaf"]; //leaf こうして　配列の何処かに隠しておくほかあるまい。　common component trifinder でそう渡すようにする　base trikey の仕様を考える。
@@ -66,7 +68,14 @@
 						<?php echo $this->Html->link(__('View'), array('controller'=> $firstModel."s",'action' => 'view', $result[$firstModel]['ID'])); ?><br>
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?><br>
 
-						 <?php echo $this->Form->postLink(__('Delete'), array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
+						 <?php echo $this->Form->postLink(__('Delete'),
+						 		 array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
+// 						 <!-- pull down trikey delete demand submitter
+// 						 $result['Link']['ID']　で現在のtrikey でのID　が取得できるが、
+// 						 複数のidを持って同時に消したい　どうやって複数持たせるのか？-->
+						 							//@todo 複数のtrikey link id を$result[$trike_id]['Link']['ID']みたいな形で表示　trikeyAndSet をいじる
+						 							?>
+						 							<?php echo $this->Form->button('del')?>
 						  ?></div>
 					</td>
 					<td><div onClick='toggleShow(this);' >

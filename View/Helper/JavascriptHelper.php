@@ -11,7 +11,7 @@
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  */
- 
+
 /**
  * Javascript Helper class for easy use of JavaScript.
  *
@@ -43,7 +43,7 @@ class JavascriptHelper extends AppHelper {
  * @access public
  */
 	var $safe = false;
-	
+
 /**
  * HTML tags used by this helper.
  *
@@ -205,11 +205,11 @@ class JavascriptHelper extends AppHelper {
 		$options = $this->_blockOptions;
 		$this->_blockOptions = array();
 		$this->inBlock = false;
-		
+
 		if (empty($script)) {
 			return null;
 		}
-		
+
 		return $this->codeBlock($script, $options);
 	}
 /**
@@ -411,12 +411,12 @@ class JavascriptHelper extends AppHelper {
         if ($isObject) {
             $b = "$({$object}).bind('{$event}', function(){ {$observer} })";
         } elseif ($object[0] == '\'') {
-            //TODO po co to?
+
             $b = "$(". substr($object, 1) .").bind('{$event}', function(){ {$observer} })";
             //$b = "Event.observe(" . substr($object, 1) . ", '{$event}', function(event) { ";
             //$b .= "{$observer} });";
         } else {
-            
+
             //TODO to chyba nie potrzebne
             // $chars = array('#', ' ', ', ', '.', ':');
             // $found = false;

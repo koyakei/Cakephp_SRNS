@@ -246,7 +246,6 @@ class BasicComponent extends Component {
 	 * @return $that->returntribasic
 	 */
 	public function tribasicfiderbyid(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$id) {
-
 		$modelSe = new $modelSe();
 		$option = array(
 				'conditions'=> array(
@@ -333,7 +332,8 @@ class BasicComponent extends Component {
 	 * @param string $that
 	 * @param unknown $link　 link の取得結果
 	 * @param unknown $linked_model
-	 * @return multitype:＄res,$link_conditions
+	 * @return multitype:＄res $res[$toID] =+ $tr
+	 * ,$link_conditions　entity 取得のための条件　or mapper の　in 対応
 	 */
 	public function linkDistinctor(&$that = null,$link,$linked_model) {
 		foreach ($link as $tr){
@@ -354,7 +354,7 @@ class BasicComponent extends Component {
 	 * @param array or int $root_ids
 	 * @param array or int $trikeys
 	 * @param array &$taghash
-	 * @return array(link, main_result(as result))   taghash as referer
+	 * @return root_id と　trikey を持つ　entity までのLink model
 	 * @var res Entity
 	 * @var link root_id と　Entitiy の間
 	 */

@@ -269,7 +269,8 @@ class CommonComponent extends Component {
 				 'taghash' => $taghash);
 	}
 	/**
-	 *
+	 * view2用のテーブル取得関数
+	 * これをget_all_reply から実行する。
 	 * @param Object $that
 	 * @param unknown $root_ids
 	 * @param unknown $trikey_ids

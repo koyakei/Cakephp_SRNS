@@ -284,9 +284,11 @@ class CommonComponent extends Component {
 		$res = BasicComponent::GETlink($that,$root_ids,$trikey_ids);
 		//link まで全部重ねて取るのはまずそう。リンクを取得してから、Entityに
 		list($link,$link_conditions) = BasicComponent::linkDistinctor($link, $res,"Link");
-		// 		$link[$linkTo_id] = array(LinkModel_res ,EntityModel_res);
-		$entity = BasicComponent::GetEntity($this, $link_conditions);
-
+		// $link[$linkTo_id] = array(LinkModel_res ,EntityModel_res);
+		$entity = BasicComponent::GetEntity($that, $link_conditions);
+		foreach ($entity as $index => $each){
+			$each[$model][$primaryKey];
+		}
 		CommonComponent::getSearchRelation(
 				$that,$entity,$taghash,$targetModel);
 		return $result;

@@ -343,6 +343,11 @@ class BasicComponent extends Component {
 					$link_conditions = array_push($link_conditions, $toID);
 				}
 				$res[$toID] =+ $tr;
+				//TODO: ここでリンクとどのタグからリンクしてきているかを入力
+				$res[$toID]['trilink'] =BasicComponent::GetEntity($that, $link_conditions) ;
+				$res[$toID][subtag] = $this->Basic->tribasicfiderbyid(
+					$that,Configure::read('tagID.search'),
+					"Tag",$result[$targetModel]['ID'],"Tag.ID");
 			}
 		}
 		return array(＄res,$link_conditions);
@@ -352,13 +357,13 @@ class BasicComponent extends Component {
 	 *
 	 * @param Object $that inherit this
 	 * @param array or int $root_ids
-	 * @param array or int $trikeys
+	 * @param int $trikey
 	 * @param array &$taghash
 	 * @return root_id と　trikey を持つ　entity までのLink model
 	 * @var res Entity
 	 * @var link root_id と　Entitiy の間
 	 */
-	public function GETlink(&$that,$root_ids,$trikeys){
+	public function GETlink(&$that,$root_ids,$trikey){
 		$modelSe = new Link();
 		$option = array(
 			'table' => 'link',
@@ -374,7 +379,7 @@ class BasicComponent extends Component {
 							'conditions' => array(
 									array("Link.ID = taglink.LTo"),
 									($trikeyID == null)?null:array(
-											"taglink.LFrom" => $trikeys)//$trikeyID
+											"taglink.LFrom" => $trikey)//$trikeyID
 							)
 					),
 			),

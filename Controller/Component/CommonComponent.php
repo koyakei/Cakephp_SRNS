@@ -239,68 +239,6 @@ class CommonComponent extends Component {
 			}
 		}
 	}
-
-	public function trifinder(&$that = null) {
-		$id = $that->request['pass'][0];
-		$this->Basic->tribasic($that,"search","Article","Article.ID",$id);
-		$that->parentres = $that->returntrybasic;
-		$that->k = 0;
-		$that->j = 0;
-		$that->i = 0;
-		$that->taghash = array();
-		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
-		$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
-		foreach ($that->parentres as $result){
-			$res = $result['Article']['ID'];
-			$this->Basic->tribasic($that,"search","Tag",$res,"Tag.ID");
-			$that->taghashgen = $that->returntrybasic;
-			foreach ($that->taghashgen as $tag){
-				$that->subtagID = $tag['Tag']['ID'];
-				$that->parentres[$that->i]['subtag'][$that->subtagID] = $tag;
-				if ($that->taghash[$that->subtagID] == null) {
-					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
-				}
-			}
-			$that->i++;
-		}
-		$that->loadModel('User');
-		$that->loadModel('Key');
-		$that->userlist = $that->User->find( 'list', array( 'fields' => array( 'ID', 'username')));
-		$that->set( 'ulist', $that->userlist);
-		$that->set('taghashes', $that->taghash);
-		$that->set('results', $that->parentres);
-	}
-	public function trireplyfinder(&$that = null) {
-		$id = $that->request['pass'][0];
-		$this->Basic->tribasic($that,"reply","Article","Article.ID",$id);
-		$that->parentres = $that->returntrybasic;
-		$that->k = 0;
-		$that->j = 0;
-		$that->i = 0;
-		$that->taghash = array();
-		$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
-		//$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
-		foreach ($that->parentres as $result){
-			$res = $result['Article']['ID'];
-			$this->Basic->tribasicfind($that,"search","Tag",$res,"Tag.ID");
-			$that->taghashgen = $that->returntrybasic;
-			foreach ($that->taghashgen as $tag){
-				$that->subtagID = $tag['Tag']['ID'];
-				$that->parentres[$that->i]['subtag'][$that->subtagID] = $tag;
-				if ($that->taghash[$that->subtagID] == null) {
-					$that->taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
-				}
-			}
-			$that->i++;
-		}
-		$that->loadModel('User');
-		$that->loadModel('Key');
-		$that->set( 'keylist', $that->Key->find( 'list', array( 'fields' => array( 'ID', 'name'))));
-		$that->set( 'ulist', $that->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-		$that->set('taghashes', $that->taghash);
-		$that->set('results', $that->parentres);
-	}
-
 	/**
 	 * trifinderbyid method
 	 * id と　trikey を指定すると　結果が帰ってくる
@@ -441,7 +379,9 @@ class CommonComponent extends Component {
 		$i = 0;
 		if (!is_array($targetParent)) return null;
 		foreach ($targetParent as $result){
-			$taghashgen = $this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$result[$targetModel]['ID'],"Tag.ID");//
+			$taghashgen = $this->Basic->tribasicfiderbyid(
+					$that,Configure::read('tagID.search'),
+					"Tag",$result[$targetModel]['ID'],"Tag.ID");//
 
 			foreach ($taghashgen as $tag){
 				$that->subtagID = $tag['Tag']['ID'];

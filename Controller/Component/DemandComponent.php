@@ -43,6 +43,16 @@ class DemandComponent extends Component {
 
 
 	//複数のエンティティーの削除要請
+	/**
+	 * delete に関しては　単体作事余のみで行けるかも？
+	 * でも、trikey@official と　trikey@personal 両方一回のクリックで削除となると大変かも
+	 *
+	 *
+	 * trの戦闘にdelボタンを設置
+	 *
+	 * @param unknown $request
+	 * @param unknown $trikeys
+	 */
 	public function requestDelDemand($request,$trikeys){
 
 	}

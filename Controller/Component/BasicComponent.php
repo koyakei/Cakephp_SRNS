@@ -328,14 +328,79 @@ class BasicComponent extends Component {
 		return $Social->save($data);
 	}
 
+	/**
+	 *
+	 * @param string $that
+	 * @param unknown $link　 link の取得結果
+	 * @param unknown $linked_model
+	 * @return multitype:＄res,$link_conditions
+	 */
+	public function linkDistinctor(&$that = null,$link,$linked_model) {
+		foreach ($link as $tr){
+			if ($link[$rr[$model]['ID']] == null){
+				$toID = $tr["Link"]['LTo'];
+				if (!array_search($toID,$link)){
+					$link_conditions = array_push($link_conditions, $toID);
+				}
+				$res[$toID] =+ $tr;
+			}
+		}
+		return array(＄res,$link_conditions);
+	}
 
+	/**
+	 *
+	 * @param Object $that inherit this
+	 * @param array or int $root_ids
+	 * @param array or int $trikeys
+	 * @param array &$taghash
+	 * @return array(link, main_result(as result))   taghash as referer
+	 * @var res Entity
+	 * @var link root_id と　Entitiy の間
+	 */
+	public function GETlink(&$that,$root_ids,$trikeys){
+		$modelSe = new Link();
+		$option = array(
+			'table' => 'link',
+			'alias' => 'Link',
+			'conditions'=> array("Link.LFrom" => $root_ids),
+			'fields' => array('*'		),
+			'joins'
+			=> array(
+					array(
+							'table' => 'taglinks',
+							'alias' => 'taglink',
+							'type' => 'INNER',
+							'conditions' => array(
+									array("Link.ID = taglink.LTo"),
+									($trikeyID == null)?null:array(
+											"taglink.LFrom" => $trikeys)//$trikeyID
+							)
+					),
+			),
+		);
+		return  $modelSe->find('all',$option);//link取得
+
+	}
+	//Entity 取得
+	public function GetEntity(&$this,$ids,$model=null){
+		if (is_null($model)){
+			$model = "Tag";
+		}
+		$modelSe = new $model;
+		$option = array(
+				'condition' =>
+				array($model. "." .$modelSe->primaryKey => $ids)
+		);
+		return $modelSe->find('all',$option);
+	}
 
 	/**
 	 * tribasicfiderbyidAndSet method
 	 *
 	 * @throws NotFoundException
 	 * @param mix $that
-	 * @param int $trikeyID　TODO:これを配列で渡せるようにしたい　返すのは両方のリンク
+	 * @param int $trikeyID　
 	 * @param string $modelSe
 	 * @param string $Ltotarget //target colmunn 探すID
 	 * @param array $ids and set array(int , int) 連想配列ではないただの配列
@@ -386,7 +451,6 @@ class BasicComponent extends Component {
 		                ),
 				),
 			);
-// 		debug($option);
 		if (($ids[0][0]!= '' || $ids[0][1]!= '') && ($ids[1][0]!= '' || $ids[1][1]!= '')){
 			$option = array_merge($option, array( 'group' => "$Ltotarget HAVING COUNT(*) > 1" ));
 		}

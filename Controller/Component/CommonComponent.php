@@ -304,6 +304,9 @@ class CommonComponent extends Component {
 	/**
 	 * trifinderbyid method
 	 * id と　trikey を指定すると　結果が帰ってくる
+	 * @param Object that
+	 * @param int id
+	 * @param array option
 	 * @var this
 	 * @var id
 	 * @var option ['key']
@@ -319,13 +322,35 @@ class CommonComponent extends Component {
 			$option['key'] = Configure::read('tagID.reply');
 		}
 		$articleparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);//どんな記事がぶら下がっているか探す
-		list($articleparentres,$taghash) = $this->getSearchRelation($that, $articleparentres, $taghash, "Article");
+		list($articleparentres,$taghash) = self::getSearchRelation($that, $articleparentres, $taghash, "Article");
 		$tagparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
 		list($tagparentres,$taghash) =
 		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
 		return array('tagparentres'=>$tagparentres,
 				'articleparentres'=> $articleparentres,
 				 'taghash' => $taghash);
+	}
+	/**
+	 *
+	 * @param Object $that
+	 * @param unknown $root_ids
+	 * @param unknown $trikey_ids
+	 * @param unknown $sorter_ids
+	 * @param unknown $searchMode
+	 * @param unknown $taghash
+	 * @return unknown
+	 */
+	public function GetTable(&$that,$root_ids,$trikey_ids,$sorter_ids
+			,$searchMode,&$taghash){
+		$res = BasicComponent::GETlink($that,$root_ids,$trikey_ids);
+		//link まで全部重ねて取るのはまずそう。リンクを取得してから、Entityに
+		list($link,$link_conditions) = BasicComponent::linkDistinctor($link, $res,"Link");
+		// 		$link[$linkTo_id] = array(LinkModel_res ,EntityModel_res);
+		$entity = BasicComponent::GetEntity($this, $link_conditions);
+
+		CommonComponent::getSearchRelation(
+				$that,$entity,$taghash,$targetModel);
+		return $result;
 	}
 	/**
 	 *

@@ -68,15 +68,25 @@
 						<?php echo $this->Html->link(__('View'), array('controller'=> $firstModel."s",'action' => 'view', $result[$firstModel]['ID'])); ?><br>
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?><br>
 
-						 <?php echo $this->Form->postLink(__('Delete'),
-						 		 array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
+						 <?php
+						 // こっちのボタンでは現在選択しているtirikeyでのリンクをすべて削除。
+						 echo $this->Form->postLink(__('Delete'),
+						 		 array('controller'=> 'Links','action' => 'nestedDelete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
 // 						 <!-- pull down trikey delete demand submitter
 // 						 $result['Link']['ID']　で現在のtrikey でのID　が取得できるが、
 // 						 複数のidを持って同時に消したい　どうやって複数持たせるのか？-->
 						 							//@todo 複数のtrikey link id を$result[$trike_id]['Link']['ID']みたいな形で表示　trikeyAndSet をいじる
 						 							?>
 						 							<?php echo $this->Form->button('del')?>
-						  ?></div>
+						  ?>
+						  <?php
+						  echo $this->Form->create('trilink',array('controller'=> 'Links','action' => 'nestedDelete'));
+						  echo $this->Form->input('title');
+						  echo $this->Form->input("trilink_id",array('type' => 'selsect' ,$result["trilink"]));
+						  echo $this->Form->end('linkDel' )
+						  ?>
+
+						  </div>
 					</td>
 					<td><div onClick='toggleShow(this);' >
 						Tag add

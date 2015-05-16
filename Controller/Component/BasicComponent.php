@@ -320,7 +320,15 @@ class BasicComponent extends Component {
 		);
 		return $modelSe->find('all',$option);
 	}
+	/**
+	 *
+	 * @param unknown $searching_tags
+	 * @param unknown $sorting_tags
+	 * @param unknown $selectings
+	 * @return mixed
+	 */
 	public function social2($searching_tags,$sorting_tags,$selectings){
+		// TODO: reply　from 側のfollower の全てに通知を出す
 		$data['Social'] = array();
 		$Social = new Social();
 		$Social->create();
@@ -344,8 +352,9 @@ class BasicComponent extends Component {
 				}
 				$res[$toID] =+ $tr;
 				//TODO: ここでリンクとどのタグからリンクしてきているかを入力
-				$res[$toID]['trilink'] =BasicComponent::GetEntity($that, $link_conditions) ;
-				$res[$toID][subtag] = $this->Basic->tribasicfiderbyid(
+				//foearch で回したついでに他の 要素もとってきてしまう
+				$res[$toID]['trilink'] =BasicComponent::GetEntity($that, $toID) ;
+				$res[$toID]["subtag"] = $this->Basic->tribasicfiderbyid(
 					$that,Configure::read('tagID.search'),
 					"Tag",$result[$targetModel]['ID'],"Tag.ID");
 			}
@@ -363,12 +372,12 @@ class BasicComponent extends Component {
 	 * @var res Entity
 	 * @var link root_id と　Entitiy の間
 	 */
-	public function GETlink(&$that,$root_ids,$trikey){
+	public function GETLink(&$that,$root_ids,$ToID = null ,$trikey = null){
 		$modelSe = new Link();
 		$option = array(
 			'table' => 'link',
 			'alias' => 'Link',
-			'conditions'=> array("Link.LFrom" => $root_ids),
+			'conditions'=> array("Link.LFrom" => $root_ids,"Link.LTo" => $ToID),
 			'fields' => array('*'		),
 			'joins'
 			=> array(
@@ -384,7 +393,7 @@ class BasicComponent extends Component {
 					),
 			),
 		);
-		return  $modelSe->find('all',$option);//link取得
+		return  $modelSe->find('listl',$option);//link取得
 
 	}
 	//Entity 取得
@@ -451,7 +460,7 @@ class BasicComponent extends Component {
 		                    'type' => 'INNER',
 		                    'conditions' => array(
 					array("Link.ID = taglink.LTo"),
-		                    		($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
+		                    		($trikeyID == null)?null:array("taglink.LFrom" => $trikeyID)//$trikeyID
 					)
 		                ),
 				),

@@ -782,7 +782,8 @@ public function beforeFilter() {
         	if ($id ==null) {
         		$id = $this->request->query["id"];;
         	}
-        	$result = $this->get_specified_reply_by_id_and_trikey($id,Configure::read("tagID.reply"));
+        	$result = $this->get_specified_reply_by_id_and_trikey($id
+        			,Configure::read("tagID.reply"));
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	$this->set('tableresults',$result);
@@ -818,7 +819,7 @@ public function beforeFilter() {
         	return $tableresults;
         }
         /**
-         *
+         * article もtagも両方返す
          * @param int $id
          * @param int $trikey
          * @return html <results, table>

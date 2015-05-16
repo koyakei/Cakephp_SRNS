@@ -281,16 +281,18 @@ class CommonComponent extends Component {
 	 */
 	public function GetTable(&$that,$root_ids,$trikey_ids,$sorter_ids
 			,$searchMode,&$taghash){
-		$res = BasicComponent::GETlink($that,$root_ids,$trikey_ids);
+// 		$res = BasicComponent::GETlink($that,$root_ids,$trikey_ids);
 		//link まで全部重ねて取るのはまずそう。リンクを取得してから、Entityに
-		list($link,$link_conditions) = BasicComponent::linkDistinctor($link, $res,"Link");
+		$option["key"] = $trikey_ids;
+		$main = self::trifinderbyidAndSet($that,$andSet_ids,$option);
+		list($link,$link_conditions) = BasicComponent::linkDistinctor($link,"Link");
 		// $link[$linkTo_id] = array(LinkModel_res ,EntityModel_res);
 		$entity = BasicComponent::GetEntity($that, $link_conditions);
 		foreach ($entity as $index => $each){
 			$each[$model][$primaryKey];
 		}
-		CommonComponent::getSearchRelation(
-				$that,$entity,$taghash,$targetModel);
+		list($result,$taghash) = CommonComponent::getSearchRelation(
+				$that,$entity,$taghash,$targetModel,array("ToID"=> $root_ids,"trikeys" =>$trikey_ids));
 		return $result;
 	}
 	/**
@@ -375,13 +377,14 @@ class CommonComponent extends Component {
 	 * @param unknown $targetParent
 	 * @param unknown $taghash
 	 * @param unknown $targetModel
+	 * @param array $option = array("ToID","trikeys")
 	 * @return multitype:array($tagparent,$taghash)
 	 */
 
-	public function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel){
-		$i = 0;
+	public function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel,$option){
 		if (!is_array($targetParent)) return null;
-		foreach ($targetParent as $result){
+		foreach ($targetParent as $i => $result){
+			//個別のtrに対して関連付けられているタグを呼ぶ
 			$taghashgen = $this->Basic->tribasicfiderbyid(
 					$that,Configure::read('tagID.search'),
 					"Tag",$result[$targetModel]['ID'],"Tag.ID");//
@@ -393,7 +396,11 @@ class CommonComponent extends Component {
 					$taghash[$that->subtagID] = array( 'ID' => $tag['Tag']['ID'], 'name' =>  $tag['Tag']['name']);
 				}
 			}
-			$i++;
+			//link 持ってきたい
+			if (!is_null($option)){
+				$targetParent[$i]['trilink'] =BasicComponent::GetLink($that,
+						$retult[$model][$primaryKey],$option["ToID"],$option["trikeys"]) ;
+			}
 		}
 
 		return array($targetParent,$taghash );

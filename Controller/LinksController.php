@@ -173,6 +173,25 @@ class LinksController extends AppController {
 		}
 	}
 
+//一個ずつ　
+//   array(array("link_id","taglink_id")...)
+//TODO: history への追加を実装する。
+	public function nestedDelete($ids = null) {
+		if (is_null($ids)){
+			$ids =+ $this->request->data("trilink_id.Link.ID");//これだけじゃあ配列になってない。
+			$ids =+ $this->request->data("trilink_id.TagLink.ID");
+		}
+		self::delQueryBuilder($ids);
+	}
+	private function delQueryBuilder($id){
+		if (is_array($ids)){
+			foreach ($ids as $id){
+				self::delQueryBuilder($id);
+			}
+		} else {
+			self::delete($id);
+		}
+	}
 /**
  * delete method
  *
@@ -180,28 +199,29 @@ class LinksController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
-		$this->Link->id = $id;
-		if (!$this->Link->exists()) {
-			throw new NotFoundException(__('Invalid link'));
-		}
+	public function delete($id) {
+
 		$this->request->onlyAllow('post', 'delete');
 		$this->loadModel('Tagauth');
-		$result = $this->Link->find('first',array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id')));
-		if ($this->Auth->user('id') == $result['Link']['user_id'] && $this->Link->find('first',
-			array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id'))
-		)) {
-			if ($this->Link->delete()) {
-				$this->Session->setFlash(__('The link has been deleted.'));
-				$this->redirect($this->referer());
-				return true;
-
-			} else {
-				$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
-				return false;
+			$this->Link->id = $id;
+			if (!$this->Link->exists()) {
+				throw new NotFoundException(__('Invalid link'));
 			}
-		}
-		debug($this->referer());
+			$result = $this->Link->find('first',array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id')));
+			if ($this->Auth->user('id') == $result['Link']['user_id'] && $this->Link->find('first',
+				array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id'))
+			)) {
+				if ($this->Link->delete()) {
+					$this->Session->setFlash(__('The link has been deleted.'));
+					$this->redirect($this->referer());
+					return true;
+
+				} else {
+					$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
+					return false;
+				}
+			}
+
 		print_r("戻るで戻って");
 		return $this->redirect($this->referer());
 	}

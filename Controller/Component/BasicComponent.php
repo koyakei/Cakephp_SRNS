@@ -16,9 +16,9 @@ class BasicComponent extends Component {
 		$data['Social']['vplugin'] = $that->plugin;
 		$data['Social']['vctrl'] = $that->name;
 		$data['Social']['vview'] = $that->view;
-		$data['Social']['page_id'] = $that->id;
+		$data['Social']['vpage_id'] = $that->id;
 		if ($userID == null) {
-			$data['Social']['user_id'] = $that->Auth->user('id');;
+			$data['Social']['user_id'] = $that->Auth->user('id');
 		}else {
 			$data['Social']['user_id'] = $userID;
 		}
@@ -327,9 +327,17 @@ class BasicComponent extends Component {
 	 * @param unknown $selectings
 	 * @return mixed
 	 */
-	public function social2($searching_tags,$sorting_tags,$selectings){
+	public function social2(&$that,$searching_tags,$sorting_tags,$selectings){
 		// TODO: reply　from 側のfollower の全てに通知を出す
-		$data['Social'] = array();
+		$data['Social'] = array(
+				'user_id' => $that->Auth->user('id'),
+				'vaction' => $that->action,
+				'vplugin' => $that->plugin,
+				'vctrl' => $that->name,
+				'vview' => $that->view,
+				'page_id' => $that->id,
+// 				'ctrl' =>  こっちが実際に更新した物
+		);
 		$Social = new Social();
 		$Social->create();
 		return $Social->save($data);

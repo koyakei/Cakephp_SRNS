@@ -39,6 +39,6 @@
 		</dd>
 	</dl>
 	<h2><?php echo "My activity"; ?></h2>
-	<?php echo $this->element('timeline', Array('socials' => $socials)); ?>
+	<?php echo $this->element('Users.Users/timeline', Array('socials' => $socials)); ?>
 </div>
 <?php echo $this->element('Users.Users/sidebar'); ?>

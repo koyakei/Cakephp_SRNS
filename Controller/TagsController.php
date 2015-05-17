@@ -167,10 +167,12 @@ public function beforeFilter() {
          * タグの当たりをつけるための全文検索　検索に使用したタグを投稿
          *  array(int tag_id)
          * @return void
-         *@todo テーブルを2つ作って、ネストしながら　insert demand 実行は後で考える
+         * @todo テーブルを2つ作って、ネストしながら　insert demand 実行は後で考える
          *現在の$id からすべてリプライする　replt@who 現在のtrikey 条件を　reply demand $ trikeys (array)に渡す
+         *
          */
-        public function view2($id) {
+        public function view2($id,$lower_id = null//テーブル2つ表示の時これ使う？
+        		) {
         	if ($id ==null) {
         		$id = $this->request->query["id"];
         	}

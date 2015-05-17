@@ -225,6 +225,10 @@ class LinksController extends AppController {
 		print_r("戻るで戻って");
 		return $this->redirect($this->referer());
 	}
+ // trikey の使用許可をどう管理するのか考えるのをすっかり忘れていた。
+	private function delete2($id,$trikey){
+// 		auth_controller($trikey, )
+	}
 /**
  *
  * 予定　@param mix options　権限を確かめる予定

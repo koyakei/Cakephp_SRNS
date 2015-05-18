@@ -20,23 +20,45 @@ $(document).ready(function(){
 	    	selected_trikey = "official reply";
 	    }
 	    $(".selected_trikey").html(selected_trikey);
+	    $(function() {
 
+	    	$(".myTable").draggable(
+	    			{helper: "clone",}
+	    			);
+
+	    	$( ".droppable" ).droppable({
+	    		accept : ".myTable" , // 受け入れる要素を指定
+	    		drop : function(event , ui){
+	    			$(this).append(ui.draggable);
+	    			//drop した瞬間にajax で送るべき？
+	    			$.ajax({
+	    				url:"tags/demander",
+	    				//cilant でテーブル全体を比較して、選択中のtrike root を指定して
+	    				//比較するのか？それとも、phpでやるのか？
+	    				//
+	    				data:{before:	this ,after:ui.draggable,
+	    					root_ids:$(".data_strage #root_ids").val(),
+	    					trikey_ids: $(".data_strage #trikey_ids").val(),
+	    					parent_ids :parentIdFinder(this),
+	    					},
+	    				type:"GET",
+	    				datatype:"JSON",
+	    				// create personal trilink
+	    			});
+
+	    		}
+
+	    	});
+	    });
 });
+/**
+ * root までたどって全部の親となるキーを取得
+ * @param data
+ */
+function parentIdFinder(root,that){
 
-$(function() {
+}
 
-	$(".myTable").draggable(
-			{helper: "clone",});
-
-	$( ".droppable" ).droppable({
-		accept : ".myTable" , // 受け入れる要素を指定
-		drop : function(event , ui){
-			$(this).append(ui.draggable);
-
-		}
-
-	});
-});
 
  /**
   *

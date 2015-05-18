@@ -65,7 +65,46 @@ public function beforeFilter() {
 			'Session'
 	);
 //        public $presetVars = true;
+	/**
+	 *
+	 * @param string $data
+	 * DemandComponent につなぐ
+	 * 要求を出すと同時に、
+	 * 自分がパーソナルモードで見ている時にすでに要求が通ったように見えるようにする。
+	 *
+	 * そのために、関係性追加の要求をしたところには、trilink選択中@自分で関係性を追加。
+	 * 切断要求をしたところにはどうやって切断するのか分からない。
+	 * 切断する特殊タグを作るか？
+	 */
+	public function demand($data = null){
+		if (is_nan($data)){
+			$data = $this->request->data();
+		}
+		$del = array_diff_assoc($data["before"],$data["after"]);
+		$add = array_diff_assoc($data["after"],$data["before"]);
+		//key で比較することによって順番も変化させる。
+		DemandComponent::requestInsertDemands($add);
+		DemandComponent::selfLinkInsert($del);
+		$this->redirect($this->referer());
+	}
+	/**
+	 * TODO:nest表示ができたから、それに従って追加する方法を考える。
+	 * 現在選択中のトライキーで今root としている
+	 * @param unknown $data
+	 */
+	public function nestedAdd($data,$root_ids,$parent_ids){
 
+	}
+	/**
+	 * delbuttoun
+	 * @param string $data
+	 * 前回移し替えるのを
+	 */
+	public function  delDemand($data = null){
+		DemandComponent::requestDelDemands($del);
+		DemandComponent::selfLinkDelete($add);
+		$this->redirect($this->referer());
+	}
 		/**
 		 * index method
 		 *

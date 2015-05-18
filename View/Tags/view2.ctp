@@ -231,5 +231,6 @@ taghashみたいに各ネストごとにループして配置
 
 	</div>
 	</div>
+	<?php echo $this->elemant('accordion/data_strage');?>
 </body>
 </html>

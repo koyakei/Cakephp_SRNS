@@ -70,6 +70,8 @@
 						 // こっちのボタンでは現在選択しているtirikeyでのリンクをすべて削除。
 						 echo $this->Form->postLink(__('Delete'),
 						 		 array('controller'=> 'Links','action' => 'nestedDelete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
+						 echo $this->Form->postLink(__('DeleteDemand'),
+						 		array('controller'=> 'Links','action' => 'delDemand', $result['Link']['ID']), null, __('deldemand # %s?', $result[$firstModel]['ID']));
 // 						 <!-- pull down trikey delete demand submitter
 // 						 $result['Link']['ID']　で現在のtrikey でのID　が取得できるが、
 // 						 複数のidを持って同時に消したい　どうやって複数持たせるのか？-->

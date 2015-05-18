@@ -54,7 +54,7 @@ class DemandComponent extends Component {
 	 * @param unknown $request
 	 * @param unknown $trikeys
 	 */
-	public function requestDelDemand($request,$trikeys){
+	public function requestDelDemands($request,$trikeys){
 
 	}
 
@@ -66,6 +66,7 @@ class DemandComponent extends Component {
 	public function acceptDemand(){
 
 	}
+
 	//追加リクエスト
 	public function requestInsertDemands(&$that,$requests){
 		foreach ($requests as $request){
@@ -117,6 +118,17 @@ class DemandComponent extends Component {
 	 * @return bool  accepted true fail false
 	 */
 	public function delDemandExe($demand){
+
+	}
+	/**
+	 * 自分にだけ見えるリンクを作る
+	 * @param unknown $demand
+	 */
+	public function selfLinkInsert($demand){
+
+	}
+
+	public function selfLinkDelete($demand){
 
 	}
 }

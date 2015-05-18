@@ -25,14 +25,13 @@ $(document).ready(function(){
 
 $(function() {
 
-	$(".myTable").draggable();
+	$(".myTable").draggable(
+			{helper: "clone",});
 
 	$( ".droppable" ).droppable({
 		accept : ".myTable" , // 受け入れる要素を指定
 		drop : function(event , ui){
-			//  dragされてきたオブジェクトを取得してクローン作製
-			var dragId = ui.draggable.attr("id");
-			$(this).append('<span class="drop' + dragId +'">' + ui.draggable.text() + 'が置かれたよ</span>');
+			$(this).append(ui.draggable);
 
 		}
 

@@ -11,28 +11,7 @@
   background: #E4F2F6;
   }
 	</style>
-	<script>
-$(document).ready(function(){
 
-    //this will hold reference to the tr we have dragged and its helper
-    var c = {};
-
-    $("#draggable").draggable({
-            helper: "clone",
-    });
-
-
-    $("#invention td").droppable({
-        drop: function(event, ui) {
-            $(this).empty();
-            $(this).prepend($("#draggable").html());
-
-        }
-    });
-
-});
-
-</script>
 </head>
 <body>
 <div id="inventor">

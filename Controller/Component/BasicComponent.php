@@ -405,7 +405,7 @@ class BasicComponent extends Component {
 
 	}
 	//Entity 取得
-	public function GetEntity(&$this,$ids,$model=null){
+	public function GetEntity(&$that,$ids,$model=null){
 		if (is_null($model)){
 			$model = "Tag";
 		}

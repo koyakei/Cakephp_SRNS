@@ -22,11 +22,31 @@ $(document).ready(function(){
 	    $(".selected_trikey").html(selected_trikey);
 
 });
-function get_type(thing){
-    if(thing===null)return "[object Null]"; // special case
-    return Object.prototype.toString.call(thing);
-}
 
+$(function() {
+
+	$(".myTable").draggable();
+
+	$( ".droppable" ).droppable({
+		accept : ".myTable" , // 受け入れる要素を指定
+		drop : function(event , ui){
+			//  dragされてきたオブジェクトを取得してクローン作製
+			var dragId = ui.draggable.attr("id");
+			$(this).append('<span class="drop' + dragId +'">' + ui.draggable.text() + 'が置かれたよ</span>');
+
+		}
+
+	});
+});
+
+ /**
+  *
+  * @param data
+  *  grab handle for d&d
+  */
+function GET_table_diff(data){
+
+}
 
 /**
  * acordionNester method

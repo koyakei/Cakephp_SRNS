@@ -8,11 +8,10 @@
 				同じ階層同士の関連性がある時は　mindmap ボタンがハイライトされればOKとする
 				SHAで色生成　同色でもいいかも　グレースケールで黒方向の制限　文字とのコントラストを確保
 				関連性にフラグ　$result["child_rel"] = bool で建てる
-					-->
-					<td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;
+					--><div class="DDhandle" id="<?php echo h($result[$firstModel]['ID']); ?>"> <td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;
 
-					</td>
-					<td>
+					</td></div>
+					<td class="droppable">
 					<!-- $leaf -->
 					<?php $leaf = $result["leaf"]; //leaf こうして　配列の何処かに隠しておくほかあるまい。　common component trifinder でそう渡すようにする　base trikey の仕様を考える。
 					if(!is_null($leaf)){ echo "<b>"; } ?>
@@ -58,7 +57,6 @@
 							</div>
 						<?php endif; ?>
 						</td>
-
 					<td class="actions">
 					<?php echo h($result[$userCallAssosiation]['username']); ?>&nbsp;
 						<div onClick='toggleShow(this);' >

@@ -10,10 +10,52 @@
 	table {
   background: #E4F2F6;
   }
-
 	</style>
+	<script>
+$(document).ready(function(){
+
+    //this will hold reference to the tr we have dragged and its helper
+    var c = {};
+
+    $("#draggable").draggable({
+            helper: "clone",
+    });
+
+
+    $("#invention td").droppable({
+        drop: function(event, ui) {
+            $(this).empty();
+            $(this).prepend($("#draggable").html());
+
+        }
+    });
+
+});
+
+</script>
 </head>
 <body>
+<div id="inventor">
+<table id="draggable">
+    <tbody>
+        <tr id="1"><td>Alexander Graham Bell</td></tr>
+        <tr id="2"><td>Thomas Edison</td></tr>
+        <tr id="3"><td>Nicholas Tesla</td></tr>
+    </tbody>
+</table>
+</div>
+<form>
+    <div id="invention">
+        <table>
+        <tbody>
+        <tr><td>Tesla coil</td><td>Explanation</td></tr>
+        <tr><td>Telephone</td><td>Explanation</td></tr>
+        <tr><td><input name="answer3" />Phonograph</td><td>Explanation</td></tr>
+        <tr><td><input name="answer4" />Light bulb</td><td>Explanation</td></tr>
+        </tbody>
+        </table>
+    </div>
+</form>
 <div id="globalnavi">
 <div id="search_box">
 <ul>

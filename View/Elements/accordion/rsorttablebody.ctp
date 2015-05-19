@@ -8,7 +8,11 @@
 				同じ階層同士の関連性がある時は　mindmap ボタンがハイライトされればOKとする
 				SHAで色生成　同色でもいいかも　グレースケールで黒方向の制限　文字とのコントラストを確保
 				関連性にフラグ　$result["child_rel"] = bool で建てる
-					--><div class="DDhandle" id="<?php echo h($result[$firstModel]['ID']); ?>"> <td <?php if($result[$firstModel]['srns_code_member']): ?>  bgcolor=green <?php endif; ?> > <?php echo h($result[$firstModel]['ID']); ?>&nbsp;
+					--><div class="DDhandle" id="<?php echo h($result[$firstModel]['ID']); ?>">
+					<td <?php if($result[$firstModel]['srns_code_member']): ?>
+					id="id"
+					 bgcolor=green <?php endif; ?> value ="<?php echo h($result[$firstModel]['ID']); ?>">
+					 <?php echo h($result[$firstModel]['ID']); ?>&nbsp;
 
 					</td></div>
 					<td class="droppable">
@@ -67,10 +71,12 @@
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?><br>
 
 						 <?php
+						 echo $this->Form->button('タグ付け要求',array("onClick" =>"demand(this)"));
+
 						 // こっちのボタンでは現在選択しているtirikeyでのリンクをすべて削除。
-						 echo $this->Form->postLink(__('Delete'),
+						 echo $this->Form->postLink(__('削除自分だけ'),
 						 		 array('controller'=> 'Links','action' => 'nestedDelete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
-						 echo $this->Form->postLink(__('DeleteDemand'),
+						 echo $this->Form->postLink(__('削除要求'),
 						 		array('controller'=> 'Links','action' => 'delDemand', $result['Link']['ID']), null, __('deldemand # %s?', $result[$firstModel]['ID']));
 // 						 <!-- pull down trikey delete demand submitter
 // 						 $result['Link']['ID']　で現在のtrikey でのID　が取得できるが、

@@ -88,8 +88,10 @@ public function beforeFilter() {
 		$this->redirect($this->referer());
 	}
 	/**
-	 * TODO:nest表示ができたから、それに従って追加する方法を考える。
+	 * TODO:nest表示ができたから、それに従って追加する方法を考える。2015/05/19ここ
+	 *
 	 * 現在選択中のトライキーで今root としている
+	 *
 	 * @param unknown $data
 	 */
 	public function nestedAdd($data,$root_ids,$parent_ids){

@@ -30,32 +30,50 @@ $(document).ready(function(){
 	    		accept : ".myTable" , // 受け入れる要素を指定
 	    		drop : function(event , ui){
 	    			$(this).append(ui.draggable);
-	    			//drop した瞬間にajax で送るべき？
-	    			$.ajax({
-	    				url:"tags/demander",
-	    				//cilant でテーブル全体を比較して、選択中のtrike root を指定して
-	    				//比較するのか？それとも、phpでやるのか？
-	    				//
-	    				data:{before:	this ,after:ui.draggable,
-	    					root_ids:$(".data_strage #root_ids").val(),
-	    					trikey_ids: $(".data_strage #trikey_ids").val(),
-	    					parent_ids :parentIdFinder(this),
-	    					},
-	    				type:"GET",
-	    				datatype:"JSON",
-	    				// create personal trilink
-	    			});
-
 	    		}
 
 	    	});
 	    });
 });
 /**
+ *
+ * @param that  <tr = parent<td = parent><input>that </input></td>
+ */
+function demand(that){
+	var root_ids = $(".data_strage #root_ids").val();
+	var trikey_ids = $(".data_strage #trikey_ids").val();
+	$.ajax({
+		url:"tags/demander",
+		//cilant でテーブル全体を比較して、選択中のtrike root を指定して
+		//比較するのか？それとも、phpでやるのか？
+		//
+		data:{before:	this ,
+			after:ui.draggable,
+			root_ids: root_ids,
+			trikey_ids: trikey_ids,
+			parent_ids :parentIdFinder( root_ids ,that),
+		},
+		type:"GET",
+		dataType:"JSON",
+	});
+}
+/**
  * root までたどって全部の親となるキーを取得
- * @param data
+ * @param root
+ * @param that
  */
 function parentIdFinder(root,that){
+	var $that = that;
+	//一番上まで行ったら？　body まで行ったら＿か
+	do{
+		parent_ids.push( $that.parentsUntil("tr").children("td #id").val());
+		if($that.parentsUntil("tr")[0]){//tr があれば
+			$that = $that.parentsUntil("tr"); //一つ上のtrまで上がる
+		}else{
+			return parent_ids;
+		}
+	}while($that.parentsUntil("tr").children("td #id").val() != root || $that("body")[0])
+		//root id と　親id がおなじになるまで。
 
 }
 

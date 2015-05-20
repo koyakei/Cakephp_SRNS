@@ -84,12 +84,13 @@ $(document).ready(function auto_complete(){
         // Attach a function to click to transfer value to the text box
 
         $('a[autoCompleteItem='+tag+']').click(function (){
-        	$(this).parent().parent().find('input[update='+tag+']').val( $(this).attr('suggest'));
-        	$(this).parent().parent().find('.tag_id').val($(this).attr('id'));
+        	var $current_node = $(this).parent().parent();
+        	$current_node.find('input[update='+tag+']').val( $(this).attr('suggest'));
+        	$current_node.find('.tag_id').val($(this).attr('id'));
             //IDを下に表示
-        	$(this).parent().parent().find('#tag_id').html($(this).attr('id'));
-        	$(this).parent().parent().find('input[update='+tag+']').focus();
-        	if($(this).parent().parent().parent().parent().parent().attr("id") == "globalnavi"){
+        	$current_node.find('#tag_id').html($(this).attr('id'));
+        	$current_node.find('input[update='+tag+']').focus();
+        	if($current_node.parentsUntil("#globalnavi")[0] != null ){
         		all_reply_finder();
         	}
 

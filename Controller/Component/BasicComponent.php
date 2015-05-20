@@ -644,32 +644,6 @@ class BasicComponent extends Component {
 
 
 
-	public function tribasicfixverifybyid(&$that = null,$trikeyID,$LinkLTo) {
-		$that->loadModel('Link');
-		//$trikeyID = tagConst()[$trykeyname];
-		if($trikeyID == null) {
-			$trikeyID = Configure::read('tagID.reply');//tagConst()['replyID'];
-		}
-		$option = array(
-			'order' => '',
-	        'conditions' => array('Link.LTo' => $LinkLTo,'Link.LFrom' => $LinkLTo),
-	        'fields' => array('Link.ID'),
-			'order' => 'Link.ID',
-			'joins' => array(
-				array(
-                    'table' => 'link',
-                    'alias' => 'taglink',
-                    'type' => 'INNER',
-                    'conditions' => array(
-						array("Link.ID = taglink.LTo"),
-						array("$trikeyID = taglink.LFrom")
-			        )
-				)
-			)
-		);
-		$that->returntribasic = $that->Link->find('first',$option);
-		return $that->returntribasic;
-	}
 
 	/**
 	 * 三角関係のリンク追加

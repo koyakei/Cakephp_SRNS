@@ -30,6 +30,7 @@ $(document).ready(function(){
 	    		accept : ".myTable" , // 受け入れる要素を指定
 	    		drop : function(event , ui){
 	    			$(this).append(ui.draggable);
+	    			demand(ui.draggable)
 	    		}
 
 	    	});
@@ -43,12 +44,12 @@ function demand(that){
 	var root_ids = $(".data_strage #root_ids").val();
 	var trikey_ids = $(".data_strage #trikey_ids").val();
 	$.ajax({
-		url:"tags/demander",
+		url:"tags/nestedAdd",
 		//cilant でテーブル全体を比較して、選択中のtrike root を指定して
 		//比較するのか？それとも、phpでやるのか？
 		//
-		data:{before:	this ,
-			after:ui.draggable,
+		data:{
+			child_ids:that,
 			root_ids: root_ids,
 			trikey_ids: trikey_ids,
 			parent_ids :parentIdFinder( root_ids ,that),

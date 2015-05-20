@@ -231,6 +231,7 @@ taghashみたいに各ネストごとにループして配置
 
 	</div>
 	</div>
+	//root_id とか選択中のidを格納
 	<?php echo $this->elemant('accordion/data_strage');?>
 </body>
 </html>

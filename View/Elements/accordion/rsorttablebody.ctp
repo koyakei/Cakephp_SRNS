@@ -89,7 +89,9 @@
 						  echo $this->Form->create('trilink',array('controller'=> 'Links','action' => 'nestedDelete'));
 						  echo $this->Form->input('title');
 						  echo $this->Form->input("trilink_id",array('type' => 'selsect' ,$result["trilink"]));
-						  echo $this->Form->end('linkDel' )
+						  echo $this->Form->end('linkDel' );
+						  echo $this->elemant('inputind', array("model" => "Article", "key" => $key,
+						  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))
 						  ?>
 
 						  </div>

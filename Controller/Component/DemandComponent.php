@@ -11,36 +11,6 @@ class DemandComponent extends Component {
 	//分解してそれぞれの関数に渡す
 
 	//複数のエンティティーの追加要請
-	/**
-	 *
-	 * @param array $request
-	 *  format  array(array(
-	 *  	'to' =>
-	 *    'from' =>
-	 *    'trikey' => ),...
-	 *    )
-	 *
-	 *    from -(trikey) > to
-	 *     是を表すとして、是の連続で表現するかな
-	 *     trikey を固定したまま　from と　to だけ　どんどん変える場合が多い
-	 *     　3っつの様相のうち２つが固定されている場合も多いだろう。
-	 *     前の値が継承されるようにした方が良い。
-	 *
-	 */
-
-	// update と insert をどうやって区別をつけるのか？
-	//主にupdate が多いはずだが、
-
-	public function requestUpdateDemands($requests){
-		foreach ($requests as $request){
-
-		}
-	}
-	public function requestUpdateDemand($requests){
-		foreach ($requests as $request){
-
-		}
-	}
 
 
 	//複数のエンティティーの削除要請
@@ -68,11 +38,55 @@ class DemandComponent extends Component {
 	}
 
 	//追加リクエスト
-	public function requestInsertDemands(&$that,$requests){
-		foreach ($requests as $request){
-			BasicComponent::trilinkAdd(&$that,$FromID,$ToID,$keyID);
-
+	/**
+	 *　要求したあと　権限が自分にあるのに関しては自動承認
+	 * @param array $from_ids
+	 * @param array $to_ids
+	 * @param array $trikey_ids
+	 * @param int $user_id
+	 * @return boolean
+	 */
+	public function requestInsertDemands($from_ids,$to_ids,$trikey_ids,$user_ids){
+		$from_ids = (array)$from_ids;
+		$to_ids = (array)$to_ids;
+		$trikey_ids = (array)$trikey_ids;
+		$user_ids = (array)$user_ids;
+		foreach ($from_ids as $from_id){
+			foreach ($to_ids as $to_id){
+				foreach ($trikey_ids as $trikey_id){
+					foreach ($user_ids as $user_id){
+						DemandComponent::trilinkAdd($from_ids,$to_ids,$trikey_ids,$user_ids);
+					}
+				}
+			}
 		}
+		return true;
+	}
+
+	public function trilinkAdd($from_id,$to_id,$trikey_id,$user_id){
+		if (empty($trikey_id)){
+			$trikey_id = Configure::read('tagID.search');
+		};
+		if($to_id == null){
+			return false;
+		}else {
+			$that->Tag = new Tag();
+			$that->Link = new Link();
+			$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+			$that->Link->unbindModel(array('hasOne'=>array('LO')), false);
+			if(null == $that->Basic->tribasicfixverifybyid($that,$trikey_id,$to_id)){
+				if($that->Basic->trilinkAdd($that,$from_id,$to_id,$trikeyID)){
+					$that->Session->setFlash(__('成功'));
+					return true;
+				}
+			}else{
+				$that->Session->setFlash(__('関連付け済み'));
+			}
+		}
+		$that->Session->setFlash(__('失敗'));
+
+		return false;
+
 	}
 	//単体の追加リクエスト
 	//まとめて削除とかするときにはどうするの　demand　table をどうまとめるか？
@@ -131,4 +145,36 @@ class DemandComponent extends Component {
 	public function selfLinkDelete($demand){
 
 	}
+
+	/**
+	 *
+	 * @param array $request
+	 *  format  array(array(
+	 *  	'to' =>
+	 *    'from' =>
+	 *    'trikey' => ),...
+	 *    )
+	 *
+	 *    from -(trikey) > to
+	 *     是を表すとして、是の連続で表現するかな
+	 *     trikey を固定したまま　from と　to だけ　どんどん変える場合が多い
+	 *     　3っつの様相のうち２つが固定されている場合も多いだろう。
+	 *     前の値が継承されるようにした方が良い。
+	 *
+	 */
+
+	// update と insert をどうやって区別をつけるのか？
+	//主にupdate が多いはずだが、
+
+	public function requestUpdateDemands($requests){
+		foreach ($requests as $request){
+
+		}
+	}
+	public function requestUpdateDemand($requests){
+		foreach ($requests as $request){
+
+		}
+	}
+
 }

@@ -90,12 +90,31 @@ public function beforeFilter() {
 	/**
 	 * TODO:nest表示ができたから、それに従って追加する方法を考える。2015/05/19ここ
 	 *
-	 * 現在選択中のトライキーで今root としている
+	 **/
+	/**
 	 *
 	 * @param unknown $data
+	 * @param unknown $root_ids
+	 * @param unknown $trikey_ids
+	 * @param unknown $parent_ids
+	 * @param unknown $before
+	 * @param unknown $after
 	 */
-	public function nestedAdd($data,$root_ids,$parent_ids){
-
+	public function nestedAdd($data = null,$root_ids = null,$trikey_ids = null,
+		$parent_ids = null,$child_ids =null){
+		$data = $this->request->data("data");
+		$root_ids = $this->request->data("root_ids");
+		$parent_ids = $this->request->data("parent_ids");
+		$trikey_ids = $this->request->data("trikey_ids");
+		$child_ids = $this->request->data("child_ids");
+		//一段階のみのreply 設定
+		//trikey 使い放題なの？
+		//trikeyと　from トシテの使われ方で権限別にする？
+		//別にしないで同じように管理しよう。
+		foreach ($parent_ids as $parent_id){
+			DemandComponent::eachLinker($parent_id,$child_ids,$trikey_ids,$this->Auth->user("id"));
+		}
+		return true;
 	}
 	/**
 	 * delbuttoun

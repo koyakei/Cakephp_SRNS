@@ -1,3 +1,4 @@
+<!-- $model $key $currentUserID $ulist -->
 <?php echo $this->Form->create($model); ?>
 <?php echo $this->Form->input('user_id', array(
 	    'type' => 'select',
@@ -5,7 +6,16 @@
 	    'options' => $ulist,
 	  'selected' => $currentUserID//['userselected']
 	,'id'=>'user_id')); ?>
-	<?php echo $this->form->hidden($model.'.keyid' ,array('value' => $key)); ?>
+	<?php
+	if (!empty($key)){
+		echo $this->form->hidden($model.'.keyid' ,array('value' => $key));
+	}
+	?>
+	<?php
+	if (!empty($parentID)){
+		echo $this->form->hidden("parentID" ,array('value' => $parentID));
+	}
+	?>
 		<legend><?php echo __($model); ?></legend>
 	<?php
 		$targetid = $this->params['pass'][0];

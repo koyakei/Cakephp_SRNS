@@ -56,11 +56,15 @@ class BasicComponent extends Component {
 	 * @param string $quant //give する量+　recive -
 	 * @return boolean
 	 */
-	public function tagAuthCountdown(&$that,$FromID,$target_user_id,$quant){
+	public function tagAuthCountdown(&$that,$FromID,$quant){
 		//ignore check special tags
 // 		if (in_array($FromID, Configure::read('tagID'))){
 // 			return true;
 // 		}
+		$Tag = new Tag();
+		$Tag->id = $FromID;
+		$result= $Tag->find();
+		$target_user_id = $result["Tag"]["ID"];
 		$that->Tagauthcount = new Tagauthcount();
 		$options = array('conditions' => array('Tagauthcount.tag_id'=> $FromID
 				,'Tagauthcount.user_id'=> $target_user_id
@@ -124,9 +128,11 @@ class BasicComponent extends Component {
 			$that->Session->setFlash(__('タグ追加失敗　発行上限に達しています'));
 		}
 	}
+
+
 	public function tagRadd(&$that) {
 		$searchID = Configure::read('tagID.search');
-		$that->request->data['Tag']['user_id'] = $that->request->data['tag']['userid'];
+		$that->request->data['tag']['user_id'] = $that->request->data['tag']['userid'];
 		$that->request->data['Link']['user_id'] = $that->request->data['tag']['userid'];
 		$LinkLTo=$that->request->data['Link']['LTo'];
 		if (!empty($that->request->data['Tag']['name'])) {
@@ -134,10 +140,58 @@ class BasicComponent extends Component {
 			$tagID = $that->Tag->find('first',
 				array(
 					'conditions' => array('name' => $that->request->data['Tag']['name'],
-					'user_id' => $that->request->data['Tag']['user_id']),
+					'user_id' => $tag_user_id),
 					'fields' => array('Tag.ID'),
 					'order' => 'Tag.ID'
 				)
+			);
+
+			if($tagID == null){
+				$that->Tag->create();
+				$that->Basic->taglimitcountup($that);
+				$that->Basic->trilinkAdd($that,$that->last_id,$LinkLTo,Configure::read('tagID.search'));
+			}else {
+				$that->loadModel('Link');
+				$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+				$that->Link->unbindModel(array('hasOne'=>array('LO')), false);
+				$trikeyID = Configure::read('tagID.search');//tagConst()['searchID'];
+				if(empty($that->Basic->tribasicfixverifybyid($trikeyID,$LinkLTo))){
+					$tagIDd = $tagID['Tag']['ID'];
+					if($that->Basic->trilinkAdd($that,$tagIDd,$LinkLTo,$trikeyID)){
+						$that->Session->setFlash(__('成功'));
+						return true;
+					}
+				}else{
+					$that->Session->setFlash(__('関連付け済み'));
+				}
+			}
+		}else {
+				$that->Session->setFlash(__('リクエストが空っぽでこけている　tag.ID'));
+			}
+			return false;
+	}
+	/**
+	 *
+	 * @param array $from_id
+	 * @param array $to_ids
+	 * @param array $trikey_ids
+	 * @param int $user_id
+	 * @return boolean
+	 */
+	public function tagRadd2($from_id,$to_ids,$trikey_ids,$user_id) {
+		$searchID = Configure::read('tagID.search');
+		$that->request->data['tag']['user_id'] = $that->request->data['tag']['userid'];
+		$that->request->data['Link']['user_id'] = $that->request->data['tag']['userid'];
+		$LinkLTo=$that->request->data['Link']['LTo'];
+		if (!empty($that->request->data['Tag']['name'])) {
+			$that->loadModel('Tag');
+			$tagID = $that->Tag->find('first',
+					array(
+							'conditions' => array('name' => $that->request->data['Tag']['name'],
+									'user_id' => $tag_user_id),
+							'fields' => array('Tag.ID'),
+							'order' => 'Tag.ID'
+					)
 			);
 
 			if($tagID == null){
@@ -162,10 +216,45 @@ class BasicComponent extends Component {
 				}
 			}
 		}else {
-				$that->Session->setFlash(__('リクエストが空っぽでこけている　tag.ID'));
-			}
-			return false;
+			$that->Session->setFlash(__('リクエストが空っぽでこけている　tag.ID'));
+		}
+		return false;
 	}
+
+	/**
+	 * リンクの結合済みチェック
+	 * link add の時のチェック
+	 * @param string $that
+	 * @param unknown $trikeyID
+	 * @param unknown $LinkLTo
+	 */
+	public function tribasicfixverifybyid($trikeyID,$LinkLTo) {
+		$that->loadModel('Link');
+		//$trikeyID = tagConst()[$trykeyname];
+		if($trikeyID == null) {
+			$trikeyID = Configure::read('tagID.reply');//tagConst()['replyID'];
+		}
+		$option = array(
+				'order' => '',
+				'conditions' => array('Link.LTo' => $LinkLTo,'Link.LFrom' => $LinkLTo),
+				'fields' => array('Link.ID'),
+				'order' => 'Link.ID',
+				'joins' => array(
+						array(
+								'table' => 'link',
+								'alias' => 'taglink',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Link.ID = taglink.LTo"),
+										array("$trikeyID = taglink.LFrom")
+								)
+						)
+				)
+		);
+		return  $that->Link->find('first',$option);
+
+	}
+
 	public function tribasic(&$that = null,$trykeyname,$modelSe,$Ltotarget,$id) {
 		$that->loadModel($modelSe);
 		$trikeyID = Configure::read('tagID.'.$trykeyname);//tagConst()[$trykeyname];
@@ -588,7 +677,7 @@ class BasicComponent extends Component {
 	 * @param unknown $FromID
 	 * @param unknown $ToID
 	 * @param unknown $keyID
-	 * @param unknown $options
+	 * @param unknown $options if($options['authCheck'] == false){goto authSkip;}
 	 * @return boolean
 	 */
 	public function trilinkAdd(&$that,$FromID,$ToID,$keyID,$options = null) {
@@ -597,7 +686,7 @@ class BasicComponent extends Component {
 			$that->request->data['Tag']['user_id'] = Configure::read('acountID.admin');
 		}
 		if($options['authCheck'] == false){goto authSkip;}
-		if ($that->Basic->tagAuthCountdown($that,$FromID,$that->request->data['tag']['userid'],$quant)) {
+		if ($that->Basic->tagAuthCountdown($that,$FromID,$quant)) {
 			authSkip:
 			$that->loadModel('Link');
 			$that->request->data['Link'] = array(
@@ -620,7 +709,6 @@ class BasicComponent extends Component {
 				$that->Link->create();
 				if($that->Link->save($that->request->data)){
 					//挿入したIDを返す
-					debug($that->last_id);
 					return $that->last_id;
 				}
 			}else{

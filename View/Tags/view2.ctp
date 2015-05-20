@@ -14,27 +14,7 @@
 
 </head>
 <body>
-<div id="inventor">
-<table id="draggable">
-    <tbody>
-        <tr id="1"><td>Alexander Graham Bell</td></tr>
-        <tr id="2"><td>Thomas Edison</td></tr>
-        <tr id="3"><td>Nicholas Tesla</td></tr>
-    </tbody>
-</table>
-</div>
-<form>
-    <div id="invention">
-        <table>
-        <tbody>
-        <tr><td>Tesla coil</td><td>Explanation</td></tr>
-        <tr><td>Telephone</td><td>Explanation</td></tr>
-        <tr><td><input name="answer3" />Phonograph</td><td>Explanation</td></tr>
-        <tr><td><input name="answer4" />Light bulb</td><td>Explanation</td></tr>
-        </tbody>
-        </table>
-    </div>
-</form>
+
 <div id="globalnavi">
 <div id="search_box">
 <ul>
@@ -232,6 +212,6 @@ taghashみたいに各ネストごとにループして配置
 	</div>
 	</div>
 	//root_id とか選択中のidを格納
-	<?php echo $this->elemant('accordion/data_strage');?>
+	<?php echo $this->element('accordion/data_strage'); ?>
 </body>
 </html>

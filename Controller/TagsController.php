@@ -32,7 +32,7 @@ class TagsController extends AppController {
  *
  * @var array
  */
-public $components = array('Auth','Search.Prg','Paginator','Common','Demand','Follow','History','Basic','Cookie','Session',
+public $components = array('Auth','Search.Prg','Paginator','Common','Demand','Basic','Cookie','Session',
 			'Security','Authpaginator','Users.RememberMe');
 public $presetVars = array(
 		'user_id' => array('type' => 'value'),
@@ -66,13 +66,13 @@ public function beforeFilter() {
 	);
 //        public $presetVars = true;
 	public function formAdd(){
-		$autoLayout= false;
+// 		$autoLayout= false;
 		 $inserted_id = CommonComponent::singleAdd($this->request->query('name'),
 		 		$this->Auth->user("id"));
 		 self::nestedAdd($this->request->query('root_ids'),$this->request->query('trikey_ids'),
 		$this->request->query('parent_ids'),$inserted_id);
-		 $Article = new Article();
-		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
+// 		 $Article = new Article();
+// 		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
 // 		$this->redirect($this->referer());
 	}
 	/**
@@ -100,7 +100,7 @@ public function beforeFilter() {
 		//trikeyと　from トシテの使われ方で権限別にする？
 		//別にしないで同じように管理しよう。
 		foreach ($parent_ids as $parent_id){
-			DemandComponent::eachLinker($parent_id,$child_ids,$trikey_ids,$this->Auth->user("id"));
+// 			DemandComponent::eachLinker($parent_id,$child_ids,$trikey_ids,$this->Auth->user("id"));
 		}
 		return true;
 	}

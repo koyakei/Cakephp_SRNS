@@ -46,7 +46,7 @@ class DemandComponent extends Component {
 	 * @param int $user_id
 	 * @return boolean
 	 */
-	public function requestInsertDemands($from_ids,$to_ids,$trikey_ids,$user_ids){
+	public function requestInsertDemands($that,$from_ids,$to_ids,$trikey_ids,$user_ids){
 		$from_ids = (array)$from_ids;
 		$to_ids = (array)$to_ids;
 		$trikey_ids = (array)$trikey_ids;
@@ -55,7 +55,7 @@ class DemandComponent extends Component {
 			foreach ($to_ids as $to_id){
 				foreach ($trikey_ids as $trikey_id){
 					foreach ($user_ids as $user_id){
-						DemandComponent::trilinkAdd($from_ids,$to_ids,$trikey_ids,$user_ids);
+						DemandComponent::trilinkAdd($that,$from_id,$to_id,$trikey_id,$user_id);
 					}
 				}
 			}
@@ -63,7 +63,7 @@ class DemandComponent extends Component {
 		return true;
 	}
 
-	public function trilinkAdd($from_id,$to_id,$trikey_id,$user_id){
+	public function trilinkAdd($that,$from_id,$to_id,$trikey_id,$user_id){
 		if (empty($trikey_id)){
 			$trikey_id = Configure::read('tagID.search');
 		};
@@ -74,16 +74,18 @@ class DemandComponent extends Component {
 			$that->Link = new Link();
 			$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
 			$that->Link->unbindModel(array('hasOne'=>array('LO')), false);
-			if(null == $that->Basic->tribasicfixverifybyid($that,$trikey_id,$to_id)){
-				if($that->Basic->trilinkAdd($that,$from_id,$to_id,$trikeyID)){
+			$options['authCheck'] = false;
+			if($that->Basic->tribasicfixverifybyid($trikey_id,$to_id,$options)){
+				if($that->Basic->trilinkAdd($that,$from_id,$to_id,$trikey_id)){
 					$that->Session->setFlash(__('成功'));
 					return true;
 				}
 			}else{
 				$that->Session->setFlash(__('関連付け済み'));
 			}
+			$that->Session->setFlash(__('失敗'));
 		}
-		$that->Session->setFlash(__('失敗'));
+
 
 		return false;
 

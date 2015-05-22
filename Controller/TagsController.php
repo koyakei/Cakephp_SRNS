@@ -69,10 +69,10 @@ public function beforeFilter() {
 // 		$autoLayout= false;
 		 $inserted_id = CommonComponent::singleAdd($this->request->query('name'),
 		 		$this->Auth->user("id"));
-		 self::nestedAdd($this->request->query('root_ids'),$this->request->query('trikey_ids'),
+		 self::nestedAdd($this,$this->request->query('root_ids'),$this->request->query('trikey_ids'),
 		$this->request->query('parent_ids'),$inserted_id);
-// 		 $Article = new Article();
-// 		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
+		 $Article = new Article();
+		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
 // 		$this->redirect($this->referer());
 	}
 	/**
@@ -88,7 +88,7 @@ public function beforeFilter() {
 	 * @param unknown $before
 	 * @param unknown $after
 	 */
-	public function nestedAdd($root_ids = null,$trikey_ids = null,
+	public function nestedAdd($that,$root_ids = null,$trikey_ids = null,
 		$parent_ids = null,$child_ids =null){
 		is_null($root_ids)?$root_ids = $this->request->data("root_ids"): null;
 		is_null($parent_ids)?$parent_ids = $this->request->data("parent_ids"): null;
@@ -100,7 +100,7 @@ public function beforeFilter() {
 		//trikeyと　from トシテの使われ方で権限別にする？
 		//別にしないで同じように管理しよう。
 		foreach ($parent_ids as $parent_id){
-// 			DemandComponent::eachLinker($parent_id,$child_ids,$trikey_ids,$this->Auth->user("id"));
+			DemandComponent::requestInsertDemands($that,$parent_id,$child_ids,$trikey_ids,$this->Auth->user("id"));
 		}
 		return true;
 	}

@@ -229,8 +229,7 @@ class BasicComponent extends Component {
 	 * @param unknown $LinkLTo
 	 */
 	public function tribasicfixverifybyid($trikeyID,$LinkLTo) {
-		$that->loadModel('Link');
-		//$trikeyID = tagConst()[$trykeyname];
+		$Link = new Link();
 		if($trikeyID == null) {
 			$trikeyID = Configure::read('tagID.reply');//tagConst()['replyID'];
 		}
@@ -246,12 +245,12 @@ class BasicComponent extends Component {
 								'type' => 'INNER',
 								'conditions' => array(
 										array("Link.ID = taglink.LTo"),
-										array("$trikeyID = taglink.LFrom")
+										array("taglink.LFrom" => $trikeyID)
 								)
 						)
 				)
 		);
-		return  $that->Link->find('first',$option);
+		return  empty($Link->find('first',$option));
 
 	}
 
@@ -662,7 +661,7 @@ class BasicComponent extends Component {
 		if($options['authCheck'] == false){goto authSkip;}
 		if ($that->Basic->tagAuthCountdown($that,$FromID,$quant)) {
 			authSkip:
-			$that->loadModel('Link');
+			$that->Link = new Link();
 			$that->request->data['Link'] = array(
 					'user_id' => $that->request->data['Tag']['user_id'],
 					'LFrom' => $FromID,
@@ -672,18 +671,19 @@ class BasicComponent extends Component {
 			);
 			$that->Link->create();
 			if($that->Link->save($that->request->data)){
-				$that->last_id = $that->Link->getLastInsertID();
 				$that->request->data['Link'] = array(
 						'user_id' => $that->request->data['Tag']['user_id'],
-						'LFrom' => $keyID,//
-						'LTo' => $that->last_id,
+						'LFrom' => $keyID,
+						'LTo' => $that->Link->getLastInsertId(),
 						'quant' => $quant,
 						'created' => date("Y-m-d H:i:s"),
 				);
 				$that->Link->create();
 				if($that->Link->save($that->request->data)){
 					//挿入したIDを返す
-					return $that->last_id;
+					return $that->Link->getLastInsertId();
+				}else{
+					debug("last step miss");
 				}
 			}else{
 				debug("1st step miss");

@@ -64,19 +64,21 @@ function demand(that){
  * @param that
  */
 function parentIdFinder(root,that){
-	var parent_ids ={};
+	var parent_ids =[];
 	var $that = $(that);
 	//一番上まで行ったら？　body まで行ったら＿か
 	do{
-		parent_ids.push( $that.parentsUntil("tr").children("td #id").val());
-		if($that.parentsUntil("tr")[0]){//tr があれば
-			$that = $that.parentsUntil("tr"); //一つ上のtrまで上がる
+		parent_ids.push($that.parentsUntil("tbody").find(".id").attr("id"));
+		if($that.parentsUntil("tbody")[0] != null){//tr があれば
+			$that = $that.parentsUntil("table").parents("tbody"); //一つ上のtrまで上がる
 		}else{
 			return parent_ids;
 		}
-	}while($that.parentsUntil("tr").children("td #id").val() != root || $that("body")[0])
-		//root id と　親id がおなじになるまで。
 
+	}while($that.parentsUntil("tbody").find(".id").attr("id") != root
+			&& !$that.parents("tbody")[0] != true)
+		//root id と　親id がおなじになるまで。
+		return parent_ids;
 }
 
 
@@ -204,7 +206,7 @@ function trikey_printer(){
 function addArticle(obj) {
 	 var obj = $(obj);
 	 var root_ids = obj.parents("#content").find(".data_strage #root_ids").val();
-	 var parent_ids = parentIdFinder(root_ids,obj,obj)
+	 var parent_ids = parentIdFinder(root_ids,obj)
 	 //代入
 	 //traverse して代入
 	    $.ajax({

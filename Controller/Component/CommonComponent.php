@@ -267,7 +267,6 @@ class CommonComponent extends Component {
 	 */
 
 	public function trifinderbyid(&$that = null,$id,&$option) {
-
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}

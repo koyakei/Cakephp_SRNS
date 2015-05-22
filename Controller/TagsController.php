@@ -32,7 +32,7 @@ class TagsController extends AppController {
  *
  * @var array
  */
-public $components = array('Auth','Search.Prg','Paginator','Common','Basic','Cookie','Session',
+public $components = array('Auth','Search.Prg','Paginator','Common','Demand','Follow','History','Basic','Cookie','Session',
 			'Security','Authpaginator','Users.RememberMe');
 public $presetVars = array(
 		'user_id' => array('type' => 'value'),
@@ -66,10 +66,13 @@ public function beforeFilter() {
 	);
 //        public $presetVars = true;
 	public function formAdd(){
-		 $inserted_id = CommonComponent::singleAdd($this->request->data('name'),
+		$autoLayout= false;
+		 $inserted_id = CommonComponent::singleAdd($this->request->query('name'),
 		 		$this->Auth->user("id"));
-		 self::nestedAdd($root_ids,$trikey_ids,
-		$parent_id,$inserted_id);
+		 self::nestedAdd($this->request->query('root_ids'),$this->request->query('trikey_ids'),
+		$this->request->query('parent_ids'),$inserted_id);
+		 $Article = new Article();
+		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
 // 		$this->redirect($this->referer());
 	}
 	/**

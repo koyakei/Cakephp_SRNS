@@ -204,9 +204,10 @@ function trikey_printer(){
  * @returns
  */
 function addArticle(obj) {
-	 var obj = $(obj);
+	 var obj = $(obj).parent();
 	 var root_ids = obj.parents("#content").find(".data_strage #root_ids").val();
-	 var parent_ids = parentIdFinder(root_ids,obj)
+	 var parent_ids = parentIdFinder(root_ids,obj);
+	 var $this = $(this)
 	 //代入
 	 //traverse して代入
 	    $.ajax({
@@ -218,12 +219,12 @@ function addArticle(obj) {
 				trikey_ids: $("#trikeys").val(),
 				parent_ids :parent_ids,
 			},
-	       /** success: function(){
-	        	return true;
+	      success: function(obj){
+	        	$this.find("td .id").append(obj);
 	        },
 	        error:function(){
 	        	return false;
-	        }**/
+	        }
 	    });
 	}
 

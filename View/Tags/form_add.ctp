@@ -1,0 +1,1 @@
+<?php echo $added_entity["Article"]["name"]?>

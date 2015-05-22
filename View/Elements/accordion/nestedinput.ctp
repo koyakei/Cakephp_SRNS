@@ -1,5 +1,5 @@
 <!-- $model $key $currentUserID $ulist -->
-<?php echo $this->Form->create(null); ?>
+<form>
 <?php echo $this->Form->input('user_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,
@@ -15,11 +15,7 @@
 		<legend><?php echo __($model); ?></legend>
 	<?php
 		$targetid = $this->params['pass'][0];
-		echo $this->Form->input('name',array('class'=> 'reply_article_name'));
+		echo $this->Form->input('Article',array('class'=> 'reply_article_name'));
 	?>
-<?php
-echo $this->Form->end(array(
-    'label' => 'submit',
-    'div' => FALSE,
-    'onclick'=>'addArticle(this)'
-)); ?>
+<input type="button" value="addArticle" onClick="addArticle(this)">
+</form>

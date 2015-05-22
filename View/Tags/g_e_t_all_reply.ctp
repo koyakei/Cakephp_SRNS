@@ -3,20 +3,16 @@
          Array('taghashes'=>$taghash)); ?>
 
     <tbody>
-    	<?php echo $this->element('rsorttablebody',
-    	 Array('results' => $tableresults['articleparentres'],
-    	 'taghashes'=>$taghash,
-    	 'firstModel' => 'Article',
-    	 'currentUserID' => $currentUserID,
-    	'srns_code_member'=>$tableresults['srns_code_member']
-    	,$sorting_tags)); ?>
-		<?php echo $this->element('rsorttablebody',
-    	 Array('results' => $tableresults['tagparentres'],
-    	 'taghashes'=>$taghash,
-    	 'firstModel' => 'Tag',
-    	 'currentUserID' => $currentUserID,
-    	'srns_code_member'=>$tableresults['srns_code_member'],
-    	$sorting_tags)); ?>
+
+    	<?php
+    	echo $this->element('accordion/table_reply',
+    			array('tableresults' => $tableresults,
+    					'taghashes'=>$taghash,
+    					'currentUserID' => $currentUserID,
+    					'srns_code_member'=>$tableresults['srns_code_member']
+    					,$sorting_tags
+    			)
+    	); ?>
 
 	</tbody>
 </table>

@@ -1,6 +1,7 @@
 
 
 	<?php
+	echo $this->element('accordion/data_strage',array('root_ids' => $id));
 	echo $this->element('accordion/table_reply',
 		array('tableresults' => $allresults,
 			'taghashes'=>$taghash,

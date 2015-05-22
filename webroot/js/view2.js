@@ -64,7 +64,8 @@ function demand(that){
  * @param that
  */
 function parentIdFinder(root,that){
-	var $that = that;
+	var parent_ids ={};
+	var $that = $(that);
 	//一番上まで行ったら？　body まで行ったら＿か
 	do{
 		parent_ids.push( $that.parentsUntil("tr").children("td #id").val());
@@ -200,17 +201,21 @@ function trikey_printer(){
  * @param obj
  * @returns
  */
-	function addArticle(obj) {
-	 var name = obj.parantNode.$(".reply_article_name")[0].value;
-	 var reply_ids = null;
+function addArticle(obj) {
+	 var obj = $(obj);
+	 var root_ids = obj.parents("#content").find(".data_strage #root_ids").val();
+	 var parent_ids = parentIdFinder(root_ids,obj,obj)
 	 //代入
-	 obj = obj.$closet.$("tr");
-	 array_make_reply_ids(obj,reply_ids);
 	 //traverse して代入
 	    $.ajax({
-	        type: "POST",
-	        url: "cakephp/articles/addArticles.php",
-	        data:inputData,
+	        type: "GET",
+	        url: location.origin +"/cakephp/tags/formAdd",
+	        data:{
+	        	name: obj.find(".reply_article_name")[0].value,
+				root_ids: root_ids,
+				trikey_ids: $("#trikeys").val(),
+				parent_ids :parent_ids,
+			},
 	       /** success: function(){
 	        	return true;
 	        },
@@ -220,23 +225,7 @@ function trikey_printer(){
 	    });
 	}
 
-	function array_make_reply_ids(obj,reply_ids){
-		try{
-			if($(".tag_id_for_reply")[0].checked == false){
-				throw "Exception";
-			}
-	    	//その起点から　id を取得
-	    	reply_ids = reply_ids.push(obj.$(".tag_id_for_reply")[0].value);
 
-	    	//一番近い祖先の<tr>を起点に定める
-	    	obj = obj.$closet("tr");
-	    	array_makey_reply_ids(obj,reply_ids);
-	    	}
-	    catch(Exception){
-	    	return reply_ids;
-        }
-
-	}
 /**
  *
  * @param data

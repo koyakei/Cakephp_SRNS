@@ -1,4 +1,4 @@
-
+<?php echo $this->Html->script("view2.js")?>
 <?php foreach ($results  as $result): ?>
 <?php if($firstModel == 'Tag'){$userCallAssosiation = 'O';} else {$userCallAssosiation = 'O';} // アソシエーションの名前を一緒にしたが後で別にするかも?>
 <div id="draggble">
@@ -53,7 +53,7 @@
 								<?php foreach ($result['no_sort_subtag'] as $taghash): ?>
 									<?php if(!in_array($taghash,$sorting_tags)): ?>
 										<?php echo $this->Html->link($taghash['Tag']['name'],
-											 array('controller'=> "tags",'action' => 'view', $taghash['Tag']['ID'])); ?>
+											 array('controller'=> "tags",'action' => 'view2', $taghash['Tag']['ID'])); ?>
 										<?php echo $taghash['Link']['quant'] + ":" + $taghash['Tag']['name']; ?>
 										<br>
 									<?php endif; ?>
@@ -87,10 +87,9 @@
 						  ?>
 						  <?php
 						  echo $this->Form->create('trilink',array('controller'=> 'Links','action' => 'nestedDelete'));
-						  echo $this->Form->input('title');
 						  echo $this->Form->input("trilink_id",array('type' => 'selsect' ,$result["trilink"]));
 						  echo $this->Form->end('linkDel' );
-						  echo $this->elemant('inputind', array("model" => "Article", "key" => $key,
+						  echo $this->element('accordion/nestedinput', array("model" => "Article",
 						  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))
 						  ?>
 

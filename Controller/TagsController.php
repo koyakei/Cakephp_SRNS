@@ -1,6 +1,6 @@
 <?php
 App::import('Vendor', 'DebugKit.FireCake');
-App::uses('AppController', 'Controller');
+App::uses('AppController', 'Controller','ArticlesController');
 App::uses('Link', 'Model');
 App::uses('User', 'Model');
 App::uses('Tagauthcounts', 'Model');
@@ -65,7 +65,13 @@ public function beforeFilter() {
 			'Session'
 	);
 //        public $presetVars = true;
-
+	public function formAdd(){
+		 $inserted_id = CommonComponent::singleAdd($this->request->data('name'),
+		 		$this->Auth->user("id"));
+		 self::nestedAdd($root_ids,$trikey_ids,
+		$parent_id,$inserted_id);
+// 		$this->redirect($this->referer());
+	}
 	/**
 	 * TODO:nest表示ができたから、それに従って追加する方法を考える。2015/05/19ここ
 	 *
@@ -79,13 +85,13 @@ public function beforeFilter() {
 	 * @param unknown $before
 	 * @param unknown $after
 	 */
-	public function nestedAdd($data = null,$root_ids = null,$trikey_ids = null,
+	public function nestedAdd($root_ids = null,$trikey_ids = null,
 		$parent_ids = null,$child_ids =null){
-		$data = $this->request->data("data");
-		$root_ids = $this->request->data("root_ids");
-		$parent_ids = $this->request->data("parent_ids");
-		$trikey_ids = $this->request->data("trikey_ids");
-		$child_ids = $this->request->data("child_ids");
+		is_null($root_ids)?$root_ids = $this->request->data("root_ids"): null;
+		is_null($parent_ids)?$parent_ids = $this->request->data("parent_ids"): null;
+		is_null($trikey_ids)? $trikey_ids = $this->request->data("trikey_ids"): null;
+		empty($trikey_ids)? $trikey_ids = Configure::read("tagID.reply"): null;
+		is_null($child_ids)?$child_ids = $this->request->data("child_ids"): null;
 		//一段階のみのreply 設定
 		//trikey 使い放題なの？
 		//trikeyと　from トシテの使われ方で権限別にする？
@@ -147,7 +153,7 @@ public function beforeFilter() {
 		 * 切断要求をしたところにはどうやって切断するのか分からない。
 		 * 切断する特殊タグを作るか？
 		 */
-		public function demand2($data = null){
+		public function demand2s($data = null){
 			if (is_null($data)){
 				$data = $this->request->data();
 			}
@@ -252,15 +258,19 @@ public function beforeFilter() {
 			//base_trikeyのみに関連付けられているエンティティーを取得
 
 			$that = $this;
-			$option = array('key' => $base_trikey);
-			$all_node["$base_trikey"] = $this->Common->trifinderbyid($that,$id,$option);
+			$option = array('key' => Configure::read("tagID.reply"));
+			$tableresults = $this->Common->trifinderbyid($that,$id,$option);
+			$this->set('headresults',$headresults);
+			$this->set('tableresults', $tableresults);
+
 			$this->set('base_trikey' ,$base_trikey);
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	//$collected_result[$trikey]["Model"}[ID] こんなかんじで
         	$this->set('default_nodes',$all_node); //デフォルトのノードツリーを返す
         	$this->set('sorting_tags',$sorting_tags);
-        	$this->set('taghash',$result["taghash"]);
+        	$this->set('taghash',$tableresults["taghash"]);
+        	$this->set('id',$id);
         }
 
 
@@ -773,6 +783,7 @@ public function beforeFilter() {
 						,$root
 				);
         	}
+
 			$this->set('currentUserID', $this->Auth->user('id'));
 			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 			$this->set('sorting_tags',$sorting_tags);
@@ -841,12 +852,13 @@ public function beforeFilter() {
 		 *
         	"SELECT * FROM tag where";
 		 */
-        public function GET_all_reply_and_nest($id = null){
+        public function GET_all_reply($id = null){
         	if ($id ==null) {
         		$id = $this->request->query["id"];;
         	}
         	$result = $this->get_specified_reply_by_id_and_trikey($id
         			,Configure::read("tagID.reply"));
+        	$this->set('root_ids',$id);
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
         	$this->set('tableresults',$result);

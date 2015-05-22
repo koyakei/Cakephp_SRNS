@@ -66,6 +66,18 @@ class CommonComponent extends Component {
 			//}
 		}
 	}
+	public function singleAdd($name,$user_id,$auth = null){
+		$this->Article = new Article();
+		$this->Article->create();
+		$data = array("Article"=>
+				array(
+						"name" =>$name,
+						"user_id" => $user_id,
+				)
+		);
+		$this->Article->save($data);
+		return $this->Article->getLastInsertID();
+	}
 	public function triarticleAdd(&$that = null,$model,$userID,$FromID,$options) {
 		if ($userID == null) {
 			$userID = Configure::read('acountID.admin');
@@ -302,7 +314,7 @@ class CommonComponent extends Component {
 	 * @param unknown $option
 	 * @return multitype:unknown multitype:multitype:NULL  unknown
 	 */
-	public function trifinderbyidAndSet(&$that,$andSet_ids,&$option = null) {
+	public function trifinderbyidAndSet(&$that,$andSet_ids,$option = null) {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}

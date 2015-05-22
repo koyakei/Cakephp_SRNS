@@ -14,8 +14,6 @@
 
 </head>
 <body>
-
-<div id="globalnavi">
 <div id="search_box">
 <ul>
   <li>
@@ -145,28 +143,29 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 </fieldset></li>
 </ul>
 </div>
-</div>
-
-<!-- アコーディオンパネルをここに設置する
-taghashみたいに各ネストごとにループして配置
-ネストが入れ子になっている時の動作を考える。
-アコーディオンでネストさせてテーブルを表示する。
-ネストで更にネストしている時の処理
-１層目と２層目でテーブルの中にアコーディオンを作れない店が違う。
-階層ごとに処理が違うのはまずそう
-
--->
 <div class="switch">
     <input type="radio" name="s2" id="on" value="1" checked="">
     <label for="on" class="switch-on"><i class="fa fa-user fa-lg"></i></label>
     <input type="radio" name="s2" id="off" value="0">
     <label for="off" class="switch-off"><i class="fa fa-globe fa-lg"></i></label>
 </div>
+<?php echo $this->element('accordion/data_strage',array('root_ids' => $id)); ?>
+
 <div class="root">
-<!--  いちいち　get_all search に呼びに行くのも難だな
-初回のロードでajax を呼ばないようにでもするか？
-全部js で制御するのか？
--->
+
+    	<?php
+    	echo $this->element('accordion/table_reply',
+    			array('tableresults' => $tableresults,
+    					'taghashes'=>$taghash,
+    					'currentUserID' => $currentUserID,
+    					'srns_code_member'=>$tableresults['srns_code_member']
+    					,$sorting_tags
+    			)
+    	);
+    	?>
+
+
+
 </div>
 <div onClick='toggleShow(this);' >
 	add
@@ -211,7 +210,5 @@ taghashみたいに各ネストごとにループして配置
 
 	</div>
 	</div>
-	//root_id とか選択中のidを格納
-	<?php echo $this->element('accordion/data_strage'); ?>
 </body>
 </html>

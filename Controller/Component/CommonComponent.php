@@ -368,10 +368,13 @@ class CommonComponent extends Component {
 													if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
 																$iparent[ucfirst($p_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
 
-														unset($parents[$p_model_parent][$parent_idx]);
+														unset($parents[$p_model_parent][$iparent_idx]);
 														//親を切って　子ノードとして追加
-														$parents[$p_model_parent][$iparent_idx]['leaf'] = array();
-														array_push($parents[$p_model_parent][$iparent_idx]['leaf'],$this_node);
+														$parents[$p_model_parent][$parent_idx]['leaf'] = array();
+														$parents[$p_model_parent][$parent_idx]['leaf'][$model_parent] = array();
+														array_push($parents[$p_model_parent][$parent_idx]['leaf'][$model_parent]
+																,$this_node);
+														debug($model_parent);
 													}
 												}
 											}
@@ -386,7 +389,7 @@ class CommonComponent extends Component {
 				}
 			}
 		//親テーブルに存在するものを検索
-				return array_merge($parents);//何もなかったと教える
+				return $parents;//何もなかったと教える
 
 	}
 

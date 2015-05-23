@@ -344,15 +344,14 @@ class CommonComponent extends Component {
 
 		$children = array();
 		$models = array( 'article' ,'tag');
-		//TODO: 親またはルートに子と同じ存在があったらカット
 		foreach ($models as  $r_model){
 			$r_model_parent = $r_model. "parentres";
 			foreach ($roots[$r_model_parent] as $root){
-
 				foreach ($models as $p_model){
 					$p_model_parent = $p_model."parentres";
 						foreach ($parents[$p_model_parent] as $parent_idx =>$parent){
 							if ($parent[ucfirst($p_model)]["ID"] != null){
+								$is_child = false;
 								$this_nodes  = self::trifinderbyid($that,$parent[ucfirst($p_model)]["ID"],$options);
 								if($this_nodes  != array(
 										'tagparentres' => array(),
@@ -369,14 +368,16 @@ class CommonComponent extends Component {
 													if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
 																$iparent[ucfirst($p_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
 
-														unset($parents[$p_model_parent][$iparent_idx]);
+														unset($parents[$p_model_parent][$parent_idx]);
 														//親を切って　子ノードとして追加
-														array_push($parens[$p_model_parent][$iparent_idx]['leaf'],$this_node);
-														//ルートに子が含まれているか調べるために含まれていない親ノードを削る
+														$parents[$p_model_parent][$iparent_idx]['leaf'] = array();
+														array_push($parents[$p_model_parent][$iparent_idx]['leaf'],$this_node);
 													}
 												}
 											}
+
 										}
+
 									}
 								}
 							}
@@ -385,10 +386,17 @@ class CommonComponent extends Component {
 				}
 			}
 		//親テーブルに存在するものを検索
-		if(!empty($children)){//もし、子供が空じゃなかったら
-					self:: nestfinderbyid($that, $roots, $sorting_tags, $id, $this_nodes['taghash'], $children);
-		}else{
-				return $parents;//何もなかったと教える
+				return array_merge($parents);//何もなかったと教える
+
+	}
+
+	public function ATswitcher($res, Callback $func){
+		$models = array( 'article' ,'tag');
+		foreach ($models as  $model){
+			$model_parent = $model. "parentres";
+			foreach ($res[$model_parent] as $root){
+				$func();
+			}
 		}
 	}
 

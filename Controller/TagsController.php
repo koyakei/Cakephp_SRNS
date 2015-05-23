@@ -263,11 +263,11 @@ public function beforeFilter() {
 			$that = $this;
 			$option = array('key' => Configure::read("tagID.reply"));
 			$root = $this->Common->trifinderbyid($that,$id,$option);
-			$tableresults = $this->Common->nestfinderbyid($that,
-					$root,$sorting_tags=null,$id,$root,$option);
+			$tableresults = $this->Common->nestfinderbyid(
+					$that, $root, $sorting_tags = null, $id, $taghash = null, $root);
+
 			$this->set('headresults',$headresults);
 			$this->set('tableresults', $tableresults);
-
 			$this->set('base_trikey' ,$base_trikey);
         	$this->set('currentUserID', $this->Auth->user('id'));
         	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
@@ -812,40 +812,6 @@ public function beforeFilter() {
         }
 
 
-		/**
-		 * GET_sons_reply method
-		 *
-		 * @param int $id
-		 * @param array $trikey
-		 * @throws NotFoundException　
-		 * @return array
-					'articleparentres' =>$sorter_mended_results['article']['results']
-					,'tagparentres'=>$sorter_mended_results['tag']['results']
-
-		 *　トライキーを複数指定したり、ノードごとに違ったり、
-		 *　arrayで渡す必要が出てくる可能性があるのか？
-		 *　今のところさしあたりはそう感じない
-		 *　定義トラキーかつリプライの時にどうするかが問題だ。array
-		 *　それだけを抽出する必要が出てくるが、今の仕様ではそこだけ抽出不可能だ。array
-		 *すべてのリプライを並べるだけではなく、トライキーで検索して順番を付けられる必要がある。
-		 *
-		 */
-		public function GET_sons_reply(&$that, $trikey = null, $sorting_tags, &$taghash, &$root){
-			if (!$this->{$this->modelClass}->exists($id)) {
-				throw new NotFoundException(__('Invalid tag'));
-			}
-			$models = array('article','tag');
-
-			foreach ($models as $model){
-				$model_parent = $model + "parentres";
-				foreach ($root["$model"] as $idx => $son){ //子供ノードごとに孫を探す
-					$temp  = CommonComponent::nestfinderbyid($this,$root,$sorting_tags,$son[ucfirst($model)]['ID'],$taghash,array('key' => $trikey));
-					if($temp['tagparentres'] != '' ||$temp['articleparentres'] != '' ){ //孫があったらもう一段入る
-						$root["$model"][$idx]['leaf'] = $temp;
-					}
-				}
-			}
-		}
 		//
 		/**
 		 * 一回のSQLで全部のネスト構造を一度に取ってくる

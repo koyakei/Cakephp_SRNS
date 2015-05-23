@@ -337,35 +337,59 @@ class CommonComponent extends Component {
 	 * @return multitype:unknown
 	 * @var $temp 子供
 	 */
-	public function nestfinderbyid(&$that,&$root,$sorting_tags,$id,&$taghash,$parent,&$option = null){
+	public function nestfinderbyid(&$that,&$roots,$sorting_tags,$id,&$taghash,&$parents,&$option = null){
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-		$temp  = self::trifinderbyid($this,$id,$options);
-		$model = "Tag";
-		//TODO: 親またはルートに子と同じ存在があったらカット
 
-			foreach ($temp['tagparentres'] as $child){
-				//親からの削除たぶんいらない　　articleparenters はまだ作っていない
-// 				foreach ($parent['tagparentres'] as $each_parent){
-// 					if ($each_parent[$model]['ID'] == $child[$model]['ID']){
-// 						unset($parent[array_search($child[$model]['ID'], $parent)]);
-// 					}
-// 				}
-				//rootの削除　　articleparenters はまだ作っていない
-				foreach ($root['tagparentres'] as $each_parent){
-					if ($each_parent[$model]['ID'] == $child[$model]['ID']){
-						unset($parent[array_search($child[$model]['ID'], $parent)]);
+		$children = array();
+		$models = array( 'article' ,'tag');
+		//TODO: 親またはルートに子と同じ存在があったらカット
+		foreach ($models as  $r_model){
+			$r_model_parent = $r_model. "parentres";
+			foreach ($roots[$r_model_parent] as $root){
+
+				foreach ($models as $p_model){
+					$p_model_parent = $p_model."parentres";
+						foreach ($parents[$p_model_parent] as $parent_idx =>$parent){
+							if ($parent[ucfirst($p_model)]["ID"] != null){
+								$this_nodes  = self::trifinderbyid($that,$parent[ucfirst($p_model)]["ID"],$options);
+								if($this_nodes  != array(
+										'tagparentres' => array(),
+										'articleparentres' => array(),
+										'taghash' => null
+								)){//子ノードが空だったら、もうこれ以上深くはいらない
+									foreach ($models as $model){
+										$model_parent = $model."parentres";
+										foreach ($this_nodes[$model_parent] as $this_node){
+											foreach ($models as $ip_model){
+												$ip_model_parent = $ip_model."parentres";
+												foreach ($parents[$ip_model_parent] as $iparent_idx =>$iparent){
+
+													if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
+																$iparent[ucfirst($p_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
+
+														unset($parents[$p_model_parent][$iparent_idx]);
+														//親を切って　子ノードとして追加
+														array_push($parens[$p_model_parent][$iparent_idx]['leaf'],$this_node);
+														//ルートに子が含まれているか調べるために含まれていない親ノードを削る
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
 					}
 				}
+			}
+		//親テーブルに存在するものを検索
+		if(!empty($children)){//もし、子供が空じゃなかったら
+					self:: nestfinderbyid($that, $roots, $sorting_tags, $id, $this_nodes['taghash'], $children);
+		}else{
+				return $parents;//何もなかったと教える
 		}
-		if($temp['tagparentres'] != '' ||$temp['articleparentres'] != '' ){ //孫があったらもう一段入る
-			$taghash = $temp['taghash'];
-			self::GET_sons_reply(
-					$this,$option['key'],$sorting_tags,$taghash,$root);
-		}
-		return array('tagparentres'=>$temp['tagparentres'],
-				'articleparentres'=> $temp['articleparentres']);
 	}
 
 	/**
@@ -386,22 +410,20 @@ class CommonComponent extends Component {
 	 *すべてのリプライを並べるだけではなく、トライキーで検索して順番を付けられる必要がある。
 	 *
 	 */
-	public function GET_sons_reply(&$that, $trikey = null, $sorting_tags, &$taghash, &$root){
-// 		if (!$this->{$this->modelClass}->exists($id)) {
-// 			throw new NotFoundException(__('Invalid tag'));
-// 		}
+	public function GET_sons_reply(&$that, $trikey = null, $sorting_tags, &$taghash, &$root,&$parent){
 		foreach (Configure::read("models") as $model){
 			$model_parent = $model + "parentres";
-			foreach ($root["$model"] as $idx => $son){ //子供ノードごとに孫を探す
-				$temp  = CommonComponent::nestfinderbyid($this,$root,$sorting_tags,$son[ucfirst($model)]['ID'],$taghash,array('key' => $trikey));
+			foreach ($parent["$model"] as $idx => $son){ //子供ノードごとに孫を探す
+				$temp  = CommonComponent::nestfinderbyid($that
+						,$root,$sorting_tags,$son[ucfirst($model)]['ID'],$taghash,array('key' => $trikey));
 				if($temp['tagparentres'] != '' ||$temp['articleparentres'] != '' ){ //孫があったらもう一段入る
-					$root["$model"][$idx]['leaf'] = $temp;
+					$parent["$model"][$idx]['leaf'] = $temp;
 				}
 			}
 		}
 	}
 
-	public function nestedtrifiderbyid(&$that,$id,$trikeyID = null,$modelSe,$Ltotarget){
+	public function nestedtrifiderbyid(&$that,$id,$trikeyID = null,$model,$Ltotarget){
 		$leaf = self::nestfinderbyid($that, $id, array('key' => $trikeyID));
 		if ($leaf['articleparentres']  != ''){
 			foreach ($leaf['articleparentres'] as $node){

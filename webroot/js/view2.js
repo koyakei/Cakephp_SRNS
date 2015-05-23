@@ -207,6 +207,7 @@ function addArticle(obj) {
 	 var obj = $(obj).parent();
 	 var root_ids = obj.parents("#content").find(".data_strage #root_ids").val();
 	 var parent_ids = parentIdFinder(root_ids,obj);
+	 parent_ids.push(root_ids);
 	 var $this = $(this)
 	 //代入
 	 //traverse して代入

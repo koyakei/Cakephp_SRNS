@@ -16,5 +16,6 @@ $config['tagID'] = array(
 $config['acountID'] = array(
 		'admin' => '52f5e533-0280-4b40-878a-0194e0e4e673'
 );
+$config["models"] = array('article','tag');
 
 ?>

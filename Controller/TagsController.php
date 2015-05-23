@@ -262,7 +262,9 @@ public function beforeFilter() {
 
 			$that = $this;
 			$option = array('key' => Configure::read("tagID.reply"));
-			$tableresults = $this->Common->trifinderbyid($that,$id,$option);
+			$root = $this->Common->trifinderbyid($that,$id,$option);
+			$tableresults = $this->Common->nestfinderbyid($that,
+					$root,$sorting_tags=null,$id,$root,$option);
 			$this->set('headresults',$headresults);
 			$this->set('tableresults', $tableresults);
 

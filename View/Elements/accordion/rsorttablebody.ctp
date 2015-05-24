@@ -72,7 +72,18 @@
 						 echo $this->Form->button('タグ付け要求',array("onClick" =>"demand(this)"));
 
 						 // こっちのボタンでは現在選択しているtirikeyでのリンクをすべて削除。
-						 echo $this->Form->postLink(__('削除自分だけ'),
+						 //TODO:トライキーを選んで削除したい。　$result['Link']['ID']　をトライキーに合わせて選択する。
+						//複数トライキー　どうやって持たせるのか考える。列ごとに　trikey  linkID をセットにした　trikey 配列でも作るか
+						 echo $this->Form->create("Link"
+						 		,array('controller'=> 'links','action' => 'delete'));
+						 echo $this->Form->input('LinkDel', array(
+						 		'type' => 'select',
+						 		'multiple'=> false,
+						 		'options' => $result['trikey'],
+						 		'selected' => Configure::read("tagID.reply")
+						 	,'id'=>'trikey_id'));
+						 echo $this->Form->end(__('削除'.$result["taglink"]["name"]));
+						 echo $this->Form->postLink(__('削除'.$result["taglink"]["name"]),
 						 		 array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
 						 echo $this->Form->postLink(__('削除要求'),
 						 		array('controller'=> 'Links','action' => 'delDemand', $result['Link']['ID']), null, __('deldemand # %s?', $result[$firstModel]['ID']));

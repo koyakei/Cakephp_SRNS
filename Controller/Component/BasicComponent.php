@@ -359,9 +359,47 @@ class BasicComponent extends Component {
 					)
 		                ),
 				),
-				'order' => ''
 			);
 		return $modelSe->find('all',$option);
+	}
+
+	public function allTrilinkFinder($from,$results){
+		foreach ($results as $idx => $result){
+			$trilink = self::GETTrilink($from, $result['Link']['LTo']);
+			if (!empty($trilink)){//TODO: 間違っているかも
+				$results[$idx ]['trikey'] = array();
+				$results[$idx]['trikey'] = $trilink;
+			}
+		}
+		return $results;
+	}
+	/**
+	 *
+	 * @param int $from
+	 * @param int $to
+	 * @return array trikey key_name
+	 */
+	private function GETTrilink($from,$to){
+		$Link = new Link();
+		$option = array(
+				'conditions'=> array(//ジョインしなければ、全部のリンクがとれてくるはず。
+						"Link.LTo = $to","$from = Link.LFrom"
+				),
+				'fields' => array("Link.ID",'taglink.name'	),
+				'joins'
+				=> array(
+						array(
+								'table' => 'taglinks',
+								'alias' => 'taglink',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Link.ID = taglink.LTo"),
+								)
+						),
+				),
+		);
+		return $Link->find("list",$option);
+
 	}
 
 	/**

@@ -199,7 +199,10 @@ class LinksController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id) {
+	public function delete($id = NULL) {
+		if (is_null($id)){
+			$id =$this->request->query("Link.trikey_id");
+		}
 
 		$this->request->onlyAllow('post', 'delete');
 		$this->loadModel('Tagauth');

@@ -92,6 +92,7 @@ class AppController extends Controller {
 		$that = $this;
 		$option = array('key' => Configure::read("tagID.reply"));
 		$root = $this->Common->trifinderbyid($that,$id,$option);
+		//TODO: この時点で全部トライキーを取ってくるようにしよう
 		$tableresults = $this->Common->nestfinderbyid(
 				$that, $root, $sorting_tags = null, $id, $taghash = null, $root);
 

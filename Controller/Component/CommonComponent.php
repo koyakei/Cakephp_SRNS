@@ -270,11 +270,13 @@ class CommonComponent extends Component {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-		$articleparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);//どんな記事がぶら下がっているか探す
-		list($articleparentres,$taghash) = self::getSearchRelation($that, $articleparentres, $taghash, "Article");
-		$tagparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
-		list($tagparentres,$taghash) =
-		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
+		$articleparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);
+		$articleparentres = $this->Basic->allTrilinkFinder($id,$articleparentres);//どんな記事がぶら下がっているか探す
+		list($articleparentres,$taghash) =
+		$this->getSearchRelation($that,$articleparentres, $taghash, "Article");
+// 		$tagparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
+// 		list($tagparentres,$taghash) =
+// 		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
 		return array('tagparentres'=>$tagparentres,
 				'articleparentres'=> $articleparentres,
 				 'taghash' => $taghash);
@@ -373,7 +375,7 @@ class CommonComponent extends Component {
 														$parents[$p_model_parent][$parent_idx]['leaf'] = array();
 														$parents[$p_model_parent][$parent_idx]['leaf'][$model_parent] = array();
 														array_push($parents[$p_model_parent][$parent_idx]['leaf'][$model_parent]
-																,$iparent);
+																,$root);
 													}
 												}
 											}
@@ -458,7 +460,7 @@ class CommonComponent extends Component {
 	 */
 
 	public function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel,$option){
-		if (!is_array($targetParent)) return null;
+		if (!is_array($targetParent)|| empty($targetParent)) return null;
 		foreach ($targetParent as $i => $result){
 			//個別のtrに対して関連付けられているタグを呼ぶ
 			$taghashgen = $this->Basic->tribasicfiderbyid(

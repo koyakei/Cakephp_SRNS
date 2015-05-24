@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<?php echo $this->Html->script(array("view2","accordion")); ?>
-	<script type="text/javascript">
-	$(document).ready(function()
-		    {
-		        $(".myTable").tablesorter();
-		    }
-		);
-	</script>
 	<style type="css">
 	.autoCompleteInputBox {
 		width: 50%;
@@ -16,11 +10,11 @@
 	table {
   background: #E4F2F6;
   }
-
 	</style>
+
 </head>
 <body>
-<div id="globalnavi">
+<div id="search_box">
 <ul>
   <li>
 	<fieldset>
@@ -45,7 +39,7 @@
 		</div>
 	</fieldset>
 	</li>
-AND
+
 <li>
 	<fieldset>
         <?php
@@ -58,6 +52,7 @@ echo $this->AutoCompleteNoHidden->input(
                 'action'=>'auto_complete',
             )
         ),
+    		'click_function' => 'test()',
         'autoCompleteRequestItem'=>'autoCompleteText',
     )
 );
@@ -89,12 +84,17 @@ echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' =>
 ?>
 </div>
 </fieldset></li>
-AND
+</ul>
+
+</div>
+<div class="trikeys">
+<p>trikeys</p>
+<ul>
 <li>
 	<fieldset>
         <?php
 echo $this->AutoCompleteNoHidden->input(
-    'or1.1',
+    'trikeys.0',
     array(
         'autoCompletesUrl'=>$this->Html->url(
             array(
@@ -108,11 +108,12 @@ echo $this->AutoCompleteNoHidden->input(
 ?>
 <div class="search_tag_id">
 <?php
-echo $this->Form->hidden('or.1.',array('value' => '','class' => 'tag_id','id' => 'or2'));
+echo $this->Form->hidden('trikeys..',array('value' => '','class' => 'tag_id'));
 ?>
 </div>
 </fieldset></li>
 </ul>
+</div>
 <div class="sorting_tags">
 <p>sorting tags</p>
 <ul>
@@ -142,22 +143,32 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 </fieldset></li>
 </ul>
 </div>
+<div class="switch">
+    <input type="radio" name="s2" id="on" value="1" checked="">
+    <label for="on" class="switch-on"><i class="fa fa-user fa-lg"></i></label>
+    <input type="radio" name="s2" id="off" value="0">
+    <label for="off" class="switch-off"><i class="fa fa-globe fa-lg"></i></label>
 </div>
+<?php echo $this->element('accordion/data_strage',array('root_ids' => $id)); ?>
 
-<!-- アコーディオンパネルをここに設置する
-taghashみたいに各ネストごとにループして配置
-ネストが入れ子になっている時の動作を考える。
-アコーディオンでネストさせてテーブルを表示する。
-ネストで更にネストしている時の処理
-１層目と２層目でテーブルの中にアコーディオンを作れない店が違う。
-階層ごとに処理が違うのはまずそう
-
--->
 <div class="root">
+
+    	<?php
+    	echo $this->element('accordion/table_reply',
+    			array('tableresults' => $tableresults,
+    					'taghashes'=>$taghash,
+    					'currentUserID' => $currentUserID,
+    					'srns_code_member'=>$tableresults['srns_code_member']
+    					,$sorting_tags
+    			)
+    	);
+    	?>
+
+
+
 </div>
 <div onClick='toggleShow(this);' >
 	add
-
 </div>
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">
@@ -197,6 +208,7 @@ taghashみたいに各ネストごとにループして配置
 				<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
 		</fieldset>
 
+	</div>
 	</div>
 </body>
 </html>

@@ -373,8 +373,7 @@ class CommonComponent extends Component {
 														$parents[$p_model_parent][$parent_idx]['leaf'] = array();
 														$parents[$p_model_parent][$parent_idx]['leaf'][$model_parent] = array();
 														array_push($parents[$p_model_parent][$parent_idx]['leaf'][$model_parent]
-																,$this_node);
-														debug($model_parent);
+																,$iparent);
 													}
 												}
 											}

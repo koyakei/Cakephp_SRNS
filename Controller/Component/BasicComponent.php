@@ -24,7 +24,6 @@ class BasicComponent extends Component {
 		}
 
 		$data['Social']['created'] = date("Y-m-d H:i:s");
-		debug($data);
 		$Social = new Social();
 		$Social->create();
 		return $Social->Save($data,false);

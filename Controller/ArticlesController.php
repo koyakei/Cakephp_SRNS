@@ -154,7 +154,6 @@ class ArticlesController extends AppController {
 			debug($this->request->data['Article']);
 			if ($this->Article->save($this->request->data)) {
 				$this->Session->setFlash(__('The article has been saved.'));
-				//return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
 			}

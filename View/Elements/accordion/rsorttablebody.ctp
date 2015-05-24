@@ -20,7 +20,7 @@
 					<div class="droppable">
 					<?php $leaf = $result["leaf"]; //leaf こうして　配列の何処かに隠しておくほかあるまい。　common component trifinder でそう渡すようにする　base trikey の仕様を考える。
 					if(!is_null($leaf)){ echo "<b>"; } ?>
-					<?php echo $this->element('URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>
+					<?php echo $this->element('accordion/URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>
 					<?php if(!is_null($leaf)){ echo "</b>"; } ?>
 					</div>
 					<?php if(!is_null($leaf)): ?>
@@ -73,7 +73,7 @@
 
 						 // こっちのボタンでは現在選択しているtirikeyでのリンクをすべて削除。
 						 echo $this->Form->postLink(__('削除自分だけ'),
-						 		 array('controller'=> 'Links','action' => 'nestedDelete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
+						 		 array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
 						 echo $this->Form->postLink(__('削除要求'),
 						 		array('controller'=> 'Links','action' => 'delDemand', $result['Link']['ID']), null, __('deldemand # %s?', $result[$firstModel]['ID']));
 // 						 <!-- pull down trikey delete demand submitter
@@ -82,7 +82,6 @@
 						 							//@todo 複数のtrikey link id を$result[$trike_id]['Link']['ID']みたいな形で表示　trikeyAndSet をいじる
 						 							?>
 						 							<?php echo $this->Form->button('del')?>
-						  ?>
 						  <?php
 						  echo $this->Form->create('trilink',array('controller'=> 'Links','action' => 'nestedDelete'));
 						  echo $this->Form->input("trilink_id",array('type' => 'selsect' ,$result["trilink"]));

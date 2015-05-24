@@ -105,7 +105,7 @@ echo $this->Form->input(
             <tr>
 		<td><?php echo h($tag['Tag']['ID']); ?>&nbsp;</td>
 		<td>
-		<?php echo $this->element('URL', Array('result' => $tag,'firstModel' =>'Tag')); ?>
+		<?php echo $this->element('accordion/URL', Array('result' => $tag,'firstModel' =>'Tag')); ?>
 		&nbsp;</td>
 		<td><?php echo h($tag['O']['username']); ?>&nbsp;</td>
 		<td><?php echo h($tag['Tag']['created']); ?>&nbsp;</td>

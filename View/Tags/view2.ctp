@@ -172,17 +172,30 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 </div>
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">
-		<fieldset>
-		<?php echo $this->Form->input("Add Article", array('type'=> 'text','placeholder' => '記事　内容')); ?>
-		<?php echo $this->Form->input("Add Article", array('type'=> 'button', 'onClick' => 'addArticle(this)')); ?>
-		<?php echo $this->Form->input('user_id', array(
-		    'type' => 'select',
-		    'multiple'=> false,
-		    'options' => $ulist,
-		  'selected' => $currentUserID//['userselected']
-		,'id'=>'user_id')); ?>
-		<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
-		</fieldset>
+		<?php $model = "Article";
+		 echo $this->Form->create($model); ?>
+<?php echo $this->Form->input('user_id', array(
+	    'type' => 'select',
+	    'multiple'=> false,
+	    'options' => $ulist,
+	  'selected' => $currentUserID//['userselected']
+	,'id'=>'user_id')); ?>
+	<?php
+	if (!empty($key)){
+		echo $this->form->hidden($model.'.keyid' ,array('value' => $key));
+	}
+	?>
+	<?php
+	if (!empty($parentID)){
+		echo $this->form->hidden("parentID" ,array('value' => $parentID));
+	}
+	?>
+		<legend><?php echo __($model); ?></legend>
+	<?php
+		$targetid = $this->params['pass'][0];
+		echo $this->Form->input('name',array('class'=> 'reply_article_name'));
+	?>
+<?php echo $this->Form->end(__('Submit')); ?>
 	<!-- 下に　$user_id $name $target_ids array リンクする対象id配列
 	これをどうにかして取り出して投げる-->
 

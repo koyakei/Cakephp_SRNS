@@ -106,10 +106,10 @@ $(document).ready(function auto_complete(){
             //IDを下に表示
         	$current_node.find('#tag_id').html($(this).attr('id'));
         	$current_node.find('input[update='+tag+']').focus();
-        	if($current_node.parentsUntil("#globalnavi")[0] != null ){
-//        		all_reply_finder(id);
-        	}else{
+        	if(location.pathname.lastIndexOf("search2")){
         		all_search_finder();
+        	}else{
+        		all_reply_finder(id);
         	}
 
             return false;

@@ -221,62 +221,7 @@ public function beforeFilter() {
         	$this->set('extends', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.extend'),"Taguser",$id));
         	$this->set('trikeyID', $trikeyID);
         }
-        /**
-         * view2 method
-         * 全部GETで情報を渡す
-         * POSTだとリンクで同じタグを表示できない。
-         * REQUEST array Searching
-         * array tags 検索中のタグ
-         * 	array("OR"=> (array("AND"=> (int $tag_id ,) ),"NOT" => array()),
-         * array users
-         * ユーザーのホワイト/ブラックリストの方式を考える必要がある。
-         * REQUEST array Sorting
-         * array tags 並べ替え中のタグ
-         * array users 優先表示するユーザー
-         * array colmun modified or created or id
-         * タグの当たりをつけるための全文検索　検索に使用したタグを投稿
-         *  array(int tag_id)
-         * @return void
-         * @todo テーブルを2つ作って、ネストしながら　insert demand 実行は後で考える
-         *現在の$id からすべてリプライする　replt@who 現在のtrikey 条件を　reply demand $ trikeys (array)に渡す
-         *
-         */
-        public function view2($id,$lower_id = null//テーブル2つ表示の時これ使う？
-        		) {
-        	if ($id ==null) {
-        		$id = $this->request->query["id"];
-        	}
-        	$base_trikey = $this->request->query('trikey_filter'); //トライキーのフィルター
-//         	デフォルトで"リプライ"だけ読む
-        	if ($base_trikey == null) {
-        		$base_trikey = Configure::read("tagID.reply");
-        	}
-        	$all_node = null;//全部の情報
-        	$this->loadModel("User");
-
-        	$this->loadModel("Trikey_list");
-        	$all_trikeis = $this->allKeyList();//すべてのトライキーを取得
-
-//         	$all_node = $this->get_child("Base_trikey_entity",$all_node,$id,$base_id,$base_trikey);
-			//base_trikeyのみに関連付けられているエンティティーを取得
-
-			$that = $this;
-			$option = array('key' => Configure::read("tagID.reply"));
-			$root = $this->Common->trifinderbyid($that,$id,$option);
-			$tableresults = $this->Common->nestfinderbyid(
-					$that, $root, $sorting_tags = null, $id, $taghash = null, $root);
-
-			$this->set('headresults',$headresults);
-			$this->set('tableresults', $tableresults);
-			$this->set('base_trikey' ,$base_trikey);
-        	$this->set('currentUserID', $this->Auth->user('id'));
-        	$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-        	//$collected_result[$trikey]["Model"}[ID] こんなかんじで
-        	$this->set('default_nodes',$all_node); //デフォルトのノードツリーを返す
-        	$this->set('sorting_tags',$sorting_tags);
-        	$this->set('taghash',$tableresults["taghash"]);
-        	$this->set('id',$id);
-        }
+       
 
 
         /**

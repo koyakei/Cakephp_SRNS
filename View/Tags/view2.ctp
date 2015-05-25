@@ -173,7 +173,7 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">
 		<?php $model = "Article";
-		 echo $this->Form->create($model); ?>
+		 echo $this->Form->create($model,array("controller" => "tags","action" =>"triArticleAdd")); ?>
 <?php echo $this->Form->input('user_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,
@@ -184,6 +184,7 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 	if (!empty($key)){
 		echo $this->form->hidden($model.'.keyid' ,array('value' => $key));
 	}
+	echo $this->form->hidden('id' ,array('value' => $id));
 	?>
 	<?php
 	if (!empty($parentID)){
@@ -214,6 +215,7 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 			);?>
 
 			<?php
+			echo $this->form->hidden('id' ,array('value' => $id));
 				echo $this->Form->hidden('add_tag_id.',array('value' => '','class' => 'tag_id','id' => 'tag_id'));
 			echo $this->Form->hidden('add_trikey_id.',
 				array('value' => $trikey_id,'class' => 'tag_id','id' => 'add_trikey_id')); ?>

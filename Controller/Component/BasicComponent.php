@@ -383,7 +383,8 @@ class BasicComponent extends Component {
 		$Link = new Link();
 		$option = array(
 				'conditions'=> array(//ジョインしなければ、全部のリンクがとれてくるはず。
-						"Link.LTo = $to","$from = Link.LFrom"
+						"Link.LTo"=> $to,
+						"Link.LFrom" =>$from
 				),
 				'fields' => array("Link.ID",'taglink.name'	),
 				'joins'
@@ -418,7 +419,7 @@ class BasicComponent extends Component {
 		$modelSe = new $modelSe();
 		$option = array(
 				'conditions'=> array(
-						"Link.LFrom = $LFromtarget"
+						"Link.LFrom" => $LFromtarget
 				),
 				'fields' => array('*'		),
 				'joins'
@@ -441,7 +442,6 @@ class BasicComponent extends Component {
 								)
 						),
 				),
-				'order' => ''
 		);
 		return $modelSe->find('all',$option);
 	}

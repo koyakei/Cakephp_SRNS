@@ -274,9 +274,9 @@ class CommonComponent extends Component {
 		$articleparentres = $this->Basic->allTrilinkFinder($id,$articleparentres);//どんな記事がぶら下がっているか探す
 		list($articleparentres,$taghash) =
 		$this->getSearchRelation($that,$articleparentres, $taghash, "Article");
-// 		$tagparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id);
-// 		list($tagparentres,$taghash) =
-// 		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
+		$tagparentres = $this->Basic->allTrilinkFinder($id,$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id));
+		list($tagparentres,$taghash) =
+		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
 		return array('tagparentres'=>$tagparentres,
 				'articleparentres'=> $articleparentres,
 				 'taghash' => $taghash);

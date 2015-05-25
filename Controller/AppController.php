@@ -61,13 +61,23 @@ class AppController extends Controller {
 	 *現在の$id からすべてリプライする　replt@who 現在のtrikey 条件を　reply demand $ trikeys (array)に渡す
 	 *
 	 */
+	public function triArticleAdd(){
+		$options['key'] = $this->request->data['Article']['keyid'];
+		$this->Common->triarticleAdd($this,'Article',
+				$this->request->data['Article']['user_id'],$this->request->data("id"),$options);
+		$this->Basic->social($this);
+		$this->redirect($this->referer());
+	}
+	public function triTagAdd(){
+		$options['key'] = $this->request->data['Tag']['keyid'];
+		$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],
+				$this->request->data("id"),$this->request->data['Tag']['name'],$options);
+		$this->Basic->social($this,$this->Auth->user('id'));
+		$this->redirect($this->referer());
+	}
 	public function view2($id,$lower_id = null//テーブル2つ表示の時これ使う？
 	) {
-		if($this->request->data['Article']['name'] != null){
-			$options['key'] = $this->request->data['Article']['keyid'];
-			$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
-			$this->Basic->social($this);
-		} elseif($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
+		if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
 			$options['key'] = $this->request->data['Tag']['keyid'];
 			$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],$id,$this->request->data['Tag']['name'],$options);
 			$this->Basic->social($this,$this->Auth->user('id'));

@@ -379,9 +379,7 @@ class CommonComponent extends Component {
 													}
 												}
 											}
-
 										}
-
 									}
 								}
 							}
@@ -390,8 +388,7 @@ class CommonComponent extends Component {
 				}
 			}
 		//親テーブルに存在するものを検索
-				return $parents;//何もなかったと教える
-
+		return $parents;//何もなかったと教える
 	}
 
 	public function ATswitcher($res, Callback $func){

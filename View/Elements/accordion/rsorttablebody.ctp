@@ -75,14 +75,34 @@
 						 //TODO:トライキーを選んで削除したい。　$result['Link']['ID']　をトライキーに合わせて選択する。
 						//複数トライキー　どうやって持たせるのか考える。列ごとに　trikey  linkID をセットにした　trikey 配列でも作るか
 						 echo $this->Form->create("Link"
-						 		,array('controller'=> 'links','action' => 'delete'));
-						 echo $this->Form->input('LinkDel', array(
+						 		,array('controller'=> 'Links','action' => 'delete'));
+						 //replay@mine も選択し
+						 $ORflag = false;
+						 $MRflag = false;
+						 foreach ($result['trikey'] as $each){
+						 	foreach ($each as $val){
+							 	if ($val == Configure::read("tagID.reply")){
+							 		$ORflag =true;
+							 	}
+// 							 	 elseif ($val == $myReply){
+// 									$MRflag = true;
+// 							 	}
+							 }
+						 }
+						 if ($ORflag){
+						 	$defaultId = Configure::read("tagID.reply");
+						 }
+// 						 elseif ($MRflag){
+// 						 	$defaultId = $myReply;
+// 						 }
+
+						 echo $this->Form->input('trikey_id', array(
 						 		'type' => 'select',
 						 		'multiple'=> false,
 						 		'options' => $result['trikey'],
-						 		'selected' => Configure::read("tagID.reply")
-						 	,'id'=>'trikey_id'));
-						 echo $this->Form->end(__('削除'.$result["taglink"]["name"]));
+						 		'selected' => $defaultId,
+						 		'id'=>'trikey_id'));
+						 echo $this->Form->end(__('削除'));
 						 echo $this->Form->postLink(__('削除'.$result["taglink"]["name"]),
 						 		 array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
 						 echo $this->Form->postLink(__('削除要求'),

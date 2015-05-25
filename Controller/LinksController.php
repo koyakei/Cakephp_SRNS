@@ -201,7 +201,7 @@ class LinksController extends AppController {
  */
 	public function delete($id = NULL) {
 		if (is_null($id)){
-			$id =$this->request->query("Link.trikey_id");
+			$id =$this->request->data("Link.trikey_id");
 		}
 
 		$this->request->onlyAllow('post', 'delete');
@@ -224,8 +224,6 @@ class LinksController extends AppController {
 					return false;
 				}
 			}
-
-		print_r("戻るで戻って");
 		return $this->redirect($this->referer());
 	}
  // trikey の使用許可をどう管理するのか考えるのをすっかり忘れていた。

@@ -208,8 +208,8 @@ contents of index
 	これをどうにかして取り出して投げる-->
 
 		<fieldset>
-		        <?php echo $this->AutoCompleteNoHidden->input(
-			    'or1.1',
+		        	        <?php echo $this->AutoCompleteNoHidden->input(
+			    'tag',
 			    array(
 			        'autoCompletesUrl'=>$this->Html->url(
 			            array(
@@ -219,16 +219,12 @@ contents of index
 			        ),
 			        'autoCompleteRequestItem'=>'autoCompleteText',
 			    )
-			);?>
-
-			<?php
+			);
+			echo $this->Form->hidden('tag',array('value' => '','class' => 'tag_id','id' => 'tag'));
 			echo $this->form->hidden('id' ,array('value' => $id));
-			echo $this->Form->hidden('add_tag_id.',array('value' => '','class' => 'tag_id','id' => 'tag_id'));
-			echo $this->Form->hidden('add_trikey_id.',
-				array('value' => $trikey_id,'class' => 'tag_id','id' => 'add_trikey_id')); ?>
-				<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Tag','onClick' => 'add_single_tag(this)')); ?>
-				<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
-		</fieldset>
+			?>
+
+				</fieldset>
 
 	</div>
 	</div>

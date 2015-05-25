@@ -113,7 +113,7 @@ class TagusersController extends AppController {
 						'Taguser.name LIKE BINARY' => '%'.$this->params['url']['autoCompleteText'].'%'
 				),
 				'fields' => array('ID' ,'name','username'),
-				'limit' => 3,
+				'limit' => 10,
 				'recursive'=>1,
 		));
 		$terms = Set::Extract($terms,'{n}.Taguser');

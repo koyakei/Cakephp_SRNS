@@ -1,12 +1,24 @@
-<?php echo $this->Form->create('tag'); ?>
-	<?php echo $this->Form->input('Tag.name'); ?>
+<?php echo $this->Form->create("Tag",array('action' =>'tagSRAdd')); ?>
 	<?php echo $this->Form->input('userid', array(
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,
-	  'selected' => $currentUserID//['userselected']  
-	)); ?>
-	<?php echo $this->Form->hidden('idre', array('value'=>$idre)); ?>
-	<?php echo $this->Form->hidden('Link.LTo', array('value'=>$ToID)); ?>
-	<?php echo $this->Form->hidden('tagRadd.add', array('value'=>true)); ?>
+	  'selected' => $currentUserID//['userselected']
+	));
+
+	echo $this->AutoCompleteNoHidden->input(
+			'tag',
+			array(
+					'autoCompletesUrl'=>$this->Html->url(
+							array(
+									'controller'=>'tagusers',
+									'action'=>'auto_complete',
+							)
+					),
+					'autoCompleteRequestItem'=>'autoCompleteText',
+			)
+	);
+	echo $this->Form->hidden('tag',array('value' => '','class' => 'tag_id','id' => 'tag'));
+	?>
+	<?php echo $this->Form->hidden('LTo', array('value'=>$ToID)); ?>
 <?php echo $this->Form->end('tag'); ?>

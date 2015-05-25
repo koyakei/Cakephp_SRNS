@@ -419,7 +419,13 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	$this->loadModel('Key');
     	return $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
     }
-
+	public function tagSRAdd(){
+		$options['key'] = Configure::read('tagID.search');
+		$this->Common->triAddbyid($this,
+				$this->request->data['Tag']['user_id'],$this->request->data['Tag']['tag'],$this->request->data['Tag']['LTo'],$options);
+		$this->Basic->social($this,$this->Auth->user('id'));
+// 		$this->redirect($this->referer());
+	}
     /**
      * view method
      *
@@ -427,9 +433,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
      * @param string $id
      * @return void
      */
-
-
-    function view($id = NULL){
+    public function view($id = NULL){
     	if (!$this->{$this->modelClass}->exists($id)) {
     		throw new NotFoundException(__('Invalid tag'));
     	}
@@ -442,10 +446,6 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     		$options['key'] = $this->request->data['Article']['keyid'];
     		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
     		$this->Basic->social($this);
-    	} elseif($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
-    		$options['key'] = $this->request->data['Tag']['keyid'];
-    		$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],$id,$this->request->data['Tag']['name'],$options);
-    		$this->Basic->social($this,$this->Auth->user('id'));
     	}
     	//表示取得
     	$key = $this->allKeyList();

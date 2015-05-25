@@ -797,38 +797,6 @@ public function beforeFilter() {
 			return $this->Common->trifinderbyid($this,$id,$option);
         }
 
-        /**
-         * autoSuggest method
-         *
-         * @throws NotFoundException
-         * @param string $id
-         * @return void
-         */
-        public function autoSuggest() {
-        	$this->layout = 'ajax';
-        	$data = ''; $json = '';
-        	if(!empty($this->params['url']['q'])){
-        		$options = array(
-        				'field'     =>array('Taguser.ID','Taguser.name'),
-        				'conditions' => array('or'=> array(
-        						array('Taguser.name LIKE ?' => $this->params['url']['q'].'%')
-        				),
-        				),
-        				'limit'     =>10
-        		);
-        		$datas = $this->Taguser->find('list', $options);
-
-        		foreach($datas as $key=>$val){
-        			$data .= $val.'|'.$key."\n";
-        		}
-        	}
-        	$this->set('json', $data);
-        	$this->render('ajax_suggest');
-        }
-
-		public function ac(){
-
-		}
 
         /**
          * delete method
@@ -904,21 +872,7 @@ public function beforeFilter() {
 
         }
 
-       public function auto_complete() {
-        	$terms = $this->Taguser->find('all', array(
-        			'conditions' => array(
-        					'Taguser.name LIKE BINARY' => '%'.$this->params['url']['autoCompleteText'].'%'
-        			),
-        			'fields' => array('name','user_id'),
-        			'limit' => 3,
-        			'recursive'=>1,
-        	));
-        	debug($terms);
-        	$terms = Set::Extract($terms,'{n}.Taguser');
-//         	$terms += Set::Extract($terms,'{n}.Taguser.name');
-        	$this->set('terms', $terms);
-//         	$this->layout = 'ajax';
-        }
+
         /**
          * articletransmitter method
          *

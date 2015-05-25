@@ -782,6 +782,7 @@ class BasicComponent extends Component {
 				),
 				'joins'
 				=> array(
+
 						array(
 								'table' => 'Link',
 								'type' => 'INNER',

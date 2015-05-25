@@ -231,8 +231,7 @@ class CommonComponent extends Component {
 		}
 
 		if ($FromID != null) {
-			$that->request->data = null;
-			$that->request->data['Link'] = array(
+			$data['Link'] = array(
 					'user_id' => $userID,
 					'LFrom' => $FromID,
 					'LTo' => $ToID,
@@ -240,25 +239,24 @@ class CommonComponent extends Component {
 			);
 			$Link = new Link();
 			$Link->create();
-			if ($Link->save($that->request->data)) {
-
+			if ($Link->save($data)) {
 				$that->last_id = $Link->getLastInsertID();
-				$that->request->data = null;
-				$that->request->data['Link'] = array(
+				$data = null;
+				$data['Link'] = array(
 						'user_id' => $userID,
 						'LFrom' => $options['key'],//
 						'LTo' => $that->last_id,
 						'quant' => 1,
 				);
 				$Link->create();
-				if ($Link->save($that->request->data)) {
-					$that->Session->setFlash(__('The article has been saved.'));
+				if ($Link->save($data)) {
+					$that->Session->setFlash(__('The entity has been saved.'));
 
 				} else {
 					$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
 				}
 			}else {
-				debug("misslink1");
+				$that->Session->setFlash(__("misslink1"));
 			}
 		}
 	}
@@ -429,6 +427,7 @@ class CommonComponent extends Component {
 										'articleparentres' => array(),
 										'taghash' => null
 								)){//子ノードが空だったら、もうこれ以上深くはいらない
+									//TODO:taghash をネストした下でどう扱うか？
 									foreach ($models as $model){
 										$model_parent = $model."parentres";
 										foreach ($this_nodes[$model_parent] as $this_node){

@@ -123,11 +123,8 @@
 						Tag add
 						</div>
 						<div id='HSfield' style='display: none;'>
-						<?php if ($idre != null) {
-							$ToID =$result[$firstModel]['ID'];
-							echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $ToID,'currentUserID' => $currentUserID));
-						}
-
+						<?php
+							echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$id,'ToID' => $result[$firstModel]['ID'],'currentUserID' => $currentUserID));
 						 ?></div></td>
 
 						<?php if ($taghashes != null) {

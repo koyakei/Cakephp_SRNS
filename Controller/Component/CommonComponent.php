@@ -442,7 +442,7 @@ class CommonComponent extends Component {
 													if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
 																$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
 
-														unset($parents[$p_model_parent][$iparent_idx]);
+														unset($parents[$ip_model_parent][$iparent_idx]);
 														//親を切って　子ノードとして追加
 														$parents[$p_model_parent][$parent_idx]['leaf'] = array();
 														$parents[$p_model_parent][$parent_idx]['leaf'][$model_parent] = array();

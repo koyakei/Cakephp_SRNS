@@ -7,7 +7,7 @@ App::uses('Date', 'Model');
 App::uses('BasicComponent', 'Controller/Component');
 Configure::load("static");
 class CommonComponent extends Component {
-    public $components = array('Basic');
+    public $components = array('Basic',"Demand");
     public function getURL(&$that = null,$id = null){
 		$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.URL'),'Article',"Article.ID",$id);
 		return $that->returntribasic[0]['Article']['name'];
@@ -144,6 +144,75 @@ class CommonComponent extends Component {
 				$that->Session->setFlash(__('Quant changed.'));
 			}
 		}
+	}
+	/**
+	 *
+	 * @param unknown $data
+	 * @param unknown $root_ids
+	 * @param unknown $trikey_ids
+	 * @param unknown $parent_ids
+	 * @param unknown $before
+	 * @param unknown $after
+	 */
+	public function nestedAdd(&$that= null,$root_ids = null,$trikey_ids = null,
+			$parent_ids = null,$child_ids =null){
+		is_null($that)?$that = $this:null;
+
+		is_null($parent_ids)?$parent_ids = $that->request->data("parent_ids"): null;
+		is_null($trikey_ids)? $trikey_ids = $that->request->data("trikey_ids"): null;
+		empty($trikey_ids)? $trikey_ids = Configure::read("tagID.reply"): null;
+		is_null($child_ids)?$child_ids = $that->request->data("child_ids"): null;
+		//一段階のみのreply 設定
+		//trikey 使い放題なの？
+		//trikeyと　from トシテの使われ方で権限別にする？
+		//別にしないで同じように管理しよう。
+		foreach ($parent_ids as $parent_id){
+			self::requestInsertDemands($that,$parent_id,$child_ids,$trikey_ids,$that->Auth->user("id"));
+		}
+		return true;
+	}
+	public function requestInsertDemands(&$that,$from_ids,$to_ids,$trikey_ids,$user_ids){
+		$from_ids = (array)$from_ids;
+		$to_ids = (array)$to_ids;
+		$trikey_ids = (array)$trikey_ids;
+		$user_ids = (array)$user_ids;
+		foreach ($from_ids as $from_id){
+			foreach ($to_ids as $to_id){
+				foreach ($trikey_ids as $trikey_id){
+					foreach ($user_ids as $user_id){
+						self::trilinkAdd($that,$from_id,$to_id,$trikey_id,$user_id);
+					}
+				}
+			}
+		}
+		return true;
+	}
+	public function trilinkAdd($that,$from_id,$to_id,$trikey_id,$user_id){
+		if (empty($trikey_id)){
+			$trikey_id = Configure::read('tagID.search');
+		};
+		if($to_id == null){
+			return false;
+		}else {
+			$that->Tag = new Tag();
+			$that->Link = new Link();
+			$that->Tag->unbindModel(array('hasOne'=>array('TO')), false);
+			$that->Link->unbindModel(array('hasOne'=>array('LO')), false);
+			$options['authCheck'] = false;
+			if($that->Basic->tribasicfixverifybyid($trikey_id,$to_id,$options)){
+				if($that->Basic->trilinkAdd($that,$from_id,$to_id,$trikey_id)){
+					$that->Session->setFlash(__('成功'));
+					return true;
+				}
+			}else{
+				$that->Session->setFlash(__('関連付け済み'));
+			}
+			$that->Session->setFlash(__('失敗'));
+		}
+
+
+		return false;
+
 	}
 	/**
 	 *
@@ -366,9 +435,12 @@ class CommonComponent extends Component {
 											foreach ($models as $ip_model){
 												$ip_model_parent = $ip_model."parentres";
 												foreach ($parents[$ip_model_parent] as $iparent_idx =>$iparent){
-
+													if($root[ucfirst($r_model)]['ID'] =="285"
+															&&$root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID']){
+														debug($iparent[ucfirst($ip_model)]['ID']);
+													}
 													if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
-																$iparent[ucfirst($p_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
+																$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
 
 														unset($parents[$p_model_parent][$iparent_idx]);
 														//親を切って　子ノードとして追加

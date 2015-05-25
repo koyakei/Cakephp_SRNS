@@ -58,6 +58,7 @@ function demand(that){
 		dataType:"JSON",
 	});
 }
+
 /**
  * root までたどって全部の親となるキーを取得
  * @param root
@@ -208,7 +209,7 @@ function addArticle(obj) {
 	 var root_ids = obj.parents("#content").find(".data_strage #root_ids").val();
 	 var parent_ids = parentIdFinder(root_ids,obj);
 	 parent_ids.push(root_ids);
-	 var $this = $(this)
+	 var $this = $(this);
 	 //代入
 	 //traverse して代入
 	    $.ajax({
@@ -251,32 +252,47 @@ function table_perser(data){
  * @returns 追加されたリンクIDを返す
  */
 function add_single_tag(obj){
-	var target = obj.parentNode.children;
-	var data = {
-			from:target.$("#from_id"),
-			to:target.$("#tag_id"),
-			trikey_id: target.$("#trikey_id"),
-			};
-	triLinker(data,callbaack);
+	var target = $(obj);
+	var root_ids = $(".data_strage #root_ids").val();
+	var parent_ids = parentIdFinder(root_ids ,obj);
+	parent_ids.push(root_ids);
+//	root_ids,to:target.find("#tag_id .tag_id"),
+//	parent_id : parent_id
+	 $.ajax({
+	        type: "GET",
+	        url: location.origin +"/cakephp/Links/triLinkAdd",
+	        data: {root_ids:root_ids
+	        	,to:target.closest("#add_tag").find(".tag_id").val(),
+	        	parent_ids:parent_ids,
+				},
+//	      success: function(obj){
+////	    	  	callback;
+//	        },
+//	        error:function(){
+//	        	return false;
+//	        }
+	    });
+
 }
 /**
  * @param array data= {from:id,to:id,trikey_id;int}
  * @returns bool
  */
-function triLinker(data,callback){
+function triLinker(data){
     // array('cntroller'=>'tagusers' ,'action' => 'addentity') に送る
     // で渡ってくる　trikey も渡せるようにしたい。label の追加が必要だろう。なければreply にするか。
     //Json post を飛ばす。
-    $.getJSON(
-    		'/cakephp/Link/addTriLink',
-    		data,
-    	function(res){// 追加できたら、ture を返してみようか。　権限がなくてできませんもあり得るから、なんとも言えんがね。
-            if(res !== null) {
-                 data.id = res;
-                 callback(data);
-            }
-    	}
-    );
+	 $.ajax({
+	        type: "GET",
+	        url: location.origin +"/cakephp/Links/triLinkAdd",
+	        data:data,
+//	      success: function(obj){
+////	    	  	callback;
+//	        },
+//	        error:function(){
+//	        	return false;
+//	        }
+	    });
 
   }
 

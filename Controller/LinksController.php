@@ -31,6 +31,28 @@ class LinksController extends AppController {
 		$this->Security->validatePost = false;
 		$this->Security->csrfCheck = false;
 	}
+	public function triLinkAdd($from =NULL,$to = null){
+		debug($this->request->query);
+		$options['key'] = $this->request->query['keyid'];
+		if (empty($options['key'])){
+			$options['key'] = Configure::read("tagID.reply");
+		}
+		$root_ids = $this->request->query['root_ids'];
+
+		$to = $this->request->query['to'];
+		$user_id = $this->request->query['user_id'];
+		if (empty($user_id)){
+			$user_id = $this->Auth->user('id');
+		}
+		$parent_ids = $this->request->query['parent_ids'];
+		if ($user_id = null){
+			$user_id = $this->Auth->user('id');
+		}
+		$this->Common->nestedAdd($this,$root_ids,$options['key'],
+				$parent_ids,$to);
+		$this->Basic->social($this,$this->Auth->user('id'));
+// 		$this->redirect($this->referer());
+	}
 	public function isAuthorized($user) {
 
 		// 投稿のオーナーは編集や削除ができる

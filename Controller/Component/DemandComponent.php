@@ -46,7 +46,7 @@ class DemandComponent extends Component {
 	 * @param int $user_id
 	 * @return boolean
 	 */
-	public function requestInsertDemands($that,$from_ids,$to_ids,$trikey_ids,$user_ids){
+	public function requestInsertDemands(&$that,$from_ids,$to_ids,$trikey_ids,$user_ids){
 		$from_ids = (array)$from_ids;
 		$to_ids = (array)$to_ids;
 		$trikey_ids = (array)$trikey_ids;

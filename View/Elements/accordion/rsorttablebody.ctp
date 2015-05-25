@@ -72,8 +72,6 @@
 						 echo $this->Form->button('タグ付け要求',array("onClick" =>"demand(this)"));
 
 						 // こっちのボタンでは現在選択しているtirikeyでのリンクをすべて削除。
-						 //TODO:トライキーを選んで削除したい。　$result['Link']['ID']　をトライキーに合わせて選択する。
-						//複数トライキー　どうやって持たせるのか考える。列ごとに　trikey  linkID をセットにした　trikey 配列でも作るか
 						 echo $this->Form->create("Link"
 						 		,array('controller'=> 'Links','action' => 'delete'));
 						 //replay@mine も選択し
@@ -103,6 +101,7 @@
 						 		'selected' => $defaultId,
 						 		'id'=>'trikey_id'));
 						 echo $this->Form->end(__('削除'));
+
 						 echo $this->Form->postLink(__('削除'.$result["taglink"]["name"]),
 						 		 array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
 						 echo $this->Form->postLink(__('削除要求'),
@@ -114,9 +113,6 @@
 						 							?>
 						 							<?php echo $this->Form->button('del')?>
 						  <?php
-						  echo $this->Form->create('trilink',array('controller'=> 'Links','action' => 'nestedDelete'));
-						  echo $this->Form->input("trilink_id",array('type' => 'selsect' ,$result["trilink"]));
-						  echo $this->Form->end('linkDel' );
 						  echo $this->element('accordion/nestedinput', array("model" => "Article",
 						  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))
 						  ?>

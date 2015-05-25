@@ -62,7 +62,6 @@ echo $this->AutoCompleteNoHidden->input(
 echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or2'));
 ?>
 </div>
-</fieldset></li><li>
 	<fieldset>
         <?php
 echo $this->AutoCompleteNoHidden->input(
@@ -216,7 +215,7 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 
 			<?php
 			echo $this->form->hidden('id' ,array('value' => $id));
-				echo $this->Form->hidden('add_tag_id.',array('value' => '','class' => 'tag_id','id' => 'tag_id'));
+			echo $this->Form->hidden('add_tag_id.',array('value' => '','class' => 'tag_id','id' => 'tag_id'));
 			echo $this->Form->hidden('add_trikey_id.',
 				array('value' => $trikey_id,'class' => 'tag_id','id' => 'add_trikey_id')); ?>
 				<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Tag','onClick' => 'add_single_tag(this)')); ?>

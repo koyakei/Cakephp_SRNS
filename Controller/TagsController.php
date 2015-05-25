@@ -69,7 +69,7 @@ public function beforeFilter() {
 // 		$autoLayout= false;
 		 $inserted_id = CommonComponent::singleAdd($this->request->query('name'),
 		 		$this->Auth->user("id"));
-		 self::nestedAdd($this,$this->request->query('root_ids'),$this->request->query('trikey_ids'),
+		 $this->Common->nestedAdd($this,$this->request->query('root_ids'),$this->request->query('trikey_ids'),
 		$this->request->query('parent_ids'),$inserted_id);
 		 $Article = new Article();
 		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
@@ -79,31 +79,7 @@ public function beforeFilter() {
 	 * TODO:nest表示ができたから、それに従って追加する方法を考える。2015/05/19ここ
 	 *
 	 **/
-	/**
-	 *
-	 * @param unknown $data
-	 * @param unknown $root_ids
-	 * @param unknown $trikey_ids
-	 * @param unknown $parent_ids
-	 * @param unknown $before
-	 * @param unknown $after
-	 */
-	public function nestedAdd($that,$root_ids = null,$trikey_ids = null,
-		$parent_ids = null,$child_ids =null){
-		is_null($root_ids)?$root_ids = $this->request->data("root_ids"): null;
-		is_null($parent_ids)?$parent_ids = $this->request->data("parent_ids"): null;
-		is_null($trikey_ids)? $trikey_ids = $this->request->data("trikey_ids"): null;
-		empty($trikey_ids)? $trikey_ids = Configure::read("tagID.reply"): null;
-		is_null($child_ids)?$child_ids = $this->request->data("child_ids"): null;
-		//一段階のみのreply 設定
-		//trikey 使い放題なの？
-		//trikeyと　from トシテの使われ方で権限別にする？
-		//別にしないで同じように管理しよう。
-		foreach ($parent_ids as $parent_id){
-			DemandComponent::requestInsertDemands($that,$parent_id,$child_ids,$trikey_ids,$this->Auth->user("id"));
-		}
-		return true;
-	}
+
 	/**
 	 * delbuttoun
 	 * @param string $data
@@ -221,7 +197,7 @@ public function beforeFilter() {
         	$this->set('extends', $this->Basic->triupperfiderbyid($this,Configure::read('tagID.extend'),"Taguser",$id));
         	$this->set('trikeyID', $trikeyID);
         }
-       
+
 
 
         /**

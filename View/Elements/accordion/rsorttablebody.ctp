@@ -28,14 +28,14 @@
 								Reply
 							</div>
 							<div id='HSfield' style='display: none;'>
-
-							<!-- このエレメントを再帰的に呼び出す  再帰的に呼び出した状態をテストする方法がわからない　 view のテストがないと不便だ。-->
+							<!-- このエレメントを再帰的に呼び出す-->
 							<?php
     	echo $this->element('accordion/table_reply',
-    			array('tableresults' => $leaf,
+    			array('tableresults' => $leaf["nodes"],
     					'taghashes'=>$taghash,
     					'currentUserID' => $currentUserID,
-    					'srns_code_member'=>$leaf['srns_code_member']
+    					'srns_code_member'=>$leaf["nodes"]['srns_code_member'],
+    					"index" => $leaf["index"]
     					,$sorting_tags
     			)
     	);

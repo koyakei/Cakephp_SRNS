@@ -142,14 +142,9 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 </fieldset></li>
 </ul>
 </div>
-<fieldset>
-contents of index
-<table class="index">
- <?php foreach ($indexs as $index):?>
- <tr><td> <?php echo $index["trikey"]["name"];?></td></tr>
- <?php endforeach;;?>
-</table>
-</fieldset>
+
+
+
 <div class="switch">
     <input type="radio" name="s2" id="on" value="1" checked="">
     <label for="on" class="switch-on"><i class="fa fa-user fa-lg"></i></label>

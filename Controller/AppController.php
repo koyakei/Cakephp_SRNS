@@ -72,11 +72,7 @@ class AppController extends Controller {
 
 	public function view2($id,$lower_id = null//テーブル2つ表示の時これ使う？
 	) {
-		if($this->request->data['Tag']['name'] != null and $this->request->data['tagRadd']['add'] != true){
-			$options['key'] = $this->request->data['Tag']['keyid'];
-			$this->Common->triAddbyid($this,$this->request->data['Tag']['user_id'],$id,$this->request->data['Tag']['name'],$options);
-			$this->Basic->social($this,$this->Auth->user('id'));
-		}
+		$that = $this;
 		if ($id ==null) {
 			$id = $this->request->query["id"];
 		}
@@ -87,16 +83,14 @@ class AppController extends Controller {
 		}
 		$all_node = null;//全部の情報
 		$this->loadModel("User");
-
 		$this->loadModel("Trikey_list");
 		$all_trikeis = $this->allKeyList();//すべてのトライキーを取得
-
 		//         	$all_node = $this->get_child("Base_trikey_entity",$all_node,$id,$base_id,$base_trikey);
 		//base_trikeyのみに関連付けられているエンティティーを取得
 
-		$that = $this;
 		$option = array('key' => Configure::read("tagID.reply"));
-		$root = $this->Common->trifinderbyid($that,$id,$option);
+		$index =null;
+		$root = $this->Common->trifinderbyid($that,$id,$option,$index);
 		//TODO: この時点で全部トライキーを取ってくるようにしよう
 		$tableresults = $this->Common->nestfinderbyid(
 				$that, $root, $sorting_tags = null, $id, $taghash = null, $root);
@@ -106,8 +100,6 @@ class AppController extends Controller {
 		$this->set('base_trikey' ,$base_trikey);
 		$this->set('currentUserID', $this->Auth->user('id'));
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-		//$collected_result[$trikey]["Model"}[ID] こんなかんじで
-		$this->set('default_nodes',$all_node); //デフォルトのノードツリーを返す
 		$this->set('sorting_tags',$sorting_tags);
 		$this->set('taghash',$tableresults["taghash"]);
 		$this->set('id',$id);

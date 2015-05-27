@@ -1,7 +1,14 @@
-<span>
-		<?php echo $this->Html->link(__("$trikey_name"),
-				 array('controller' => 'tags','action' => 'view',$trikey_id)); ?>
-	</span>
+
+<table class="index">
+<!-- contents of index
+トライキーを複数持つエンティティーが出てきた場合
+重複のどちらかを削除するのか、残すのか？
+-->
+
+	 <?php foreach ($indexs as $index):?>
+	 <tr><td> <?php echo $index["trikey"]["name"];?></td></tr>
+	 <?php endforeach;;?>
+</table>
 	<div class="DDhandle"> ここを持つとテーブルが動く</div>
 	<table class="myTable" cellpadding="0" cellspacing="0" style ="background: white">
         <?php echo $this->element('tablehead',

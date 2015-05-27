@@ -484,8 +484,6 @@ class BasicComponent extends Component {
 					$link_conditions = array_push($link_conditions, $toID);
 				}
 				$res[$toID] =+ $tr;
-				//TODO: ここでリンクとどのタグからリンクしてきているかを入力
-				//foearch で回したついでに他の 要素もとってきてしまう
 				$res[$toID]['trilink'] =BasicComponent::GetEntity($that, $toID) ;
 				$res[$toID]["subtag"] = $this->Basic->tribasicfiderbyid(
 					$that,Configure::read('tagID.search'),

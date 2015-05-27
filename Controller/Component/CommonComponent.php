@@ -397,20 +397,22 @@ class CommonComponent extends Component {
 	}
 	/**
 	 *
+	 *
 	 * @param unknown $that
-	 * @param unknown $root　親ノード
+	 * @param unknown $roots
 	 * @param unknown $sorting_tags
 	 * @param unknown $id
 	 * @param unknown $taghash
+	 * @param unknown $parents
 	 * @param string $option
-	 * @return multitype:unknown
-	 * @var $temp 子供
+	 * @param string $index インデックステーブルを　最初のsんしょうだんかいからのみ返す。
+	 * @return multitype:
 	 */
-	public function nestfinderbyid(&$that,&$roots,$sorting_tags,$id,&$taghash,&$parents,&$option = null){
+	public function nestfinderbyid(&$that,&$roots,$sorting_tags,$id,&$taghash,&$parents,$option = null,$index =null){
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-
+		//TODO:trikey ごと
 		$children = array();
 		$models = array( 'article' ,'tag');
 		foreach ($models as  $r_model){
@@ -434,18 +436,19 @@ class CommonComponent extends Component {
 											foreach ($models as $ip_model){
 												$ip_model_parent = $ip_model."parentres";
 												foreach ($parents[$ip_model_parent] as $iparent_idx =>$iparent){
-													if($root[ucfirst($r_model)]['ID'] =="285"
-															&&$root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID']){
-														debug($iparent[ucfirst($ip_model)]['ID']);
-													}
+
 													if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
 																$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
 
 														unset($parents[$ip_model_parent][$iparent_idx]);
 														//親を切って　子ノードとして追加
-														$parents[$p_model_parent][$parent_idx]['leaf'] = array();
-														$parents[$p_model_parent][$parent_idx]['leaf'][$model_parent] = array();
-														array_push($parents[$p_model_parent][$parent_idx]['leaf'][$model_parent]
+														if (is_null($parents[$p_model_parent][$parent_idx]['leaf'])){
+															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"] = array();
+// 															$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
+														}
+// 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["index"][$model_parent]
+// 																,indexFinder);
+														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
 													}
 												}

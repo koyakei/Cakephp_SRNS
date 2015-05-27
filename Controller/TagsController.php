@@ -64,7 +64,7 @@ public function beforeFilter() {
 	 'Html',
 			'Session'
 	);
-//        public $presetVars = true;
+
 	public function formAdd(){
 // 		$autoLayout= false;
 		 $inserted_id = CommonComponent::singleAdd($this->request->query('name'),
@@ -73,7 +73,7 @@ public function beforeFilter() {
 		$this->request->query('parent_ids'),$inserted_id);
 		 $Article = new Article();
 		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
-// 		$this->redirect($this->referer());
+		$this->redirect($this->referer());
 	}
 	/**
 	 * TODO:nest表示ができたから、それに従って追加する方法を考える。2015/05/19ここ
@@ -103,9 +103,8 @@ public function beforeFilter() {
 			$this->set('tags', $this->paginate('Taguser'));
 		}
 		//demand は直接コンポーネントを呼ぶのか？呼ばないだろう
-		//TODO: save する形式に適応するように　view を書く
 		/**
-		 * @todo 今いじっている
+		 *
 		 * @param string $insert
 		 * @param string $update
 		 * @param string $del

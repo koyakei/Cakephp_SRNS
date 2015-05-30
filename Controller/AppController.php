@@ -93,7 +93,7 @@ class AppController extends Controller {
 		$root = $this->Common->trifinderbyid($that,$id,$option,$index);
 		//TODO: この時点で全部トライキーを取ってくるようにしよう
 		$tableresults = $this->Common->nestfinderbyid(
-				$that, $root, $sorting_tags = null, $id, $taghash = null, $root);
+				$that, $root, $sorting_tags = null, $id, $root);
 
 		$this->set('headresults',$headresults);
 		$this->set('tableresults', $tableresults);

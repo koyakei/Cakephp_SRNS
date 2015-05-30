@@ -337,7 +337,7 @@ class CommonComponent extends Component {
 			$option['key'] = Configure::read('tagID.reply');
 		}
 		$articleparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);
-		$articleparentres = $this->Basic->allTrilinkFinder($id,$articleparentres);//どんな記事がぶら下がっているか探す
+// 		$articleparentres = $this->Basic->allTrilinkFinder($id,$articleparentres);//どんな記事がぶら下がっているか探す
 		list($articleparentres,$taghash) =
 		$this->getSearchRelation($that,$articleparentres, $taghash, "Article");
 		$tagparentres = $this->Basic->allTrilinkFinder($id,$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id));
@@ -407,7 +407,9 @@ class CommonComponent extends Component {
 	 * @param string $index インデックステーブルを　最初のsんしょうだんかいからのみ返す。
 	 * @return multitype:
 	 */
-	public function nestfinderbyid(&$that,&$roots,$sorting_tags,$id,&$taghash,&$parents,$option = null,$index =null){
+	public function nestfinderbyid(&$that,&$roots,$sorting_tags,$id,&$parents,
+			$option = null){
+		$indexHashes = array();
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
@@ -420,14 +422,13 @@ class CommonComponent extends Component {
 				foreach ($models as $p_model){
 					$p_model_parent = $p_model."parentres";
 						foreach ($parents[$p_model_parent] as $parent_idx =>$parent){
+
 							if ($parent[ucfirst($p_model)]["ID"] != null){
 								$is_child = false;
 								$this_nodes  = self::trifinderbyid($that,$parent[ucfirst($p_model)]["ID"],$options);
-								if($this_nodes  != array(
-										'tagparentres' => array(),
-										'articleparentres' => array(),
-										'taghash' => null
-								)){//子ノードが空だったら、もうこれ以上深くはいらない
+								if($this_nodes['tagparentres']  != array() &&
+										$this_nodes['articleparentres']  != array()
+								){//子ノードが空だったら、もうこれ以上深くはいらない
 									//TODO:taghash をネストした下でどう扱うか？
 									foreach ($models as $model){
 										$model_parent = $model."parentres";
@@ -442,13 +443,24 @@ class CommonComponent extends Component {
 														unset($parents[$ip_model_parent][$iparent_idx]);
 														//親を切って　子ノードとして追加
 														if (is_null($parents[$p_model_parent][$parent_idx]['leaf'])){
-															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"] = array();
-// 															$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
+															$parents[$p_model_parent][$parent_idx]['leaf'] = array();
+															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
+															$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
 														}
-// 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["index"][$model_parent]
-// 																,indexFinder);
+//
 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
+// 														$index_node = allTrikeyFinder($parent["Link"]["ID"]);
+// 														array_push(
+// 																$parents[$p_model_parent][$parent_idx]['trikeys']
+// 														 		,$index_node);
+// 														//indexHash generator
+// 														foreach ($index_node as $index){
+// 															if ($indexHashes[$index["Taglink"]["ID"]]== null){
+// 																$indexHashes[$index["Taglink"]["ID"]] = $index;
+// 															}
+// 														}
+
 													}
 												}
 											}
@@ -456,14 +468,35 @@ class CommonComponent extends Component {
 									}
 								}
 							}
+							list($parents[$p_model_parent],$taghash) =
+							$this->getSearchRelation($that,$parents[$p_model_parent] , $taghash, ucfirst($p_model));
+
 						}
 					}
 				}
 			}
-		//親テーブルに存在するものを検索
-		return $parents;//何もなかったと教える
+			$parents["taghash"] =$taghash;
+		return $parents;
 	}
-
+	/**
+	 *
+	 * @param unknown $from
+	 * @param unknown $to
+	 * @return array
+	 */
+	public function allTrikeyFinder($link_id){
+		$Taglink = new Taglink();
+		return $TagLink->find("all", array("condition" =>
+			array("Taglink" => array( "LTo" => $link_id,"LFrom <".Configure::read("tagID.End")))));
+	}
+	/**
+	 * index generator $完成されたノードツリーからインデックスを作る
+	 *
+	 * @param unknown $node_tree
+	 * @return unknown
+	 */
+	public function indexGen($node_tree){
+	}
 	public function ATswitcher($res, Callback $func){
 		$models = array( 'article' ,'tag');
 		foreach ($models as  $model){
@@ -520,7 +553,7 @@ class CommonComponent extends Component {
 		return $result; //leaf も含めて返す
 	}
 	/**
-	 *
+	 * taghash generator taghash 生成
 	 * @param unknown $that
 	 * @param unknown $targetParent
 	 * @param unknown $taghash

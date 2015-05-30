@@ -366,7 +366,7 @@ class BasicComponent extends Component {
 	public function allTrilinkFinder($from,$results){
 		foreach ($results as $idx => $result){
 			$trilink = self::GETTrilink($from, $result['Link']['LTo']);
-			if (!empty($trilink)){//TODO: 間違っているかも
+			if (!empty($trilink)){
 				$results[$idx ]['trikey'] = array();
 				$results[$idx]['trikey'] = $trilink;
 			}

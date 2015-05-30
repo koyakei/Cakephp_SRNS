@@ -31,16 +31,16 @@
 							<div id='HSfield' style='display: none;'>
 							<!-- このエレメントを再帰的に呼び出す-->
 							<?php
-    	echo $this->element('accordion/table_reply',
-    			array('tableresults' => $leaf["nodes"],
-    					'taghashes'=>$taghash,
-    					'currentUserID' => $currentUserID,
-    					'srns_code_member'=>$leaf["nodes"]['srns_code_member'],
-    					"index" => $leaf["index"]
-    					,$sorting_tags
-    			)
-    	);
-    	?>
+						    	echo $this->element('accordion/table_reply',
+						    			array('tableresults' => $leaf["nodes"],
+						    					'taghashes'=>$leaf["taghash"],
+						    					'currentUserID' => $currentUserID,
+						    					'srns_code_member'=>$leaf["nodes"]['srns_code_member'],
+						    					"index" => $leaf["index"]
+						    					,$sorting_tags
+						    			)
+						    	);
+					    	?>
 							</div>
 					<?php endif; ?>
 						<?php echo $this->Form->hidden($firstModel.'.ID', array('value'=>$result[$firstModel]['ID'])); ?>

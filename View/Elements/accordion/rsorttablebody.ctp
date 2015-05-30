@@ -23,6 +23,7 @@
 					<?php echo $this->element('accordion/URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>
 					<?php if(!is_null($leaf)){ echo "</b>"; } ?>
 					</div>
+					<!--  タグ付けされているとして　タグのnameとentityのnameが部分一致するならリンクを張る機能が必要か？ -->
 					<?php if(!is_null($leaf)): ?>
 						<div onClick='toggleShow(this)' >
 								Reply

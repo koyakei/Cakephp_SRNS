@@ -690,6 +690,7 @@ class BasicComponent extends Component {
 	 */
 	public function trilinkAdd(&$that,$FromID,$ToID,$keyID,$options = null) {
 		$quant = 1;
+// 		$keyIDs = (array)$keyID;
 		if ($that->request->data['Tag']['user_id'] == null) {
 			$that->request->data['Tag']['user_id'] = Configure::read('acountID.admin');
 		}
@@ -706,20 +707,19 @@ class BasicComponent extends Component {
 			);
 			$that->Link->create();
 			if($that->Link->save($that->request->data)){
-				$that->request->data['Link'] = array(
-						'user_id' => $that->request->data['Tag']['user_id'],
-						'LFrom' => $keyID,
-						'LTo' => $that->Link->getLastInsertId(),
-						'quant' => $quant,
-						'created' => date("Y-m-d H:i:s"),
-				);
-				$that->Link->create();
-				if($that->Link->save($that->request->data)){
-					//挿入したIDを返す
-					return $that->Link->getLastInsertId();
-				}else{
-					debug("last step miss");
+				$link_id = $that->Link->getLastInsertId();
+				foreach ($keyID as $key){
+					$that->request->data['Link'] = array(
+							'user_id' => $that->request->data['Tag']['user_id'],
+							'LFrom' => $key,
+							'LTo' => $link_id,
+							'quant' => $quant,
+							'created' => date("Y-m-d H:i:s"),
+					);
+					$that->Link->create();
+					$that->Link->save($that->request->data);
 				}
+				return $link_id;
 			}else{
 				debug("1st step miss");
 				return false;

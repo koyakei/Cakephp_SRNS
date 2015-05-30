@@ -69,15 +69,15 @@ function parentIdFinder(root,that){
 	var $that = $(that);
 	//一番上まで行ったら？　body まで行ったら＿か
 	do{
-		parent_ids.push($that.parentsUntil("tbody").find(".id").attr("id"));
-		if($that.parentsUntil("tbody")[0] != null){//tr があれば
-			$that = $that.parentsUntil("table").parents("tbody"); //一つ上のtrまで上がる
+		parent_ids.push($that.closest("tr").find(".id").attr("id"));
+		if($that.closest("tbody")[0] != null){//tr があれば
+			$that = $that.closest("table"); //一つ上のtrまで上がる
 		}else{
 			return parent_ids;
 		}
 
-	}while($that.parentsUntil("tbody").find(".id").attr("id") != root
-			&& !$that.parents("tbody")[0] != true)
+	}while($that.closest("tr").find(".id").attr("id") != root
+			&& $that.closest("tr").find(".id").attr("id") == true)
 		//root id と　親id がおなじになるまで。
 		return parent_ids;
 }
@@ -209,6 +209,10 @@ function addArticle(obj) {
 	 var root_ids = obj.parents("#content").find(".data_strage #root_ids").val();
 	 var parent_ids = parentIdFinder(root_ids,obj);
 	 parent_ids.push(root_ids);
+	 var trikeys = ["2138"];
+	 if($(".trikeys #trikeys").val()){
+		 trikeys.push($(".trikeys #trikeys").val());
+	 }
 	 var $this = $(this);
 	 //代入
 	 //traverse して代入
@@ -218,11 +222,13 @@ function addArticle(obj) {
 	        data:{
 	        	name: obj.find(".reply_article_name")[0].value,
 				root_ids: root_ids,
-				trikey_ids: $("#trikeys").val(),
+				trikey_ids: trikeys,
 				parent_ids :parent_ids,
 			},
 	      success: function(obj){
-	        	$this.find("td .id").append(obj);
+//	        	$this.find("td .id").append(obj);
+//	    	  location.reload();
+
 	        },
 	        error:function(){
 	        	return false;
@@ -247,31 +253,29 @@ function table_perser(data){
     });
 }
 /**
- *
+ *タグ追加
  * @param obj
  * @returns 追加されたリンクIDを返す
  */
-function add_single_tag(obj){
+function add_reply_tag(obj){
 	var target = $(obj);
 	var root_ids = $(".data_strage #root_ids").val();
 	var parent_ids = parentIdFinder(root_ids ,obj);
+	var trikeys = ["2138"];
+	 if($(".trikeys #trikeys").val()){
+		 trikeys.push($(".trikeys #trikeys").val());
+	 }
 	parent_ids.push(root_ids);
-//	root_ids,to:target.find("#tag_id .tag_id"),
-//	parent_id : parent_id
 	 $.ajax({
 	        type: "GET",
 	        url: location.origin +"/cakephp/Links/triLinkAdd",
 	        data: {root_ids:root_ids
 	        	,to:target.closest("#add_tag").find(".tag_id").val(),
 	        	parent_ids:parent_ids,
+	        	trikeys:trikeys,
 				},
-//	      success: function(obj){
-////	    	  	callback;
-//	        },
-//	        error:function(){
-//	        	return false;
-//	        }
 	    });
+	 location.reload();
 
 }
 /**

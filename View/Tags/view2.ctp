@@ -174,52 +174,11 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 </div>
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">
-		<?php $model = "Article";
-		 echo $this->Form->create($model,array("controller" => "tags","action" =>"triArticleAdd")); ?>
-<?php echo $this->Form->input('user_id', array(
-	    'type' => 'select',
-	    'multiple'=> false,
-	    'options' => $ulist,
-	  'selected' => $currentUserID//['userselected']
-	,'id'=>'user_id')); ?>
-	<?php
-	if (!empty($key)){
-		echo $this->form->hidden($model.'.keyid' ,array('value' => $key));
-	}
-	echo $this->form->hidden('id' ,array('value' => $id));
-	?>
-	<?php
-	if (!empty($parentID)){
-		echo $this->form->hidden("parentID" ,array('value' => $parentID));
-	}
-	?>
-		<legend><?php echo __($model); ?></legend>
-	<?php
-		$targetid = $this->params['pass'][0];
-		echo $this->Form->input('name',array('class'=> 'reply_article_name'));
-	?>
-<?php echo $this->Form->end(__('Submit')); ?>
-	<!-- 下に　$user_id $name $target_ids array リンクする対象id配列
-	これをどうにかして取り出して投げる-->
+		 <?php
+						  echo $this->element('accordion/nestedinput', array("model" => "Article",
+						  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))
+						  ?>
 
-		<fieldset>
-		        	        <?php echo $this->AutoCompleteNoHidden->input(
-			    'tag',
-			    array(
-			        'autoCompletesUrl'=>$this->Html->url(
-			            array(
-			                'controller'=>'tagusers',
-			                'action'=>'auto_complete',
-			            )
-			        ),
-			        'autoCompleteRequestItem'=>'autoCompleteText',
-			    )
-			);
-			echo $this->Form->hidden('tag',array('value' => '','class' => 'tag_id','id' => 'tag'));
-			echo $this->form->hidden('id' ,array('value' => $id));
-			?>
-
-				</fieldset>
 
 	</div>
 	</div>

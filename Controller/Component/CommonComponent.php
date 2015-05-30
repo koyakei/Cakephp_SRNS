@@ -178,11 +178,10 @@ class CommonComponent extends Component {
 		$user_ids = (array)$user_ids;
 		foreach ($from_ids as $from_id){
 			foreach ($to_ids as $to_id){
-				foreach ($trikey_ids as $trikey_id){
 					foreach ($user_ids as $user_id){
-						self::trilinkAdd($that,$from_id,$to_id,$trikey_id,$user_id);
+						self::trilinkAdd($that,$from_id,$to_id,$trikey_ids,$user_id);
 					}
-				}
+
 			}
 		}
 		return true;

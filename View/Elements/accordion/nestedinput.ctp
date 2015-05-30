@@ -43,6 +43,6 @@
 echo $this->Form->hidden('tag',array('value' => '','class' => 'tag_id','id' => 'tag'));
 ?>
 
-				<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Tag','onClick' => 'add_single_tag(this)')); ?>
+				<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Tag','onClick' => 'add_reply_tag(this)')); ?>
 				<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
 		</fieldset>

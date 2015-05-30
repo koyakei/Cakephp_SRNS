@@ -67,13 +67,13 @@ public function beforeFilter() {
 
 	public function formAdd(){
 // 		$autoLayout= false;
-		 $inserted_id = CommonComponent::singleAdd($this->request->query('name'),
+		 $inserted_id = $this->Common->singleAdd($this->request->query('name'),
 		 		$this->Auth->user("id"));
 		 $this->Common->nestedAdd($this,$this->request->query('root_ids'),$this->request->query('trikey_ids'),
 		$this->request->query('parent_ids'),$inserted_id);
 		 $Article = new Article();
 		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
-		$this->redirect($this->referer());
+
 	}
 	/**
 	 * TODO:nest表示ができたから、それに従って追加する方法を考える。2015/05/19ここ

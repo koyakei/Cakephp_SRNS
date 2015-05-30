@@ -2,6 +2,7 @@
 App::uses('Tag', 'Model');
 App::uses('User', 'Model');
 App::uses('Link', 'Model');
+App::uses('Taglink', 'Model');
 App::uses('Article', 'Model');
 App::uses('Date', 'Model');
 App::uses('BasicComponent', 'Controller/Component');
@@ -450,16 +451,16 @@ class CommonComponent extends Component {
 //
 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
-// 														$index_node = allTrikeyFinder($parent["Link"]["ID"]);
-// 														array_push(
-// 																$parents[$p_model_parent][$parent_idx]['trikeys']
-// 														 		,$index_node);
-// 														//indexHash generator
-// 														foreach ($index_node as $index){
-// 															if ($indexHashes[$index["Taglink"]["ID"]]== null){
-// 																$indexHashes[$index["Taglink"]["ID"]] = $index;
-// 															}
-// 														}
+														$index_node = self::allTrikeyFinder($parent["Link"]["ID"]);
+														array_push(
+																$parents[$p_model_parent][$parent_idx]['trikeys']
+														 		,$index_node);
+														//indexHash generator
+														foreach ($index_node as $index){
+															if ($indexHashes[$index["Taglink"]["ID"]]== null){
+																$indexHashes[$index["Taglink"]["ID"]] = $index;
+															}
+														}
 
 													}
 												}
@@ -468,26 +469,25 @@ class CommonComponent extends Component {
 									}
 								}
 							}
-							list($parents[$p_model_parent],$taghash) =
-							$this->getSearchRelation($that,$parents[$p_model_parent] , $taghash, ucfirst($p_model));
-
 						}
 					}
 				}
+				list($parents[$r_model_parent],$taghash) =
+				$this->getSearchRelation($that,$parents[$r_model_parent] , $taghash, ucfirst($r_model));
 			}
 			$parents["taghash"] =$taghash;
+			$parents["indexHashes"] =$indexHashes;
 		return $parents;
 	}
 	/**
 	 *
-	 * @param unknown $from
 	 * @param unknown $to
 	 * @return array
 	 */
-	public function allTrikeyFinder($link_id){
+public function allTrikeyFinder($link_id){
 		$Taglink = new Taglink();
-		return $TagLink->find("all", array("condition" =>
-			array("Taglink" => array( "LTo" => $link_id,"LFrom <".Configure::read("tagID.End")))));
+		return $Taglink->find("all", array("conditions" =>
+				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
 	}
 	/**
 	 * index generator $完成されたノードツリーからインデックスを作る

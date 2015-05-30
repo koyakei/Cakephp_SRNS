@@ -7,8 +7,9 @@ def@A def@b の二つが紐付いていたときにどうするの？
 限定された　trikiのみを要求する時も、一度ザンブルを表示させてからでないとだめなのかも
 重複している円ティーティーを何度も繰り返して表示しないようにしたら、
 -->
+<?php debug($tableresults["indexHashes"] ); ?>
+	 <?php foreach ($tableresults["indexHashes"] as $index):?>
 
-	 <?php foreach ($indexs as $index):?>
 	 <tr><td　id="<?php echo $index["trikey"]["ID"]; ?>"> <?php echo $index["trikey"]["name"];?></td></tr>
 	 <?php endforeach;;?>
 </table>

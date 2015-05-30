@@ -102,7 +102,14 @@ class AppController extends Controller {
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		$this->set('sorting_tags',$sorting_tags);
 		$this->set('taghash',$tableresults["taghash"]);
+
 		$this->set('id',$id);
+	}
+	public function allTrikeyFinder($link_id){
+		debug($link_id);
+		$Taglink = new Taglink();
+		return $Taglink->find("all", array("conditions" =>
+				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
 	}
 	public $helpers = array('Js','AutoComplete');
 public $components = array(

@@ -159,6 +159,7 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
     	echo $this->element('accordion/table_reply',
     			array('tableresults' => $tableresults,
     					'taghashes'=>$tableresults["taghash"],
+    					"index" => $tableresults["indexHashes"],
     					'currentUserID' => $currentUserID,
     					'srns_code_member'=>$tableresults['srns_code_member']
     					,$sorting_tags

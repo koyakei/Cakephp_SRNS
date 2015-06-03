@@ -140,11 +140,12 @@ class LinksController extends AppController {
 			$this->Link->create();
 			if ($this->Link->save($this->request->data)) {
 				$this->Session->setFlash(__('The link has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+// 				$this->redirect($this->referer());
 			} else {
 				$this->Session->setFlash(__('The link could not be saved. Please, try again.'));
 			}
 		}
+// 		$this->redirect($this->referer());
 	}
 
 	public function linkdel($id = NULL){

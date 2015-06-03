@@ -1,6 +1,5 @@
 <?php echo $this->Html->script("view2.js");
 ?>
-
 <?php foreach ($results  as $result): ?>
 
 <?php if($firstModel == 'Tag'){$userCallAssosiation = 'O';} else {$userCallAssosiation = 'O';} // アソシエーションの名前を一緒にしたが後で別にするかも?>
@@ -27,12 +26,14 @@
 
 					</td></div>
 					<td>
+
 					<!-- $leaf -->
 					<div class="droppable">
 					<?php $leaf = $result["leaf"]; //leaf こうして　配列の何処かに隠しておくほかあるまい。　common component trifinder でそう渡すようにする　base trikey の仕様を考える。
 					if(!is_null($leaf)){ echo "<b>"; } ?>
 					<?php echo $this->element('accordion/URL', Array('result' => $result,'firstModel' =>$firstModel)); ?>
 					<?php if(!is_null($leaf)){ echo "</b>"; } ?>
+
 					</div>
 					<!--  タグ付けされているとして　タグのnameとentityのnameが部分一致するならリンクを張る機能が必要か？ -->
 					<?php if(!is_null($leaf)): ?>
@@ -56,6 +57,7 @@
 					<?php endif; ?>
 						<?php echo $this->Form->hidden($firstModel.'.ID', array('value'=>$result[$firstModel]['ID'])); ?>
 						<?php  if($result['no_sort_subtag'] != null): ?>
+
 							<div onClick='toggleShow(this);' >
 								tagged
 							</div>
@@ -77,12 +79,30 @@
 						Action
 						</div>
 						<div id='HSfield' style='display: none;'>
+						<?php echo $this->Form->create("Link",array("action" => "add"));
+						echo $this->AutoCompleteNoHidden->input(
+								'LFrom',
+								array(
+										'autoCompletesUrl'=>$this->Html->url(
+												array(
+														'controller'=>'tagusers',
+														'action'=>'auto_complete',
+												)
+										),
+										'autoCompleteRequestItem'=>'autoCompleteText',
+								)
+						);
+
+						echo $this->Form->hidden('LFrom',array('value' => '','class' => 'tag_id','id' => 'tag'));
+						echo $this->Form->hidden('LTo',array('value' => $result["Link"]['ID']));
+								echo $this->Form->hidden("user_id",array("value" => $currentUserID));
+								echo $this->Form->submit("trikey")
+						?>
 						<?php echo $this->Html->link(__('View'), array('controller'=> $firstModel."s",'action' => 'view', $result[$firstModel]['ID'])); ?><br>
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?><br>
 
 						 <?php
 						 echo $this->Form->button('タグ付け要求',array("onClick" =>"demand(this)"));
-
 						 // こっちのボタンでは現在選択しているtirikeyでのリンクをすべて削除。
 						 echo $this->Form->create("Link"
 						 		,array('controller'=> 'Links','action' => 'delete'));

@@ -17,7 +17,7 @@
 					 bgcolor=green <?php endif; ?> id ="<?php echo h($result[$firstModel]['ID']); ?>">
 					 <?php echo h($result[$firstModel]['ID']); ?>
 					 <?php echo $this->Form->create("Link",array("action" => "delete"));?>
-					 <?php echo $this->Form->input(null, array(
+					 <?php echo $this->Form->input('trikey_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $result["trikeys"],
@@ -105,15 +105,6 @@
 // 						 elseif ($MRflag){
 // 						 	$defaultId = $myReply;
 // 						 }
-
-						 echo $this->Form->input('trikey_id', array(
-						 		'type' => 'select',
-						 		'multiple'=> false,
-						 		'options' => $result['trikey'],
-						 		'selected' => $defaultId,
-						 		'id'=>'trikey_id'));
-						 echo $this->Form->end(__('削除'));
-
 						 echo $this->Form->postLink(__('削除'.$result["taglink"]["name"]),
 						 		 array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
 						 echo $this->Form->postLink(__('削除要求'),
@@ -123,7 +114,6 @@
 // 						 複数のidを持って同時に消したい　どうやって複数持たせるのか？-->
 						 							//@todo 複数のtrikey link id を$result[$trike_id]['Link']['ID']みたいな形で表示　trikeyAndSet をいじる
 						 							?>
-						 							<?php echo $this->Form->button('del')?>
 						  <?php
 						  echo $this->element('accordion/nestedinput', array("model" => "Article",
 						  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))

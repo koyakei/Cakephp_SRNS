@@ -346,7 +346,7 @@ class CommonComponent extends Component {
 		$articleparentres = self::GETrootTrikey($this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id));
 		list($articleparentres,$taghash) =
 		$this->getSearchRelation($that,$articleparentres, $taghash, "Article");
-		$tagparentres = $this->Basic->allTrilinkFinder($id,$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id));
+		$tagparentres =  self::GETrootTrikey($this->Basic->allTrilinkFinder($id,$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id)));
 		list($tagparentres,$taghash) =
 		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
 		return array('tagparentres'=>$tagparentres,
@@ -460,8 +460,6 @@ class CommonComponent extends Component {
 														}
 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
-
-															debug($iparent[ucfirst($ip_model)]['ID']);
 
 														$index_node = self::allTrikeyFinder($parent["Link"]["ID"]);
 

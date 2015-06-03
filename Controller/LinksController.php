@@ -222,31 +222,32 @@ class LinksController extends AppController {
  * @return void
  */
 	public function delete($id = NULL) {
+		debug($this->request->data());
 		if (is_null($id)){
 			$id =$this->request->data("Link.trikey_id");
 		}
 
-		$this->request->onlyAllow('post', 'delete');
-		$this->loadModel('Tagauth');
-			$this->Link->id = $id;
-			if (!$this->Link->exists()) {
-				throw new NotFoundException(__('Invalid link'));
-			}
-			$result = $this->Link->find('first',array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id')));
-			if ($this->Auth->user('id') == $result['Link']['user_id'] && $this->Link->find('first',
-				array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id'))
-			)) {
-				if ($this->Link->delete()) {
-					$this->Session->setFlash(__('The link has been deleted.'));
-					$this->redirect($this->referer());
-					return true;
+// 		$this->request->onlyAllow('post', 'delete');
+// 		$this->loadModel('Tagauth');
+// 			$this->Link->id = $id;
+// 			if (!$this->Link->exists()) {
+// 				throw new NotFoundException(__('Invalid link'));
+// 			}
+// 			$result = $this->Link->find('first',array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id')));
+// 			if ($this->Auth->user('id') == $result['Link']['user_id'] && $this->Link->find('first',
+// 				array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id'))
+// 			)) {
+// 				if ($this->Link->delete()) {
+// 					$this->Session->setFlash(__('The link has been deleted.'));
+// 					$this->redirect($this->referer());
+// 					return true;
 
-				} else {
-					$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
-					return false;
-				}
-			}
-		return $this->redirect($this->referer());
+// 				} else {
+// 					$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
+// 					return false;
+// 				}
+// 			}
+// 		return $this->redirect($this->referer());
 	}
  // trikey の使用許可をどう管理するのか考えるのをすっかり忘れていた。
 	private function delete2($id,$trikey){

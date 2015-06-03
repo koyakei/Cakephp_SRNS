@@ -15,13 +15,15 @@
 					<td class="id"<?php if($result[$firstModel]['srns_code_member']): ?>
 
 					 bgcolor=green <?php endif; ?> id ="<?php echo h($result[$firstModel]['ID']); ?>">
-					 <?php echo h($result[$firstModel]['ID']); ?><br>
-					 <?php echo $this->Form->input('tag_id', array(
+					 <?php echo h($result[$firstModel]['ID']); ?>
+					 <?php echo $this->Form->create("Link",array("action" => "delete"));?>
+					 <?php echo $this->Form->input(null, array(
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $result["trikeys"],
-// 	  'selected' => $currentUserID,//['userselected']
-	'id'=>'trikey_id')); ?>
+	'id'=>'trikey_id'));
+					 echo $this->Form->end("Del"); ?>
+
 
 					</td></div>
 					<td>

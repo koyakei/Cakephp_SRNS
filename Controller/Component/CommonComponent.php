@@ -332,13 +332,18 @@ class CommonComponent extends Component {
 				 'taghash' );
 	 *
 	 */
-
+	public function GETrootTrikey($results){
+		foreach ($results as $idx => $articleparentre){
+			$results[$idx]["trikeys"] = array();
+			$results[$idx]["trikeys"] = self::allTrikeyFinder($articleparentre["Link"]["ID"]);
+		}
+		return $results;
+	}
 	public function trifinderbyid(&$that = null,$id,&$option) {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-		$articleparentres = $this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id);
-// 		$articleparentres = $this->Basic->allTrilinkFinder($id,$articleparentres);//どんな記事がぶら下がっているか探す
+		$articleparentres = self::GETrootTrikey($this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id));
 		list($articleparentres,$taghash) =
 		$this->getSearchRelation($that,$articleparentres, $taghash, "Article");
 		$tagparentres = $this->Basic->allTrilinkFinder($id,$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id));
@@ -407,9 +412,13 @@ class CommonComponent extends Component {
 	 * @param string $option
 	 * @param string $index インデックステーブルを　最初のsんしょうだんかいからのみ返す。
 	 * @return multitype:
+	 *
+	 * trikey で整形するのはview 側では相当面倒なのでここでやりたい
+	 * r array( article , tag) と分かれているが、それごとにもう一度　foreach を回して　trikey ごとに紐付けていくか？
 	 */
 	public function nestfinderbyid(&$that,&$roots,$sorting_tags,$id,&$parents,
 			$option = null){
+
 		$indexHashes = array();
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
@@ -447,18 +456,21 @@ class CommonComponent extends Component {
 															$parents[$p_model_parent][$parent_idx]['leaf'] = array();
 															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
 															$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
+															$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
 														}
-//
 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
+
+															debug($iparent[ucfirst($ip_model)]['ID']);
+
 														$index_node = self::allTrikeyFinder($parent["Link"]["ID"]);
-														array_push(
+
 																$parents[$p_model_parent][$parent_idx]['trikeys']
-														 		,$index_node);
+														 		= $index_node;
 														//indexHash generator
 														foreach ($index_node as $index){
-															if ($indexHashes[$index["Taglink"]["ID"]]== null){
-																$indexHashes[$index["Taglink"]["ID"]] = $index;
+															if ($indexHashes[$index["Taglink"]["LFrom"]]== null){
+																$indexHashes[$index["Taglink"]["LFrom"]] = $index;
 															}
 														}
 
@@ -486,7 +498,7 @@ class CommonComponent extends Component {
 	 */
 public function allTrikeyFinder($link_id){
 		$Taglink = new Taglink();
-		return $Taglink->find("all", array("conditions" =>
+		return $Taglink->find("list", array("conditions" =>
 				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
 	}
 	/**

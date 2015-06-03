@@ -94,7 +94,7 @@ class AppController extends Controller {
 		//TODO: この時点で全部トライキーを取ってくるようにしよう
 		$tableresults = $this->Common->nestfinderbyid(
 				$that, $root, $sorting_tags = null, $id, $root);
-
+// 		debug( $tableresults);
 		$this->set('headresults',$headresults);
 		$this->set('tableresults', $tableresults);
 		$this->set('base_trikey' ,$base_trikey);
@@ -105,12 +105,7 @@ class AppController extends Controller {
 
 		$this->set('id',$id);
 	}
-	public function allTrikeyFinder($link_id){
-		debug($link_id);
-		$Taglink = new Taglink();
-		return $Taglink->find("all", array("conditions" =>
-				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
-	}
+
 	public $helpers = array('Js','AutoComplete');
 public $components = array(
     'Session',

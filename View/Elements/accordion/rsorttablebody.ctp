@@ -1,5 +1,8 @@
-<?php echo $this->Html->script("view2.js")?>
+<?php echo $this->Html->script("view2.js");
+?>
+
 <?php foreach ($results  as $result): ?>
+
 <?php if($firstModel == 'Tag'){$userCallAssosiation = 'O';} else {$userCallAssosiation = 'O';} // アソシエーションの名前を一緒にしたが後で別にするかも?>
 <div id="draggble">
 				<tr>
@@ -12,7 +15,13 @@
 					<td class="id"<?php if($result[$firstModel]['srns_code_member']): ?>
 
 					 bgcolor=green <?php endif; ?> id ="<?php echo h($result[$firstModel]['ID']); ?>">
-					 <?php echo h($result[$firstModel]['ID']); ?>&nbsp;
+					 <?php echo h($result[$firstModel]['ID']); ?><br>
+					 <?php echo $this->Form->input('tag_id', array(
+	    'type' => 'select',
+	    'multiple'=> false,
+	    'options' => $result["trikeys"],
+// 	  'selected' => $currentUserID,//['userselected']
+	'id'=>'trikey_id')); ?>
 
 					</td></div>
 					<td>

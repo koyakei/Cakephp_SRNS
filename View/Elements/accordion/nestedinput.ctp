@@ -12,7 +12,7 @@
 		echo $this->form->hidden("parentID" ,array('value' => $parentID));
 	}
 	?>
-		<legend><?php echo __($model); ?></legend>
+		<?php echo __($model); ?>
 	<?php
 		$targetid = $this->params['pass'][0];
 		echo $this->Form->input('Article',array('class'=> 'reply_article_name'));

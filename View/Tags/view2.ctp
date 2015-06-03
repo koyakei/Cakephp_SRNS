@@ -62,6 +62,7 @@ echo $this->AutoCompleteNoHidden->input(
 echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or2'));
 ?>
 </div>
+</fieldset>
 	<fieldset>
         <?php
 echo $this->AutoCompleteNoHidden->input(
@@ -142,9 +143,6 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 </fieldset></li>
 </ul>
 </div>
-
-
-
 <div class="switch">
     <input type="radio" name="s2" id="on" value="1" checked="">
     <label for="on" class="switch-on"><i class="fa fa-user fa-lg"></i></label>
@@ -152,9 +150,7 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
     <label for="off" class="switch-off"><i class="fa fa-globe fa-lg"></i></label>
 </div>
 <?php echo $this->element('accordion/data_strage',array('root_ids' => $id)); ?>
-
 <div class="root">
-
     	<?php
     	echo $this->element('accordion/table_reply',
     			array('tableresults' => $tableresults,
@@ -165,6 +161,7 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
     					,$sorting_tags
     			)
     	);
+
     	?>
 
 

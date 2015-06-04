@@ -102,7 +102,6 @@ class AppController extends Controller {
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		$this->set('sorting_tags',$sorting_tags);
 		$this->set('taghash',$tableresults["taghash"]);
-
 		$this->set('id',$id);
 	}
 

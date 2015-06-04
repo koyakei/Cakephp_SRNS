@@ -39,7 +39,7 @@
 			        ),
 			        'autoCompleteRequestItem'=>'autoCompleteText',
 			    )
-			);?><?php
+			);
 echo $this->Form->hidden('tag',array('value' => '','class' => 'tag_id','id' => 'tag'));
 ?>
 

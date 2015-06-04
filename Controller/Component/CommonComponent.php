@@ -334,6 +334,8 @@ class CommonComponent extends Component {
 	 */
 	public function GETrootTrikey($results){
 		foreach ($results as $idx => $articleparentre){
+// 			$results[$idx]["follow"] = array();
+// 			array_push($results[$idx]["follow"],  $articleparentre["Link"]["LFrom"]);
 			$results[$idx]["trikeys"] = array();
 			$results[$idx]["trikeys"] = self::allTrikeyFinder($articleparentre["Link"]["ID"]);
 		}
@@ -400,9 +402,8 @@ class CommonComponent extends Component {
 				'articleparentres'=> $articleparentres,
 				'taghash' => $taghash);
 	}
+
 	/**
-	 *
-	 *
 	 * @param unknown $that
 	 * @param unknown $roots
 	 * @param unknown $sorting_tags
@@ -416,40 +417,41 @@ class CommonComponent extends Component {
 	 * trikey で整形するのはview 側では相当面倒なのでここでやりたい
 	 * r array( article , tag) と分かれているが、それごとにもう一度　foreach を回して　trikey ごとに紐付けていくか？
 	 */
+    const   models = array( 'article' ,'tag');
 	public function nestfinderbyid(&$that,&$roots,$sorting_tags,$id,&$parents,
 			$option = null){
-
 		$indexHashes = array();
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
 		//TODO:trikey ごと
 		$children = array();
-		$models = array( 'article' ,'tag');
-		foreach ($models as  $r_model){
-			$r_model_parent = $r_model. "parentres";
-			foreach ($roots[$r_model_parent] as $root){
-				foreach ($models as $p_model){
-					$p_model_parent = $p_model."parentres";
-						foreach ($parents[$p_model_parent] as $parent_idx =>$parent){
+		foreach (self::models as $p_model){
+			$p_model_parent = $p_model."parentres";
+			foreach ($parents[$p_model_parent] as $parent_idx =>$parent){
+				$roots[$p_model_parent][$parent_idx]["follow"] = array();
+				array_push($roots[$p_model_parent][$parent_idx]["follow"],$parent["Link"]["LFrom"]);
 
+		foreach (self::models as  $r_model){
+			$r_model_parent = $r_model. "parentres";
+			foreach ($roots[$r_model_parent] as $root_idx =>$root){
 							if ($parent[ucfirst($p_model)]["ID"] != null){
 								$is_child = false;
 								$this_nodes  = self::trifinderbyid($that,$parent[ucfirst($p_model)]["ID"],$options);
+// 								$this_nodes = self::nestfinderbyid($that, $roots, $sorting_tags, $id, $parents);
 								if($this_nodes['tagparentres']  != array() &&
 										$this_nodes['articleparentres']  != array()
 								){//子ノードが空だったら、もうこれ以上深くはいらない
-									//TODO:taghash をネストした下でどう扱うか？
-									foreach ($models as $model){
+									foreach (self::models as $model){
 										$model_parent = $model."parentres";
 										foreach ($this_nodes[$model_parent] as $this_node){
-											foreach ($models as $ip_model){
+
+											foreach (self::models as $ip_model){
 												$ip_model_parent = $ip_model."parentres";
 												foreach ($parents[$ip_model_parent] as $iparent_idx =>$iparent){
 
 													if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
-																$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
-
+														$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
 														unset($parents[$ip_model_parent][$iparent_idx]);
 														//親を切って　子ノードとして追加
 														if (is_null($parents[$p_model_parent][$parent_idx]['leaf'])){
@@ -457,16 +459,23 @@ class CommonComponent extends Component {
 															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
 															$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
 															$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
+															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]['follow']= $parents[$p_model_parent][$parent_idx]["follow"]; // Link LFrom をブッシュ
 														}
+// 														debug($roots[$p_model_parent][$parent_idx]["follow"]);
+														;
+														$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
+														array_push($root["follow"],$this_node["Link"]["LFrom"]);
 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
-
-														$index_node = self::allTrikeyFinder($parent["Link"]["ID"]);
+// 														debug($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]['follow']);
+														debug($parents[$p_model_parent][$parent_idx]);
+// 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]["follow"],$this_node["Link"]["LFrom"]);
+// 														debug($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]);
 
 																$parents[$p_model_parent][$parent_idx]['trikeys']
-														 		= $index_node;
+														 		= self::allTrikeyFinder($parent["Link"]["ID"]);
 														//indexHash generator
-														foreach ($index_node as $index){
+														foreach ($parents[$p_model_parent][$parent_idx]['trikeys'] as $index){
 															if ($indexHashes[$index["Taglink"]["LFrom"]]== null){
 																$indexHashes[$index["Taglink"]["LFrom"]] = $index;
 															}
@@ -482,12 +491,25 @@ class CommonComponent extends Component {
 						}
 					}
 				}
-				list($parents[$r_model_parent],$taghash) =
-				$this->getSearchRelation($that,$parents[$r_model_parent] , $taghash, ucfirst($r_model));
+				list($parents[$p_model_parent],$taghash) =
+				$this->getSearchRelation($that,$parents[$p_model_parent] , $taghash, ucfirst($p_model));
 			}
+// 			$parents["index"] = self::GETContentsIndex($parents);
 			$parents["taghash"] =$taghash;
 			$parents["indexHashes"] =$indexHashes;
 		return $parents;
+	}
+
+	private  function GETContentsIndex($res){
+// 		[$p_model_parent][$parent_idx]['trikeys']
+		$all_array = Hash::get($res, "text=/articleparenters|tagparenters/");
+
+		return Hash::apply($all_array, "trikeys",self::dispatchMethod($method));
+	}
+	private function distinct($hash){
+// 		$contents_of_index =
+//TODO:group_by を使って　distinct 　taglink.LFrom で
+		return $contents_of_index;
 	}
 	/**
 	 *
@@ -500,20 +522,26 @@ public function allTrikeyFinder($link_id){
 				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
 	}
 	/**
-	 * index generator $完成されたノードツリーからインデックスを作る
-	 *
-	 * @param unknown $node_tree
-	 * @return unknown
+	 * 再起するんだけれども各段階の　$model $model_parent $re は各海藻から識別可能であること
+	 * @param unknown $res
+	 * @return Generator
 	 */
-	public function indexGen($node_tree){
-	}
-	public function ATswitcher($res, Callback $func){
-		$models = array( 'article' ,'tag');
-		foreach ($models as  $model){
+	public function ATswitcher($res){
+		foreach (self::models as  $model){
 			$model_parent = $model. "parentres";
-			foreach ($res[$model_parent] as $root){
-				$func();
+			foreach ($res[$model_parent] as $re){
+				yield $re;
 			}
+
+		}
+	}
+	/**
+	 *
+	 * @param unknown $all array( array("res" => $res, "callback" => $func), .... )
+	 */
+	public function nestTest($all){
+		self::ATswitcher($res);
+		foreach ($all as $each){
 		}
 	}
 
@@ -573,7 +601,9 @@ public function allTrikeyFinder($link_id){
 	 */
 
 	public function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel,$option){
-		if (!is_array($targetParent)|| empty($targetParent)) return null;
+		if (!is_array($targetParent)|| empty($targetParent) || empty($result[$targetModel]['ID'])) {
+			return array($targetParent,$taghash);
+		}
 		foreach ($targetParent as $i => $result){
 			//個別のtrに対して関連付けられているタグを呼ぶ
 			$taghashgen = $this->Basic->tribasicfiderbyid(

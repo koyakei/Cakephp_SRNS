@@ -441,40 +441,38 @@ class CommonComponent extends Component {
 								if($this_nodes['tagparentres']  != array() &&
 										$this_nodes['articleparentres']  != array()
 								){//子ノードが空だったら、もうこれ以上深くはいらない
-									foreach (self::models as $model){
-										$model_parent = $model."parentres";
-										foreach ($this_nodes[$model_parent] as $this_node){
+								foreach (self::models as $model){
+									$model_parent = $model."parentres";
+									foreach ($this_nodes[$model_parent] as $this_node){
 
-											foreach (self::models as $ip_model){
-												$ip_model_parent = $ip_model."parentres";
-												foreach ($parents[$ip_model_parent] as $iparent_idx =>$iparent){
+										foreach (self::models as $ip_model){
+											$ip_model_parent = $ip_model."parentres";
+											foreach ($parents[$ip_model_parent] as $iparent_idx =>$iparent){
 
-													if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
-														$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
-														unset($parents[$ip_model_parent][$iparent_idx]);
-														//親を切って　子ノードとして追加
-														if (is_null($parents[$p_model_parent][$parent_idx]['leaf'])){
-															$parents[$p_model_parent][$parent_idx]['leaf'] = array();
-															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
-															$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
-															$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
-															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]['follow']= $parents[$p_model_parent][$parent_idx]["follow"]; // Link LFrom をブッシュ
-														}
-														$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
-														array_push($root["follow"],$this_node["Link"]["LFrom"]);
-														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
-																,$root);
-
-														$parents[$p_model_parent][$parent_idx]['trikeys']
-														= self::allTrikeyFinder($parent["Link"]["ID"]);
-														//indexHash generator
-														foreach ($parents[$p_model_parent][$parent_idx]['trikeys'] as $index){
-															if ($indexHashes[$index["Taglink"]["LFrom"]]== null){
-																$indexHashes[$index["Taglink"]["LFrom"]] = $index;
-															}
-														}
-
+												if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
+													$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
+													unset($parents[$ip_model_parent][$iparent_idx]);
+													//親を切って　子ノードとして追加
+													if (is_null($parents[$p_model_parent][$parent_idx]['leaf'])){
+														$parents[$p_model_parent][$parent_idx]['leaf'] = array();
+														$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
+														$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
+														$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
+														$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]['follow']= $parents[$p_model_parent][$parent_idx]["follow"]; // Link LFrom をブッシュ
 													}
+													$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
+													array_push($root["follow"],$this_node["Link"]["LFrom"]);
+													array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
+															,$root);
+													$parents[$p_model_parent][$parent_idx]['trikeys']
+													= self::allTrikeyFinder($parent["Link"]["ID"]);
+													//indexHash generator
+													foreach ($parents[$p_model_parent][$parent_idx]['trikeys'] as $index){
+														if ($indexHashes[$index["Taglink"]["LFrom"]]== null){
+															$indexHashes[$index["Taglink"]["LFrom"]] = $index;
+														}
+													}
+
 												}
 											}
 										}
@@ -484,12 +482,14 @@ class CommonComponent extends Component {
 						}
 					}
 				}
-				list($parents[$p_model_parent],$taghash) =
-				$this->getSearchRelation($that,$parents[$p_model_parent] , $taghash, ucfirst($p_model));
+
+
 			}
-// 			$parents["index"] = self::GETContentsIndex($parents);
-			$parents["taghash"] =$taghash;
-			$parents["indexHashes"] =$indexHashes;
+			list($parents[$p_model_parent],$taghash) =
+			self::getSearchRelation($that,$parents[$p_model_parent] , $taghash, (string)ucfirst($p_model));
+		}
+		$parents["taghash"] =$taghash;
+		$parents["indexHashes"] =$indexHashes;
 		return $parents;
 	}
 
@@ -594,7 +594,7 @@ public function allTrikeyFinder($link_id){
 	 */
 
 	public function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel,$option){
-		if (!is_array($targetParent)|| empty($targetParent) || empty($result[$targetModel]['ID'])) {
+		if (!is_array($targetParent)|| empty($targetParent)) {
 			return array($targetParent,$taghash);
 		}
 		foreach ($targetParent as $i => $result){

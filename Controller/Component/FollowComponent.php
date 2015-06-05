@@ -13,13 +13,8 @@ class FollowComponent extends Component {
 	 *  どっちで渡してもOK
 	 */
 	public function add(&$that,$changed_ids){
-		$changed_ids = (array)$changed_ids;
-		if (is_array($changed_ids)){
-			foreach ($changed_ids as $changed_id){
-				self::Feed(&$that,self::GETeffected(&$that,$changed_id));
-			}
-		} else {
-			 self::Feed(&$that,self::GETeffected(&$that,$changed_ids));
+		foreach ((array)$changed_ids as $changed_id){
+			self::Feed(&$that,self::GETeffected(&$that,$changed_id));
 		}
 	}
 	/**
@@ -94,17 +89,11 @@ class FollowComponent extends Component {
  */
 	public function GETfollower(&$that,$effected_ids){
 		$follower_ids = array();
-
-		if (is_array($effected_ids)){
-			foreach ($effected_ids as $effected_id){
-				$follower_ids = array_merge($follower_ids,BasicComponent::tribasicRefiderbyid(
-						$that,Configure::read("tagID.follow"),
-						"User","User.id",$effected_id)) ;
-			}
-		} else {
-			return BasicComponent::tribasicRefiderbyid(
-						$that,Configure::read("tagID.follow"),
-						"User","User.id",$effected_ids);;
+		$effected_ids =(array) $effected_ids;
+		foreach ($effected_ids as $effected_id){
+			$follower_ids = array_merge($follower_ids,BasicComponent::tribasicRefiderbyid(
+					$that,Configure::read("tagID.follow"),
+					"User","User.id",$effected_id)) ;
 		}
 		return $follower_ids;
 	}

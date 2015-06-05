@@ -105,7 +105,8 @@ class AppController extends Controller {
 	}
 
 	public $helpers = array('Js','AutoComplete');
-public $components = array(
+	public $components = array('Auth','Search.Prg','Paginator','Common','Demand','Basic','Cookie','Session',
+			'Security','Authpaginator','Users.RememberMe',
     'Session',
     'Auth' => array(
 // 		        'loginAction' => array(

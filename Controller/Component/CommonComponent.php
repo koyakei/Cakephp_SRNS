@@ -201,6 +201,7 @@ class CommonComponent extends Component {
 			$options['authCheck'] = false;
 			if($that->Basic->tribasicfixverifybyid($trikey_id,$to_id,$options)){
 				if($that->Basic->trilinkAdd($that,$from_id,$to_id,$trikey_id)){
+					$this->Follow->add($this,$from_id);
 					$that->Session->setFlash(__('成功'));
 					return true;
 				}

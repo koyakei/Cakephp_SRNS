@@ -238,8 +238,9 @@ class LinksController extends AppController {
 				array('conditions' => array('Link.ID' => $id),'fields' => array('Link.user_id'))
 			)) {
 				if ($this->Link->delete()) {
+					$this->Follow->add($this,$this->request->data("Link.target"));
 					$this->Session->setFlash(__('The link has been deleted.'));
-					$this->redirect($this->referer());
+// 					$this->redirect($this->referer());
 					return true;
 
 				} else {
@@ -247,7 +248,7 @@ class LinksController extends AppController {
 					return false;
 				}
 			}
-		return $this->redirect($this->referer());
+// 		return $this->redirect($this->referer());
 	}
  // trikey の使用許可をどう管理するのか考えるのをすっかり忘れていた。
 	public function delete2(){

@@ -79,24 +79,25 @@
 						Action
 						</div>
 						<div id='HSfield' style='display: none;'>
-						<?php echo $this->Form->create("Link",array("action" => "add"));
-						echo $this->AutoCompleteNoHidden->input(
-								'LFrom',
-								array(
-										'autoCompletesUrl'=>$this->Html->url(
-												array(
-														'controller'=>'tagusers',
-														'action'=>'auto_complete',
-												)
-										),
-										'autoCompleteRequestItem'=>'autoCompleteText',
-								)
-						);
-
-						echo $this->Form->hidden('LFrom',array('value' => '','class' => 'tag_id','id' => 'tag'));
-						echo $this->Form->hidden('LTo',array('value' => $result["Link"]['ID']));
-								echo $this->Form->hidden("user_id",array("value" => $currentUserID));
-								echo $this->Form->submit("trikey")
+						<?php
+							echo $this->Form->create("Link",array("action" => "add"));
+							echo $this->AutoCompleteNoHidden->input(
+									'LFrom',
+									array(
+											'autoCompletesUrl'=>$this->Html->url(
+													array(
+															'controller'=>'tagusers',
+															'action'=>'auto_complete',
+													)
+											),
+											'autoCompleteRequestItem'=>'autoCompleteText',
+									)
+							);
+							echo $this->Form->hidden('LFrom',array('value' => '','class' => 'tag_id','id' => 'tag'));
+							echo $this->Form->hidden('LTo',array('value' => $result["Link"]['ID']));
+							echo $this->Form->hidden("user_id",array("value" => $currentUserID));
+							echo $this->Form->hidden("target",array("value" =>$result["follow"]));
+							echo $this->Form->submit("trikey");
 						?>
 						<?php echo $this->Html->link(__('View'), array('controller'=> $firstModel."s",'action' => 'view', $result[$firstModel]['ID'])); ?><br>
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?><br>

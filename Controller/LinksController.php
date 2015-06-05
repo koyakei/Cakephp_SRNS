@@ -1,6 +1,7 @@
 <?php
 App::uses('AppController', 'Controller');
 App::uses('TagauthsController', 'Controller');
+App::uses('BasicComponent', 'Controller/Component', 'Follow/Component');
 Configure::load("static");
 
 /**
@@ -132,20 +133,20 @@ class LinksController extends AppController {
 	}
 /**
  * add method
- *
+ *TODO:Follow 追加
  * @return void
  */
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Link->create();
 			if ($this->Link->save($this->request->data)) {
+				$this->Follow->add($this,$this->request->data("Link.target"));
 				$this->Session->setFlash(__('The link has been saved.'));
 // 				$this->redirect($this->referer());
 			} else {
 				$this->Session->setFlash(__('The link could not be saved. Please, try again.'));
 			}
 		}
-// 		$this->redirect($this->referer());
 	}
 
 	public function linkdel($id = NULL){

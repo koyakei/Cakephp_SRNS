@@ -424,17 +424,15 @@ class CommonComponent extends Component {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-		//TODO:trikey ごと
 		$children = array();
 		foreach (self::models as $p_model){
 			$p_model_parent = $p_model."parentres";
 			foreach ($parents[$p_model_parent] as $parent_idx =>$parent){
 				$roots[$p_model_parent][$parent_idx]["follow"] = array();
 				array_push($roots[$p_model_parent][$parent_idx]["follow"],$parent["Link"]["LFrom"]);
-
-		foreach (self::models as  $r_model){
-			$r_model_parent = $r_model. "parentres";
-			foreach ($roots[$r_model_parent] as $root_idx =>$root){
+				foreach (self::models as  $r_model){
+					$r_model_parent = $r_model. "parentres";
+					foreach ($roots[$r_model_parent] as $root_idx =>$root){
 							if ($parent[ucfirst($p_model)]["ID"] != null){
 								$is_child = false;
 								$this_nodes  = self::trifinderbyid($that,$parent[ucfirst($p_model)]["ID"],$options);
@@ -461,19 +459,13 @@ class CommonComponent extends Component {
 															$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
 															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]['follow']= $parents[$p_model_parent][$parent_idx]["follow"]; // Link LFrom をブッシュ
 														}
-// 														debug($roots[$p_model_parent][$parent_idx]["follow"]);
-														;
 														$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
 														array_push($root["follow"],$this_node["Link"]["LFrom"]);
 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
-// 														debug($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]['follow']);
-														debug($parents[$p_model_parent][$parent_idx]);
-// 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]["follow"],$this_node["Link"]["LFrom"]);
-// 														debug($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]);
 
-																$parents[$p_model_parent][$parent_idx]['trikeys']
-														 		= self::allTrikeyFinder($parent["Link"]["ID"]);
+														$parents[$p_model_parent][$parent_idx]['trikeys']
+														= self::allTrikeyFinder($parent["Link"]["ID"]);
 														//indexHash generator
 														foreach ($parents[$p_model_parent][$parent_idx]['trikeys'] as $index){
 															if ($indexHashes[$index["Taglink"]["LFrom"]]== null){

@@ -47,7 +47,6 @@ function demand(that){
 		url:"tags/nestedAdd",
 		//cilant でテーブル全体を比較して、選択中のtrike root を指定して
 		//比較するのか？それとも、phpでやるのか？
-		//
 		data:{
 			child_ids:that,
 			root_ids: root_ids,

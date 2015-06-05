@@ -13,6 +13,7 @@ class FollowComponent extends Component {
 	 *  どっちで渡してもOK
 	 */
 	public function add(&$that,$changed_ids){
+		$changed_ids = (array)$changed_ids;
 		if (is_array($changed_ids)){
 			foreach ($changed_ids as $changed_id){
 				self::Feed(&$that,self::GETeffected(&$that,$changed_id));

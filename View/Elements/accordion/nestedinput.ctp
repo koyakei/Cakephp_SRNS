@@ -16,6 +16,7 @@
 	<?php
 		$targetid = $this->params['pass'][0];
 		echo $this->Form->input('Article',array('class'=> 'reply_article_name'));
+		echo $this->Form->hidden("target",array("value" =>$result["follow"]));
 	?>
 <input type="button" value="addArticle" onClick="addArticle(this)">
 </form>

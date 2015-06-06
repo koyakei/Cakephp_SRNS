@@ -17,10 +17,10 @@
 					 <?php echo h($result[$firstModel]['ID']); ?>
 					 <?php echo $this->Form->create("Link",array("action" => "delete"));?>
 					 <?php echo $this->Form->input('trikey_id', array(
-						    'type' => 'select',
-						    'multiple'=> false,
-						    'options' => $result["trikeys"],
-						'id'=>'trikey_id'));
+	    'type' => 'select',
+	    'multiple'=> false,
+	    'options' => $result["trikeys"],
+	'id'=>'trikey_id'));
 					 echo $this->Form->end("Del"); ?>
 
 
@@ -105,8 +105,7 @@
 						 <?php
 						 echo $this->Form->button('タグ付け要求',array("onClick" =>"demand(this)"));
 						 // こっちのボタンでは現在選択しているtirikeyでのリンクをすべて削除。
-						 echo $this->Form->create("Link"
-						 		,array('controller'=> 'Links','action' => 'delete'));
+
 						 //replay@mine も選択し
 						 $ORflag = false;
 						 $MRflag = false;
@@ -123,28 +122,8 @@
 						 if ($ORflag){
 						 	$defaultId = Configure::read("tagID.reply");
 						 }
-// 						 elseif ($MRflag){
-// 						 	$defaultId = $myReply;
-// 						 }
-// 						 echo $this->Form->postLink(__('削除'.$result['Link']['ID']),
-// 						 		 array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
-						 echo $this->Form->postLink(__('削除'.$result['Link']['ID']),
+						  echo $this->Html->link(__('削除'.$result['Link']['ID']),
 						 						 		 array('controller'=> 'links','action' => 'delete', $result['Link']['ID']), null);
-						  echo $this->Form->create("Link",
-						 		array('controller'=> 'links','action' => 'delete', $result['Link']['ID']));
-						 					 echo $this->Form->end("Del");
-						echo $this->Html->link(
-    '削除',
-    array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']),
-    array()
-);?>
-					 <!-- pull down trikey delete demand submitter
-// 						 $result['Link']['ID']　で現在のtrikey でのID　が取得できるが、
-// 						 複数のidを持って同時に消したい　どうやって複数持たせるのか？-->
-
-<?php 						 							//@todo 複数のtrikey link id を$result[$trike_id]['Link']['ID']みたいな形で表示　trikeyAndSet をいじる
-						 							?>
-						  <?php
 						  echo $this->element('accordion/nestedinput', array("model" => "Article",
 						  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))
 						  ?>

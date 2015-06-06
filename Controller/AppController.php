@@ -93,7 +93,7 @@ class AppController extends Controller {
 
 		$tableresults = $this->Common->nestfinderbyid(
 				$that, $root, $sorting_tags = null, $id, $root);
-		debug( $tableresults);
+// 		debug( $tableresults);
 		$this->set('headresults',$headresults);
 		$this->set('tableresults', $tableresults);
 		$this->set('base_trikey' ,$base_trikey);

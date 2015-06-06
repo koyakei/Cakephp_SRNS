@@ -457,9 +457,12 @@ class CommonComponent extends Component {
 														//follow キーを追加すると空と認識されないから詰まない　ステップ実行とかで　早くそれを認識する方法を考える
 														//モジュール化して整理しないとまた同じ間違いをするのではないか？考えよう
 													//追加フェーズ
+														//follow
 														$roots[$p_model_parent][$parent_idx]["follow"] = array();
+														$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
+														array_push($root["follow"],$this_node["Link"]["LFrom"]);
 														array_push($roots[$p_model_parent][$parent_idx]["follow"],$parent["Link"]["LFrom"]);
-														//親を切って　子ノードとして追加
+														//leaf 追加
 														if (is_null($parents[$p_model_parent][$parent_idx]['leaf'])){
 															$parents[$p_model_parent][$parent_idx]['leaf'] = array();
 															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
@@ -467,19 +470,16 @@ class CommonComponent extends Component {
 															$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
 															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]['follow']= $parents[$p_model_parent][$parent_idx]["follow"]; // Link LFrom をブッシュ
 														}
-
-														$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
-														array_push($root["follow"],$this_node["Link"]["LFrom"]);
 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
 														$parents[$p_model_parent][$parent_idx]['trikeys']
 														= self::allTrikeyFinder($parent["Link"]["ID"]);
-
-
 	// 													indexHash generator
-														foreach ($parents[$p_model_parent][$parent_idx]['trikeys'] as $index){
-															if ($indexHashes[$index["Taglink"]["LFrom"]]== null){
-																$indexHashes[$index["Taglink"]["LFrom"]] = $index;
+// 														debug($parents[$p_model_parent][$parent_idx]);
+														foreach ($parents[$p_model_parent][$parent_idx]['trikeys'] as $key =>$index){
+
+															if ($indexHashes[$key]== null){
+																$indexHashes[$key] = $index;
 															}
 														}
 
@@ -500,6 +500,7 @@ class CommonComponent extends Component {
 		}
 		$parents["taghash"] =$taghash;
 		$parents["indexHashes"] =$indexHashes;
+		debug($indexHashes);
 		return $parents;
 	}
 

@@ -13,7 +13,7 @@ echo $this->Form->input('user_id', array(
 // 		$targetid = $this->params['pass'][0];
 
 		echo $this->Form->hidden("target",array("value" =>$result["follow"]));
-		echo $this->Form->input('Article',array('class'=> 'reply_article_name'));
+		echo $this->Form->input('Article',array("type" =>"text",'class'=> 'reply_article_name'));
 	?>
 <input type="button" value="addArticle" onClick="addArticle(this)">
 <?php echo $this->Form->end();?>

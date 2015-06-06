@@ -223,7 +223,7 @@ function addArticle(obj) {
 	        type: "GET",
 	        url: location.origin +"/cakephp/tags/formAdd",
 	        data:{
-	        	name: obj.parent().find(".text").find("input").val(),
+	        	name: obj.find(".text").find(".reply_article_name").val(),
 				root_ids: root_ids,
 				trikey_ids: trikeys,
 				parent_ids :parent_ids,

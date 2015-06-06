@@ -17,10 +17,10 @@
 					 <?php echo h($result[$firstModel]['ID']); ?>
 					 <?php echo $this->Form->create("Link",array("action" => "delete"));?>
 					 <?php echo $this->Form->input('trikey_id', array(
-	    'type' => 'select',
-	    'multiple'=> false,
-	    'options' => $result["trikeys"],
-	'id'=>'trikey_id'));
+						    'type' => 'select',
+						    'multiple'=> false,
+						    'options' => $result["trikeys"],
+						'id'=>'trikey_id'));
 					 echo $this->Form->end("Del"); ?>
 
 
@@ -128,15 +128,21 @@
 // 						 }
 // 						 echo $this->Form->postLink(__('削除'.$result['Link']['ID']),
 // 						 		 array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('Are you sure you want to delete # %s?', $result[$firstModel]['ID']));
-// 						 echo $this->Form->postLink(__('削除'.$result['Link']['ID']),
-// 						 						 		 array('controller'=> 'links','action' => 'delete', $result['Link']['ID']), null);
-
-						 echo $this->Form->postLink(__('Link削除'),
-						 		array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']), null, __('deldemand # %s?', $result[$firstModel]['ID']));
-// 						 <!-- pull down trikey delete demand submitter
+						 echo $this->Form->postLink(__('削除'.$result['Link']['ID']),
+						 						 		 array('controller'=> 'links','action' => 'delete', $result['Link']['ID']), null);
+						  echo $this->Form->create("Link",
+						 		array('controller'=> 'links','action' => 'delete', $result['Link']['ID']));
+						 					 echo $this->Form->end("Del");
+						echo $this->Html->link(
+    '削除',
+    array('controller'=> 'Links','action' => 'delete', $result['Link']['ID']),
+    array()
+);?>
+					 <!-- pull down trikey delete demand submitter
 // 						 $result['Link']['ID']　で現在のtrikey でのID　が取得できるが、
 // 						 複数のidを持って同時に消したい　どうやって複数持たせるのか？-->
-						 							//@todo 複数のtrikey link id を$result[$trike_id]['Link']['ID']みたいな形で表示　trikeyAndSet をいじる
+
+<?php 						 							//@todo 複数のtrikey link id を$result[$trike_id]['Link']['ID']みたいな形で表示　trikeyAndSet をいじる
 						 							?>
 						  <?php
 						  echo $this->element('accordion/nestedinput', array("model" => "Article",

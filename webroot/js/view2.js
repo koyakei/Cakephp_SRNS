@@ -67,6 +67,10 @@ function parentIdFinder(root,that){
 	var parent_ids =[];
 	var $that = $(that);
 	//一番上まで行ったら？　body まで行ったら＿か
+	if($that.closest("tr").find(".id").attr("id") == null){
+		return parent_ids;
+	}
+
 	do{
 		parent_ids.push($that.closest("tr").find(".id").attr("id"));
 		if($that.closest("tbody")[0] != null){//tr があれば
@@ -219,7 +223,7 @@ function addArticle(obj) {
 	        type: "GET",
 	        url: location.origin +"/cakephp/tags/formAdd",
 	        data:{
-	        	name: obj.find(".reply_article_name")[0].value,
+	        	name: obj.parent().find(".text").find("input").val(),
 				root_ids: root_ids,
 				trikey_ids: trikeys,
 				parent_ids :parent_ids,

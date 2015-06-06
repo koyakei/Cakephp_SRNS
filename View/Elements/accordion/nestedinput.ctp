@@ -1,25 +1,22 @@
 <!-- $model $key $currentUserID $ulist -->
-<form>
-<?php echo $this->Form->input('user_id', array(
+
+<?php echo $this->Form->create(null);
+echo $this->Form->input('user_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,
 	  'selected' => $currentUserID//['userselected']
-	,'id'=>'user_id')); ?>
+	,'id'=>'user_id'));
+// 	if (!empty($parentID)){
+// 		echo $this->form->hidden("parentID" ,array('value' => $parentID));
+// 	}
+// 		$targetid = $this->params['pass'][0];
 
-	<?php
-	if (!empty($parentID)){
-		echo $this->form->hidden("parentID" ,array('value' => $parentID));
-	}
-	?>
-		<?php echo __($model); ?>
-	<?php
-		$targetid = $this->params['pass'][0];
-		echo $this->Form->input('Article',array('class'=> 'reply_article_name'));
 		echo $this->Form->hidden("target",array("value" =>$result["follow"]));
+		echo $this->Form->input('Article',array('class'=> 'reply_article_name'));
 	?>
 <input type="button" value="addArticle" onClick="addArticle(this)">
-</form>
+<?php echo $this->Form->end();?>
 
 <!-- tag追加 -->
 <fieldset id="add_tag">

@@ -227,6 +227,7 @@ class LinksController extends AppController {
 		if (is_null($id)){
 			$id =$this->request->data("Link.trikey_id");
 		}
+		debug($id);
 // 		$this->request->onlyAllow('post', 'delete');
 		$this->loadModel('Tagauth');
 			$this->Link->id = $id;
@@ -257,7 +258,17 @@ class LinksController extends AppController {
 		if (is_null($id)){
 			$id =$this->request->data("Link.trikey_id");
 		}
-		self::delete($id);
+	if ($this->Link->delete()) {
+					//TODO: 次はここいら辺のフォロー関係と並列関係
+// 					$this->Follow->add($this,$this->request->data("Link.target"));
+					$this->Session->setFlash(__('The link has been deleted.'));
+					$this->redirect($this->referer());
+					return true;
+
+				} else {
+					$this->Session->setFlash(__('The link could not be deleted. Please, try again.'));
+					return false;
+				}
 
 	}
 /**

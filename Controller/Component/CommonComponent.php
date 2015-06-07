@@ -439,7 +439,16 @@ class CommonComponent extends Component {
 
 // 								$this_nodes = self::nestfinderbyid($that, $roots, $sorting_tags, $id, $parents);
 
+								$parents[$p_model_parent][$parent_idx]['trikeys']
+								= self::allTrikeyFinderWithLinkId($parent["Link"]["ID"]);
 
+								//indexHash generator
+								foreach (self::allTrikeyFinder($parent["Link"]["ID"]) as $key =>$index){
+
+									if ($indexHashes[$key]== null){
+										$indexHashes[$key] = $index;
+									}
+								}
 								foreach (self::models as $model){
 									$model_parent = $model."parentres";
 									foreach ($this_nodes[$model_parent] as $this_node){
@@ -472,18 +481,6 @@ class CommonComponent extends Component {
 														}
 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
-														$parents[$p_model_parent][$parent_idx]['trikeys']
-														= self::allTrikeyFinder($parent["Link"]["ID"]);
-	// 													indexHash generator
-// 														debug($parents[$p_model_parent][$parent_idx]);
-														foreach ($parents[$p_model_parent][$parent_idx]['trikeys'] as $key =>$index){
-
-															if ($indexHashes[$key]== null){
-																$indexHashes[$key] = $index;
-															}
-														}
-
-
 											}
 										}
 									}
@@ -492,15 +489,12 @@ class CommonComponent extends Component {
 						}
 					}
 				}
-
-
 			}
 			list($parents[$p_model_parent],$taghash) =
 			self::getSearchRelation($that,$parents[$p_model_parent] , $taghash, (string)ucfirst($p_model));
 		}
 		$parents["taghash"] =$taghash;
 		$parents["indexHashes"] =$indexHashes;
-		debug($indexHashes);
 		return $parents;
 	}
 
@@ -521,6 +515,16 @@ class CommonComponent extends Component {
 	 * @return array
 	 */
 public function allTrikeyFinder($link_id){
+		$Taglink = new Taglink();
+		return $Taglink->find("list", array("fields"=> array("Taglink.LFrom","Taglink.name"),"conditions" =>
+				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
+	}
+	/**
+	 *
+	 * @param unknown $to
+	 * @return array
+	 */
+	public function allTrikeyFinderWithLinkId($link_id){
 		$Taglink = new Taglink();
 		return $Taglink->find("list", array("conditions" =>
 				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
@@ -610,6 +614,7 @@ public function allTrikeyFinder($link_id){
 		}
 		foreach ($targetParent as $i => $result){
 			//個別のtrに対して関連付けられているタグを呼ぶ
+			if(!is_null($result[$targetModel]['ID'])){
 			$taghashgen = $this->Basic->tribasicfiderbyid(
 					$that,Configure::read('tagID.search'),
 					"Tag",$result[$targetModel]['ID'],"Tag.ID");//
@@ -625,6 +630,7 @@ public function allTrikeyFinder($link_id){
 			if (!is_null($option)){
 				$targetParent[$i]['trilink'] =BasicComponent::GetLink($that,
 						$retult[$model][$primaryKey],$option["ToID"],$option["trikeys"]) ;
+			}
 			}
 		}
 

@@ -15,7 +15,7 @@
 
 					 bgcolor=green <?php endif; ?> id ="<?php echo h($result[$firstModel]['ID']); ?>">
 					 <?php echo h($result[$firstModel]['ID']); ?>
-					 <?php echo $this->Form->create("Link",array("action" => "delete"));?>
+					 <?php echo $this->Form->create("Link",array("action" => "delete2"));?>
 					 <?php echo $this->Form->input('trikey_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,
@@ -122,7 +122,7 @@
 						 if ($ORflag){
 						 	$defaultId = Configure::read("tagID.reply");
 						 }
-						  echo $this->Html->link(__('削除'.$result['Link']['ID']),
+						  echo $this->Html->link(('削除'.$result['Link']['ID']),
 						 						 		 array('controller'=> 'links','action' => 'delete', $result['Link']['ID']), null);
 						  echo $this->element('accordion/nestedinput', array("model" => "Article",
 						  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))

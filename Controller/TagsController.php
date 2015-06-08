@@ -32,8 +32,7 @@ class TagsController extends AppController {
  *
  * @var array
  */
-public $components = array('Auth','Search.Prg','Paginator','Common','Demand','Basic','Cookie','Session',
-			'Security','Authpaginator','Users.RememberMe');
+
 public $presetVars = array(
 		'user_id' => array('type' => 'value'),
 		'keyword' => array('type' => 'value'),
@@ -294,7 +293,8 @@ public function beforeFilter() {
 				}
 
 				}
-		public function search2(){
+		public function search2($or = null){
+
 			//         	デフォルトで"リプライ"だけ読む
         	if ($base_trikey == null) {
         		$base_trikey = Configure::read("tagID.reply");
@@ -320,6 +320,7 @@ public function beforeFilter() {
 //         	$this->set('default_nodes',$all_node); //デフォルトのノードツリーを返す
 //         	$this->set('sorting_tags',$sorting_tags);
 //         	$this->set('taghash',$result["taghash"]);
+        	$this->set('or1',$this->request->query("or1"));
 		}
 		public function get_parent_id($parent_entities,$model,$primarykey){
 			if ($model == "Base_trikey_tag"){

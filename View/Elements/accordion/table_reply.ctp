@@ -39,7 +39,7 @@ def@A def@b の二つが紐付いていたときにどうするの？
 	==関係で結ばれていれば重複表示にするか。
 	-->
 	<table class="myTable" cellpadding="0" cellspacing="0" style ="background: white">
-        <?php echo $this->element('tablehead',
+        <?php echo $this->element('accordion/tablehead',
          Array('taghashes'=>$tableresults["taghash"])); ?>
 	    <tbody>
 	    	<?php echo $this->element('accordion/rsorttablebody',

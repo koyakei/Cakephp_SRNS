@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<?php echo $this->Html->script(array("view2","accordion")); ?>
+	<?php echo $this->Html->script(array("view2","accordion","search2")); ?>
 	<script type="text/javascript">
 	$(document).ready(function()
 		    {
@@ -40,7 +40,7 @@
 		?>
 		<div class="search_tag_id">
 		<?php
-			echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or1'));
+			echo $this->Form->hidden('or.0.',array('value' => $or1,'class' => 'tag_id','id' => 'or1'));
 		?>
 		</div>
 	</fieldset>

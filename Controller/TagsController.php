@@ -32,7 +32,6 @@ class TagsController extends AppController {
  *
  * @var array
  */
-
 public $presetVars = array(
 		'user_id' => array('type' => 'value'),
 		'keyword' => array('type' => 'value'),
@@ -63,20 +62,26 @@ public function beforeFilter() {
 	 'Html',
 			'Session'
 	);
-
+	/**
+	 * TODO:now
+	 */
 	public function formAdd(){
-// 		$autoLayout= false;
-		 $inserted_id = $this->Common->singleAdd($this->request->query('name'),
-		 		$this->Auth->user("id"));
-		 $this->Common->nestedAdd($this,$this->request->query('root_ids'),$this->request->query('trikey_ids'),
-		$this->request->query('parent_ids'),$inserted_id);
-		 $Article = new Article();
-		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
-
+// 		 $inserted_id = $this->Common->singleAdd($this->request->query('name'),
+// 		 		$this->Auth->user("id"));
+// 		 $this->Common->nestedAdd($this,$this->request->query('root_ids'),$this->request->query('trikey_ids'),
+// 		$this->request->query('parent_ids'),$inserted_id);
+// 		 $Article = new Article();
+// 		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
+debug($this->request->query);
+		 $this->Follow->tickSStream($target_ids,array(
+		 		"name" => substr($this->request->query('name'), 0,140),
+		 		'vctrl' =>$this->request->query('ctrl'),
+		 		'vaction'  => $this->request->query('action'),
+		 		'id' => $this->request->query('id'),
+		 ));
 	}
 	/**
-	 * TODO:nest表示ができたから、それに従って追加する方法を考える。2015/05/19ここ
-	 *
+	 * TODO:nest表示ができたから、それに従って追加する方法を考える。
 	 **/
 
 	/**
@@ -112,7 +117,6 @@ public function beforeFilter() {
 			$insert = $this->request->data("insert");
 			$update = $this->request->data("iupdate");
 			$del = $this->request->data("del");
-			//TODO:view　で整形不可能ならここで整形する　整形してから下に渡す
 			DemandComponent::requestInsertDemands($this,$insert);
 			DemandComponent::requestUpdateDemands($this,$update);
 			DemandComponent::requestDelDemands($this,$update);
@@ -470,7 +474,6 @@ public function beforeFilter() {
 
         	if($this->request->data['Article']['name'] != null){
         		$options['key'] = $this->request->data['Article']['keyid'];
-        		debug($this->request->data);
         		$this->Common->triarticleAdd($this,'Article',$this->request->data['Article']['user_id'],$id,$options);
         		$this->Basic->social($this);
         	}

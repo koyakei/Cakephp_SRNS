@@ -10,7 +10,8 @@ $config['tagID'] = array(
 	'extend' => 2535,
 	'SRNS_Code' => 2539,
 	'equal' => 2327,
-	'End' => 100000
+	'End' => 100000,
+	'follow' =>	2568
 
 );
 $config['acountID'] = array(

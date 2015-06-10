@@ -10,7 +10,6 @@
 		<th>
 		<?php echo $hash['name']; ?>
 		<?php
-		//TODO:search2になんか入れてジャンプするか？
 		echo $this->Html->link(__('Open'),
 		array('controller'=> "tags",'action' => 'search2', "?" => array("or1"=>$hash['ID'])));
 		?></th>

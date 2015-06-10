@@ -92,8 +92,7 @@ class AppController extends Controller {
 		$root = $this->Common->trifinderbyid($that,$id,$option,$index);
 
 		$tableresults = $this->Common->nestfinderbyid(
-				$that, $root, $sorting_tags = null, $id, $root);
-// 		debug( $tableresults);
+		$that, $root, $sorting_tags = null, $id, $root);
 		$this->set('headresults',$headresults);
 		$this->set('tableresults', $tableresults);
 		$this->set('base_trikey' ,$base_trikey);
@@ -105,7 +104,10 @@ class AppController extends Controller {
 	}
 
 	public $helpers = array('Js','AutoComplete');
-	public $components = array('Auth','Search.Prg','Paginator','Common','Demand','Basic','Cookie','Session',
+	public $components = array('Auth','Search.Prg','Paginator','Common',
+			// TODO: "Follow", を入れるとなんで動かないのか？
+		 "Follow",
+			'Demand','Basic','Cookie','Session',
 			'Security','Authpaginator','Users.RememberMe',
     'Session',
     'Auth' => array(
@@ -211,8 +213,9 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 					$target_id
 					,$last_id,
 					$options);
-			//$this->Basic->social2($this);
+
 		}
+
 	}
 	/**
 	 *

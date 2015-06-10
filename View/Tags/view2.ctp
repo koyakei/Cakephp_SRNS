@@ -150,6 +150,16 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
     <label for="off" class="switch-off"><i class="fa fa-globe fa-lg"></i></label>
 </div>
 <?php echo $this->element('accordion/data_strage',array('root_ids' => $id)); ?>
+<?php /**
+TODO:入れ子もそうだが、　動的表現も　考えよう
+この2つの内どちらが優先なのか？ということが重要だ　
+動的表現で使い方の説明をするとどうなるのか考えてみてからやるのを決めよう。
+動的サンプル　の場面設定はタグ追加のみにしようか？
+こよりに聞かれたのは場面追加設定について説明可能か考える
+テーブル同士の結びつきが描かれていない。しかしそれを描こうとしているのにこの体たらくである。
+テーブル同士の結びつきで正確に描写する欲求がそこまで無いのでは？
+
+**/ ?>
 <div class="root">
     	<?php
     	echo $this->element('accordion/table_reply',

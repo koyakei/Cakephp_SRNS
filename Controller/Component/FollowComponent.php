@@ -7,14 +7,23 @@ App::uses('Date', 'Model');
 App::uses('BasicComponent', 'Controller/Component');
 Configure::load("static");
 class FollowComponent extends Component {
+
 	/**
 	 * 　add method
 	 * @param array or int $changed_ids
 	 *  どっちで渡してもOK
+	 *  link もfollow 対象にするのか？
+	 *  対象にしたいが対象にしなかったときにどれだけ不具合になるのか
+	 *  @param options
+	 *'name' => $option["name"],
+	 'vaction' =>$option['action'],
+	 'vctrl'  => $option['ctrl'],
+	 'id' => $option['id'],
+	 *
 	 */
-	public function add(&$that,$changed_ids){
+	public function tickSStream($changed_ids,$options){
 		foreach ((array)$changed_ids as $changed_id){
-			self::Feed(&$that,self::GETeffected(&$that,$changed_id));
+			self::Feed(self::GETeffected($changed_id),$options);
 		}
 	}
 	/**
@@ -33,10 +42,11 @@ class FollowComponent extends Component {
 	 *　Social テーブルに対してプッシュ　
 	 * @param array $follow_ids
 	 * @return bool
+	 * @var name twitter size 　
 	 */
-	public function Feed(&$that,$effected_ids){
+	public function Feed($effected_ids,$options = null){
 		foreach ($effected_ids as $effected_id){
-			self::pushFeed($that, self::GETfollower($that, $effected_ids), $name, $option);
+			self::pushFeed(self::GETfollower($effected_ids),$options);
 		}
 		return $bool;
 	}
@@ -45,8 +55,8 @@ class FollowComponent extends Component {
 	 *
 	 * @param Object $that
 	 * @param mixed $follower_ids array or int
-	 * @param string $name 更新した記事の要約 twitter連携の時はこれをポスト　140文字まで
-	 * @param array $option  ctrl action id
+	 * @param array $option  name 更新した記事の要約 twitter連携の時はこれをポスト　140文字まで
+	 * ctrl action idとか　更新対象情報を与える
 	 * @return boolean
 	 * 　どのページを帆湯辞させた方がいいのかわからない。
 	 * 更新した人間が操作している現在のアドレスと　捜査した対象を記録する
@@ -54,48 +64,42 @@ class FollowComponent extends Component {
 	 * 　履歴を表示するときに　元のページのroot entity と更新した対象が関連性を持たない場合、どのように処理するのか？
 	 * 　関連性がない倍委、ページの下に無関係として　append する。
 	 */
-	public function pushFeed(&$that,$follower_ids,$name,$option){
+	public function pushFeed($follower_ids,$options){
 		$bool = false;
 		$data["Social"] = array(
-				'name' => $name,
+				'name' => $option["name"],
 				'vaction' =>$option['action'],
 				'vctrl'  => $option['ctrl'],
 				'id' => $option['id'],
 		);
 		if (is_array($changed_ids)){
 			foreach ($follower_ids as $follower_id){
-			 	$data["Social"]['user_id'] = $follower_id;
+				$data["Social"]['user_id'] = $follower_id;
 				$Social = new Social();
 				$Social->create();
 				$bool = $bool + $Social->Save($data);
 			}
 		} else {
-				$data["Social"]['user_id'] = $follower_ids;
-				$Social = new Social();
-				$Social->create();
-				return $Social->Save($data);
+			$data["Social"]['user_id'] = $follower_ids;
+			$Social = new Social();
+			$Social->create();
+			return $Social->Save($data);
 		}
 		return $bool;
 	}
 
-/**
- *
- * @param unknown $that
- * @param unknown $effected_ids
- * @return Ambigous <multitype:, NULL>|Ambigous <multitype:, number>
- *
- * follower target <(follow)=  User
- *
- */
-	public function GETfollower(&$that,$effected_ids){
-		$follower_ids = array();
-		$effected_ids =(array) $effected_ids;
-		foreach ($effected_ids as $effected_id){
-			$follower_ids = array_merge($follower_ids,BasicComponent::tribasicRefiderbyid(
-					$that,Configure::read("tagID.follow"),
-					"User","User.id",$effected_id)) ;
-		}
-		return $follower_ids;
+	/**
+	 *
+	 * @param array or int $effected_ids
+	 * @return array follower's user_id
+	 *
+	 */
+	public function GETfollower($effected_ids){
+		$options = array("fields" => "Follow.user_id","conditions" => array(
+				"Follow.target" => $effectedid
+		));
+		$Follow = new Follow();
+		return $Follow->find("all",$options);
 	}
 
 

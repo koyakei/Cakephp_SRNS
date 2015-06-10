@@ -208,7 +208,7 @@ function trikey_printer(){
  * @param obj
  * @returns
  */
-function addArticle(obj) {
+function addArticle(obj,ctrl,action,id) {
 	 var obj = $(obj).parent();
 	 var root_ids = obj.parents("#content").find(".data_strage #root_ids").val();
 	 var parent_ids = parentIdFinder(root_ids,obj);
@@ -224,10 +224,13 @@ function addArticle(obj) {
 	        type: "GET",
 	        url: location.origin +"/cakephp/tags/formAdd",
 	        data:{
-	        	name: obj.find(".text").find(".reply_article_name").val(),
+	        	name: obj.parent().find(".text").find("input").val(),
 				root_ids: root_ids,
 				trikey_ids: trikeys,
 				parent_ids :parent_ids,
+				ctrl :ctrl,
+				action : action,
+				id : id,
 			},
 	      success: function(obj){
 //	        	$this.find("td .id").append(obj);
@@ -261,7 +264,7 @@ function table_perser(data){
  * @param obj
  * @returns 追加されたリンクIDを返す
  */
-function add_reply_tag(obj){
+function add_reply_tag(obj,ctrl,action,id){
 	var target = $(obj);
 	var root_ids = $(".data_strage #root_ids").val();
 	var parent_ids = parentIdFinder(root_ids ,obj);
@@ -277,6 +280,9 @@ function add_reply_tag(obj){
 	        	,to:target.closest("#add_tag").find(".tag_id").val(),
 	        	parent_ids:parent_ids,
 	        	trikeys:trikeys,
+				ctrl :ctrl,
+				action : action,
+				id : id,
 				},
 	    });
 	 location.reload();

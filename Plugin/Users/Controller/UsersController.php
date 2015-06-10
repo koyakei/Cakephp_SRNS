@@ -326,7 +326,7 @@ class UsersController extends UsersAppController {
  * @return void
  */
 	public function edit() {
-		// @todo replace this with something better than the user details that were removed
+
 	}
 
 /**

@@ -62,7 +62,7 @@ echo $this->AutoCompleteNoHidden->input(
 echo $this->Form->hidden('or.0.',array('value' => '','class' => 'tag_id','id' => 'or2'));
 ?>
 </div>
-</fieldset></li><li>
+</fieldset>
 	<fieldset>
         <?php
 echo $this->AutoCompleteNoHidden->input(
@@ -150,18 +150,28 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
     <label for="off" class="switch-off"><i class="fa fa-globe fa-lg"></i></label>
 </div>
 <?php echo $this->element('accordion/data_strage',array('root_ids' => $id)); ?>
+<?php /**
+TODO:入れ子もそうだが、　動的表現も　考えよう
+この2つの内どちらが優先なのか？ということが重要だ　
+動的表現で使い方の説明をするとどうなるのか考えてみてからやるのを決めよう。
+動的サンプル　の場面設定はタグ追加のみにしようか？
+こよりに聞かれたのは場面追加設定について説明可能か考える
+テーブル同士の結びつきが描かれていない。しかしそれを描こうとしているのにこの体たらくである。
+テーブル同士の結びつきで正確に描写する欲求がそこまで無いのでは？
 
+**/ ?>
 <div class="root">
-
     	<?php
     	echo $this->element('accordion/table_reply',
     			array('tableresults' => $tableresults,
-    					'taghashes'=>$taghash,
+    					'taghashes'=>$tableresults["taghash"],
+    					"index" => $tableresults["indexHashes"],
     					'currentUserID' => $currentUserID,
     					'srns_code_member'=>$tableresults['srns_code_member']
     					,$sorting_tags
     			)
     	);
+
     	?>
 
 
@@ -172,41 +182,11 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 </div>
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">
-		<fieldset>
-		<?php echo $this->Form->input("Add Article", array('type'=> 'text','placeholder' => '記事　内容')); ?>
-		<?php echo $this->Form->input("Add Article", array('type'=> 'button', 'onClick' => 'addArticle(this)')); ?>
-		<?php echo $this->Form->input('user_id', array(
-		    'type' => 'select',
-		    'multiple'=> false,
-		    'options' => $ulist,
-		  'selected' => $currentUserID//['userselected']
-		,'id'=>'user_id')); ?>
-		<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
-		</fieldset>
-	<!-- 下に　$user_id $name $target_ids array リンクする対象id配列
-	これをどうにかして取り出して投げる-->
+		 <?php
+						  echo $this->element('accordion/nestedinput', array("model" => "Article",
+						  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))
+						  ?>
 
-		<fieldset>
-		        <?php echo $this->AutoCompleteNoHidden->input(
-			    'or1.1',
-			    array(
-			        'autoCompletesUrl'=>$this->Html->url(
-			            array(
-			                'controller'=>'tagusers',
-			                'action'=>'auto_complete',
-			            )
-			        ),
-			        'autoCompleteRequestItem'=>'autoCompleteText',
-			    )
-			);?>
-
-			<?php
-				echo $this->Form->hidden('add_tag_id.',array('value' => '','class' => 'tag_id','id' => 'tag_id'));
-			echo $this->Form->hidden('add_trikey_id.',
-				array('value' => $trikey_id,'class' => 'tag_id','id' => 'add_trikey_id')); ?>
-				<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Tag','onClick' => 'add_single_tag(this)')); ?>
-				<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
-		</fieldset>
 
 	</div>
 	</div>

@@ -15,7 +15,9 @@ echo $this->Form->input('user_id', array(
 		echo $this->Form->hidden("target",array("value" =>$result["follow"]));
 		echo $this->Form->input('Article',array("type" =>"text",'class'=> 'reply_article_name'));
 	?>
-<input type="button" value="addArticle" onClick="addArticle(this)">
+
+<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Article','onClick' =>
+						"addArticle(this,'".$this->params['controller']."','".$this->params['action']."','".$this->params['pass'][0]."')")); ?>
 <?php echo $this->Form->end();?>
 
 <!-- tag追加 -->
@@ -41,6 +43,7 @@ echo $this->Form->input('user_id', array(
 echo $this->Form->hidden('tag',array('value' => '','class' => 'tag_id','id' => 'tag'));
 ?>
 
-				<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Tag','onClick' => 'add_reply_tag(this)')); ?>
+				<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Tag','onClick' =>
+						"add_reply_tag(this,'".$this->params['controller']."','".$this->params['action']."','".$this->params['pass'][0]."')")); ?>
 				<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
 		</fieldset>

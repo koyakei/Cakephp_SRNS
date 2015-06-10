@@ -66,24 +66,12 @@ class FollowComponent extends Component {
 	 */
 	public function pushFeed($follower_ids,$options){
 		$bool = false;
-		$data["Social"] = array(
-				'name' => $option["name"],
-				'vaction' =>$option['action'],
-				'vctrl'  => $option['ctrl'],
-				'id' => $option['id'],
-		);
-		if (is_array($changed_ids)){
-			foreach ($follower_ids as $follower_id){
-				$data["Social"]['user_id'] = $follower_id;
-				$Social = new Social();
-				$Social->create();
-				$bool = $bool + $Social->Save($data);
-			}
-		} else {
-			$data["Social"]['user_id'] = $follower_ids;
+		$data["Social"] = $options;
+		foreach ((array)$follower_ids as $follower_id){
+			$data["Social"]['user_id'] = $follower_id;
 			$Social = new Social();
 			$Social->create();
-			return $Social->Save($data);
+			$bool = $bool + $Social->Save($data);
 		}
 		return $bool;
 	}

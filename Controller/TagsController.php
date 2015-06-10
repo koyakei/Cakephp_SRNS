@@ -63,15 +63,15 @@ public function beforeFilter() {
 			'Session'
 	);
 	/**
-	 * TODO:now
+	 *
 	 */
 	public function formAdd(){
-// 		 $inserted_id = $this->Common->singleAdd($this->request->query('name'),
-// 		 		$this->Auth->user("id"));
-// 		 $this->Common->nestedAdd($this,$this->request->query('root_ids'),$this->request->query('trikey_ids'),
-// 		$this->request->query('parent_ids'),$inserted_id);
-// 		 $Article = new Article();
-// 		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
+		 $inserted_id = $this->Common->singleAdd($this->request->query('name'),
+		 		$this->Auth->user("id"));
+		 $this->Common->nestedAdd($this,$this->request->query('root_ids'),$this->request->query('trikey_ids'),
+		$this->request->query('parent_ids'),$inserted_id);
+		 $Article = new Article();
+		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
 debug($this->request->query);
 		 $this->Follow->tickSStream($target_ids,array(
 		 		"name" => substr($this->request->query('name'), 0,140),

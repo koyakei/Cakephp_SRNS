@@ -94,7 +94,7 @@ class AppController extends Controller {
 		$tableresults = $this->Common->nestfinderbyid(
 		$that, $root, $sorting_tags = null, $id, $root);
 		$this->set('headresults',$headresults);
-		$this->set('tableresults', $tableresults);
+		$this->set("tableresults",$tableresults);
 		$this->set('base_trikey' ,$base_trikey);
 		$this->set('currentUserID', $this->Auth->user('id'));
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
@@ -102,8 +102,17 @@ class AppController extends Controller {
 		$this->set('taghash',$tableresults["taghash"]);
 		$this->set('id',$id);
 	}
+	/**
+	 *
+	 * @param int $id
+	 */
+	public function followCheck($id){
+		$Follow = new Follow();
+		$options = array();
+		return $Follow->find("all",$options);
+	}
 
-	public $helpers = array('Js','AutoComplete');
+	public $helpers = array('Js','AutoComplete','Session');
 	public $components = array('Auth','Search.Prg','Paginator','Common',
 			// TODO: "Follow", を入れるとなんで動かないのか？
 		 "Follow",

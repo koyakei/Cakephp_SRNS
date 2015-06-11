@@ -62,6 +62,17 @@ public function beforeFilter() {
 	 'Html',
 			'Session'
 	);
+	public function follow_unfollow(){
+		$Follow = new Follow();
+		$data =array("Follow"=>array("target"=> $this->request->query("target_id"),
+		"user_id" => $this->request->query("user_id")));
+		if ($this->request->query("follow")){
+			$Follow->delete($Follow->find("first",array("fields" =>"Follow.ID" ,"conditions" =>$data )));
+		}else {
+			$Follow->create();
+			$Follow->save($data);
+		}
+	}
 	/**
 	 *
 	 */
@@ -72,7 +83,6 @@ public function beforeFilter() {
 		$this->request->query('parent_ids'),$inserted_id);
 		 $Article = new Article();
 		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
-debug($this->request->query);
 		 $this->Follow->tickSStream($target_ids,array(
 		 		"name" => substr($this->request->query('name'), 0,140),
 		 		'vctrl' =>$this->request->query('ctrl'),

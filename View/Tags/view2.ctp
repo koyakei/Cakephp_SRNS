@@ -160,8 +160,14 @@ TODO:入れ子もそうだが、　動的表現も　考えよう
 テーブル同士の結びつきで正確に描写する欲求がそこまで無いのでは？
 
 **/ ?>
+<br>
 <div class="root">
     	<?php
+    	$data["id"] = $this->params["pass"][0];
+    	echo $this->element('follow_button',
+    			array('data' => $data
+    			)
+    	);
     	echo $this->element('accordion/table_reply',
     			array('tableresults' => $tableresults,
     					'taghashes'=>$tableresults["taghash"],

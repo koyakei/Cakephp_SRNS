@@ -20,7 +20,7 @@ class Follow extends Date {
  *
  * @var string
  */
-	public $primaryKey = 'ID';
+	public $primaryKey = 'id';
 
 /**
  * Validation rules

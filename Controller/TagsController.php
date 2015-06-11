@@ -64,13 +64,25 @@ public function beforeFilter() {
 	);
 	public function follow_unfollow(){
 		$Follow = new Follow();
-		$data =array("Follow"=>array("target"=> $this->request->query("target_id"),
-		"user_id" => $this->request->query("user_id")));
+// 		$data =array("Follow.target"=> $this->request->query("target_id"),
+// 		"Follow.user_id" => $this->request->query("user_id"));
+$child = array("target"=> $this->request->query("target_id"),
+				"user_id" => $this->request->query("user_id"));
+		$data["Follow"] = $child;
+		debug($this->request->query("follow"));
 		if ($this->request->query("follow")){
-			$Follow->delete($Follow->find("first",array("fields" =>"Follow.ID" ,"conditions" =>$data )));
-		}else {
 			$Follow->create();
-			$Follow->save($data);
+			if($Follow->save($data)){
+				$this->Session->setFlash(__('followed.'));
+			}else{
+				debug("follow miss");
+			}
+		}else {
+			if($Follow->delete($Follow->find("first",array("fields" =>"Follow.id" ,"conditions" =>$child))["Follow"]["id"])){
+				$this->Session->setFlash(__('Unfollowed.'));
+			}else{
+			debug("follow miss");
+			}
 		}
 	}
 	/**

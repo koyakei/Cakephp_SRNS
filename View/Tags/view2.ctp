@@ -163,9 +163,9 @@ TODO:入れ子もそうだが、　動的表現も　考えよう
 <br>
 <div class="root">
     	<?php
-    	$data["id"] = $this->params["pass"][0];
+    	$root_data["id"] = $this->params["pass"][0];
     	echo $this->element('follow_button',
-    			array('data' => $data
+    			array('data' => $root_data
     			)
     	);
     	echo $this->element('accordion/table_reply',

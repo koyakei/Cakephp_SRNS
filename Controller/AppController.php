@@ -93,6 +93,8 @@ class AppController extends Controller {
 
 		$tableresults = $this->Common->nestfinderbyid(
 		$that, $root, $sorting_tags = null, $id, $root);
+		$root_data["follow"] = $this->Follow->followChecker($id,$this->Auth->user("id"));
+		$this->set('root_data',$root_data);
 		$this->set('headresults',$headresults);
 		$this->set("tableresults",$tableresults);
 		$this->set('base_trikey' ,$base_trikey);

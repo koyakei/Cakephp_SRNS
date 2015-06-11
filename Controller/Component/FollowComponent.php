@@ -4,6 +4,7 @@ App::uses('User', 'Model');
 App::uses('Link', 'Model');
 App::uses('Article', 'Model');
 App::uses('Date', 'Model');
+App::uses('Follow', 'Model');
 App::uses('BasicComponent', 'Controller/Component');
 Configure::load("static");
 class FollowComponent extends Component {
@@ -51,6 +52,12 @@ class FollowComponent extends Component {
 		return $bool;
 	}
 
+	 public function followChecker($id,$user_id){
+	 	$Follow = new Follow();
+	 	$res = $Follow->find("all", array("conditions" =>
+	 			array("user_id" => $user_id,"target" => $id)));
+	 	return $res;
+	 }
 	/**
 	 *
 	 * @param Object $that

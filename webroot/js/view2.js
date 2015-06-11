@@ -9,7 +9,7 @@ $.ajaxSetup({
 function follow(obj,target_id,user_id){
 	$obj = $(obj);
 	$.ajax({
-		url:"tags/follow_unfollow",
+		url:location.origin +"/cakephp/tags/follow_unfollow",
 		data:{
 			follow: $obj.val(),
 			target_id: target_id,

@@ -281,7 +281,32 @@ class UsersController extends UsersAppController {
 			$this->set('tag', $this->Tag->find('first',$options));
 			$this->set('user', $user);
 			$tuserid = $this->{$this->modelClass}->view($slug)[$this->modelClass]['id'];
+			$Follow = new Follow();
+			$Follow->find("all",array("conditions" => array(
+					"Follow.user_id" => $slug
+			)));
+			$this->loadModel('Socialuser');
+			$this->Paginator->settings = array(
+					'conditions' => array(
+							"Follow.user_id" => $slug),
+					'joins'
+							=> array(
+									array(
+											'table' => 'follow',
+											'alias' => 'Follow',
+											'type' => 'INNER',
+											'conditions' => array(
+													"or" => array(
+															array("Follow.target = Socialuser.user_id"),
+															array("Follow.target = Socialuser.page_id"),
+													),
 
+											)
+									),
+							),
+					'order' => array('Socialuser.created' => 'desc')
+			);
+			$this->set('timeLine',$this->Paginator->paginate('Socialuser'));
 
 		} catch (Exception $e) {
 			$this->Session->setFlash($e->getMessage());

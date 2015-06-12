@@ -54,7 +54,6 @@
 			&nbsp;
 		</dd>
 	</dl>
-	<?php debug($this->params["pass"][0]); ?>
 	<?php
 	$root_data["id"] = $this->params["pass"][0];
 	echo $this->element('follow_button',
@@ -62,7 +61,7 @@
 			)
 	);
 	?>
-	<h2><?php echo __('time line'); ?></h2>
-	<?php echo $this->element('Users.Users/timeline', Array('socials' => $socials)); ?>
+	<h2><?php echo __('Time line'); ?></h2>
+	<?php echo $this->element('Users.Users/timeline', Array('socials' => $timeLine)); ?>
 </div>
 <?php echo $this->element('Users.Users/sidebar'); ?>

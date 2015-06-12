@@ -3,6 +3,7 @@
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
+			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('username'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
@@ -14,6 +15,7 @@
  //pageID で　$(".my_table") の中をネストしていって、その　tr だけ　color="red"にでも塗りつぶすか。クリックしたら色が普通に戻るとかでもいい。
 
 		?>&nbsp;</td>
+		<td><?php echo h($socialuser['Socialuser']['name']); ?>&nbsp;</td>
 		<td><?php echo h($socialuser['Socialuser']['username']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'vview', $socialuser['Socialuser']['ID'])); ?>

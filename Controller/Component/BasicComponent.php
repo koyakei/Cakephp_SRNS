@@ -429,7 +429,7 @@ class BasicComponent extends Component {
 								'alias' => 'Link',
 								'type' => 'INNER',
 								'conditions' => array(
-										array("$id = Link.LTo")
+										array("Link.LTo" => $id)
 								)
 						),
 						array(

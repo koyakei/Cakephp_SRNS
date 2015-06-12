@@ -23,8 +23,9 @@ class FollowComponent extends Component {
 	 *
 	 */
 	public function tickSStream($changed_ids,$options){
-		foreach ((array)$changed_ids as $changed_id){
-			self::Feed(self::GETeffected($changed_id),$options);
+		$changed_ids = (array)$changed_ids;
+		foreach ($changed_ids as $changed_id){
+			self::Feed($changed_id,$options);
 		}
 	}
 	/**
@@ -32,11 +33,44 @@ class FollowComponent extends Component {
 	 * @param array $changed_id
 	 * @return array $follow_ids
 	 */
-	public function GETeffected(&$that,$changed_id){
-		$follow_ids = BasicComponent::tribasicRefiderbyid(
-				$that,Configure::read("tagID.reply"),
-				"Article","Article.ID",$changed_id);
-		return $effected_ids;
+	public function GETeffected($changed_id){
+		return self::tribasicRefiderbyid(
+				Configure::read("tagID.reply"),$changed_id);
+
+	}
+
+	/**
+	 * tribasicfiderbyid method
+	 *
+	 * @throws NotFoundException
+	 * @param mix $that
+	 * @param int $trikeyID
+	 * @param string $modelSe
+	 * @param string $Ltotarget //target colmunn 探すID
+	 * @param ind $id
+	 * @return $that->returntribasic
+	 */
+	public function tribasicRefiderbyid($trikeyID,$id) {
+		$Entity = new Link();
+		$option = array(
+				'conditions'=> array(
+						array("Link.LTo" => $id)
+				),
+				'fields' => array('*'	),
+				'joins'
+				=> array(
+						array(
+								'table' => 'taglinks',
+								'alias' => 'taglink',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Link.ID = taglink.LTo"),
+										array("taglink.LFrom" => $trikeyID)
+								)
+						),
+				),
+		);
+		return $Entity->find('all',$option);
 	}
 
 	/**
@@ -46,9 +80,7 @@ class FollowComponent extends Component {
 	 * @var name twitter size 　
 	 */
 	public function Feed($effected_ids,$options = null){
-		foreach ($effected_ids as $effected_id){
 			self::pushFeed(self::GETfollower($effected_ids),$options);
-		}
 		return $bool;
 	}
 
@@ -72,13 +104,13 @@ class FollowComponent extends Component {
 	 * 　関連性がない倍委、ページの下に無関係として　append する。
 	 */
 	public function pushFeed($follower_ids,$options){
-		$bool = false;
-		$data["Social"] = $options;
-		foreach ((array)$follower_ids as $follower_id){
-			$data["Social"]['user_id'] = $follower_id;
+		$bool = 0;
+		$data["Social"] = $options;d;
+		foreach ($follower_ids as $follower_id){
+			$data["Social"]['user_id'] = $follower_id["Follow"]["user_id"];
 			$Social = new Social();
 			$Social->create();
-			$bool = $bool + $Social->Save($data);
+			$bool = $bool + (int)$Social->save($data);
 		}
 		return $bool;
 	}
@@ -91,7 +123,7 @@ class FollowComponent extends Component {
 	 */
 	public function GETfollower($effected_ids){
 		$options = array("fields" => "Follow.user_id","conditions" => array(
-				"Follow.target" => $effectedid
+				"Follow.target" => $effected_ids
 		));
 		$Follow = new Follow();
 		return $Follow->find("all",$options);

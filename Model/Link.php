@@ -87,23 +87,23 @@ class Link extends Date {
  * @var array
  */
     public $hasOne= array(
-        'LO' => array(
-		'className' => 'User',
-		'foreignKey' => 'ID',
-		'dependent' => false,
-		'conditions' => 'LO.ID = Link.user_id',
-		//'type' => 'inner'
-        )
-    );/*
-    public $hasMany= array(
-        'AI_LT' => array(
-		'className' => 'Article',
-		'foreignKey' => 'ID',
-		'dependent' => false,
-		'conditions' => 'Article.ID = link.LTo',
-		//'type' => 'inner'
-        )
-    );*/
+//         'LO' => array(
+// 		'className' => 'User',
+// 		'foreignKey' => 'ID',
+// 		'dependent' => false,
+// 		'conditions' => 'LO.ID = Link.user_id',
+// 		'type' => 'inner'
+//         )
+    );
+//     public $hasMany= array(
+//         'AI_LT' => array(
+// 		'className' => 'Article',
+// 		'foreignKey' => 'ID',
+// 		'dependent' => false,
+// 		'conditions' => 'Article.ID = link.LTo',
+// 		//'type' => 'inner'
+//         )
+//     );
 /*public $hasAndBelongsToMany= array(
         'LinkTo_ArticleID' => array(
 		'className' => 'article',

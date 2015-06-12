@@ -10,9 +10,9 @@
 	<tr>
 		<td><?php echo $this->Html->link($socialuser['Socialuser']['created'], array('plugin' => null ,'controller' => $socialuser['Socialuser']['vctrl'],
 				 'action' => $socialuser['Socialuser']['vaction'], $socialuser['Socialuser']['vpage_id'],
-				"?" =>array('page_id' =>$socialuser['Socialuser']["page_id"])));
+				$socialuser['Socialuser']["page_id"]));
  //pageID で　$(".my_table") の中をネストしていって、その　tr だけ　color="red"にでも塗りつぶすか。クリックしたら色が普通に戻るとかでもいい。
- 
+
 		?>&nbsp;</td>
 		<td><?php echo h($socialuser['Socialuser']['username']); ?>&nbsp;</td>
 		<td class="actions">

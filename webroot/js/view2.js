@@ -294,10 +294,10 @@ function add_reply_tag(obj,ctrl,action,id){
 	        	trikeys:trikeys,
 				ctrl :ctrl,
 				action : action,
-				id : id,
+				page_id : id,
 				},
 	    });
-	 location.reload();
+//	 location.reload();
 
 }
 /**

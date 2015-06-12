@@ -220,7 +220,7 @@ class UsersController extends UsersAppController {
 			return;
 		}
 
-		$this->Auth->allow('add', 'reset', 'verify', 'logout', 'view', 'reset_password', 'login', 'resend_verification');
+		$this->Auth->allow('add', 'reset', 'verify', 'logout', 'view', 'reset_password', 'login', 'my_activity'.'resend_verification');
 
 		if (!is_null(Configure::read('Users.allowRegistration')) && !Configure::read('Users.allowRegistration')) {
 			$this->Auth->deny('add');
@@ -281,19 +281,23 @@ class UsersController extends UsersAppController {
 			$this->set('tag', $this->Tag->find('first',$options));
 			$this->set('user', $user);
 			$tuserid = $this->{$this->modelClass}->view($slug)[$this->modelClass]['id'];
-			$this->loadModel('Socialuser');
-			$this->Paginator->settings = array(
-				'conditions' => array(
-						"Socialuser.user_id" => $slug),
-				'order' => array('Socialuser.created' => 'desc')
-			);
-			$this->set('socials',$this->Paginator->paginate('Socialuser'));
+
+
 		} catch (Exception $e) {
 			$this->Session->setFlash($e->getMessage());
 			$this->redirect('/');
 		}
 	}
 
+	public  function my_activity($slug){
+		$this->loadModel('Socialuser');
+		$this->Paginator->settings = array(
+				'conditions' => array(
+						"Socialuser.user_id" => $slug),
+				'order' => array('Socialuser.created' => 'desc')
+		);
+		$this->set('socials',$this->Paginator->paginate('Socialuser'));
+	}
 /**
  * all timeline method
  * @return void

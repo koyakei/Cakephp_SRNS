@@ -32,13 +32,37 @@
 			}
 		}
 		?>
-		<dt<?php if ($i % 2 == 0) echo $class; ?>><?php echo __d('users', 'Profile'); ?></dt>
+		<dt><?php echo __d('users', 'Following'); ?></dt>
 		<dd>
-			<?php echo $this->Html->link(__d('users', 'Profile'), array('plugin'=>false,'controller' => 'tags','action' => 'view',$tag['Tag']['ID'])); ?>
+			<?php echo $this->Html->link(__d('users', 'Following'),
+					array('action' => 'following',$this->params["pass"][0]
+			)); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __d('users', 'Follower'); ?></dt>
+		<dd>
+			<?php echo $this->Html->link(__d('users', 'Follower'),
+					array('action' => 'follower',$this->params["pass"][0]
+			)); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __d('users', 'My activity'); ?></dt>
+		<dd>
+			<?php echo $this->Html->link(__d('users', 'My activity'),
+					array('action' => 'my_activity',$this->params["pass"][0]
+			)); ?>
 			&nbsp;
 		</dd>
 	</dl>
-	<h2><?php echo "My activity"; ?></h2>
+	<?php debug($this->params["pass"][0]); ?>
+	<?php
+	$root_data["id"] = $this->params["pass"][0];
+	echo $this->element('follow_button',
+			array('data' => $root_data
+			)
+	);
+	?>
+	<h2><?php echo __('time line'); ?></h2>
 	<?php echo $this->element('Users.Users/timeline', Array('socials' => $socials)); ?>
 </div>
 <?php echo $this->element('Users.Users/sidebar'); ?>

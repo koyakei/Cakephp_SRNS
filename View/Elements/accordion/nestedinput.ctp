@@ -7,10 +7,6 @@ echo $this->Form->input('user_id', array(
 	    'options' => $ulist,
 	  'selected' => $currentUserID//['userselected']
 	,'id'=>'user_id'));
-// 	if (!empty($parentID)){
-// 		echo $this->form->hidden("parentID" ,array('value' => $parentID));
-// 	}
-// 		$targetid = $this->params['pass'][0];
 
 		echo $this->Form->hidden("target",array("value" =>$result["follow"]));
 		echo $this->Form->input('Article',array("type" =>"text",'class'=> 'reply_article_name'));

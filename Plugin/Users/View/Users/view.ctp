@@ -55,11 +55,13 @@
 		</dd>
 	</dl>
 	<?php
-	$root_data["id"] = $this->params["pass"][0];
-	echo $this->element('follow_button',
-			array('data' => $root_data
-			)
-	);
+	if (AuthComponent::user("id") != $this->params["pass"][0]){
+		$root_data["id"] = $this->params["pass"][0];
+		echo $this->element('follow_button',
+				array('data' => $root_data
+				)
+		);
+	}
 	?>
 	<h2><?php echo __('Time line'); ?></h2>
 	<?php echo $this->element('Users.Users/timeline', Array('socials' => $timeLine)); ?>

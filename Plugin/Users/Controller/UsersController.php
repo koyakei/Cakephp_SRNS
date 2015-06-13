@@ -306,6 +306,10 @@ class UsersController extends UsersAppController {
 							),
 					'order' => array('Socialuser.created' => 'desc')
 			);
+			$Follow = new Follow();
+			$root_data["follow"]  = $Follow->find("first",array("conditions" =>
+					array("Follow.user_id" => $this->Auth->user("id"),"Follow.target"=> $slug)));
+			$this->set("root_data",$root_data);
 			$this->set('timeLine',$this->Paginator->paginate('Socialuser'));
 
 		} catch (Exception $e) {

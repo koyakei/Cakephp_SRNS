@@ -12,6 +12,15 @@ def@A def@b の二つが紐付いていたときにどうするの？
 	 <tr><td> <a href="#<?php echo $trikey_id; ?>"><?php echo $index; ?></a></td></tr>
 	 <?php endforeach;;?>
 </table>
+<!-- quantize -->
+<?php //TODO: 量子化切り替えプルダウン
+echo $this->Form->input('quzntize', array(
+		'type' => 'select',
+		'multiple'=> false,
+		'options' => $quantize,
+		'selected' => 0//['userselected']
+		,'class'=>'quantizeSelector'));
+?>
 	<div class="DDhandle"> ここを持つとテーブルが動く</div>
 	<!--  trikey table itarator
 	here is table

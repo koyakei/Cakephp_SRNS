@@ -13,10 +13,9 @@
 			<li><?php echo $this->Html->link(__d('users', 'My Account'), array('action' => 'edit')); ?></li>
 
 		<?php endif ?>
-		<?php if($this->Session->read('Auth.User.is_admin')) : ?>
+
             <li>&nbsp;</li>
             <li><?php echo $this->Html->link(__d('users', 'List Users'), array('action'=>'index'));?></li>
 
-        <?php endif; ?>
 	</ul>
 </div>

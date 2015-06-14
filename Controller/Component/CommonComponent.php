@@ -61,7 +61,6 @@ class CommonComponent extends Component {
 		debug($diff);
 		$options['key'] = $fromKeyID;
 		foreach ($diff as $var){
-			//debug($var['ID']);
 			$ToID= $var['ID'];
 			$that->Common->triAddbyid($that,$that->Auth->user('id'),$fromID,$ToID,$options);
 			//}
@@ -318,6 +317,16 @@ class CommonComponent extends Component {
 			}
 		}
 	}
+
+	public function GETrootTrikey($results){
+		foreach ($results as $idx => $articleparentre){
+// 			$results[$idx]["follow"] = array();
+// 			array_push($results[$idx]["follow"],  $articleparentre["Link"]["LFrom"]);
+			$results[$idx]["trikeys"] = array();
+			$results[$idx]["trikeys"] = self::allTrikeyFinder($articleparentre["Link"]["ID"]);
+		}
+		return $results;
+	}
 	/**
 	 * trifinderbyid method
 	 * id と　trikey を指定すると　結果が帰ってくる
@@ -328,27 +337,18 @@ class CommonComponent extends Component {
 	 * @var id
 	 * @var option ['key']
 	 * @return array('tagparentres'
-				'articleparentres',
-				 'taghash' );
+	 'articleparentres',
+	 'taghash' );
 	 *
 	 */
-	public function GETrootTrikey($results){
-		foreach ($results as $idx => $articleparentre){
-// 			$results[$idx]["follow"] = array();
-// 			array_push($results[$idx]["follow"],  $articleparentre["Link"]["LFrom"]);
-			$results[$idx]["trikeys"] = array();
-			$results[$idx]["trikeys"] = self::allTrikeyFinder($articleparentre["Link"]["ID"]);
-		}
-		return $results;
-	}
-	public function trifinderbyid(&$that = null,$id,&$option) {
+	public function trifinderbyid(&$that = null,$id,$quantize = 0,&$option) {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-		$articleparentres = self::GETrootTrikey($this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id));
+		$articleparentres = self::GETrootTrikey($this->Basic->tribasicfiderbyid($that,$option['key'],"Article","Article.ID",$id,$quantize));
 		list($articleparentres,$taghash) =
 		$this->getSearchRelation($that,$articleparentres, $taghash, "Article");
-		$tagparentres =  self::GETrootTrikey($this->Basic->allTrilinkFinder($id,$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id)));
+		$tagparentres =  self::GETrootTrikey($this->Basic->allTrilinkFinder($id,$this->Basic->tribasicfiderbyid($that,$option['key'],"Tag","Tag.ID",$id,$quantize)));
 		list($tagparentres,$taghash) =
 		$this->getSearchRelation($that, $tagparentres, $taghash, "Tag");
 		return array('tagparentres'=>$tagparentres,
@@ -418,7 +418,7 @@ class CommonComponent extends Component {
 	 * r array( article , tag) と分かれているが、それごとにもう一度　foreach を回して　trikey ごとに紐付けていくか？
 	 */
     const   models = array( 'article' ,'tag');
-	public function nestfinderbyid(&$that,&$roots,$sorting_tags,$id,&$parents,
+	public function nestfinderbyid(&$that,&$roots,$sorting_tags,$id,&$parents,$quantize = 0,
 			$option = null){
 		$indexHashes = array();
 		if ($option['key'] == null) {

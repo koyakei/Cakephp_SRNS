@@ -1,12 +1,12 @@
 <!-- $model $key $currentUserID $ulist -->
 
 <?php echo $this->Form->create(null);
-echo $this->Form->input('user_id', array(
-	    'type' => 'select',
-	    'multiple'=> false,
-	    'options' => $ulist,
-	  'selected' => AuthComponent::user("id")//['userselected']
-	,'id'=>'user_id'));
+		echo $this->Form->input('user_id', array(
+			    'type' => 'select',
+			    'multiple'=> false,
+			    'options' => $ulist,
+			  'selected' => AuthComponent::user("id")//['userselected']
+			,'id'=>'user_id'));
 		echo $this->Form->hidden("target",array("value" =>$result["follow"]));
 		echo $this->Form->input('Article',array("type" =>"text",'class'=> 'reply_article_name'));
 	?>

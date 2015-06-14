@@ -332,7 +332,7 @@ class BasicComponent extends Component {
 	 * @param ind $id
 	 * @return $that->returntribasic
 	 */
-	public function tribasicfiderbyid(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$id) {
+	public function tribasicfiderbyid(&$that = null,$trikeyID = null,$modelSe,$Ltotarget,$id,$quantize = 0) {
 		$modelSe = new $modelSe();
 		$option = array(
 				'conditions'=> array(
@@ -346,7 +346,8 @@ class BasicComponent extends Component {
 		                    'alias' => 'Link',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
-					array("$id = Link.LFrom")
+					array("$id = Link.LFrom"),
+					array("Link.quantize_id" => $quantize),
 					)
 		                ),
 				array(
@@ -355,6 +356,7 @@ class BasicComponent extends Component {
 		                    'type' => 'INNER',
 		                    'conditions' => array(
 					array("Link.ID = taglink.LTo"),
+					array("taglink.quantize_id" => $quantize),
 		                    		($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
 					)
 		                ),
@@ -414,7 +416,7 @@ class BasicComponent extends Component {
 	 * @param ind $id
 	 * @return $that->returntribasic
 	 */
-	public function tribasicRefiderbyid(&$that = null,$trikeyID = null,$modelSe,$LFromtarget,$id) {
+	public function tribasicRefiderbyid(&$that = null,$trikeyID = null,$modelSe,$LFromtarget,$id,$quantize = 0) {
 
 		$modelSe = new $modelSe();
 		$option = array(
@@ -429,7 +431,8 @@ class BasicComponent extends Component {
 								'alias' => 'Link',
 								'type' => 'INNER',
 								'conditions' => array(
-										array("Link.LTo" => $id)
+										array("Link.LTo" => $id),
+										array("Link.quantize_id" => $quantize),
 								)
 						),
 						array(
@@ -438,6 +441,7 @@ class BasicComponent extends Component {
 								'type' => 'INNER',
 								'conditions' => array(
 										array("Link.ID = taglink.LTo"),
+										array("taglink.quantize_id" => $quantize),
 										($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
 								)
 						),
@@ -603,7 +607,7 @@ class BasicComponent extends Component {
 	}
 
 
-	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe = null,$Ltotarget = null ,$id) {
+	public function tribasicfiderbyidTF(&$that = null,$trikeyID = null,$modelSe = null,$Ltotarget = null ,$id,$quantize = 0) {
 		// 		$that->loadModel($modelSe);
 		$modelSe = new $modelSe();
 		$option = array(
@@ -618,7 +622,8 @@ class BasicComponent extends Component {
 								'alias' => 'Link',
 								'type' => 'INNER',
 								'conditions' => array(
-										array("$id = Link.LTo")
+										array("$id = Link.LTo"),
+										array("Link.quantize_id" => $quantize),
 								)
 						),
 						array(
@@ -627,6 +632,7 @@ class BasicComponent extends Component {
 								'type' => 'INNER',
 								'conditions' => array(
 										array("Link.ID = taglink.LTo"),
+										array("taglink.quantize_id" => $quantize),
 										($trikeyID == null)?null:array($trikeyID." = taglink.LFrom")//$trikeyID
 								)
 						),

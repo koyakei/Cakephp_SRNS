@@ -69,7 +69,8 @@ class AppController extends Controller {
 	 *
 	 */
 
-	public function view2($id,$lower_id = null//テーブル2つ表示の時これ使う？
+	public function view2($id,
+		$quantize = 0//テーブル2つ表示の時これ使う？
 	) {
 		$that = $this;
 		if ($id ==null) {
@@ -89,7 +90,7 @@ class AppController extends Controller {
 
 		$option = array('key' => Configure::read("tagID.reply"));
 		$index =null;
-		$root = $this->Common->trifinderbyid($that,$id,$option,$index);
+		$root = $this->Common->trifinderbyid($that,$id,$quantize,$option);
 
 		$tableresults = $this->Common->nestfinderbyid(
 		$that, $root, $sorting_tags = null, $id, $root);

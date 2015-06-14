@@ -1,7 +1,7 @@
 <!-- $model $key $currentUserID $ulist -->
 
 <?php
-$quantize = $this->params['pass'][0];
+$quantize = $this->params['pass'][1];
 echo $this->Form->create(null);
 		echo $this->Form->input('user_id', array(
 			    'type' => 'select',
@@ -14,7 +14,7 @@ echo $this->Form->create(null);
 	?>
 
 <?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Article','onClick' =>
-						"addArticle(this,'".$this->params['controller']."','".$this->params['action']."','".$this->params['pass'][0].",'".$quantize."'')")); ?>
+						"addArticle(this,'".$this->params['controller']."','".$this->params['action']."','".$this->params['pass'][0]."','".$quantize."')")); ?>
 <?php echo $this->Form->end();?>
 
 <!-- tag追加 -->
@@ -39,8 +39,7 @@ echo $this->Form->create(null);
 			);
 echo $this->Form->hidden('tag',array('value' => '','class' => 'tag_id','id' => 'tag'));
 ?>
-
 				<?php echo $this->Form->input('add tag', array('type'=> 'button', 'value' =>'Add Tag','onClick' =>
-						"add_reply_tag(this,'".$this->params['controller']."','".$this->params['action']."','".$this->params['pass'][0].",'".$quantize."')")); ?>
+						"add_reply_tag(this,'".$this->params['controller']."','".$this->params['action']."','".$this->params['pass'][0]."','".$quantize."')")); ?>
 				<?php echo $this->Form->input('trikey[]', array('type'=> 'hidden','class' => 'trikey', 'value' =>$trikey)); ?>
 		</fieldset>

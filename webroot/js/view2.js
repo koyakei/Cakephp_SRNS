@@ -198,10 +198,19 @@ function open_nest(trikey){
 
 }
 /**
- * 今現在開いているトライキー
- */
-function trikey_printer(){
-
+*
+* @param data
+* @returns
+*/
+function table_perser(data){
+	$.ajax({
+       type: "POST",
+       url: "cakephp/tags/table_perser.php",
+       data:data,
+       success: function(data){
+       	return data;
+       }
+   });
 }
 /**
  *
@@ -239,27 +248,12 @@ function addArticle(obj,ctrl,action,id,quantize_id) {
 
 	        },
 	        error:function(){
-	        	return false;
 	        }
 	    });
 	}
 
 
-/**
- *
- * @param data
- * @returns
- */
-function table_perser(data){
-	$.ajax({
-        type: "POST",
-        url: "cakephp/tags/table_perser.php",
-        data:data,
-        success: function(data){
-        	return data;
-        }
-    });
-}
+
 /**
  *タグ追加
  * @param obj

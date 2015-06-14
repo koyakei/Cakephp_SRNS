@@ -92,7 +92,7 @@ public function beforeFilter() {
 		 $inserted_id = $this->Common->singleAdd($this->request->query('name'),
 		 		$this->Auth->user("id"));
 		 $this->Common->nestedAdd($this,$this->request->query('root_ids'),$this->request->query('trikey_ids'),
-		$this->request->query('parent_ids'),$inserted_id);
+		$this->request->query('parent_ids'),$inserted_id,$this->request->query('quantize_id'));
 		 $Article = new Article();
 		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
 		 $this->Follow->tickSStream($target_ids,array(
@@ -102,9 +102,6 @@ public function beforeFilter() {
 		 		'id' => $this->request->query('id'),
 		 ));
 	}
-	/**
-	 * TODO:nest表示ができたから、それに従って追加する方法を考える。
-	 **/
 
 	/**
 	 * delbuttoun

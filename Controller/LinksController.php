@@ -38,7 +38,6 @@ class LinksController extends AppController {
 			$options['key'] = Configure::read("tagID.reply");
 		}
 		$root_ids = $this->request->query['root_ids'];
-
 		$to = $this->request->query['to'];
 		$user_id = $this->request->query['user_id'];
 		if (empty($user_id)){
@@ -48,8 +47,8 @@ class LinksController extends AppController {
 		if ($user_id = null){
 			$user_id = $this->Auth->user('id');
 		}
-// 		$this->Common->nestedAdd($this,$root_ids,$options['key'],
-// 				$parent_ids,$to);
+		$this->Common->nestedAdd($this,$root_ids,$options['key'],
+				$parent_ids,$to,$this->request->query['quantize_id']);
 		$Tag = new Tag();
 		$this->Follow->tickSStream($parent_ids,array(
 		 		"name" => substr($Tag->find('first',array('conditions' => array("Tag.ID" => $to)))["Tag"]["name"], 0,140),

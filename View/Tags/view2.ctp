@@ -161,6 +161,33 @@ TODO:入れ子もそうだが、　動的表現も　考えよう
 
 **/ ?>
 <br>
+<!-- quantize -->
+<script type="text/javascript">
+    function updateTextInput(val) {
+      document.getElementById('qNumber').value=val;
+    }
+  </script>
+<?php
+	//TODO: 量子化切り替えプルダウン
+	//ここの切り替えによってaddした時のquantize を決定する。
+	//とりあえず、tagにquantize を設定しない
+	echo $this->Form->input('quzntize', array(
+			'type' => 'range',
+			'multiple'=> false,
+			'options' => $quantize,
+			'selected' => 0,//['userselected']
+			'max' => 5,
+			'class'=>'quantizeSelector',
+			'onchange' =>"updateTextInput(this.value)",
+			"value" => "0",
+	));
+	echo $this->Form->input('number', array(
+			'type' => 'input',
+			'onchange' =>"updateTextInput(this.value)",
+			'id' => "qNumber",
+			"value" => "0",
+	));
+?>
 <div class="root">
     	<?php
     	$root_data["id"] = $this->params["pass"][0];
@@ -189,11 +216,9 @@ TODO:入れ子もそうだが、　動的表現も　考えよう
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">
 		 <?php
-						  echo $this->element('accordion/nestedinput', array("model" => "Article",
-						  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))
-						  ?>
-
-
+		  echo $this->element('accordion/nestedinput', array("model" => "Article",
+		  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))
+		  ?>
 	</div>
 	</div>
 </body>

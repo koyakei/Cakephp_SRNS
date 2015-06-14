@@ -154,8 +154,8 @@ class CommonComponent extends Component {
 	 * @param unknown $before
 	 * @param unknown $after
 	 */
-	public function nestedAdd(&$that= null,$root_ids = null,$trikey_ids = null,
-			$parent_ids = null,$child_ids =null){
+	public function nestedAdd(&$that,$root_ids,$trikey_ids,
+			$parent_ids,$child_ids,$quantize = 0){
 		is_null($that)?$that = $this:null;
 
 		is_null($parent_ids)?$parent_ids = $that->request->data("parent_ids"): null;
@@ -167,11 +167,11 @@ class CommonComponent extends Component {
 		//trikeyと　from トシテの使われ方で権限別にする？
 		//別にしないで同じように管理しよう。
 		foreach ($parent_ids as $parent_id){
-			self::requestInsertDemands($that,$parent_id,$child_ids,$trikey_ids,$that->Auth->user("id"));
+			self::requestInsertDemands($that,$parent_id,$child_ids,$trikey_ids,$that->Auth->user("id"),$quantize);
 		}
 		return true;
 	}
-	public function requestInsertDemands(&$that,$from_ids,$to_ids,$trikey_ids,$user_ids){
+	public function requestInsertDemands(&$that,$from_ids,$to_ids,$trikey_ids,$user_ids,$quantize){
 		$from_ids = (array)$from_ids;
 		$to_ids = (array)$to_ids;
 		$trikey_ids = (array)$trikey_ids;
@@ -179,14 +179,14 @@ class CommonComponent extends Component {
 		foreach ($from_ids as $from_id){
 			foreach ($to_ids as $to_id){
 					foreach ($user_ids as $user_id){
-						self::trilinkAdd($that,$from_id,$to_id,$trikey_ids,$user_id);
+						self::trilinkAdd($that,$from_id,$to_id,$trikey_ids,$user_id,$quantize);
 					}
 
 			}
 		}
 		return true;
 	}
-	public function trilinkAdd($that,$from_id,$to_id,$trikey_id,$user_id){
+	public function trilinkAdd($that,$from_id,$to_id,$trikey_id,$user_id,$quantize){
 		if (empty($trikey_id)){
 			$trikey_id = Configure::read('tagID.search');
 		};
@@ -199,7 +199,7 @@ class CommonComponent extends Component {
 			$that->Link->unbindModel(array('hasOne'=>array('LO')), false);
 			$options['authCheck'] = false;
 			if($that->Basic->tribasicfixverifybyid($trikey_id,$to_id,$options)){
-				if($that->Basic->trilinkAdd($that,$from_id,$to_id,$trikey_id)){
+				if($that->Basic->trilinkAdd($that,$from_id,$to_id,$trikey_id,$quantize)){
 					$that->Session->setFlash(__('成功'));
 					return true;
 				}

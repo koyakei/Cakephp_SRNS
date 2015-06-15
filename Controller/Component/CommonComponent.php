@@ -424,8 +424,14 @@ class CommonComponent extends Component {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
-
 		$children = array();
+		foreach (self::models as $p_model){
+			$p_model_parent = $p_model."parentres";
+			foreach ($parents[$p_model_parent] as $parent_idx =>$parent){
+				$parents[$p_model_parent][$parent_idx]['trikeys']
+				= self::allTrikeyFinderWithLinkId($parent["Link"]["ID"]);
+			}
+		}
 		foreach (self::models as $p_model){
 			$p_model_parent = $p_model."parentres";
 			foreach ($parents[$p_model_parent] as $parent_idx =>$parent){
@@ -436,12 +442,7 @@ class CommonComponent extends Component {
 							if ($parent[ucfirst($p_model)]["ID"] != null){
 								$is_child = false;
 								$this_nodes  = self::trifinderbyid($that,$parent[ucfirst($p_model)]["ID"],$quantize,$options);
-
 // 								$this_nodes = self::nestfinderbyid($that, $roots, $sorting_tags, $id, $parents);
-
-								$parents[$p_model_parent][$parent_idx]['trikeys']
-								= self::allTrikeyFinderWithLinkId($parent["Link"]["ID"]);
-
 								//indexHash generator
 								foreach (self::allTrikeyFinder($parent["Link"]["ID"]) as $key =>$index){
 									if ($indexHashes[$key]== null){
@@ -462,6 +463,7 @@ class CommonComponent extends Component {
 													$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
 													//削除フェーズ
 														unset($parents[$ip_model_parent][$iparent_idx]);
+
 														array_merge($parents[$p_model_parent]);
 														//TODO:配列を詰めるところを削除したせいで　結果に空欄ができていることに気づかなかった
 														//follow キーを追加すると空と認識されないから詰まない　ステップ実行とかで　早くそれを認識する方法を考える
@@ -478,19 +480,32 @@ class CommonComponent extends Component {
 															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
 															$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
 															$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
+															$parents[$p_model_parent][$parent_idx]['leaf']["taghash"] = array();
 															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]['follow']= $parents[$p_model_parent][$parent_idx]["follow"]; // Link LFrom をブッシュ
 														}
 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
+
 											}
 										}
 									}
+
 								}
 							}
+
 						}
 					}
 				}
+				foreach (self::models as $taghash_model){
+					$taghash_model_parent = $taghash_model."parentres";
+					list($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],$parents[$p_model_parent][$parent_idx]['leaf']["taghash"]) =
+					self::getSearchRelation($that,$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent] ,
+							$parents[$p_model_parent][$parent_idx]['leaf']["taghash"], (string)ucfirst($taghash_model));
+
+				}
 			}
+
+
 			list($parents[$p_model_parent],$taghash) =
 			self::getSearchRelation($that,$parents[$p_model_parent] , $taghash, (string)ucfirst($p_model));
 		}

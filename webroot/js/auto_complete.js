@@ -107,9 +107,10 @@ $(document).ready(function auto_complete(){
         	$current_node.find('#tag_id').html($(this).attr('id'));
         	$current_node.find('input[update='+tag+']').focus();
         	if($(this).closest(".root").length != 0){
-	        	if(location.pathname.lastIndexOf("search2")){
+	        	if(location.pathname.lastIndexOf("search2") > 0){
 	        		all_search_finder();
-	        	}else{
+	        	}
+	        	if( location.pathname.lastIndexOf("view2") > 0){
 	        		all_reply_finder(id);
 	        	}
         	}

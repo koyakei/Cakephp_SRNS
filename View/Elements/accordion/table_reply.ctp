@@ -41,18 +41,18 @@ def@A def@b の二つが紐付いていたときにどうするの？
 	-->
 	<table class="myTable" cellpadding="0" cellspacing="0" style ="background: white">
         <?php echo $this->element('accordion/tablehead',
-         Array('taghashes'=>$tableresults["taghash"])); ?>
+         Array('taghashes'=>$taghashes)); ?>
 	    <tbody>
 	    	<?php echo $this->element('accordion/rsorttablebody',
 	    	 Array('results' => $tableresults['articleparentres'],
-	    	 'taghashes'=>$tableresults["taghash"],
+	    	 'taghashes'=>$taghashes,
 	    	 'firstModel' => 'Article',
 	    	 'currentUserID' => $currentUserID,
 	    	'srns_code_member'=>$tableresults['srns_code_member']
 	    	,$sorting_tags)); ?>
 			<?php echo $this->element('accordion/rsorttablebody',
 	    	 Array('results' => $tableresults['tagparentres'],
-	    	 'taghashes'=>$tableresults["taghash"],
+	    	 'taghashes'=>$taghashes,
 	    	 'firstModel' => 'Tag',
 	    	 'currentUserID' => $currentUserID,
 	    	'srns_code_member'=>$tableresults['srns_code_member'],

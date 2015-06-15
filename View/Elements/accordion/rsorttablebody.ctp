@@ -42,6 +42,7 @@
 							</div>
 							<div id='HSfield' style='display: none;'>
 							<!-- このエレメントを再帰的に呼び出す-->
+
 							<?php
 						    	echo $this->element('accordion/table_reply',
 						    			array('tableresults' => $leaf["nodes"],

@@ -245,7 +245,7 @@ function addArticle(obj,ctrl,action,id,quantize_id) {
 			},
 	      success: function(obj){
 //	        	$this.find("td .id").append(obj);
-//	    	  location.reload();
+	    	  location.reload();
 
 	        },
 	        error:function(){

@@ -496,12 +496,14 @@ class CommonComponent extends Component {
 						}
 					}
 				}
-				foreach (self::models as $taghash_model){
-					$taghash_model_parent = $taghash_model."parentres";
-					list($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],$parents[$p_model_parent][$parent_idx]['leaf']["taghash"]) =
-					self::getSearchRelation($that,$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent] ,
-							$parents[$p_model_parent][$parent_idx]['leaf']["taghash"], (string)ucfirst($taghash_model));
+				if(!empty($parents[$p_model_parent][$parent_idx]['leaf'])){
+					foreach (self::models as $taghash_model){
+						$taghash_model_parent = $taghash_model."parentres";
+						list($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],$parents[$p_model_parent][$parent_idx]['leaf']["taghash"]) =
+						self::getSearchRelation($that,$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent] ,
+								$parents[$p_model_parent][$parent_idx]['leaf']["taghash"], (string)ucfirst($taghash_model));
 
+					}
 				}
 			}
 

@@ -424,6 +424,7 @@ class CommonComponent extends Component {
 		if ($option['key'] == null) {
 			$option['key'] = Configure::read('tagID.reply');
 		}
+
 		$children = array();
 		foreach (self::models as $p_model){
 			$p_model_parent = $p_model."parentres";
@@ -433,9 +434,8 @@ class CommonComponent extends Component {
 					$r_model_parent = $r_model. "parentres";
 					foreach ($roots[$r_model_parent] as $root_idx =>$root){
 							if ($parent[ucfirst($p_model)]["ID"] != null){
-
 								$is_child = false;
-								$this_nodes  = self::trifinderbyid($that,$parent[ucfirst($p_model)]["ID"],$options);
+								$this_nodes  = self::trifinderbyid($that,$parent[ucfirst($p_model)]["ID"],$quantize,$options);
 
 // 								$this_nodes = self::nestfinderbyid($that, $roots, $sorting_tags, $id, $parents);
 
@@ -444,19 +444,20 @@ class CommonComponent extends Component {
 
 								//indexHash generator
 								foreach (self::allTrikeyFinder($parent["Link"]["ID"]) as $key =>$index){
-
 									if ($indexHashes[$key]== null){
 										$indexHashes[$key] = $index;
 									}
 								}
+
 								foreach (self::models as $model){
 									$model_parent = $model."parentres";
 									foreach ($this_nodes[$model_parent] as $this_node){
-
 										foreach (self::models as $ip_model){
 											$ip_model_parent = $ip_model."parentres";
 											foreach ($parents[$ip_model_parent] as $iparent_idx =>$iparent){
+													if ($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] ){
 
+													}
 												if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
 													$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
 													//削除フェーズ

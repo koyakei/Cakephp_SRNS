@@ -714,6 +714,7 @@ class BasicComponent extends Component {
 			);
 			$that->Link->create();
 			if($that->Link->save($that->request->data)){
+				debug($FromID);
 				$link_id = $that->Link->getLastInsertId();
 				foreach ($keyID as $key){
 					$that->request->data['Link'] = array(

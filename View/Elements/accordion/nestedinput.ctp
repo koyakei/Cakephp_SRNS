@@ -2,6 +2,9 @@
 
 <?php
 $quantize = $this->params['pass'][1];
+if (is_null($quantize)){
+	$quantize = 0;
+}
 echo $this->Form->create(null);
 		echo $this->Form->input('user_id', array(
 			    'type' => 'select',

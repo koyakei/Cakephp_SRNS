@@ -68,7 +68,10 @@ class AppController extends Controller {
 	 *現在の$id からすべてリプライする　replt@who 現在のtrikey 条件を　reply demand $ trikeys (array)に渡す
 	 *
 	 */
-
+   function test(){
+   	$this_nodes  = $this->Common->trifinderbyid($that,101276);
+   	debug($this_nodes);
+   }
 	public function view2($id,
 		$quantize = 0//テーブル2つ表示の時これ使う？
 	) {

@@ -227,13 +227,14 @@ function addArticle(obj,ctrl,action,id,quantize_id) {
 		 trikeys.push($(".trikeys #trikeys").val());
 	 }
 	 var $this = $(this);
+	 var name  = obj.parent().find(".reply_article_name").val()
 	 //代入
 	 //traverse して代入
 	    $.ajax({
 	        type: "GET",
 	        url: location.origin +"/cakephp/tags/formAdd",
 	        data:{
-	        	name: obj.parent().find(".text").find("input").val(),
+	        	name: name,
 				root_ids: root_ids,
 				trikey_ids: trikeys,
 				parent_ids :parent_ids,

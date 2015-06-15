@@ -1,3 +1,10 @@
+/**
+ * element follow button
+ * @param obj this
+ * @param target_id string
+ * @param user_id  string
+ * @var follow bool
+ */
 function follow(obj,target_id,user_id){
 	$obj = $(obj);
 	var follow = ($obj.val() == "follow");

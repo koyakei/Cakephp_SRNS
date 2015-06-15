@@ -35,8 +35,17 @@
 					<?php if(!is_null($leaf)){ echo "</b>"; } ?>
 
 					</div>
+
 					<!--  タグ付けされているとして　タグのnameとentityのnameが部分一致するならリンクを張る機能が必要か？ -->
-					<?php if(!is_null($leaf)): ?>
+					<?php
+					$follow["id"] = $result[$firstModel]['ID'];
+					$follow["follow"] = $result["follow"];
+					echo $this->element('follow_button',
+							array('data' => $follow
+							)
+					);
+
+					if(!is_null($leaf)): ?>
 						<div onClick='toggleShow(this)' >
 								Reply
 							</div>
@@ -99,6 +108,7 @@
 							echo $this->Form->hidden("user_id",array("value" => $currentUserID));
 							echo $this->Form->hidden("target",array("value" =>$result["follow"]));
 							echo $this->Form->submit("trikey");
+
 						?>
 						<?php echo $this->Html->link(__('View'), array('controller'=> $firstModel."s",'action' => 'view', $result[$firstModel]['ID'])); ?><br>
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?><br>

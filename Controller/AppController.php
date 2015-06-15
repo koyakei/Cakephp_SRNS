@@ -100,7 +100,6 @@ class AppController extends Controller {
 		$root_data["follow"] = $this->Follow->followChecker($id,$this->Auth->user("id"));
 		$this->set('root_data',$root_data);
 		$this->set('headresults',$headresults);
-		debug($tableresults);
 		$this->set("tableresults",$tableresults);
 		$this->set('base_trikey' ,$base_trikey);
 		$this->set('currentUserID', $this->Auth->user('id'));

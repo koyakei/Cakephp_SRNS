@@ -69,8 +69,9 @@ public function beforeFilter() {
 		$child = array("target"=> $this->request->query("target_id"),
 				"user_id" => $this->request->query("user_id"));
 		$data["Follow"] = $child;
-		debug($data);
-		if ($this->request->query("follow")){
+
+		debug($this->request->query("follow") == "true");
+		if ($this->request->query("follow") == "true"){
 			$Follow->create();
 			if($Follow->save($data,false)){
 				$this->Session->setFlash(__('followed.'));
@@ -78,6 +79,8 @@ public function beforeFilter() {
 				debug("follow miss");
 			}
 		}else {
+
+			debug($this->request->query("follow"));
 			if($Follow->delete($Follow->find("first",array("fields" =>"Follow.id" ,"conditions" =>$child))["Follow"]["id"])){
 				$this->Session->setFlash(__('Unfollowed.'));
 			}else{

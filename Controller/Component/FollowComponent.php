@@ -86,9 +86,12 @@ class FollowComponent extends Component {
 
 	 public function followChecker($id,$user_id){
 	 	$Follow = new Follow();
-	 	$res = $Follow->find("all", array("conditions" =>
-	 			array("user_id" => $user_id,"target" => $id)));
-	 	return $res;
+	 	if(empty($Follow->find("all", array("conditions" =>
+	 			array("user_id" => $user_id,"target" => $id))))){
+	 		return false;
+	 	}else {
+	 		return true;
+	 	}
 	 }
 	/**
 	 *

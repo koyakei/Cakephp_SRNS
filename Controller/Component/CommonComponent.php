@@ -6,9 +6,11 @@ App::uses('Taglink', 'Model');
 App::uses('Article', 'Model');
 App::uses('Date', 'Model');
 App::uses('BasicComponent', 'Controller/Component');
+App::uses('FollowComponent', 'Controller/Component');
+App::uses('AuthComponent', 'Controller/Component');
 Configure::load("static");
 class CommonComponent extends Component {
-    public $components = array('Basic',"Demand");
+    public $components = array('Basic',"Demand"."Follow","Auth");
     public function getURL(&$that = null,$id = null){
 		$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.URL'),'Article',"Article.ID",$id);
 		return $that->returntribasic[0]['Article']['name'];
@@ -456,9 +458,7 @@ class CommonComponent extends Component {
 										foreach (self::models as $ip_model){
 											$ip_model_parent = $ip_model."parentres";
 											foreach ($parents[$ip_model_parent] as $iparent_idx =>$iparent){
-													if ($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] ){
 
-													}
 												if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
 													$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
 													//削除フェーズ
@@ -469,19 +469,20 @@ class CommonComponent extends Component {
 														//follow キーを追加すると空と認識されないから詰まない　ステップ実行とかで　早くそれを認識する方法を考える
 														//モジュール化して整理しないとまた同じ間違いをするのではないか？考えよう
 													//追加フェーズ
-														//follow
-														$roots[$p_model_parent][$parent_idx]["follow"] = array();
-														$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
+// 														//follow
+// 														$roots[$p_model_parent][$parent_idx]["follow"] = array();
+// 														$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
 														array_push($root["follow"],$this_node["Link"]["LFrom"]);
 														array_push($roots[$p_model_parent][$parent_idx]["follow"],$parent["Link"]["LFrom"]);
 														//leaf 追加
 														if (is_null($parents[$p_model_parent][$parent_idx]['leaf'])){
-															$parents[$p_model_parent][$parent_idx]['leaf'] = array();
-															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
+															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"] = array();
 															$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
 															$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
 															$parents[$p_model_parent][$parent_idx]['leaf']["taghash"] = array();
-															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]['follow']= $parents[$p_model_parent][$parent_idx]["follow"]; // Link LFrom をブッシュ
+															if (is_null($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent])){
+																$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
+															}
 														}
 														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
 																,$root);
@@ -624,6 +625,7 @@ public function allTrikeyFinder($link_id){
 	 * @param unknown $targetModel
 	 * @param array $option = array("ToID","trikeys")
 	 * @return multitype:array($tagparent,$taghash)
+	 * follow check も入れておくか
 	 */
 
 	public function getSearchRelation(&$that,$targetParent,&$taghash,$targetModel,$option){
@@ -631,6 +633,7 @@ public function allTrikeyFinder($link_id){
 			return array($targetParent,$taghash);
 		}
 		foreach ($targetParent as $i => $result){
+			$targetParent[$i]["follow"] = $that->Follow->followChecker($result[$targetModel]["ID"],$that->Auth->user("id"));
 			//個別のtrに対して関連付けられているタグを呼ぶ
 			if(!is_null($result[$targetModel]['ID'])){
 			$taghashgen = $this->Basic->tribasicfiderbyid(

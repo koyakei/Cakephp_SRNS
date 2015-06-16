@@ -108,6 +108,7 @@ class AppController extends Controller {
 		$this->set('taghash',$tableresults["taghash"]);
 		$this->set('id',$id);
 	}
+
 	public function nestLi($id,$quantize = 0 ,$id2){
 
 	}

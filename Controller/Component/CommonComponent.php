@@ -460,39 +460,39 @@ class CommonComponent extends Component {
 											foreach ($parents[$ip_model_parent] as $iparent_idx =>$iparent){
 
 												if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
-													$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
+														$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
 													//削除フェーズ
-														unset($parents[$ip_model_parent][$iparent_idx]);
+													unset($parents[$ip_model_parent][$iparent_idx]);
 
-														array_merge($parents[$p_model_parent]);
-														//TODO:配列を詰めるところを削除したせいで　結果に空欄ができていることに気づかなかった
-														//follow キーを追加すると空と認識されないから詰まない　ステップ実行とかで　早くそれを認識する方法を考える
-														//モジュール化して整理しないとまた同じ間違いをするのではないか？考えよう
+													array_merge($parents[$p_model_parent]);
+													//TODO:配列を詰めるところを削除したせいで　結果に空欄ができていることに気づかなかった
+													//follow キーを追加すると空と認識されないから詰まない　ステップ実行とかで　早くそれを認識する方法を考える
+													//モジュール化して整理しないとまた同じ間違いをするのではないか？考えよう
 													//追加フェーズ
-// 														//follow
-// 														$roots[$p_model_parent][$parent_idx]["follow"] = array();
-// 														$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
-														array_push($root["follow"],$this_node["Link"]["LFrom"]);
-														array_push($roots[$p_model_parent][$parent_idx]["follow"],$parent["Link"]["LFrom"]);
-														//leaf 追加
-														if (is_null($parents[$p_model_parent][$parent_idx]['leaf'])){
-															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"] = array();
-															$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
-															$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
-															$parents[$p_model_parent][$parent_idx]['leaf']["taghash"] = array();
-															if (is_null($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent])){
-																$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
-															}
+													// 														//follow
+													// 														$roots[$p_model_parent][$parent_idx]["follow"] = array();
+													// 														$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
+													array_push($root["follow"],$this_node["Link"]["LFrom"]);
+													array_push($roots[$p_model_parent][$parent_idx]["follow"],$parent["Link"]["LFrom"]);
+													//leaf 追加
+													if (is_null($parents[$p_model_parent][$parent_idx]['leaf'])){
+														$parents[$p_model_parent][$parent_idx]['leaf']["nodes"] = array();
+														$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
+														$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
+														$parents[$p_model_parent][$parent_idx]['leaf']["taghash"] = array();
+														if (is_null($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent])){
+															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
 														}
-														array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
-																,$root);
+													}
+													array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
+															,$root);
 
+												}
 											}
 										}
-									}
 
+									}
 								}
-							}
 
 						}
 					}
@@ -516,7 +516,20 @@ class CommonComponent extends Component {
 		$parents["indexHashes"] =$indexHashes;
 		return $parents;
 	}
+	/**
+	 * 再起するんだけれども各段階の　$model $model_parent $re は各海藻から識別可能であること
+	 * @param unknown $res
+	 * @return Generator
+	 */
+	public function ATswitcher($res,callable $func){
+		foreach (self::models as  $model){
+			$model_parent = $model. "parentres";
+			foreach ($res[$model_parent] as $re){
+				$func;
+			}
 
+		}
+	}
 	private  function GETContentsIndex($res){
 // 		[$p_model_parent][$parent_idx]['trikeys']
 		$all_array = Hash::get($res, "text=/articleparenters|tagparenters/");
@@ -548,20 +561,7 @@ public function allTrikeyFinder($link_id){
 		return $Taglink->find("list", array("conditions" =>
 				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
 	}
-	/**
-	 * 再起するんだけれども各段階の　$model $model_parent $re は各海藻から識別可能であること
-	 * @param unknown $res
-	 * @return Generator
-	 */
-	public function ATswitcher($res){
-		foreach (self::models as  $model){
-			$model_parent = $model. "parentres";
-			foreach ($res[$model_parent] as $re){
-				yield $re;
-			}
 
-		}
-	}
 	/**
 	 *
 	 * @param unknown $all array( array("res" => $res, "callback" => $func), .... )

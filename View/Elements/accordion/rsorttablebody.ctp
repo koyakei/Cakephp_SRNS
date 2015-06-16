@@ -89,6 +89,7 @@
 						Action
 						</div>
 						<div id='HSfield' style='display: none;'>
+
 						<?php
 							echo $this->Form->create("Link",array("action" => "add"));
 							echo $this->AutoCompleteNoHidden->input(

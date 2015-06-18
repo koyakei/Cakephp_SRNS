@@ -439,7 +439,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 		$this->Common->triAddbyid($this,
 				$this->request->data['Tag']['user_id'],$this->request->data['Tag']['tag'],$this->request->data['Tag']['LTo'],$options);
 		$this->Basic->social($this,$this->Auth->user('id'));
-// 		$this->redirect($this->referer());
+		$this->redirect($this->referer());
 	}
     /**
      * view method

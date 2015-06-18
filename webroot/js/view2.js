@@ -57,6 +57,7 @@ function demand(that){
 		dataType:"JSON",
 	});
 	location.reload();
+
 }
 
 /**

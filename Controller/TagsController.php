@@ -992,23 +992,23 @@ public function beforeFilter() {
 
         public function tagdel($id = NULL) {
 //         	debug($id);
-//         	debug($this->request->data());
+        	debug($this->request->data());
         	$this->Link = new Link();
         	//$options = array('conditions' => array('.'.$this->Aurh->primaryKey => $this->request->data['Taguser']['']));
 //         	$Link->find('all');
 
         	if ($this->Link->delete($this->request->data('Link.ID'))){
-        		if($this->Basic->taglimitcountup($this)){
+//         		if($this->Basic->taglimitcountup($this)){
         			$this->Session->setFlash(__('削除完了.'));
         			debug("sucsess");
-        		}else{
+//         		}else{
         			debug("auth fail");
-        		}
+//         		}
         	} else {
         		$this->Session->setFlash(__('削除失敗.'));
         		debug("fail");
         	}
-        	//$this->redirect($this->referer());
+        	$this->redirect($this->referer());
         }
 
         public function result($id = null) {

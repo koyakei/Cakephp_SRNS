@@ -196,6 +196,7 @@ TODO:入れ子もそうだが、　動的表現も　考えよう
     			array('data' => $root_data
     			)
     	);
+    	echo $this->Html->link(___('Mind Map'), array('controller' => 'tagusers','action' => 'mapt', $this->params["pass"][0]));
     	echo $this->element('accordion/table_reply',
     			array('tableresults' => $tableresults,
     					'taghashes'=>$tableresults["taghash"],

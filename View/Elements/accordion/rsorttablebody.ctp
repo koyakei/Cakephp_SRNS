@@ -14,19 +14,16 @@
 					<td class="id"<?php if($result[$firstModel]['srns_code_member']): ?>
 
 					 bgcolor=green <?php endif; ?> id ="<?php echo h($result[$firstModel]['ID']); ?>">
-					 <?php echo h($result[$firstModel]['ID']); ?>
+					 <?php //echo h($result[$firstModel]['ID']); ?>
 					 <?php echo $this->Form->create("Link",array("action" => "delete2"));?>
 					 <?php echo $this->Form->input('trikey_id', array(
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $result["trikeys"],
 	'id'=>'trikey_id'));
-					 echo $this->Form->end("Del"); ?>
-
-
-					</td></div>
+					 echo $this->Form->end("trikey del"); ?>
+					 </td></div>
 					<td>
-
 					<!-- $leaf -->
 					<div class="droppable">
 					<?php $leaf = $result["leaf"]; //leaf こうして　配列の何処かに隠しておくほかあるまい。　common component trifinder でそう渡すようにする　base trikey の仕様を考える。
@@ -50,7 +47,7 @@
 					<?php
 					endif; ?>
 					<?php if(!is_null($leaf)): ?>
-						<div onClick='toggleShow(this)' >
+							<div onClick='toggleShow(this)' >
 								Reply
 							</div>
 							<div id='HSfield' style='display: none;'>
@@ -93,9 +90,9 @@
 						Action
 						</div>
 						<div id='HSfield' style='display: none;'>
-											<?php if(!is_null($result["leaf"]["parallel"])): ?>
+											<?php if(false ==$result["leaf"]["parallel"]): ?>
 											parallel entity is exist
-					<?php echo $this->Html->link(___('Mind Map'), array('controller' => 'tagusers','action' => 'mapt', $result[$firstModel]['ID'])); ?>
+					<?php echo $this->Html->link(__('Mind Map'), array('controller' => 'tagusers','action' => 'mapt', $result[$firstModel]['ID'])); ?>
 
 					<?php
 					endif; ?>

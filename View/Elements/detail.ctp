@@ -1,3 +1,4 @@
+<dl>
 <?php $controller_name = lcfirst ($firstModel) ?>
 <?php if ($upperIdeas) {
 echo $this->element('upperIdea', Array('ulist' => $upperIdeas,'idre'=>$idre));
@@ -50,3 +51,4 @@ echo $this->element('extends', Array('ulist' => $extends));
 		<?php echo $this->element('detailSTag',array('SecondDems' =>  $SecondDems,'firstModel' => 'Tag')); ?>
 	<?php endif; ?>
 	<?php echo $this->element('map', array('id' => $id)); ?>
+	</dl>

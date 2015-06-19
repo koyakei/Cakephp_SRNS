@@ -498,13 +498,21 @@ class CommonComponent extends Component {
 					}
 				}
 				if(!empty($parents[$p_model_parent][$parent_idx]['leaf'])){
+					$from_id = $to_id = array();
 					foreach (self::models as $taghash_model){
 						$taghash_model_parent = $taghash_model."parentres";
 						list($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],$parents[$p_model_parent][$parent_idx]['leaf']["taghash"]) =
 						self::getSearchRelation($that,$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent] ,
 								$parents[$p_model_parent][$parent_idx]['leaf']["taghash"], (string)ucfirst($taghash_model));
-
+						array_merge($from_id,
+								Hash::format($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],
+										"{n}.Link.LFrom"));
+						array_merge($to_id,
+								Hash::format($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],
+										"{n}.Link.LTo"));
 					}
+					$parents[$p_model_parent][$parent_idx]['leaf']["parallel"] = array(); // 並列関係の判定
+					$parents[$p_model_parent][$parent_idx]['leaf']["parallel"] = !empty($this->Basic->parallelChecker($from_id,$to_id));
 				}
 			}
 
@@ -633,6 +641,7 @@ public function allTrikeyFinder($link_id){
 			return array($targetParent,$taghash);
 		}
 		foreach ($targetParent as $i => $result){
+			//TODO: parent を超えてfrom_id と　to_id を配列として取得するには？
 			$targetParent[$i]["follow"] = $that->Follow->followChecker($result[$targetModel]["ID"],$that->Auth->user("id"));
 			//個別のtrに対して関連付けられているタグを呼ぶ
 			if(!is_null($result[$targetModel]['ID'])){

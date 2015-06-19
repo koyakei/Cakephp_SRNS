@@ -143,6 +143,7 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 </fieldset></li>
 </ul>
 </div>
+<?php echo $this->element('detail',array('detail' =>  $headresults,'firstModel' => $firstModel,'SecondDems' =>  $SecondDems)); ?>
 <div class="switch">
     <input type="radio" name="s2" id="on" value="1" checked="">
     <label for="on" class="switch-on"><i class="fa fa-user fa-lg"></i></label>
@@ -160,8 +161,41 @@ TODO:入れ子もそうだが、　動的表現も　考えよう
 テーブル同士の結びつきで正確に描写する欲求がそこまで無いのでは？
 
 **/ ?>
+<br>
+<!-- quantize -->
+<script type="text/javascript">
+    function updateTextInput(val) {
+      document.getElementById('qNumber').value=val;
+    }
+  </script>
+<?php
+	//TODO: 量子化切り替えプルダウン
+	//ここの切り替えによってaddした時のquantize を決定する。
+	//とりあえず、tagにquantize を設定しない
+	echo $this->Form->input('quzntize', array(
+			'type' => 'range',
+			'multiple'=> false,
+			'options' => $quantize,
+			'selected' => 0,//['userselected']
+			'max' => 5,
+			'class'=>'quantizeSelector',
+			'onchange' =>"updateTextInput(this.value)",
+			"value" => "0",
+	));
+	echo $this->Form->input('number', array(
+			'type' => 'input',
+			'onchange' =>"updateTextInput(this.value)",
+			'id' => "qNumber",
+			"value" => "0",
+	));
+?>
 <div class="root">
     	<?php
+    	$root_data["id"] = $this->params["pass"][0];
+    	echo $this->element('follow_button',
+    			array('data' => $root_data
+    			)
+    	);
     	echo $this->element('accordion/table_reply',
     			array('tableresults' => $tableresults,
     					'taghashes'=>$tableresults["taghash"],
@@ -183,11 +217,9 @@ TODO:入れ子もそうだが、　動的表現も　考えよう
 <div id='HSfield' style='display: none;'>
 	<div id="inputfield">
 		 <?php
-						  echo $this->element('accordion/nestedinput', array("model" => "Article",
-						  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))
-						  ?>
-
-
+		  echo $this->element('accordion/nestedinput', array("model" => "Article",
+		  		 "currentUserID" => $currentUserID ,"ulist" =>$ulist,"parentID" => $result[$firstModel]['ID']))
+		  ?>
 	</div>
 	</div>
 </body>

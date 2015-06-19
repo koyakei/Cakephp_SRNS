@@ -11,6 +11,15 @@ App::uses('ConnectionManager', 'Model');
 class BasicComponent extends Component {
 	public $components = array('Auth');
 
+	public function parallenChecker($from_id , $to_id){
+		$Link = new Link();
+		$Link->find("first" ,array(
+				"conditions"=> array(
+
+				)
+		));
+		return $res;
+	}
 	public function social(&$that,$userID){
 		$data['Social']['vaction'] = $that->action;
 		$data['Social']['vplugin'] = $that->plugin;

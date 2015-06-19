@@ -84,6 +84,7 @@ class AppController extends Controller {
 		if ($base_trikey == null) {
 			$base_trikey = Configure::read("tagID.reply");
 		}
+		$headresults = $this->headview($id);
 		$all_node = null;//全部の情報
 		$this->loadModel("User");
 		$this->loadModel("Trikey_list");
@@ -98,15 +99,18 @@ class AppController extends Controller {
 		$tableresults = $this->Common->nestfinderbyid(
 		$that, $root, $sorting_tags = null, $id, $root);
 		$root_data["follow"] = $this->Follow->followChecker($id,$this->Auth->user("id"));
+		$this->set('SecondDems',$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.search'),"Tag",$id,"Tag.ID"));
 		$this->set('root_data',$root_data);
 		$this->set('headresults',$headresults);
 		$this->set("tableresults",$tableresults);
 		$this->set('base_trikey' ,$base_trikey);
+		$this->pageTitle = $headresults[$this->modelClass]['name'];
 		$this->set('currentUserID', $this->Auth->user('id'));
 		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		$this->set('sorting_tags',$sorting_tags);
 		$this->set('taghash',$tableresults["taghash"]);
 		$this->set('id',$id);
+		$this->set('firstModel',$this->modelClass);
 	}
 
 	public function nestLi($id,$quantize = 0 ,$id2){

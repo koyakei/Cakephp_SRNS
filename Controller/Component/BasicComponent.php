@@ -11,14 +11,14 @@ App::uses('ConnectionManager', 'Model');
 class BasicComponent extends Component {
 	public $components = array('Auth');
 
-	public function parallenChecker($from_id , $to_id){
+	public function parallelChecker($from_id , $to_id){
 		$Link = new Link();
-		$Link->find("first" ,array(
+		return $Link->find("first" ,array(
 				"conditions"=> array(
-
+					"Link.LFrom" => $from_id,
+					"Link.LTo" => $to_id,
 				)
 		));
-		return $res;
 	}
 	public function social(&$that,$userID){
 		$data['Social']['vaction'] = $that->action;

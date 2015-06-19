@@ -435,6 +435,7 @@ class CommonComponent extends Component {
 			}
 		}
 		foreach (self::models as $p_model){
+			$from_id = $to_id = array();
 			$p_model_parent = $p_model."parentres";
 			foreach ($parents[$p_model_parent] as $parent_idx =>$parent){
 
@@ -493,7 +494,6 @@ class CommonComponent extends Component {
 
 									}
 								}
-
 						}
 					}
 				}
@@ -514,8 +514,16 @@ class CommonComponent extends Component {
 					$parents[$p_model_parent][$parent_idx]['leaf']["parallel"] = array(); // 並列関係の判定
 					$parents[$p_model_parent][$parent_idx]['leaf']["parallel"] = !empty($this->Basic->parallelChecker($from_id,$to_id));
 				}
-			}
 
+				array_merge($from_id,
+						Hash::extract($parents[$p_model_parent],
+								"{n}.Link.LFrom"));
+				array_merge($to_id,
+						Hash::extract($parents[$p_model_parent],
+								"{n}.Link.LTo"));
+			}
+			$parents["parallel"] = array(); // 並列関係の判定
+			$parents["parallel"] = !empty($this->Basic->parallelChecker($from_id,$to_id));
 
 			list($parents[$p_model_parent],$taghash) =
 			self::getSearchRelation($that,$parents[$p_model_parent] , $taghash, (string)ucfirst($p_model));

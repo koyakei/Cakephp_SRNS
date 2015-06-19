@@ -44,8 +44,12 @@
 							array('data' => $follow
 							)
 					);
+					if(!is_null($result["leaf"]["parallel"])): ?>
+					<?php echo $this->Html->link(___('Mind Map'), array('controller' => 'tagusers','action' => 'mapt', $result[$firstModel]['ID'])); ?>
 
-					if(!is_null($leaf)): ?>
+					<?php
+					endif; ?>
+					<?php if(!is_null($leaf)): ?>
 						<div onClick='toggleShow(this)' >
 								Reply
 							</div>
@@ -89,7 +93,12 @@
 						Action
 						</div>
 						<div id='HSfield' style='display: none;'>
+											<?php if(!is_null($result["leaf"]["parallel"])): ?>
+											parallel entity is exist
+					<?php echo $this->Html->link(___('Mind Map'), array('controller' => 'tagusers','action' => 'mapt', $result[$firstModel]['ID'])); ?>
 
+					<?php
+					endif; ?>
 						<?php
 							echo $this->Form->create("Link",array("action" => "add"));
 							echo $this->AutoCompleteNoHidden->input(
@@ -109,7 +118,6 @@
 							echo $this->Form->hidden("user_id",array("value" => $currentUserID));
 							echo $this->Form->hidden("target",array("value" =>$result["follow"]));
 							echo $this->Form->submit("trikey");
-
 						?>
 						<?php echo $this->Html->link(__('View'), array('controller'=> $firstModel."s",'action' => 'view', $result[$firstModel]['ID'])); ?><br>
 						<?php echo $this->Html->link(__('Edit'), array('controller'=> $firstModel."s",'action' => 'edit', $result[$firstModel]['ID'])); ?><br>
@@ -117,7 +125,6 @@
 						 <?php
 						 echo $this->Form->button('タグ付け要求',array("onClick" =>"demand(this)"));
 						 // こっちのボタンでは現在選択しているtirikeyでのリンクをすべて削除。
-
 						 //replay@mine も選択し
 						 $ORflag = false;
 						 $MRflag = false;

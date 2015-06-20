@@ -42,7 +42,7 @@
 							)
 					);
 					if(!is_null($result["leaf"]["parallel"])): ?>
-					<?php echo $this->Html->link(___('Mind Map'), array('controller' => 'tagusers','action' => 'mapt', $result[$firstModel]['ID'])); ?>
+					<?php echo $this->Html->link(__('Mind Map'), array('controller' => 'tagusers','action' => 'mapt', $result[$firstModel]['ID'])); ?>
 
 					<?php
 					endif; ?>

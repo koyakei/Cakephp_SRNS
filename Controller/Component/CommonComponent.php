@@ -504,23 +504,27 @@ class CommonComponent extends Component {
 						list($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],$parents[$p_model_parent][$parent_idx]['leaf']["taghash"]) =
 						self::getSearchRelation($that,$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent] ,
 								$parents[$p_model_parent][$parent_idx]['leaf']["taghash"], (string)ucfirst($taghash_model));
-						array_merge($from_id,
-								Hash::format($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],
-										"{n}.Link.LFrom"));
-						array_merge($to_id,
-								Hash::format($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],
-										"{n}.Link.LTo"));
+						if (is_array($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent])){
+							array_merge($from_id,
+									Hash::extract($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],
+											"{n}.Link.LFrom"));
+							array_merge($to_id,
+									Hash::extract($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],
+											"{n}.Link.LTo"));
+						}
+						$from_id = $to_id = array();
 					}
 					$parents[$p_model_parent][$parent_idx]['leaf']["parallel"] = array(); // 並列関係の判定
 					$parents[$p_model_parent][$parent_idx]['leaf']["parallel"] = !empty($this->Basic->parallelChecker($from_id,$to_id));
 				}
-
+				if (is_array($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent])){
 				array_merge($from_id,
 						Hash::extract($parents[$p_model_parent],
 								"{n}.Link.LFrom"));
 				array_merge($to_id,
 						Hash::extract($parents[$p_model_parent],
 								"{n}.Link.LTo"));
+				}
 			}
 			$parents["parallel"] = array(); // 並列関係の判定
 			$parents["parallel"] = !empty($this->Basic->parallelChecker($from_id,$to_id));

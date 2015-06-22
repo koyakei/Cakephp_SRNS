@@ -65,8 +65,14 @@ public function beforeFilter() {
 	/**
 	 *
 	 * @param string $target
+	 * @param boolean $bool
+	 *  true not followed yet
+	 *  false followd yet will unfollow
 	 */
-	public function follow_unfollow($target = null){
+	public function follow_unfollow($target = null, boolean $bool = null){
+		if (is_null($bool)){
+			$follow = $this->request->query("follow");
+		}
 		$target = $this->request->query("target_id");
 		$Follow = new Follow();
 // 		$data =array("Follow.target"=> $this->request->query("target_id"),
@@ -76,7 +82,7 @@ public function beforeFilter() {
 		$data["Follow"] = $child;
 
 // 		debug($this->request->query("follow") == "true");
-		if ($this->request->query("follow") == "true"){
+		if ($bool == "true"){
 			$Follow->create();
 			if($Follow->save($data,false)){
 				$this->Session->setFlash(__('followed.'));
@@ -101,14 +107,9 @@ public function beforeFilter() {
 		 		$this->Auth->user("id"));
 		 $this->Common->nestedAdd($this,$this->request->query('root_ids'),$this->request->query('trikey_ids'),
 		$this->request->query('parent_ids'),$inserted_id,$this->request->query('quantize_id'));
-		 $Article = new Article();
+		$this->LInk->tickStreambyid("Article");
+		$this->Tag->follow_unfollow($inserted_id, true);
 		 $this->set("added_entity",$Article->find('all',(array('condition' => array("Article.ID" =>$inserted_id)))));
-		 $this->Follow->tickSStream($target_ids,array(
-		 		"name" => substr($this->request->query('name'), 0,140),
-		 		'vctrl' =>$this->request->query('ctrl'),
-		 		'vaction'  => $this->request->query('action'),
-		 		'id' => $this->request->query('id'),
-		 ));
 	}
 
 	/**

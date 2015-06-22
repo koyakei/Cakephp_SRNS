@@ -196,11 +196,8 @@ echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id
 </fieldset></li>
 </ul>
 </div>
-
 <div class="root">
-
     	<?php
-
     	echo $this->element('accordion/table_reply',
     			array('tableresults' => $tableresults,
     					'taghashes'=>$tableresults["taghash"],

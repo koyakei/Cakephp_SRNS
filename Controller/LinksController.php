@@ -32,7 +32,7 @@ class LinksController extends AppController {
 		$this->Security->validatePost = false;
 		$this->Security->csrfCheck = false;
 	}
-	public function triLinkAdd($from =NULL,$to = null){
+	public function triLinkAdd($parent_ids =NULL,$to = null,$options = null){
 		$options['key'] = $this->request->query['keyid'];
 		if (empty($options['key'])){
 			$options['key'] = Configure::read("tagID.reply");
@@ -47,16 +47,24 @@ class LinksController extends AppController {
 		if ($user_id = null){
 			$user_id = $this->Auth->user('id');
 		}
+		$quantize = $this->request->query['quantize_id'];
+		if (is_null($quantize)){
+			$quantize = 0;
+		}
 		$this->Common->nestedAdd($this,$root_ids,$options['key'],
-				$parent_ids,$to,$this->request->query['quantize_id']);
-		$Tag = new Tag();
-		$this->Follow->tickSStream($parent_ids,array(
-		 		"name" => substr($Tag->find('first',array('conditions' => array("Tag.ID" => $to)))["Tag"]["name"], 0,140),
-		 		'vctrl' =>$this->request->query('ctrl'),
-		 		'vaction'  => $this->request->query('action'),
-		 		'page_id' => $this->request->query('page_id'),
-		 ));
+				$parent_ids,$to,$quantize);
+	self::tickStreambyid("Tag");
+	$this->Tag->follow_unfollow($to, true);
 // 		$this->redirect($this->referer());
+	}
+	public function tickStreambyid($model){
+		$Tag = new $model();
+		$this->Follow->tickSStream($parent_ids,array(
+				"name" => substr($Tag->find('first',array('conditions' => array($model.".ID" => $to)))[$model]["name"], 0,140),
+				'vctrl' =>$this->request->query('ctrl'),
+				'vaction'  => $this->request->query('action'),
+				'page_id' => $this->request->query('page_id'),
+		));
 	}
 	public function isAuthorized($user) {
 
@@ -275,14 +283,7 @@ class LinksController extends AppController {
 				}
 
 	}
-/**
- *
- * 予定　@param mix options　権限を確かめる予定
- */
-	function addTriLink(){
-		$this->set('json', $this->Basic->trilinkAdd($this,$_REQUEST['from'],$_REQUEST['to'],$_REQUEST['trikey_id'],$options));
-		$this->layout = 'ajax';
-	}
+
 /**
  * singlelink method
  *

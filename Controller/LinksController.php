@@ -144,7 +144,7 @@ class LinksController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Link->create();
 			if ($this->Link->save($this->request->data)) {
-				$this->Follow->add($this,$this->request->data("Link.target"));
+				$this->Follow->add($this->request->data("Link.target"));
 				$this->Session->setFlash(__('The link has been saved.'));
 // 				$this->redirect($this->referer());
 			} else {

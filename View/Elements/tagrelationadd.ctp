@@ -3,7 +3,7 @@
 	    'type' => 'select',
 	    'multiple'=> false,
 	    'options' => $ulist,
-	  'selected' => $currentUserID//['userselected']
+	  'selected' => AuthComponent::user("id")//['userselected']
 	));
 
 	echo $this->AutoCompleteNoHidden->input(

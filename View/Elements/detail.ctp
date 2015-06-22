@@ -52,3 +52,4 @@ echo $this->element('extends', Array('ulist' => $extends));
 	<?php endif; ?>
 	<?php echo $this->element('map', array('id' => $id)); ?>
 	</dl>
+	<?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$this->params["pass"][0] ,'ToID' => $this->params["pass"][0])); ?>

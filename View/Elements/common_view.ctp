@@ -35,7 +35,7 @@ function ajaxtable(keyid){
 <h2><?php echo __('Article'); ?></h2>
 	<?php echo $this->element('detail',array('detail' =>  $headresults,'firstModel' => $firstModel,'SecondDems' =>  $SecondDems)); ?>
 
-        <?php echo $this->element('tagrelationadd', Array('ulist' => $ulist,'idre'=>$idre,'ToID' => $headresults[$firstModel]['ID'],'currentUserID' => $currentUserID)); ?>
+
     <?php if($firstModel == 'Tag'): ?>
 
 	<?php if($idre == 2184): ?>
@@ -51,7 +51,6 @@ function ajaxtable(keyid){
 <?php endif; ?>
 </div>
 	<?php foreach($tableresults as $value):
-
 	 ?>
 <a name="<?php echo $value['ID']; ?>">
     <h2><?php echo $value['name'] ?></h2>

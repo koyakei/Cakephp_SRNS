@@ -62,15 +62,20 @@ public function beforeFilter() {
 	 'Html',
 			'Session'
 	);
-	public function follow_unfollow(){
+	/**
+	 *
+	 * @param string $target
+	 */
+	public function follow_unfollow($target = null){
+		$target = $this->request->query("target_id");
 		$Follow = new Follow();
 // 		$data =array("Follow.target"=> $this->request->query("target_id"),
 // 		"Follow.user_id" => $this->request->query("user_id"));
-		$child = array("target"=> $this->request->query("target_id"),
-				"user_id" => $this->request->query("user_id"));
+		$child = array("target"=> $target,
+				"user_id" => $this->Auth->user("id"));
 		$data["Follow"] = $child;
 
-		debug($this->request->query("follow") == "true");
+// 		debug($this->request->query("follow") == "true");
 		if ($this->request->query("follow") == "true"){
 			$Follow->create();
 			if($Follow->save($data,false)){

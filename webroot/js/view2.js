@@ -283,7 +283,7 @@ function add_reply_tag(obj,ctrl,action,id,quantize_id){
 				quantize_id:quantize_id,
 				},
 	    });
-//	 location.reload();
+	 location.reload();
 
 }
 /**

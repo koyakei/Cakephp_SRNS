@@ -96,14 +96,13 @@ public function beforeFilter() {
 			}
 		}else {
 			if($Follow->delete($Follow->find("first",array("fields" =>"Follow.id" ,"conditions" =>$child))["Follow"]["id"])){
-// 				if($this->request->is('ajax')){
-// 					$this->set('res', false);
-// 					$this->layout = 'ajax';
-// 				}else {
-// 					$this->Session->setFlash(__('unfollowed.'));
-// 				}
-				$this->set('res', 0);
-				$this->layout = 'ajax';
+				if($this->request->is('ajax')){
+					$this->set('res', 0);
+					$this->layout = 'ajax';
+				}else {
+					$this->Session->setFlash(__('unfollowed.'));
+				}
+
 			}else{
 				throw new Exception('can not unfollowd');
 			}

@@ -4,5 +4,5 @@
 	$title = "follow";
 	?>
     <?php endif;?>
-    <?php echo $this->Form->button($title,array("onClick" => "follow(this,'".$data["id"]."',
+    <?php echo $this->Form->button($title,array("value"=>  $title,"onClick" => "follow(this,'".$data["id"]."',
 	  '".AuthComponent::user('id')."')"))?>

@@ -70,8 +70,9 @@ public function beforeFilter() {
 	 *  false followd yet will unfollow
 	 */
 	public function follow_unfollow($target = null, boolean $bool = null){
+
 		if (is_null($bool)){
-			$follow = $this->request->query("follow");
+			$bool = $this->request->query("follow");
 		}
 		$target = $this->request->query("target_id");
 		$Follow = new Follow();
@@ -80,22 +81,31 @@ public function beforeFilter() {
 		$child = array("target"=> $target,
 				"user_id" => $this->Auth->user("id"));
 		$data["Follow"] = $child;
-
 // 		debug($this->request->query("follow") == "true");
-		if ($bool == "true"){
+		if ($bool== "true"){
 			$Follow->create();
 			if($Follow->save($data,false)){
+				if($this->request->is('ajax')){
+					$this->set('res', true);
+					$this->layout = 'ajax';
+				}else {
 				$this->Session->setFlash(__('followed.'));
+				}
 			}else{
-				debug("follow miss");
+				throw new Exception('can not followd');
 			}
 		}else {
-
-			debug($this->request->query("follow"));
 			if($Follow->delete($Follow->find("first",array("fields" =>"Follow.id" ,"conditions" =>$child))["Follow"]["id"])){
-				$this->Session->setFlash(__('Unfollowed.'));
+// 				if($this->request->is('ajax')){
+// 					$this->set('res', false);
+// 					$this->layout = 'ajax';
+// 				}else {
+// 					$this->Session->setFlash(__('unfollowed.'));
+// 				}
+				$this->set('res', 0);
+				$this->layout = 'ajax';
 			}else{
-			debug("unfollow miss");
+				throw new Exception('can not unfollowd');
 			}
 		}
 	}

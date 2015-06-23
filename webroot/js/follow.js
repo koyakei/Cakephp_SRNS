@@ -17,10 +17,15 @@ function follow(obj,target_id,user_id){
 		},
 		type:"GET",
 		dataType:"JSON",
+		success:function(data){
+			if(data){
+				$obj.val("unfollow");
+				$obj.html("unfollow");
+			}else{
+				$obj.val("follow");
+				$obj.html("follow");
+			}
+		}
 	});
-	if(follow){
-		$obj.val("unfollow");
-	}else{
-		$obj.val("follow");
-	}
+
 }

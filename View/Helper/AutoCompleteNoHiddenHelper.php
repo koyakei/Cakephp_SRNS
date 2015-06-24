@@ -59,7 +59,8 @@
                 'update'=>$this->update,
                 'label'=>false,
                 'autoCompleteText'=>1,
-                'class'=>'autoCompleteInputBox'
+                'class'=>'autoCompleteInputBox',
+                "ng-model"=>"tagName",
             );
             $options = array_replace($baseOptions,$options);
             $html = '';

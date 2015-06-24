@@ -12,8 +12,6 @@ Configure::load("static");
  */
 class ArticlesController extends AppController {
  public function add2(){
-//  $this->autoRender = false;
- $this->autoLayout = false;
  }
 	public function isAuthorized($user) {
 		// 登録済ユーザーは投稿できる

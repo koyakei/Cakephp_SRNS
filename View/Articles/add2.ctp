@@ -28,27 +28,28 @@
       </form>
       <form ng-submit="separate()">
       <?php echo $this->Form->submit("separete",array("class" => "btn-primary"))?>
-      <table>
-      	<tr  ng-repeat="todo in todos">
-      		<td class="done-{{todo.done}}">
-      			<input type="checkbox" ng-model="todo.done">
-      			{{todo.text}}
-			</td>
-      </table>
+<!--       <table> -->
+<!--       	<tr  ng-repeat="todo in todos"> -->
+<!--       		<td class="done-{{todo.done}}"> -->
+<!--       			<input type="checkbox" ng-model="todo.done"> -->
+<!--       			{{todo.text}} -->
+<!-- 			</td> -->
+<!--       </table> -->
       </form>
-      <table ng-repeat="todo in todos">
-      			{{separated.html}}
-      </table><!--
+      <div ng-repeat="separeted in separeteds">
+      <table ng-repeat="htmls in separeted">
+      	<tr  ng-repeat="html in htmls">
+      			<td>
+      			{{html.text}}
+			</td>
+			</tr>
+      </table>
+      </div>
+      <!--
       <table ng-repeat="todo in todos" class="done-{{todo.done}}">
       <input type="checkbox" ng-model="todo.done">
       			{{todo.text}}
       </table> -->
-      <ul >
-        <li ng-repeat="todo in todos">
-
-          <span class="done-{{todo.done}}">{{todo.text}}</span>
-        </li>
-      </ul>
       <div>
 
       </div>

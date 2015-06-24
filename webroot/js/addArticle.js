@@ -3,7 +3,11 @@ function ArticleCtrl($scope) {
     	    {text:'AngularJSの学習', done:true},
     	    {text:'AngularJSのアプリケーション構築', done:false}
     	    ];
-    	  $scope.separeted =[
+    	  $scope.separeteds =[
+    	                      {htmls:[
+    	    {text:'AngularJSの学習', done:true},
+    	    {text:'AngularJSのアプリケーション構築', done:false}
+    	    ]}
     	                     ];
     	  $scope.addArticle = function() {
     	    $scope.todos.push({text:$scope.todoText, done:false});
@@ -24,7 +28,7 @@ function ArticleCtrl($scope) {
     	    });
     	  };
     	  $scope.separate =function(){
-    		  	$scope.separeted.push({html:$scope.todos});
+    		  	$scope.separeteds.push({htmls:$scope.todos});
     		  	$scope.todos = [];
     	  }
 

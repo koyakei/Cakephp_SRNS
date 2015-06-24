@@ -19,7 +19,7 @@
 $cakeDescription = __d('SRNS', 'Give you power for administrating currency.');
 ?>
 <!DOCTYPE html>
-<html>
+<html  ng-app>
 <head>
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
 

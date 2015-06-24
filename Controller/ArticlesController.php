@@ -11,7 +11,10 @@ Configure::load("static");
  * @property PaginatorComponent $Paginator
  */
 class ArticlesController extends AppController {
-
+ public function add2(){
+//  $this->autoRender = false;
+ $this->autoLayout = false;
+ }
 	public function isAuthorized($user) {
 		// 登録済ユーザーは投稿できる
 		if ($this->action === 'add'|| $this->action === 'transmitter') {

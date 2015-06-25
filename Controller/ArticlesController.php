@@ -200,7 +200,18 @@ class ArticlesController extends AppController {
 	function addArticles($target_ids= NULL,$trikey= NULL,$user_id= NULL,$name= NULL,$options = NULL){
 		parent::vaddArticles($target_ids,$trikey,$user_id,$name,$options);
 	}
-
+	function ajaxRTagAdd(){
+		foreach ($this->request->query("articles") as $key => $article){
+			foreach ($article["Rtags"] as $RTag){
+				if ($article["id"] == $article["Rtags"]){
+					unset($articles[$key]);
+					goto article_level;
+				}
+			}
+			article_level;
+		}
+		return ;
+	}
 /**
  * edit method
  *

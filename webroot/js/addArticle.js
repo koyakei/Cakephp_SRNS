@@ -24,7 +24,7 @@ function ArticleCtrl($scope) {
     					var id =data["id"];
     					if(id){
 $scope.primes.push({id:id,text:$scope.name, done:false,
-    	    	    	sortingTags:data["rTags"]
+    	    	    	RTags:data["rTags"]
     	    	    		});
     					}else{
     						alert("add failed");
@@ -38,8 +38,36 @@ $scope.primes.push({id:id,text:$scope.name, done:false,
     	  };
     	  $scope.addRTag = function(){
     		  var articles = $scope.prime;
+//    		  こっちで分解するのは面倒なので　phpで分解
+//    		  articles.forEach(element,index,array
+//    				){
+//    			  sortingTags["rTag"]
+//    			  unset
+//    		  }
     		  angular.forEach(articles,function(article){
+    			  $.ajax({
+      				url:"ajaxRTagAdd",
+      				data:{
+      					articles:prime,//entity ids
+  	   					user_id: $scope.user_id, //current user id
+  	   					rTagIds: $scope.rTagId, // array or int rTagId
+      				},
+      				type:"GET",
+      				dataType:"JSON",
+      				success: function(data){
+      					var id =data["id"];
+      					if(id){
+  $scope.primes.push({id:id,text:$scope.name, done:false,
+      	    	    	sortingTags:data["rTags"]
+      	    	    		});
+      					}else{
+      						alert("add failed");
+      					}
+      					$scope.name = '';
+      				}
 
+      			}
+      		  );
     		  })
     	  };
     	  $scope.remaining = function() {

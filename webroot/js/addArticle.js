@@ -7,28 +7,33 @@ function ArticleCtrl($scope) {
     	  $scope.separeteds =[
     	                     ];
     	  $scope.addArticle = function(obj) {
+    		  var data =[];
     		  $.ajax({
     				url:"ajaxAdd",
-    				data:{Article:{
-    					name:$scope.name,
-    					user_id: $scope.user_id,
-    					auth: $scope.auth,
+    				data:{
+    					Article:{
+	    					name:$scope.name,
+	    					user_id: $scope.user_id,
+	    					auth: $scope.auth,
     				},
-    		  rTag_ids:$scope.rTag_ids
+    					rTag_ids:$scope.rTag_ids
     				},
     				type:"GET",
     				dataType:"JSON",
     				success: function(data){
-    					if(data["id"]){
-    						$scope.primes.push({id:data["id"],text:$scope.name, done:false,
-//        		    	    	sortingTags:data["rTags"]
-        		    	    		});
-        		    	    $scope.name = '';
+    					var id =data["id"];
+    					if(id){
+$scope.primes.push({id:id,text:$scope.name, done:false,
+    	    	    	sortingTags:data["rTags"]
+    	    	    		});
     					}else{
     						alert("add failed");
     					}
+    					$scope.name = '';
     				}
-    			});
+
+    			}
+    		  );
 
     	  };
     	  $scope.addRTag = function(){

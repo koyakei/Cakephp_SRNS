@@ -46,7 +46,12 @@ class Article extends Date {
 
 
 
-
+	function beforeValidate(){
+		if($this->data['Article']['user_id'] == null){
+			$this->data['Article']['user_id'] = AuthComponent::user("id");
+		}
+		return true; //this is required, otherwise validation will always fail
+	}
 public $base_sql = null;
 
 

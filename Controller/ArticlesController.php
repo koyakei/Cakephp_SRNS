@@ -153,10 +153,10 @@ class ArticlesController extends AppController {
 			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 		}
 		if ($this->request->is('post')) {
-			debug($this->request->data['Article']);
-			if (is_null($this->request->data("Article.user_id"))){
-				$this->request->data("Article.user_id") = $this->Auth->user("id");
-			}
+			debug($this->request->data("Article.user_id"));
+// 			if (is_null($this->request->data("Article.user_id"))){
+// 				$this->request->data("Article.user_id") = AuthComponent::user("id");
+// 			}
 			if ($this->Article->save($this->request->data)) {
 				if ($this->request->is('ajax')){
 					$this->render('ajaxAdd');
@@ -170,6 +170,16 @@ class ArticlesController extends AppController {
 
 			}
 		}
+	}
+
+	function  ajaxAdd(){
+		$this->autoRender = false;
+			if ($this->Article->save($this->request->query)) {
+					return json_encode(array("id" => $this->Article->getLastInsertID()));
+			} else {
+				throw new NotFoundException(__('missed add article'));
+			}
+
 	}
 	function add2(){
 			$this->set('currentUserID', $this->Auth->user('id'));

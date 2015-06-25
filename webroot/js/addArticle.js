@@ -8,7 +8,7 @@ function ArticleCtrl($scope) {
     	                     ];
     	  $scope.addArticle = function(obj) {
     		  $.ajax({
-    				url:"add",
+    				url:"ajaxAdd",
     				//cilant でテーブル全体を比較して、選択中のtrike root を指定して
     				//比較するのか？それとも、phpでやるのか？
     				data:{Article:{
@@ -22,7 +22,7 @@ function ArticleCtrl($scope) {
     				dataType:"JSON",
     				success: function(data){
     					if(data["id"]){
-    						$scope.todos.push({id:data["id"],text:$scope.articleText, done:false,
+    						$scope.todos.push({id:data["id"],text:$scope.name, done:false,
         		    	    	sortingTags:[{id:$scope.tagId,
         		    	    		name:$scope.tagName}]});
         		    	    $scope.name = '';

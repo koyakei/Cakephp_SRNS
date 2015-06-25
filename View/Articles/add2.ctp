@@ -11,9 +11,9 @@
     <div ng-app ng-controller="ArticleCtrl">
       <span>残り:{{remaining()}}/{{todos.length}}</span>
       <a href="" ng-click="archive()">完了</a>
-
+<div>
                <?php
-               echo $this->Form->create("Article",array("ng-submit"=>"addArticle(this)"));
+//                echo $this->Form->create("Article",array("ng-click"=>"addArticle(this);"));
 		echo $this->Form->input('name',array("ng-model" => "name",
 				"size"=>"30",
 						"placeholder"=>"新しいArticleを追加"
@@ -65,8 +65,9 @@ echo $this->Form->input('auth',array(
 	</div>
         <?php
 
-        echo $this->Form->submit("add",array("class" => "btn-primary"));
-        echo $this->Form->end();?>
+        echo $this->Form->button("add",array("style" => "submit","ng-click"=>"addArticle(this)" ,"class" => "btn-primary"));
+//         echo $this->Form->end();?>
+</div>
       <form ng-submit="separate()">
       <?php echo $this->Form->submit("separete",array("class" => "btn-primary"))?>
       <table>

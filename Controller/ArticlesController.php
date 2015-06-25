@@ -173,9 +173,20 @@ class ArticlesController extends AppController {
 	}
 
 	function  ajaxAdd(){
+		$rTag_ids = (array) $this->request->query("rTag_ids");
 		$this->autoRender = false;
+		$Taguser = new Taguser();
 			if ($this->Article->save($this->request->query)) {
-					return json_encode(array("id" => $this->Article->getLastInsertID()));
+				$rTags = array();
+				foreach ($rTag_ids as $rTag_id){
+					$this->Common->triAddbyid($this,$this->Auth->user("id"),
+							$rTag_id,$this->Article->getLastInsertID(),
+							array("key" => Configure::read("tagID.search")));
+					$data = $Taguser->find("first",array("conditions"=>array("Taguser.ID" => $rTag_id)));
+					array_push($rTags, array("id" => $rTag_id,"tag_name" =>$data["Taguser"]["name"],
+							"user_name" => $data["Taguser"]["username"]));
+				}
+					return json_encode(array("id" => $this->Article->getLastInsertID(),"rTags" =>$rTags));
 			} else {
 				throw new NotFoundException(__('missed add article'));
 			}

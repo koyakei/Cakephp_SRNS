@@ -251,7 +251,9 @@ class CommonComponent extends Component {
 				);
 				$Link->create();
 				if ($Link->save($data)) {
+
 					$that->Session->setFlash(__('The entity has been saved.'));
+
 				} else {
 					$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
 				}

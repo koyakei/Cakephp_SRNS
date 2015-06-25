@@ -25,7 +25,7 @@
 	    'multiple'=> false,
 	    'options' => $ulist,
 	  'selected' => $currentUserID,
-		"ng-model" => "user_id",
+// 		"ng-model" => "user_id",
 	));
 echo $this->Form->input('auth',array(
 		"ng-model" => "auth",
@@ -70,13 +70,22 @@ echo $this->Form->input('auth',array(
 </div>
       <form ng-submit="separate()">
       <?php echo $this->Form->submit("separete",array("class" => "btn-primary"))?>
+      <?php echo $this->Form->button("Tag relation add",array("ng-click" =>"addRTa()",
+      		"class" => "btn-primary"))?>
       <table>
-      	<tr  ng-repeat="todo in todos">
-      		<td class="done-{{todo.done}}">
-      			<input type="checkbox" ng-model="todo.done">
-      			{{todo.text}}
+      	<tr  ng-repeat="prime in primes">
+      		<td class="done-{{prime.done}}">
+      			<input type="checkbox" ng-model="prime.done">
+      			{{prime.text}}
 			</td>
+				<td ng-repeat="rTag_id in rTag_ids">
+					{{rTag_id.tag_name}}<br>
+					{{rTag_id.user_name}}
+				</td>
+				</tr>
+
       </table>
+
       </form>
       <div ng-repeat="separeted in separeteds">
       <form ng-click="addRecStag()">

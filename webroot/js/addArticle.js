@@ -1,5 +1,5 @@
 function ArticleCtrl($scope) {
-    	  $scope.todos = [
+    	  $scope.primes = [
     	    {text:'AngularJSの学習', done:true},
     	    {text:'AngularJSのアプリケーション構築', done:false}
     	    ];
@@ -9,22 +9,20 @@ function ArticleCtrl($scope) {
     	  $scope.addArticle = function(obj) {
     		  $.ajax({
     				url:"ajaxAdd",
-    				//cilant でテーブル全体を比較して、選択中のtrike root を指定して
-    				//比較するのか？それとも、phpでやるのか？
     				data:{Article:{
     					name:$scope.name,
     					user_id: $scope.user_id,
     					auth: $scope.auth,
-    					rTag_ids:$scope.rTag_ids
-    				}
+    				},
+    		  rTag_ids:$scope.rTag_ids
     				},
     				type:"GET",
     				dataType:"JSON",
     				success: function(data){
     					if(data["id"]){
-    						$scope.todos.push({id:data["id"],text:$scope.name, done:false,
-        		    	    	sortingTags:[{id:$scope.tagId,
-        		    	    		name:$scope.tagName}]});
+    						$scope.primes.push({id:data["id"],text:$scope.name, done:false,
+//        		    	    	sortingTags:data["rTags"]
+        		    	    		});
         		    	    $scope.name = '';
     					}else{
     						alert("add failed");
@@ -33,27 +31,33 @@ function ArticleCtrl($scope) {
     			});
 
     	  };
+    	  $scope.addRTag = function(){
+    		  var articles = $scope.prime;
+    		  angular.forEach(articles,function(article){
+
+    		  })
+    	  };
     	  $scope.remaining = function() {
     	    var count = 0;
-    	    angular.forEach($scope.todos, function(todo) {
-    	      count += todo.done ? 0 : 1;
+    	    angular.forEach($scope.primes, function(prime) {
+    	      count += prime.done ? 0 : 1;
     	    });
     	    return count;
     	  };
     	  $scope.archive = function() {
-    	    var oldTodos = $scope.todos;
-    	    $scope.todos = [];
-    	    angular.forEach(oldTodos, function(todo) {
-    	      if (!todo.done) $scope.todos.push(todo);
+    	    var oldprimes = $scope.primes;
+    	    $scope.primes = [];
+    	    angular.forEach(oldprimes, function(prime) {
+    	      if (!prime.done) $scope.primes.push(prime);
     	    });
     	  };
     	  $scope.separate =function(){
-    		  	$scope.separeteds.push({htmls:$scope.todos});
-    		  	$scope.todos = [];
+    		  	$scope.separeteds.push({htmls:$scope.primes});
+    		  	$scope.primes = [];
     	  }
     	  $scope.addRecStag = function(){
-    		  angular.forEach($scope.todos, function(todo) {
-        	      count += todo.done ? 0 : 1;
+    		  angular.forEach($scope.primes, function(prime) {
+        	      count += prime.done ? 0 : 1;
         	    });
     	  }
 

@@ -11,8 +11,7 @@ Configure::load("static");
  * @property PaginatorComponent $Paginator
  */
 class ArticlesController extends AppController {
- public function add2(){
- }
+
 	public function isAuthorized($user) {
 		// 登録済ユーザーは投稿できる
 		if ($this->action === 'add'|| $this->action === 'transmitter') {
@@ -148,17 +147,31 @@ class ArticlesController extends AppController {
  * @return void
  */
 	public function add() {
-		$this->set('currentUserID', $this->Auth->user('id'));
-		$this->loadModel('User');
-		$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+		if (!$this->request->is('ajax')){
+			$this->set('currentUserID', $this->Auth->user('id'));
+			$this->loadModel('User');
+			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
+		}
 		if ($this->request->is('post')) {
 			debug($this->request->data['Article']);
 			if ($this->Article->save($this->request->data)) {
-				$this->Session->setFlash(__('The article has been saved.'));
+				if ($this->request->is('ajax')){
+					$this->render('ajaxAdd');
+					$this->autoRender = false;
+					$this->set('res', array("id" => $this->Article->getLastInsertID()));
+				}else{
+					$this->Session->setFlash(__('The article has been saved.'));
+				}
 			} else {
 				$this->Session->setFlash(__('The article could not be saved. Please, try again.'));
+
 			}
 		}
+	}
+	function add2(){
+			$this->set('currentUserID', $this->Auth->user('id'));
+			$this->loadModel('User');
+			$this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
 	}
 	function addArticles($target_ids= NULL,$trikey= NULL,$user_id= NULL,$name= NULL,$options = NULL){
 		parent::vaddArticles($target_ids,$trikey,$user_id,$name,$options);

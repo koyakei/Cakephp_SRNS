@@ -12,9 +12,27 @@
       <span>残り:{{remaining()}}/{{todos.length}}</span>
       <a href="" ng-click="archive()">完了</a>
 
-      <form ng-submit="addArticle()">
-        <input type="text" ng-model="articleText"  size="30"
-               placeholder="新しいArticleを追加">
+      <form ng-submit="addArticle(this)">
+               <?php
+		echo $this->Form->input('name',array("ng-model" => "name",
+				"size"=>"30",
+						"placeholder"=>"新しいArticleを追加"
+		));
+	?>
+<?php echo $this->Form->input('user_id', array(
+//
+	    'type' => 'select',
+	    'multiple'=> false,
+	    'options' => $ulist,
+	  'selected' => $currentUserID,
+// 		"ng-model" => "user_id",
+	));
+echo $this->Form->input('auth',array(
+// 		"ng-model" => "auth",
+			'type' => 'select',
+			'options' => array( 0 => 'public',1 => 'private'),
+			'selected' => 0));
+?>
                <div class="sorting_tags" style ="width: 200px; float:right;">
 					<p>sorting tags</p>
 					<ul>
@@ -60,14 +78,23 @@
       </table>
       </form>
       <div ng-repeat="separeted in separeteds">
-      {{separeted}}
+      <form ng-click="addRecStag()">
       <table ng-repeat="htmls in separeted">
       	<tr  ng-repeat="html in htmls">
       			<td>
       			{{html.text}}
-			</td>
+      			<?php echo $this->Form->hidden("id",
+      						array("ng-model" =>"id","value" =>"{{html.id}}")); ?>
+
+				</td>
+				<td ng-repeat="sortingTag in html.sortingTags">
+				{{html.sortingTag.name}}
+      				<?php echo $this->Form->hidden("id",
+      						array("ng-model" =>"id","value" =>"{{html.sortingTag.id}}"))?>
+				</td>
 			</tr>
       </table>
+      </form>
       </div>
       <!--
       <table ng-repeat="todo in todos" class="done-{{todo.done}}">

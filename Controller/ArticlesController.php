@@ -154,6 +154,9 @@ class ArticlesController extends AppController {
 		}
 		if ($this->request->is('post')) {
 			debug($this->request->data['Article']);
+			if (is_null($this->request->data("Article.user_id"))){
+				$this->request->data("Article.user_id") = $this->Auth->user("id");
+			}
 			if ($this->Article->save($this->request->data)) {
 				if ($this->request->is('ajax')){
 					$this->render('ajaxAdd');

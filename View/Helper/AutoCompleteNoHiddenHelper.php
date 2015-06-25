@@ -61,6 +61,7 @@
                 'autoCompleteText'=>1,
                 'class'=>'autoCompleteInputBox',
                 "ng-model"=>"tagName",
+                "required" => false
             );
             $options = array_replace($baseOptions,$options);
             $html = '';

@@ -12,8 +12,8 @@
       <span>残り:{{remaining()}}/{{todos.length}}</span>
       <a href="" ng-click="archive()">完了</a>
 
-      <form ng-submit="addArticle(this)">
                <?php
+               echo $this->Form->create("Article",array("ng-submit"=>"addArticle(this)"));
 		echo $this->Form->input('name',array("ng-model" => "name",
 				"size"=>"30",
 						"placeholder"=>"新しいArticleを追加"
@@ -25,10 +25,10 @@
 	    'multiple'=> false,
 	    'options' => $ulist,
 	  'selected' => $currentUserID,
-// 		"ng-model" => "user_id",
+		"ng-model" => "user_id",
 	));
 echo $this->Form->input('auth',array(
-// 		"ng-model" => "auth",
+		"ng-model" => "auth",
 			'type' => 'select',
 			'options' => array( 0 => 'public',1 => 'private'),
 			'selected' => 0));
@@ -57,7 +57,7 @@ echo $this->Form->input('auth',array(
 					<div class="search_tag_id">
 					<?php
 					echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id',
-							"ng-model"=>"tagId"));
+							"ng-model"=>"tagId","required" => false));
 					?>
 					</div>
 					</fieldset></li>
@@ -65,8 +65,8 @@ echo $this->Form->input('auth',array(
 	</div>
         <?php
 
-        echo $this->Form->submit("add",array("class" => "btn-primary"))?>
-      </form>
+        echo $this->Form->submit("add",array("class" => "btn-primary"));
+        echo $this->Form->end();?>
       <form ng-submit="separate()">
       <?php echo $this->Form->submit("separete",array("class" => "btn-primary"))?>
       <table>

@@ -31,6 +31,11 @@ App::uses('Model', 'Model');
  */
 class AppModel extends Model {
 	public $useDbConfig = 'test';
+	public function isUniqueWith($data, $fields) {
+		if (!is_array($fields)) $fields = array($fields);
+		$fields = Set::merge($data, $fields);
+		return $this->isUnique($fields, false);
+	}
 
 	function checkUnique($data, $fields) {
 		if (!is_array($fields)) {

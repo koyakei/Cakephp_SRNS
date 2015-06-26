@@ -62,16 +62,17 @@ echo $this->Form->input('auth',array(
 <!-- 					</div> -->
 					</fieldset></li>
 			</ul>
+	<?php
+	echo $this->Form->button("Tag relation add",
+      		array("ng-click" =>"addRTag(this)",
+      		"class" => "btn-primary"));?>
 	</div>
-        <?php
+	<?php echo $this->Form->button("add",array("style" => "submit","ng-click"=>"addArticle(this)" ,"class" => "btn-primary"));?>
 
-        echo $this->Form->button("add",array("style" => "submit","ng-click"=>"addArticle(this)" ,"class" => "btn-primary"));
-//         echo $this->Form->end();?>
 </div>
       <form ng-submit="separate()">
       <?php echo $this->Form->submit("separete",array("class" => "btn-primary"))?>
-      <?php echo $this->Form->button("Tag relation add",array("ng-click" =>"addRTa()",
-      		"class" => "btn-primary"))?>
+
       <table>
       	<tr  ng-repeat="prime in primes">
       		<td class="done-{{prime.done}}">
@@ -81,10 +82,11 @@ echo $this->Form->input('auth',array(
 
 				<td ng-repeat="rTag in prime.rTags">
 					<?php echo $this->Form->hidden("id",
-      						array("ng-model" =>"tagId","value" =>"{{rTag.LFrom}}"))?>
+      						array("ng-model" =>"linkId","value" =>"{{rTag.Link.ID}}"))?>
       						<?php echo $this->Form->hidden("LinkID",
-      						array("ng-model" =>"linkId","value" =>"{{rTag.ID}}"))?>
-					{{rTag.name}}
+      						array("ng-model" =>"tagId","value" =>"{{rTag.Tag.ID}}"))?>
+      						{{rTag.Tag.name}}<br>
+      						{{rTag.O.username}}
 				</td>
 				</tr>
 

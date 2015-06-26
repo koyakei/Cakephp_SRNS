@@ -49,7 +49,9 @@ class Link extends Date {
 		),
 		'LFrom' => array(
 			'naturalNumber' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notEmpty',
+						array( 'isUnique', array( 'LFrom', 'LTo','user_id'), false)
+				),
 				//'message' => 'Your custom message here',
 				'allowEmpty' => FALSE,
 				//'required' => false,

@@ -201,29 +201,43 @@ class ArticlesController extends AppController {
 		parent::vaddArticles($target_ids,$trikey,$user_id,$name,$options);
 	}
 	function ajaxRTagAdd(){
-		$articles = $this->request->query("articles");
+
+		$this->autoRender = false;
+		$articles = json_decode($this->request->query("articles"));
 		$user_id = $this->request->query("user_id");
 		if (empty($user_id)){
 
 		}
+		$Taglink = new Taglink();
 		foreach ($articles as $key => $article){
-			foreach ($article["Rtags"] as $addedTag){//関連づけ済みのタグ
-				foreach ($this->request->query("rTagIds") as $rTagId){
-					if ($addedTag["ID"] == $rTagId["ID"]){
+			foreach ($this->request->query("rTagIds") as $rTagId){
+// 				$related = false;
+				foreach ($article["rtags"] as $addedTag){//関連づけ済みのタグ
+					if ($addedTag["ID"] == $rTagId["ID"]){//すでに追加されているか？
 // 						unset($articles[$key]);
-						goto relatedTag_level;
+// 						$related = true;//すでに追加されている
+						goto relatedTag_level;//追加されていたら、次の追加するタグを走査するレベルに飛ぶ
 					}
 				}
-				$this->Common->triAddbyId($this,$this->Auth->user("id"),
-						$rTagId,$article["ID"],array("key" => Configure::read("tagID.search")));
+// 				if (!$related){
+					//関係追加
+					$this->Common->triAddbyId($this,$this->Auth->user("id"),
+							$rTagId,$article["ID"],array("key" => Configure::read("tagID.search")));
+					//返値に追加
+					$articles[$key]["rTags"] +=
+					$Taglink->find("first" ,array("conditions" => array(
+							"Taglink.LFrom" => $rTagId,"Taglink.LTo" => $articles[$key]["ID"]
+					)))["Taglink"];
+// 				}
+
 				relatedTag_level:
 			}
-// 			if (is_null($articles[$key])){
-
-// 			}
 
 		}
-		return $bool;
+		//entity.id に対して付与したタグ
+// 		@example array("entity.ID"=> array("id","name"));
+//ここで全部　$scope.primeを書き換える？
+		return json_encode($articles);
 
 	}
 /**

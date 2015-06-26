@@ -2,7 +2,7 @@ function ArticleCtrl($scope) {
     	  $scope.primes = [
     	    {ID:123,text:"abc", done:false,
       	    	    	rTags:[
-      	    	    	       {id:1,name:"kei"},{id:2,name:"keiee"}
+      	    	    	       {LFrom:1,name:"kei",ID:123},
       	    	    	       ]
       	    	    		},
     	    {text:'AngularJSのアプリケーション構築', done:false}
@@ -20,7 +20,7 @@ function ArticleCtrl($scope) {
 	    					user_id: $scope.user_id,
 	    					auth: $scope.auth,
     				},
-    					rTag_ids:$scope.rTag_ids
+    					rTag_ids:$("#rTagId").val(),
     				},
     				type:"GET",
     				dataType:"JSON",
@@ -28,7 +28,7 @@ function ArticleCtrl($scope) {
     					var id =data["id"];
     					if(id){
 $scope.primes.push({id:id,text:$scope.name, done:false,
-    	    	    	RTags:data["rTags"]
+    	    	    	rTags:data["rTags"]
     	    	    		});
     					}else{
     						alert("add failed");
@@ -42,12 +42,6 @@ $scope.primes.push({id:id,text:$scope.name, done:false,
     	  };
     	  $scope.addRTag = function(){
     		  var articles = $scope.prime;
-//    		  こっちで分解するのは面倒なので　phpで分解
-//    		  articles.forEach(element,index,array
-//    				){
-//    			  sortingTags["rTag"]
-//    			  unset
-//    		  }
     			  $.ajax({
       				url:"ajaxRTagAdd",
       				data:{
@@ -58,15 +52,7 @@ $scope.primes.push({id:id,text:$scope.name, done:false,
       				type:"GET",
       				dataType:"JSON",
       				success: function(data){
-      					var id =data["id"];
-      					if(id){
-  $scope.primes.push({ID:id,text:$scope.name, done:false,
-      	    	    	sortingTags:data["rTags"]
-      	    	    		});
-      					}else{
-      						alert("add failed");
-      					}
-      					$scope.name = '';
+      					$scope.primes =data;
       				}
 
       			}

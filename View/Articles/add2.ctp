@@ -54,12 +54,12 @@ echo $this->Form->input('auth',array(
 					    )
 					);
 					?>
-					<div class="search_tag_id">
+<!-- 					<div class="search_tag_id"> -->
 					<?php
-					echo $this->Form->hidden('sorting_tags..',array('value' => '','class' => 'tag_id',
-							"ng-model"=>"tagId","required" => false));
+					echo $this->Form->input('rtags',array('value' => '','class' => 'tag_id',
+							 "ng-model"=>"rTagId","required" => false,"id" => "rTagId"));
 					?>
-					</div>
+<!-- 					</div> -->
 					</fieldset></li>
 			</ul>
 	</div>
@@ -77,11 +77,13 @@ echo $this->Form->input('auth',array(
       		<td class="done-{{prime.done}}">
       			<input type="checkbox" ng-model="prime.done">
       			{{prime.text}}
-      			{{prime}}
 			</td>
 
 				<td ng-repeat="rTag in prime.rTags">
-					{{rTag.id}}<br>
+					<?php echo $this->Form->hidden("id",
+      						array("ng-model" =>"tagId","value" =>"{{rTag.LFrom}}"))?>
+      						<?php echo $this->Form->hidden("LinkID",
+      						array("ng-model" =>"linkId","value" =>"{{rTag.ID}}"))?>
 					{{rTag.name}}
 				</td>
 				</tr>
@@ -99,10 +101,10 @@ echo $this->Form->input('auth',array(
       						array("ng-model" =>"id","value" =>"{{html.id}}")); ?>
 
 				</td>
-				<td ng-repeat="sortingTag in html.sortingTags">
-				{{html.sortingTag.name}}
+				<td ng-repeat="rTag in html.rTags">
+				{{rTag.name}}
       				<?php echo $this->Form->hidden("id",
-      						array("ng-model" =>"id","value" =>"{{html.sortingTag.id}}"))?>
+      						array("ng-model" =>"id","value" =>"{{rTag.id}}"))?>
 				</td>
 			</tr>
       </table>

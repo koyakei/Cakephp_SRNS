@@ -51,7 +51,10 @@ class Link extends Date {
 			'naturalNumber' => array(
 				'rule' =>
 // 						'notEmpty',
-						array( 'isUniqueWith', array('LTo','user_id'))
+						array(
+// 								 'isUniqueWith', array('LTo','user_id')
+
+						)
 				,
 				//'message' => 'Your custom message here',
 				'allowEmpty' => FALSE,

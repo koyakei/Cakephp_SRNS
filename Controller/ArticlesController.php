@@ -173,24 +173,27 @@ class ArticlesController extends AppController {
 	}
 
 	function  ajaxAdd(){
-		$rTag_ids = (array) $this->request->query("rTag_ids");
+		$rTags = (array) $this->request->query("rTag_ids");
 		$this->autoRender = false;
 		$Taguser = new Taguser();
-			if ($this->Article->save($this->request->query)) {
-				$rTags = array();
-				foreach ($rTag_ids as $rTag_id){
+		if ($this->Article->save($this->request->query)) {
+			$redTags = array();
+			if (!empty($rTags)){
+				foreach ($rTags as $rTagId){
 					$this->Common->triAddbyid($this,$this->Auth->user("id"),
-							$rTag_id,$this->Article->getLastInsertID(),
+							$rTagId,$this->Article->getLastInsertID(),
 							array("key" => Configure::read("tagID.search")));
-					$data = $Taguser->find("first",array("conditions"=>array("Taguser.ID" => $rTag_id)));
-					array_push($rTags, array("id" => $rTag_id,"tag_name" =>$data["Taguser"]["name"],
-							"user_name" => $data["Taguser"]["username"]));
-				}
-					return json_encode(array("id" => $this->Article->getLastInsertID(),"rTags" =>$rTags));
-			} else {
-				throw new NotFoundException(__('missed add article'));
-			}
+					$redTags = $redTags +
+							$this->Basic->rCheck(Configure::read('tagID.search'),
+									$this->Article->getLastInsertID(),$rTagId)
+							;
 
+				}
+			}
+				return json_encode(array("ID" => $this->Article->getLastInsertID(),"rTags" =>$redTags));
+		} else {
+			throw new NotFoundException(__('missed add article'));
+		}
 	}
 	function add2(){
 			$this->set('currentUserID', $this->Auth->user('id'));
@@ -201,34 +204,36 @@ class ArticlesController extends AppController {
 		parent::vaddArticles($target_ids,$trikey,$user_id,$name,$options);
 	}
 	function ajaxRTagAdd(){
-
 		$this->autoRender = false;
-		$articles = json_decode($this->request->query("articles"));
 		$user_id = $this->request->query("user_id");
+		$articles = $this->request->query("articles");
 		if (empty($user_id)){
-
+			$user_id = $this->Auth->user("id");
 		}
 		$Taglink = new Taglink();
 		foreach ($articles as $key => $article){
-			foreach ($this->request->query("rTagIds") as $rTagId){
-// 				$related = false;
-				foreach ($article["rtags"] as $addedTag){//関連づけ済みのタグ
-					if ($addedTag["ID"] == $rTagId["ID"]){//すでに追加されているか？
+			foreach ($this->request->query("rTagIds") as $i => $rTagId){
+				$related = false;
+				$articles[$key]["rTags"] = (array) $article["rTags"];
+				foreach ($article["rTags"] as $addedTag){//関連づけ済みのタグ
+					if ($addedTag["ID"] == $rTagId){//すでに追加されているか？
 // 						unset($articles[$key]);
-// 						$related = true;//すでに追加されている
+						$related = true;//すでに追加されている
 						goto relatedTag_level;//追加されていたら、次の追加するタグを走査するレベルに飛ぶ
 					}
 				}
-// 				if (!$related){
+				if (!$related){
+// 					debug($i);
 					//関係追加
 					$this->Common->triAddbyId($this,$this->Auth->user("id"),
 							$rTagId,$article["ID"],array("key" => Configure::read("tagID.search")));
 					//返値に追加
-					$articles[$key]["rTags"] +=
-					$Taglink->find("first" ,array("conditions" => array(
-							"Taglink.LFrom" => $rTagId,"Taglink.LTo" => $articles[$key]["ID"]
-					)))["Taglink"];
-// 				}
+
+					$newTag = $this->Basic->rCheck(Configure::read('tagID.search'),
+							$article["ID"],$rTagId);
+					$articles[$key]["rTags"] = $articles[$key]["rTags"] +
+					$newTag;
+				}
 
 				relatedTag_level:
 			}

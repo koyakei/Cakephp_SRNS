@@ -301,7 +301,7 @@ class BasicComponent extends Component {
 		$trikeyID = Configure::read('tagID.'.$trykeyname);//tagConst()[$trykeyname];
 		$option = array(
 				'conditions'=> array(
-				        	"Link.LTo = $Ltotarget"
+				        	"Link.LTo"=>$Ltotarget
 			        	 ),
 				'fields' => array('Link.*',$modelSe .'.*'
 					),
@@ -345,7 +345,8 @@ class BasicComponent extends Component {
 		$modelSe = new $modelSe();
 		$option = array(
 				'conditions'=> array(
-				        	"Link.LTo = $Ltotarget"
+				        	"Link.LTo = $Ltotarget",
+						"Link.LFrom" => $id
 			        	 ),
 				'fields' => array('*'		),
 				'joins'
@@ -355,7 +356,7 @@ class BasicComponent extends Component {
 		                    'alias' => 'Link',
 		                    'type' => 'INNER',
 		                    'conditions' => array(
-					array("$id = Link.LFrom"),
+// 					array("Link.LFrom" => $id),
 					array("Link.quantize_id" => $quantize),
 					)
 		                ),
@@ -372,6 +373,39 @@ class BasicComponent extends Component {
 				),
 			);
 		return $modelSe->find('all',$option);
+	}
+	public function rCheck($trikeyIDl,$Ltotarget,$id,$quantize = 0) {
+		$Tag = new Tag();
+		$option = array(
+				'conditions'=> array(
+						"Link.LTo" => $Ltotarget,
+						 "Link.LFrom" => $id ,
+						"Link.quantize_id" => $quantize,
+				),
+				'fields' => array('*'	),
+				'joins'
+				=> array(
+						array(
+								'table' => 'link',
+								'alias' => 'Link',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Tag.ID = Link.LFrom"),
+								)
+						),
+						array(
+								'table' => 'taglinks',
+								'alias' => 'taglink',
+								'type' => 'INNER',
+								'conditions' => array(
+										array("Link.ID = taglink.LTo"),
+										array("taglink.quantize_id" => $quantize),
+										array("taglink.LFrom" => Configure::read("tagID.search"))
+								)
+						),
+				),
+		);
+		return $Tag->find('all',$option);
 	}
 
 	public function allTrilinkFinder($from,$results){

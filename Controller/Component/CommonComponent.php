@@ -230,37 +230,35 @@ class CommonComponent extends Component {
 		if ($options['key'] == null){
 			$options['key'] = Configure::read('tagID.reply');
 		}
-
-		if ($FromID != null) {
+		$data['Link'] = array(
+				'user_id' => $userID,
+				'LFrom' => $FromID,
+				'LTo' => $ToID,
+				'quant' => 1,
+		);
+		$Link = new Link();
+		$Link->create();
+		if ($Link->save($data)) {
+			$that->last_id = $Link->getLastInsertID();
+			$data = null;
 			$data['Link'] = array(
 					'user_id' => $userID,
-					'LFrom' => $FromID,
-					'LTo' => $ToID,
+					'LFrom' => $options['key'],//
+					'LTo' => $that->last_id,
 					'quant' => 1,
 			);
-			$Link = new Link();
 			$Link->create();
 			if ($Link->save($data)) {
-				$that->last_id = $Link->getLastInsertID();
-				$data = null;
-				$data['Link'] = array(
-						'user_id' => $userID,
-						'LFrom' => $options['key'],//
-						'LTo' => $that->last_id,
-						'quant' => 1,
-				);
-				$Link->create();
-				if ($Link->save($data)) {
 
-					$that->Session->setFlash(__('The entity has been saved.'));
+				$that->Session->setFlash(__('The entity has been saved.'));
 
-				} else {
-					$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
-				}
-			}else {
-				$that->Session->setFlash(__("misslink1"));
+			} else {
+				$that->Session->setFlash(__('The article could not be saved. Please, try again.'));
 			}
+		}else {
+			$that->Session->setFlash(__("misslink1"));
 		}
+
 	}
 
 	public function tritagAdd(&$that = null,$model,$userID,$targetFromID,$options) {

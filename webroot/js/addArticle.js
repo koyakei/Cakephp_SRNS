@@ -33,7 +33,7 @@ function ArticleCtrl($scope) {
     				success: function(data){
     					var id =data["ID"];
     					if(id){
-    							$scope.primes.push({id:id,text:$scope.name, done:false,
+    							$scope.primes.push({ID:id,text:$scope.name, done:false,
     	    	    	rTags:data["rTags"]
     	    	    		});
     					}else{
@@ -41,10 +41,8 @@ function ArticleCtrl($scope) {
     					}
     					$scope.name = '';
     				}
-
     			}
     		  );
-
     	  };
     	  $scope.addRTag = function(obj){
     		  var articles = $scope.primes;

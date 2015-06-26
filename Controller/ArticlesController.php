@@ -201,16 +201,30 @@ class ArticlesController extends AppController {
 		parent::vaddArticles($target_ids,$trikey,$user_id,$name,$options);
 	}
 	function ajaxRTagAdd(){
-		foreach ($this->request->query("articles") as $key => $article){
-			foreach ($article["Rtags"] as $RTag){
-				if ($article["id"] == $article["Rtags"]){
-					unset($articles[$key]);
-					goto article_level;
-				}
-			}
-			article_level;
+		$articles = $this->request->query("articles");
+		$user_id = $this->request->query("user_id");
+		if (empty($user_id)){
+
 		}
-		return ;
+		foreach ($articles as $key => $article){
+			foreach ($article["Rtags"] as $addedTag){//関連づけ済みのタグ
+				foreach ($this->request->query("rTagIds") as $rTagId){
+					if ($addedTag["ID"] == $rTagId["ID"]){
+// 						unset($articles[$key]);
+						goto relatedTag_level;
+					}
+				}
+				$this->Common->triAddbyId($this,$this->Auth->user("id"),
+						$rTagId,$article["ID"],array("key" => Configure::read("tagID.search")));
+				relatedTag_level;
+			}
+// 			if (is_null($articles[$key])){
+
+// 			}
+
+		}
+		return $bool;
+
 	}
 /**
  * edit method

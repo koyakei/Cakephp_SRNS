@@ -1,6 +1,8 @@
 function ArticleCtrl($scope) {
     	  $scope.primes = [
-    	    {text:'AngularJSの学習', done:true},
+    	    {ID:id,text:$scope.name, done:false,
+      	    	    	sortingTags:[{id:1,name:"kei"},{id:2,name:"keiee"}]
+      	    	    		},
     	    {text:'AngularJSのアプリケーション構築', done:false}
     	    ];
 
@@ -44,20 +46,19 @@ $scope.primes.push({id:id,text:$scope.name, done:false,
 //    			  sortingTags["rTag"]
 //    			  unset
 //    		  }
-    		  angular.forEach(articles,function(article){
     			  $.ajax({
       				url:"ajaxRTagAdd",
       				data:{
-      					articles:prime,//entity ids
+      					articles:articles,//entity ids
   	   					user_id: $scope.user_id, //current user id
-  	   					rTagIds: $scope.rTagId, // array or int rTagId
+  	   					rTagIds: [{id:$scope.rTagId}], // array or int rTagId
       				},
       				type:"GET",
       				dataType:"JSON",
       				success: function(data){
       					var id =data["id"];
       					if(id){
-  $scope.primes.push({id:id,text:$scope.name, done:false,
+  $scope.primes.push({ID:id,text:$scope.name, done:false,
       	    	    	sortingTags:data["rTags"]
       	    	    		});
       					}else{
@@ -68,7 +69,7 @@ $scope.primes.push({id:id,text:$scope.name, done:false,
 
       			}
       		  );
-    		  })
+
     	  };
     	  $scope.remaining = function() {
     	    var count = 0;

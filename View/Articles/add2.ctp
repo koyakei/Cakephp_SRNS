@@ -77,10 +77,12 @@ echo $this->Form->input('auth',array(
       		<td class="done-{{prime.done}}">
       			<input type="checkbox" ng-model="prime.done">
       			{{prime.text}}
+      			{{prime}}
 			</td>
-				<td ng-repeat="rTag_id in rTag_ids">
-					{{rTag_id.tag_name}}<br>
-					{{rTag_id.user_name}}
+
+				<td ng-repeat="rTag in prime.rTags">
+					{{rTag.id}}<br>
+					{{rTag.name}}
 				</td>
 				</tr>
 

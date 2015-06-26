@@ -216,7 +216,7 @@ class ArticlesController extends AppController {
 				}
 				$this->Common->triAddbyId($this,$this->Auth->user("id"),
 						$rTagId,$article["ID"],array("key" => Configure::read("tagID.search")));
-				relatedTag_level;
+				relatedTag_level:
 			}
 // 			if (is_null($articles[$key])){
 

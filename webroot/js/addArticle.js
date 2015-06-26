@@ -1,7 +1,9 @@
 function ArticleCtrl($scope) {
     	  $scope.primes = [
-    	    {ID:id,text:$scope.name, done:false,
-      	    	    	sortingTags:[{id:1,name:"kei"},{id:2,name:"keiee"}]
+    	    {ID:123,text:"abc", done:false,
+      	    	    	rTags:[
+      	    	    	       {id:1,name:"kei"},{id:2,name:"keiee"}
+      	    	    	       ]
       	    	    		},
     	    {text:'AngularJSのアプリケーション構築', done:false}
     	    ];

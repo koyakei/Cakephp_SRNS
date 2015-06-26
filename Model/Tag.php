@@ -150,12 +150,12 @@ institution'
 
    	);
    public $hasMany= array(
-   		'W' => array(
-   				'className' => 'Whiteuser',
-   				'foreignKey' => 'entity_id',
-   				'dependent' => false,
-   				'conditions' => '',
-   				//'type' => 'inner'
-   		),
+//    		'W' => array(
+//    				'className' => 'Whiteuser',
+//    				'foreignKey' => 'entity_id',
+//    				'dependent' => false,
+//    				'conditions' => '',
+//    				//'type' => 'inner'
+//    		),
    );
 }

@@ -216,15 +216,13 @@ class ArticlesController extends AppController {
 				$related = false;
 				$articles[$key]["rTags"] = (array) $article["rTags"];
 				foreach ($article["rTags"] as $addedTag){//関連づけ済みのタグ
-					if ($addedTag["ID"] == $rTagId){//すでに追加されているか？
+					if ($addedTag["Tag"]["ID"] == $rTagId){//すでに追加されているか？
 // 						unset($articles[$key]);
 						$related = true;//すでに追加されている
 						goto relatedTag_level;//追加されていたら、次の追加するタグを走査するレベルに飛ぶ
 					}
 				}
 				if (!$related){
-// 					debug($i);
-					//関係追加
 					$this->Common->triAddbyId($this,$this->Auth->user("id"),
 							$rTagId,$article["ID"],array("key" => Configure::read("tagID.search")));
 					//返値に追加

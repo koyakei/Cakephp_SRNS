@@ -73,27 +73,36 @@ echo $this->Form->input('auth',array(
       <form ng-submit="separate()">
       <?php echo $this->Form->submit("separete",array("class" => "btn-primary"))?>
 
+      </form>
       <table>
-      	<tr  ng-repeat="prime in primes">
+      	<tr  ng-repeat="(primeKey,prime) in primes">
       		<td class="done-{{prime.done}}">
       			<input type="checkbox" ng-model="prime.done">
       			{{prime.text}}
 			</td>
 
-				<td ng-repeat="rTag in prime.rTags">
-					<?php echo $this->Form->hidden("id",
-      						array("ng-model" =>"linkId","value" =>"{{rTag.Link.ID}}"))?>
+				<td ng-repeat="(key,rTag) in prime.rTags">
       						<?php echo $this->Form->hidden("LinkID",
       						array("ng-model" =>"tagId","value" =>"{{rTag.Tag.ID}}"))?>
       						{{rTag.Tag.name}}<br>
-      						{{rTag.O.username}}
+      						{{rTag.O.username}}<br>
+      						{{rTag.Link.ID}}
+<!--       						     <form ng-submit="rDel(this,{{primeKey}},{{key}},1)"> -->
+
+      									<?php
+//       									 echo $this->Form->submit("del",array())?>
+<?php
+echo $this->Form->button("del",array("style" => "submit",
+		"ng-click"=>"rDel(this)",
+		"class" => "btn-primary"));?>
+<!-- 		</form> -->
 				</td>
 				</tr>
 
       </table>
 
-      </form>
       <div ng-repeat="separeted in separeteds">
+      <br>
       <form ng-click="addRecStag()">
       <table ng-repeat="htmls in separeted">
       	<tr  ng-repeat="html in htmls">

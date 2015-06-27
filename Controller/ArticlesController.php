@@ -290,4 +290,28 @@ class ArticlesController extends AppController {
 		}
 		//return $this->redirect(array('action' => 'index'));
 		return $this->redirect($this->referer());
-	}}
+	}
+	function ajaxRDel(){
+		$this->autoRender =false;
+		$data = $this->request->query;
+
+		$Link = new Link();
+		if (empty($data["user_id"])){
+			$data["Link.user_id"] = $this->Auth->user("id");
+		}else{
+			$data["Link.user_id"] =$data["user_id"];
+		}
+		$data["Link.ID"] =$data["ID"];
+		if ($Link->deleteAll($data)){
+			//         		if($this->Basic->taglimitcountup($this)){
+
+
+			//         		}else{
+			return true;
+			//         		}
+		} else {
+			throw new NotFoundException(__('not exist'));
+		}
+	}
+}
+

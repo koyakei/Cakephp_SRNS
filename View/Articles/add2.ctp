@@ -80,23 +80,23 @@ echo $this->Form->input('auth',array(
       			<input type="checkbox" ng-model="prime.done">
       			{{prime.text}}
 			</td>
-
+<form ng-submit="rDel(this)">
 				<td ng-repeat="(key,rTag) in prime.rTags">
       						<?php echo $this->Form->hidden("LinkID",
       						array("ng-model" =>"tagId","value" =>"{{rTag.Tag.ID}}"))?>
       						{{rTag.Tag.name}}<br>
       						{{rTag.O.username}}<br>
       						{{rTag.Link.ID}}
-<!--       						     <form ng-submit="rDel(this,{{primeKey}},{{key}},1)"> -->
 
-      									<?php
-//       									 echo $this->Form->submit("del",array())?>
+
+
 <?php
-echo $this->Form->button("del",array("style" => "submit",
+echo $this->Form->button("add",array("style" => "submit",
 		"ng-click"=>"rDel(this)",
 		"class" => "btn-primary"));?>
-<!-- 		</form> -->
+
 				</td>
+				</form>
 				</tr>
 
       </table>

@@ -21,21 +21,20 @@ function ArticleCtrl($scope) {
     	  $scope.separeteds =[
     	                     ];
     	  $scope.rDel = function(obj,primeKey,key){
-    		  obj.rTag.Link.ID;
-    		  $scope.primes[obj.$parent.$index].rTags.splice([obj.$index],1)
-//    		  $.ajax({
-//  				url:"ajaxRDel",
-//  				data:{
-//  					linkId: linkId,
-//  					userId: $scope.user_id,
-//  				},
-//  				type:"GET",
-//  				dataType:"JSON",
-//  				success: function(data){
-//  					$scope.primes.indexOf(obj);
-//  				}
-//  			}
-//  		  );
+    		  $.ajax({
+  				url:"ajaxRDel",
+  				data:{
+  					ID: obj.rTag.Link.ID,
+  					user_id: $scope.user_id,
+
+  				},
+  				type:"GET",
+  				dataType:"JSON",
+  				success: function(data){
+  					$scope.primes[obj.$parent.$index].rTags.splice([obj.$index],1)
+  				}
+  			}
+  		  );
     	  }
 
     	  $scope.addArticle = function(obj) {
@@ -55,7 +54,7 @@ function ArticleCtrl($scope) {
     				success: function(data){
     					var id =data["ID"];
     					if(id){
-    							$scope.primes.push.apply({ID:id,text:$scope.name, done:false,
+    							$scope.primes.push({ID:id,text:$scope.name, done:false,
     	    	    	rTags:data["rTags"]
     	    	    		});
     					}else{

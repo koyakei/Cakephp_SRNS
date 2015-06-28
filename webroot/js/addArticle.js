@@ -31,7 +31,11 @@ function ArticleCtrl($scope) {
   				type:"GET",
   				dataType:"JSON",
   				success: function(data){
-  					$scope.primes[obj.$parent.$index].rTags.splice([obj.$index],1)
+  					if(data){
+  						$scope.primes[obj.$parent.$index].rTags.splice([obj.$index],1)
+  					}else{
+
+  					}
   				}
   			}
   		  );

@@ -310,7 +310,8 @@ class ArticlesController extends AppController {
 			return true;
 			//         		}
 		} else {
-			throw new NotFoundException(__('not exist'));
+			return false;
+// 			throw new NotFoundException(__('not exist'));
 		}
 	}
 }

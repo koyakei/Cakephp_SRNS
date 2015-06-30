@@ -56,7 +56,7 @@ echo $this->Form->input('auth',array(
 					?>
 <!-- 					<div class="search_tag_id"> -->
 					<?php
-					echo $this->Form->input('rtags',array('value' => '','class' => 'tag_id',
+					echo $this->Form->hidden('rtags',array('value' => '','class' => 'tag_id',
 							 "ng-model"=>"rTagId","required" => false,"id" => "rTagId"));
 					?>
 <!-- 					</div> -->

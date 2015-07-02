@@ -7,10 +7,14 @@ App::uses('Article', 'Model');
 App::uses('Date', 'Model');
 App::uses('BasicComponent', 'Controller/Component');
 App::uses('FollowComponent', 'Controller/Component');
-App::uses('AuthComponent', 'Controller/Component');
+// App::uses('AuthComponent', 'Controller/Component');
 Configure::load("static");
 class CommonComponent extends Component {
-    public $components = array('Basic',"Demand"."Follow","Auth");
+    public $components = array('Basic',"Demand",
+
+//     "Follow"
+
+    );
     public function getURL(&$that = null,$id = null){
 		$this->Basic->tribasicfiderbyid($that,Configure::read('tagID.URL'),'Article',"Article.ID",$id);
 		return $that->returntribasic[0]['Article']['name'];

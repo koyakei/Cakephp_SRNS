@@ -384,8 +384,9 @@ class CommonComponent extends Component {
 		$Trilink = new Trilink();
 		$options = array("conditions" =>
 				array(
-						"AND" =>
-						array("Trilink.Link_LFrom" =>$id[0]),
+						"AND" => array(array("Trilink.Link_LFrom" => $id[0]),
+								$id[1] != array('','') ? array("Trilink.Link_LFrom" => $id[1]):false
+						),
 						"Trilink.LFrom" => $trikey,
 				),
 // 				"joins" =>

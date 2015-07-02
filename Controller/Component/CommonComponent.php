@@ -3,6 +3,7 @@ App::uses('Tag', 'Model');
 App::uses('User', 'Model');
 App::uses('Link', 'Model');
 App::uses('Taglink', 'Model');
+App::uses('Trilink', 'Model');
 App::uses('Article', 'Model');
 App::uses('Date', 'Model');
 App::uses('BasicComponent', 'Controller/Component');
@@ -359,6 +360,48 @@ class CommonComponent extends Component {
 		return array('tagparentres'=>$tagparentres,
 				'articleparentres'=> $articleparentres,
 				 'taghash' => $taghash);
+	}
+	public function searchFinder($id, $trikey){
+		$result = array();
+// 		debug($id);
+		return self::searchEntity($id, $trikey);
+
+	}
+	private function searchBoth($id,$trikey){
+		foreach (self::models as $model){
+			yield  self::searchEntity($id, $trikey, $model);
+		}
+	}
+	/**
+	 *
+	 * @param int $id
+	 * @param int $trikey
+	 * @param string $model
+	 * @return multitype:
+	 */
+	private function searchEntity($id, $trikey){
+		$result = array();
+		$Trilink = new Trilink();
+		$options = array("conditions" =>
+				array(
+						"AND" =>
+						array("Trilink.Link_LFrom" =>$id[0]),
+						"Trilink.LFrom" => $trikey,
+				),
+// 				"joins" =>
+// 				array(
+// 						array(
+// 								'table' => 'article',
+// 								'type' => 'INNER',
+// 								'alias' => 'Article',
+// 								'conditions' => array(
+// 										array("Trilink.Link_LTo = " . ucfirst($model).".ID"),
+// 								)
+// 						),
+// 				)
+
+		);
+		return $Trilink->find("all",$options);
 	}
 	/**
 	 * view2用のテーブル取得関数

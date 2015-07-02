@@ -736,7 +736,7 @@ public function beforeFilter() {
         	$id = $this->request->query('id');
         	//リプライか　searchかをidのあるなしで判定　
         	if (is_null($id)|| $id == ''){
-        		debug($this->Common->searchFinder($this->request->query('searching_tag_ids'),(int)Configure::read('tagID.search')));
+
 // 				return json_encode($this->Common->searchFinder($this->request->query('searching_tag_ids'),(int)Configure::read('tagID.search')));
         	} else {
 //         		$allresults  = $this->Common->trifinderbyid($this,$id,array('key'=>$this->request->query('trikey')));
@@ -757,7 +757,7 @@ public function beforeFilter() {
 // 			$this->set('sorting_tags',$sorting_tags);
 // 			$this->set('taghash',$taghash);
 // 			$this->set("andSet_ids",$andSet_ids);
-// 			$this->set("allresults",$allresults);
+			$this->set("results",$this->Common->searchFinder($this->request->query('searching_tag_ids'),(int)Configure::read('tagID.search')));
         }
 		public function result_converter($temp,&$taghash){
 			$taghash = $temp['taghash'];

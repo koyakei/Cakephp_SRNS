@@ -112,6 +112,54 @@ class FollowsController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+	/**
+	 *
+	 * @param string $target
+	 * @param boolean $bool
+	 *
+	 *
+	 *  true: not followed yet
+	 *  false: followd yet will unfollow
+	 */
+	public function follow_unfollow($target = null, boolean $bool = null){
+
+		if (is_null($bool)){
+			$bool = $this->request->query("follow");
+		}
+		$target = $this->request->query("target_id");
+		$Follow = new Follow();
+		// 		$data =array("Follow.target"=> $this->request->query("target_id"),
+		// 		"Follow.user_id" => $this->request->query("user_id"));
+		$child = array("target"=> $target,
+				"user_id" => $this->Auth->user("id"));
+		$data["Follow"] = $child;
+		// 		debug($this->request->query("follow") == "true");
+		if ($bool== "true"){
+			$Follow->create();
+			if($Follow->save($data,false)){
+				if($this->request->is('ajax')){
+					$this->set('res', true);
+					$this->layout = 'ajax';
+				}else {
+					$this->Session->setFlash(__('followed.'));
+				}
+			}else{
+				throw new Exception('can not followd');
+			}
+		}else {
+			if($Follow->delete($Follow->find("first",array("fields" =>"Follow.id" ,"conditions" =>$child))["Follow"]["id"])){
+				if($this->request->is('ajax')){
+					$this->set('res', 0);
+					$this->layout = 'ajax';
+				}else {
+					$this->Session->setFlash(__('unfollowed.'));
+				}
+
+			}else{
+				throw new Exception('can not unfollowd');
+			}
+		}
+	}
 
 	public function myfollow($id = null){
 		$this->Follow->recursive = 0;

@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('FollowController', 'Controller');
 App::uses('TagauthsController', 'Controller');
 App::uses('BasicComponent', 'Controller/Component', 'Follow/Component');
 Configure::load("static");
@@ -145,14 +146,15 @@ class LinksController extends AppController {
 	}
 /**
  * add method
- *TODO:Follow 追加
+ *
  * @return void
  */
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Link->create();
-			if ($this->Link->save($this->request->data)) {
-// 				$this->Follow->add($this->request->data("Link.target"));
+			if ($this->Link->save($this->request->data)) {//TODO:aa
+				$Follow = FollowsController();
+				$Follow->follow_unfollow($this->request->data("Link.target"),true);
 				$this->Session->setFlash(__('The link has been saved.'));
 // 				$this->redirect($this->referer());
 			} else {

@@ -749,7 +749,7 @@ $newart );
 			$data ['Tagauthcount'] = array (
 					'user_id' => $this->request->data ['Tag'] ['user_id'],
 					'tag_id' => $this->last_id,
-					'quant' => $max_quant .
+					'quant' => $max_quant ,
 			);
 			$this->loadModel ( 'Tagauthcount' );
 			$this->Tagauthcount->create ();

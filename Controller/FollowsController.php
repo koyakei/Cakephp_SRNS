@@ -94,7 +94,6 @@ class FollowsController extends AppController {
 
 /**
  * delete method
- *
  * @throws NotFoundException
  * @param string $id
  * @return void
@@ -116,13 +115,10 @@ class FollowsController extends AppController {
 	 *
 	 * @param string $target
 	 * @param boolean $bool
-	 *
-	 *
 	 *  true: not followed yet
 	 *  false: followd yet will unfollow
 	 */
 	public function follow_unfollow($target = null, boolean $bool = null){
-
 		if (is_null($bool)){
 			$bool = $this->request->query("follow");
 		}

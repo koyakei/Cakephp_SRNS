@@ -9,6 +9,7 @@
 // 		)
 // 	);
 ?>
+<table>
 <?php foreach ($results  as $result): ?>
 <tr>
 					<td>
@@ -24,3 +25,4 @@
 					</td>
 			</tr>
 <?php endforeach; ?>
+</table>

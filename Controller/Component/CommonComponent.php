@@ -363,9 +363,7 @@ class CommonComponent extends Component {
 	}
 	public function searchFinder($id, $trikey){
 		$result = array();
-// 		debug($id);
 		return self::searchEntity($id, $trikey);
-
 	}
 	private function searchBoth($id,$trikey){
 		foreach (self::models as $model){
@@ -389,18 +387,6 @@ class CommonComponent extends Component {
 						),
 						"Trilink.LFrom" => $trikey,
 				),
-// 				"joins" =>
-// 				array(
-// 						array(
-// 								'table' => 'article',
-// 								'type' => 'INNER',
-// 								'alias' => 'Article',
-// 								'conditions' => array(
-// 										array("Trilink.Link_LTo = " . ucfirst($model).".ID"),
-// 								)
-// 						),
-// 				)
-
 		);
 		return $Trilink->find("all",$options);
 	}

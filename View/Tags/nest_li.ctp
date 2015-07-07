@@ -1,41 +1,17 @@
 <?php
-echo $this->Html->script(array('jquery-sortable'));
+echo $this->Html->script(array('jquery-sortable'.'nest_li'));
 ?>
  <link href="http://johnny.github.io/jquery-sortable/css/vendor.css" rel="stylesheet">
   <link href="http://johnny.github.io/jquery-sortable/css/application.css" rel="stylesheet">
-<ol class="default vertical">
-              <li>
+<ol ng-app class="default vertical">
+ <div ng-repeat=" nest in root">
+              <li >
                 Second
 
                 <ol></ol>
               </li>
-              <li>
-                Third
-                <ol>
-                  <li class="">Second</li>
-                  <li class="">
-                First
-                <ol></ol>
-              </li>
-              <li class="">Second</li>
-              <li>First</li>
-                  <li>
-                    Third
-                    <ol>
-                      <li>First</li>
-
-                    </ol>
-                    <ol>
-                      <li>First</li>
-                      <li>Second</li>
-                    </ol>
-                  </li>
-                </ol>
-              </li>
-              <li>Fourth</li>
-              <li>Fifth</li>
-              <li>Sixth</li>
-            </ol>
+              </div>
+</ol>
 
             <!--
             between rows の 関係性を追加するUIを考える　d3d 導入は面倒だ。

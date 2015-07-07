@@ -442,17 +442,32 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	if (is_null($trikey)){
     		$trikey  = Configure::read("tagID.reply");
     	}
-    	$id = $this->request->query("id");
-    	    $this->autoRender = FALSE;
-    		$result = array();
-    		$Trilink = new Trilink();
-    		$options = array("conditions" =>
-    				array(
-    						"Trilink.Link_LFrom" => $id,
-    						"Trilink.LFrom" => $trikey,
-    				),
-    		);
-    		return json_encode($Trilink->find("all",$options));
+    	$id = json_decode($this->request->query("id"));
+    	$this->autoRender = FALSE;
+    	$Trilink = new Trilink();
+    	$root = self::nodeFinder($id, $trikey, $Trilink);
+    	$parents = $root;
+    	foreach ($parents as $index => $parent){
+
+
+    		if ($parent == $child){
+    			unset($parent[$index]);
+    			$child =self::nodeFinder($id, $trikey, $Trilink,$root,$parents);
+//     			もう一段入る
+    		}
+    	}
+    	return json_encode(self::nodeFinder($id, $trikey, $Trilink));
+    }
+
+    private function nodeFinder($id,$trikey,$Trilink,$root,$parents){
+    	//TODO:ここでネストして子供を取ってくる
+    	$options = array("conditions" =>
+    			array(
+    					"Trilink.Link_LFrom" => $id,
+    					"Trilink.LFrom" => $trikey,
+    			),
+    	);
+    	return $Trilink->find("all",$options);
     }
 	public function tagSRAdd(){
 		$options['key'] = Configure::read('tagID.search');

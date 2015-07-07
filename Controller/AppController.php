@@ -438,6 +438,21 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	$this->loadModel('Key');
     	return $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
     }
+    public function nest_result($id,$trikey){
+    	if (is_null($trikey)){
+    		$trikey  = Configure::read("tagID.reply");
+    	}
+    	    $this->autoRender = FALSE;
+    		$result = array();
+    		$Trilink = new Trilink();
+    		$options = array("conditions" =>
+    				array(
+    						"Trilink.Link_LFrom" => $id,
+    						"Trilink.LFrom" => $trikey,
+    				),
+    		);
+    		return json_encode($Trilink->find("all",$options));
+    }
 	public function tagSRAdd(){
 		$options['key'] = Configure::read('tagID.search');
 		$this->Common->triAddbyid($this,

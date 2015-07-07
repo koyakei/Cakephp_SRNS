@@ -442,6 +442,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	if (is_null($trikey)){
     		$trikey  = Configure::read("tagID.reply");
     	}
+    	$id = $this->request->query("id");
     	    $this->autoRender = FALSE;
     		$result = array();
     		$Trilink = new Trilink();

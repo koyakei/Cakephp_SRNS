@@ -6,6 +6,7 @@ echo $this->Html->script(array('jquery-sortable'));
 <ol class="default vertical">
               <li>
                 Second
+
                 <ol></ol>
               </li>
               <li>
@@ -50,17 +51,17 @@ echo $this->Html->script(array('jquery-sortable'));
             trikey を　search tag みたいに使う？
             並列関係になっている記事同士のみを抜粋して、なんらかの方法で順番付けをする必要がある。
             順番付けの方法がたsearch のみでいいのかが問題。
-            
+
             どういうタイミングでマインドマップを起動するか？
             一個でも並列リンクがあれば、マップボタンを色を変える？もしくは表示　どちらにするか？
             色をかえるほうが、自分でクリックしに行けるから良いのではないか？
-            
+
             並列関係（双方向）の追加
             ＝など　双方向キーを設定する？
              -->
             <script>
             function GETarray(obj){
-            	console.log($('.default').sortable("serialize").get());
+            	console.log($('.default').sortable("toArray").get());
             }
             </script>
     <?php

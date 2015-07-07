@@ -823,28 +823,6 @@ $newart );
 		$taghash = array ();
 		$id = $this->request->query ( 'id' );
 		// リプライか　searchかをidのあるなしで判定　
-		if (is_null ( $id ) || $id == '') {
-
-			// return json_encode($this->Common->searchFinder($this->request->query('searching_tag_ids'),(int)Configure::read('tagID.search')));
-		} else {
-			// $allresults = $this->Common->trifinderbyid($this,$id,array('key'=>$this->request->query('trikey')));
-			// $root = array('tagparentres'=>$temp['tagparentres'],
-			// 'articleparentres'=> $temp['articleparentres'],
-			// 'taghash' => $temp['taghash']);
-			// $taghash = $temp['taghash'];
-			// $allresults = self::GET_sons_reply($id
-			// ,array($this->request->query('trikey'))
-			// ,$sorting_tags
-			// ,$taghash
-			// ,$root
-			// );
-		}
-
-		// $this->set('currentUserID', $this->Auth->user('id'));
-		// $this->set( 'ulist', $this->User->find( 'list', array( 'fields' => array( 'ID', 'username'))));
-		// $this->set('sorting_tags',$sorting_tags);
-		// $this->set('taghash',$taghash);
-		// $this->set("andSet_ids",$andSet_ids);
 		$this->set ( "results", $this->Common->searchFinder ( $this->request->query ( 'searching_tag_ids' ), ( int ) Configure::read ( 'tagID.search' ) ) );
 	}
 	public function result_converter($temp, &$taghash) {

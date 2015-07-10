@@ -447,16 +447,23 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	$Trilink = new Trilink();
     	$root = self::nodeFinder($id, $trikey, $Trilink);
     	$parents = $root;
-    	foreach ($parents as $index => $parent){
 
-
-    		if ($parent == $child){
-    			unset($parent[$index]);
-    			$child =self::nodeFinder($id, $trikey, $Trilink,$root,$parents);
-//     			もう一段入る
-    		}
-    	}
     	return json_encode(self::nodeFinder($id, $trikey, $Trilink));
+    }
+    const   models = array( 'article' ,'tag');
+    private function findItarator($root,&$parents){
+    	foreach ($parents as $p_index => $parent){
+    		$children =self::nodeFinder($id, $trikey, $Trilink,$root,$parents);//子供を確認
+    		//parent の削除はrootの存在確認がとれてから
+    		foreach ($children as $c_idx => $child){
+	    		if (Hash::get($root, "{n}.Trilink.Link_LTo=".$child["Trilink"]["Link_LTo"] ,false)){//rootにcihldren が存在したら
+	    			unset($parent[$p_index]);//親削除
+	    			array_push($children, $child);
+    			}
+    		}
+    		$children[$c_idx] = self::findItarator($root, $parents);
+    	}
+    	return $children;
     }
 
     private function nodeFinder($id,$trikey,$Trilink,$root,$parents){

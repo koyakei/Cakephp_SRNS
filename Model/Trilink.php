@@ -8,9 +8,7 @@ Configure::load("static");
  * @property Owner $Owner
  */
 class Trilink extends Date {
-
-
-
+	public $cacheQueries = true;
 
 /**
  * Use table
@@ -24,7 +22,8 @@ class Trilink extends Date {
  *
  * @var string
  */
-	public $primaryKey = 'ID';
+	public $primaryKey = 'Link_LTo';
+	public $actsAs = array('Containable');
 
 /**
  * Validation rules
@@ -32,17 +31,42 @@ class Trilink extends Date {
  * @var array
  */
 	public $hasOne= array(
-			'Tag' => array(
-					'className' => 'Tag',
-					'foreignKey' => FALSE,
+		'Tag' => array(
+				'className' => 'Tag',
+				'foreignKey' => FALSE,
+				'dependent' => false,
+				'conditions' => array('`Tag.ID = Trilink.Link_LTo`'),
+				),
+		'Article' => array(
+				'className' => 'Article',
+				'foreignKey' => FALSE,
+				'dependent' => false,
+				'conditions' => array('`Article.ID = Trilink.Link_LTo`'),
+		),
+
+	);
+	public $hasMany= array(
+			'Search' => array(
+					'className' => 'Strilink',
+// 					'table' => 'trilinks',
+// 									                    'alias' => 'Strilink',
+					'foreignKey' => "Link_LTo",
+					'associationForeignKey' => 'Link_LTo',
 					'dependent' => false,
-					'conditions' => array('`Tag.ID = Trilink.Link_LTo`'),
+					'conditions'=> array(
+// 							"`Search.Link_LTo = Strilink.Link_LTo`",
+							"`Search.LFrom = 2146`",//TODO:valuable in assosiation conditions
 					),
-			'Article' => array(
-					'className' => 'Article',
-					'foreignKey' => FALSE,
-					'dependent' => false,
-					'conditions' => array('`Article.ID = Trilink.Link_LTo`'),
-			),
-			);
+// 									'fields' => array('Tag.ID'),
+// 					'joins'
+// 					 => array(
+// 	                    'table' => 'tag',
+// 	                    'alias' => 'Tag',
+// // 	                    'type' => 'LEFT',
+// 	                    'conditions' => array(
+// 			                "`Tag.ID = Search.Link_LFrom`",
+// 					)
+// 			)
+		),
+	);
 }

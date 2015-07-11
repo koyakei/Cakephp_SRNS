@@ -445,134 +445,102 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	$id = json_decode($this->request->query("id"));
     	$this->autoRender = FALSE;
     	$Trilink = new Trilink();
-    	$root = self::nodeFinder($id, $trikey, $Trilink);
+    	$root = self::nodeFinder(null, Configure::read('tagID.reply'), $Trilink_model,$id);//ノードを取得したら、子供でassosiationしない。
+    	//$rootを取得した時に
+    	self::findItarator($roots, $parents, $unbindTrilink, $trikey);
+    	$unbindTrilink = new Trilink();
+    	$unbindTrilink->unbindModel(array('hasMany' => array('Tag','Article','Search')),false);
     	$parents = $root;
-
-    	return json_encode(self::findItarator($roots, $parents));
+    	return json_encode(self::findItarator($roots, $parents,$unbindTrilink,$trikey));
     }
-    private function findItarator(&$roots,&$parents,$quantize = 0,$options =null){
+    private function findItarator(&$roots,&$parents,&$unbindTrilink,$trikey,$quantize = 0,$option =null){
 		$indexHashes = array();
-		if ($option['key'] == null) {
-			$option['key'] = Configure::read('tagID.reply');
-		}
 		$children = array();
 		foreach ($parents as $parent_idx =>$parent){
 			$parents[$parent_idx]['trikeys']
-			= $this->Common->allTrikeyFinderWithLinkId($parent["Link"]["ID"]);
+			= $this->Common->allTrikeyFinderWithLinkId($parent["TriLink"]["ID"]);
 		}
-
-		foreach (self::models as $p_model){
-			$from_id = $to_id = array();
-			$p_model_parent = $p_model."parentres";
-			foreach ($parents[$p_model_parent] as $parent_idx =>$parent){
-
-				foreach (self::models as  $r_model){
-					$r_model_parent = $r_model. "parentres";
-					foreach ($roots[$r_model_parent] as $root_idx =>$root){
-							if ($parent[ucfirst($p_model)]["ID"] != null){
-								$is_child = false;
-								$this_nodes  = $this->Common->trifinderbyid($that,$parent[ucfirst($p_model)]["ID"],$quantize,$options);
-// 								$this_nodes = $this->Common->nestfinderbyid($that, $roots, $sorting_tags, $id, $parents);
-								//indexHash generator
-								foreach ($this->Common->allTrikeyFinder($parent["Link"]["ID"]) as $key =>$index){
-									if ($indexHashes[$key]== null){
-										$indexHashes[$key] = $index;
-									}
-								}
-
-								foreach (self::models as $model){
-									$model_parent = $model."parentres";
-									foreach ($this_nodes[$model_parent] as $this_node){
-										foreach (self::models as $ip_model){
-											$ip_model_parent = $ip_model."parentres";
-											foreach ($parents[$ip_model_parent] as $iparent_idx =>$iparent){
-
-												if (($root[ucfirst($r_model)]['ID'] == $this_node[ucfirst($model)]['ID'] && //ルートノードに存在し、かつ
-														$iparent[ucfirst($ip_model)]['ID'] == $this_node[ucfirst($model)]['ID'])){ // 親に含まれているなら
-													//削除フェーズ
-													unset($parents[$ip_model_parent][$iparent_idx]);
-
-													array_merge($parents[$p_model_parent]);
-													//TODO:配列を詰めるところを削除したせいで　結果に空欄ができていることに気づかなかった
-													//follow キーを追加すると空と認識されないから詰まない　ステップ実行とかで　早くそれを認識する方法を考える
-													//モジュール化して整理しないとまた同じ間違いをするのではないか？考えよう
-													//追加フェーズ
-													// 														//follow
-													// 														$roots[$p_model_parent][$parent_idx]["follow"] = array();
-													// 														$root["follow"] =$roots[$p_model_parent][$parent_idx]["follow"];
-													array_push($root["follow"],$this_node["Link"]["LFrom"]);
-													array_push($roots[$p_model_parent][$parent_idx]["follow"],$parent["Link"]["LFrom"]);
-													//leaf 追加
-													if (is_null($parents[$p_model_parent][$parent_idx]['leaf'])){
-														$parents[$p_model_parent][$parent_idx]['leaf']["nodes"] = array();
-														$parents[$p_model_parent][$parent_idx]['leaf']["index"] = array();
-														$parents[$p_model_parent][$parent_idx]['leaf']['trikeys']= array();
-														$parents[$p_model_parent][$parent_idx]['leaf']["taghash"] = array();
-														if (is_null($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent])){
-															$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent] = array();
-														}
-													}
-													array_push($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$model_parent]
-															,$root);
-
-												}
-											}
-										}
-
-									}
-								}
+		$from_id = $to_id = array();
+		foreach ($parents as $parent_idx =>$parent){
+			foreach ($roots as $root_idx =>$root){
+				$is_child = false;
+				$this_nodes  = self::nodeFinder($root_idx,$parent_id, $trikey, $unbindTrilink);
+				//indexHash generator
+				foreach ($this->Common->allTrikeyFinder($parent["Link"]["ID"]) as $key =>$index){
+					if ($indexHashes[$key]== null){
+						$indexHashes[$key] = $index;
+					}
+				}
+				foreach ($this_nodes as $this_node){
+					foreach ($parents as $iparent_idx =>$iparent){
+						if (($root["Taglink"]['ID'] == $this_node["Taglink"]['ID'] && //ルートノードに存在し、かつ
+								$iparent["Taglink"]['ID'] == $this_node["Taglink"]['ID'])){ // 親に含まれているなら
+							//削除フェーズ
+							unset($parents[$iparent_idx]);
+							array_merge($parents);
+							//TODO:配列を詰めるところを削除したせいで　結果に空欄ができていることに気づかなかった
+							//follow キーを追加すると空と認識されないから詰まない　ステップ実行とかで　早くそれを認識する方法を考える
+							//モジュール化して整理しないとまた同じ間違いをするのではないか？考えよう
+							//追加フェーズ
+							array_push($root["follow"],$this_node["Link"]["LFrom"]);
+							array_push($roots[$parent_idx]["follow"],$parent["Link"]["LFrom"]);
+							//leaf 追加
+							if (is_null($parents[$parent_idx]['leaf'])){
+								$parents[$parent_idx]['leaf'] = array(
+										"nodes" => array(),
+										"index" => array(),
+										'trikeys' => array(),
+										"taghash" => array(),
+								);
+							}
+							array_push($parents[$parent_idx]['leaf']["nodes"]
+									,$root);
 						}
 					}
 				}
-				if(!empty($parents[$p_model_parent][$parent_idx]['leaf'])){
-					$from_id = $to_id = array();
-					foreach (self::models as $taghash_model){
-						$taghash_model_parent = $taghash_model."parentres";
-						list($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],$parents[$p_model_parent][$parent_idx]['leaf']["taghash"]) =
-						$this->Common->getSearchRelation($that,$parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent] ,
-								$parents[$p_model_parent][$parent_idx]['leaf']["taghash"], (string)ucfirst($taghash_model));
-						if (is_array($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent])){
-							array_merge($from_id,
-									Hash::extract($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],
-											"{n}.Link.LFrom"));
-							array_merge($to_id,
-									Hash::extract($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent],
-											"{n}.Link.LTo"));
-						}
-						$from_id = $to_id = array();
-					}
+				// taghash 関連付けられているタグを追加する。
 					$parents[$p_model_parent][$parent_idx]['leaf']["parallel"] = array(); // 並列関係の判定
 					$parents[$p_model_parent][$parent_idx]['leaf']["parallel"] = !empty($this->Basic->parallelChecker($from_id,$to_id));
-				}
-				if (is_array($parents[$p_model_parent][$parent_idx]['leaf']["nodes"][$taghash_model_parent])){
-				array_merge($from_id,
-						Hash::extract($parents[$p_model_parent],
-								"{n}.Link.LFrom"));
-				array_merge($to_id,
-						Hash::extract($parents[$p_model_parent],
-								"{n}.Link.LTo"));
-				}
-			}
-			$parents["parallel"] = array(); // 並列関係の判定
-			$parents["parallel"] = !empty($this->Basic->parallelChecker($from_id,$to_id));
 
-			list($parents[$p_model_parent],$taghash) =
-			$this->Common->getSearchRelation($that,$parents[$p_model_parent] , $taghash, (string)ucfirst($p_model));
+			}
 		}
-		$parents["taghash"] =$taghash;
-		$parents["indexHashes"] =$indexHashes;
 		return $parents;
     }
 
-    private function nodeFinder($id,$trikey,$Trilink,$root,$parents){
+    private function GETPrallel(){
+    	//
+    	$from_id = $to_id = array();
+    	if (is_array($parents[$parent_idx]['leaf']["nodes"][$taghash_model_parent])){
+    		//子同士にリンクが貼られているか確認するために　
+    		array_merge($from_id,
+    				Hash::extract($parents[$p_model_parent],
+    						"{n}.Link.LFrom"));
+    		array_merge($to_id,
+    				Hash::extract($parents[$p_model_parent],
+    						"{n}.Link.LTo"));
+    	}
+    	$parents["parallel"] = array(); // 並列関係の判定
+    	$parents["parallel"] = !empty($this->Basic->parallelChecker($from_id,$to_id));
+    	return $parent;
+    }
+/**
+ *
+ * @param string $root_ids
+ *   null の場合は無条件
+ * @param  $trikey tagID.search
+ * @param unknown $Trilink_model
+ * @param unknown $parent_ids
+ */
+    private function nodeFinder($root_ids= null,$trikey,$Trilink_model,$parent_ids){
     	//TODO:ここでネストして子供を取ってくる
     	$options = array("conditions" =>
     			array(
-    					"Trilink.Link_LFrom" => $id,
+    					"Trilink.Link_LFrom" => $parent_ids,
+    					is_null($root_ids)?:"Trilink.Link_LTo" => $root_ids,
     					"Trilink.LFrom" => $trikey,
     			),
     	);
-    	return $Trilink->find("all",$options);
+    	return $Trilink_model->find("all",$options);
     }
 	public function tagSRAdd(){
 		$options['key'] = Configure::read('tagID.search');

@@ -387,8 +387,43 @@ class CommonComponent extends Component {
 						),
 						"Trilink.LFrom" => $trikey,
 				),
+				'contain' => array("Tag","Article",
+						"Search" =>array("fields" => array("Link_LTo"),"Stag")
+				),
 		);
 		return $Trilink->find("all",$options);
+		$params = array(
+				'fields' => array(
+						'username'
+				),
+				'contain' => array(
+						'Profile',
+						'Account' => array(
+								'AccountSummary'
+						),
+						'Post' => array(
+								'PostAttachment' => array(
+										'fields' => array(
+												'id',
+												'name'
+										),
+										'PostAttachmentHistory' => array(
+												'HistoryNote' => array(
+														'fields' => array(
+																'id',
+																'note'
+														)
+												)
+										)
+								),
+								'Tag' => array(
+										'conditions' => array(
+												'Tag.name LIKE' => '%1%'
+										)
+								)
+						)
+				)
+		);
 	}
 	/**
 	 * view2用のテーブル取得関数

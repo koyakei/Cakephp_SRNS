@@ -823,7 +823,10 @@ $newart );
 		$taghash = array ();
 		$id = $this->request->query ( 'id' );
 		// リプライか　searchかをidのあるなしで判定　
-		$this->set ( "results", $this->Common->searchFinder ( $this->request->query ( 'searching_tag_ids' ), ( int ) Configure::read ( 'tagID.search' ) ) );
+		debug($this->Common->searchFinder ( $this->request->query ( 'searching_tag_ids' ), ( int ) Configure::read ( 'tagID.search' ) ));
+		$this->set ("results",
+				 $this->Common->searchFinder ( $this->request->query ( 'searching_tag_ids' ), ( int ) Configure::read ( 'tagID.search' ) )
+				);
 	}
 	public function result_converter($temp, &$taghash) {
 		$taghash = $temp ['taghash'];

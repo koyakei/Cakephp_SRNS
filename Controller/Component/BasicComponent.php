@@ -11,10 +11,12 @@ App::uses('ConnectionManager', 'Model');
 class BasicComponent extends Component {
 	public $components = array('Auth');
 
-	public function parallelChecker($from_id , $to_id){
+	public function parallelChecker($this_node,$not_this_trikey
+			, $to_id){
 		$Link = new Link();
-		return $Link->find("first" ,array(
+		return $Link->find("all" ,array(
 				"conditions"=> array(
+					"NOT" => array("LFrom" => $not_this_trikey),
 					"Link.LFrom" => $from_id,
 					"Link.LTo" => $to_id,
 				)

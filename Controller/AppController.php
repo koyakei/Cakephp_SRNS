@@ -502,6 +502,15 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 		}
 		return $parents;
     }
+    private function SETnodeFinderOptins($parent_ids,$root_ids,$trikey){
+		return array("conditions" =>
+    			array(
+    					"Trilink.Link_LFrom" => $parent_ids,
+    					is_null($root_ids)?:"Trilink.Link_LTo" => $root_ids,
+    					"Trilink.LFrom" => $trikey,
+    			),
+    	);
+    }
 /**
  *
  * @param string $root_ids
@@ -512,12 +521,26 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
  */
     private function nodeFinder($root_ids= null,$trikey,$Trilink_model,$parent_ids){
     	//TODO:ここでネストして子供を取ってくる
-    	$options = array("conditions" =>
+    	$options = self::SETnodeFinderOptins($parent_ids, $root_ids, $trikey);
+    	return $Trilink_model->find("all",$options);
+    }
+    /**
+     *
+     * @param string $root_ids
+     *   null の場合は無条件
+     * @param  $trikey tagID.search
+     * @param unknown $Trilink_model
+     * @param unknown $parent_ids
+     */
+    private function rootFinder($root_ids= null,$trikey,$Trilink_model,$parent_ids){
+    	$options = self::SETnodeFinderOptins($parent_ids, $root_ids, $trikey);
+    	//関連付け取得
+    	array_merge($options,
     			array(
-    					"Trilink.Link_LFrom" => $parent_ids,
-    					is_null($root_ids)?:"Trilink.Link_LTo" => $root_ids,
-    					"Trilink.LFrom" => $trikey,
-    			),
+    					'contain' => array("Tag","Article",
+    							"Search" =>array("fields" => array("Link_LTo"),"Stag")
+    					),
+    			)
     	);
     	return $Trilink_model->find("all",$options);
     }

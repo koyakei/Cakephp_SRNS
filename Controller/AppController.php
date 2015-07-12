@@ -531,6 +531,48 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
      * @param  $trikey tagID.search
      * @param unknown $Trilink_model
      * @param unknown $parent_ids
+     * @return array root node result
+     *  @example
+     *  (int) 7 => array(
+		'Trilink' => array(
+			'name' => 'Search',
+		),
+		'Tag' => array(
+			'ID' => null,
+			'name' => null,
+		),
+		'Article' => array(
+			'ID' => '100490',
+			'name' => '外部サイトからの　インポート',
+		),
+		'Search' => array(
+			(int) 0 => array(
+				'Link_LTo' => '100490',
+				'Link_LFrom' => '2140',
+				'Stag' => array(
+					'ID' => '2140',
+					'name' => 'SRNS',
+				)
+			)
+		)
+		'Parallel' => array(
+		From　なのか　Toなのかで矢印の向きが変わる
+			(int) 0 => array(
+				'Link_LTo' => '100490',
+				'Trikey' => array(
+					'ID' => '2140',
+					'name' => 'SRNS',
+				)
+			)
+			(int) 1 => array(
+				'Link_LFrom' => '2140',
+				'Trikey' => array(
+					'ID' => '2140',
+					'name' => 'SRNS',
+				)
+			)
+		)
+	),
      */
     private function rootFinder($root_ids= null,$trikey,$Trilink_model,$parent_ids){
     	$options = self::SETnodeFinderOptins($parent_ids, $root_ids, $trikey);
@@ -542,6 +584,8 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     					),
     			)
     	);
+    	//並列情報の取得
+    	//
     	return $Trilink_model->find("all",$options);
     }
 	public function tagSRAdd(){

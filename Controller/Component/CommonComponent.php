@@ -388,10 +388,13 @@ class CommonComponent extends Component {
 						"Trilink.LFrom" => $trikey,
 				),
 				'contain' => array("Tag","Article",
-						"Search" =>array("fields" => array("Link_LTo"),"Stag")
+						"Search" =>array("fields" => array("Link_LTo"),"Stag"),
+						'Parallel',
 				),
 		);
 		return $Trilink->find("all",$options);
+		//リプライでどうやって　なかに
+		//Rtag niyotte　headding を並び替えるにや？
 		$params = array(
 				'fields' => array(
 						'username'

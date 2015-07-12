@@ -48,25 +48,35 @@ class Trilink extends Date {
 	public $hasMany= array(
 			'Search' => array(
 					'className' => 'Strilink',
-// 					'table' => 'trilinks',
-// 									                    'alias' => 'Strilink',
 					'foreignKey' => "Link_LTo",
 					'associationForeignKey' => 'Link_LTo',
 					'dependent' => false,
 					'conditions'=> array(
-// 							"`Search.Link_LTo = Strilink.Link_LTo`",
-							"`Search.LFrom = 2146`",//TODO:valuable in assosiation conditions
+							"`Search.LFrom = 2146`",
 					),
-// 									'fields' => array('Tag.ID'),
-// 					'joins'
-// 					 => array(
-// 	                    'table' => 'tag',
-// 	                    'alias' => 'Tag',
-// // 	                    'type' => 'LEFT',
-// 	                    'conditions' => array(
-// 			                "`Tag.ID = Search.Link_LFrom`",
-// 					)
-// 			)
 		),
+			// 自らの結果に存在するか調査
+			//ajaxで取得した時に　関連性を追加するからっこでは不適当なのか？
+			//foreachで回すのめんどうさすぎる　何とかして　assosiation で自己三章でkないものか。
+			//belongsTo にしようか　
+		'Parallel' => array(
+			'className' => 'Trilink',
+// 			'foreignKey' =>array("AND" =>array("Link_LTo","Link_LFrom" )) ,// "Link_LTo" ,//array('Link_LTo',"Link_LFrom"),
+// 			'associationForeignKey' =>array("AND" =>array("Link_LTo","Link_LFrom" )) ,
+			'fields' => array("Parallel.ID"),
+			'foreignKey' => "Link_LTo",
+// 				'associationForeignKey' => 'Link_LTo',
+			'dependent' => false,
+			'conditions' => array(
+// 					'AND' => array(
+// 							array(
+									'Parallel.Link_LFrom = ({$__cakeID__$})'
+
+// 							),
+// 							array('Parallel.Link_LTo' => '{$__cakeID__$}')
+// 					)
+			),
+		),
+
 	);
 }

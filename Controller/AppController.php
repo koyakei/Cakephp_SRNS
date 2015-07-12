@@ -498,30 +498,9 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 						}
 					}
 				}
-				// taghash 関連付けられているタグを追加する。
-					$parents[$p_model_parent][$parent_idx]['leaf']["parallel"] = array(); // 並列関係の判定
-					$parents[$p_model_parent][$parent_idx]['leaf']["parallel"] = !empty($this->Basic->parallelChecker($from_id,$to_id));
-
 			}
 		}
 		return $parents;
-    }
-
-    private function GETPrallel(){
-    	//
-    	$from_id = $to_id = array();
-    	if (is_array($parents[$parent_idx]['leaf']["nodes"][$taghash_model_parent])){
-    		//子同士にリンクが貼られているか確認するために　
-    		array_merge($from_id,
-    				Hash::extract($parents[$p_model_parent],
-    						"{n}.Link.LFrom"));
-    		array_merge($to_id,
-    				Hash::extract($parents[$p_model_parent],
-    						"{n}.Link.LTo"));
-    	}
-    	$parents["parallel"] = array(); // 並列関係の判定
-    	$parents["parallel"] = !empty($this->Basic->parallelChecker($from_id,$to_id));
-    	return $parent;
     }
 /**
  *

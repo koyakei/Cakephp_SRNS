@@ -3,8 +3,12 @@ echo $this->Html->script(array('jquery-sortable'.'nest_li'));
 ?>
  <link href="http://johnny.github.io/jquery-sortable/css/vendor.css" rel="stylesheet">
   <link href="http://johnny.github.io/jquery-sortable/css/application.css" rel="stylesheet">
+  <div id="data_store">
+  	<input type="hidden" id= "root_ids" value="<?php echo $this->params['pass'][0]; ?>">
+  	<input type="hidden" id= "root_ids" value="<?php echo Configure::read("tagID.reply"); ?>">
+</div>
 <ol ng-app class="default vertical">
- <div ng-repeat=" nest in root">
+ <div ng-repeat=" nest in roots">
               <li >
                 Second
 
@@ -12,29 +16,6 @@ echo $this->Html->script(array('jquery-sortable'.'nest_li'));
               </li>
               </div>
 </ol>
-
-            <!--
-            between rows の 関係性を追加するUIを考える　d3d 導入は面倒だ。
-            考えなければいけない範囲
-            同一画面での並列関係の追加
-            ベン図で表記不可能な　集合関係も描写するかを決定する。
-            データ制御上の拡張の余地は残しておくべき　
-            ネットワーク生成したデータ構造を　view の前段階でツリーに置き直して　ツリーとして表示するというのがいいのか？
-            ネットワーク型だとsql そのまんまだからそんなこと考えなくていいのか？
-
-            一番近い　tr 同士が　現在操作している行になるように自動で並び替える。
-            関係先が何本かある状態でも、セットで選択できれば　ごちゃごちゃしないだろう。
-            trikey を　search tag みたいに使う？
-            並列関係になっている記事同士のみを抜粋して、なんらかの方法で順番付けをする必要がある。
-            順番付けの方法がたsearch のみでいいのかが問題。
-
-            どういうタイミングでマインドマップを起動するか？
-            一個でも並列リンクがあれば、マップボタンを色を変える？もしくは表示　どちらにするか？
-            色をかえるほうが、自分でクリックしに行けるから良いのではないか？
-
-            並列関係（双方向）の追加
-            ＝など　双方向キーを設定する？
-             -->
             <script>
             function GETarray(obj){
             	console.log($('.default').sortable("toArray").get());

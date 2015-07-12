@@ -438,17 +438,13 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	$this->loadModel('Key');
     	return $this->Key->find( 'list', array( 'fields' => array( 'ID', 'name')));
     }
-    public function nest_result($id,$trikey){
-    	if (is_null($trikey)){
-    		$trikey  = Configure::read("tagID.reply");
-    	}
-    	$id = json_decode($this->request->query("id"));
+    public function ajaxList(){
+    	$root_ids = $this->request->query("root_ids");
+    	$trilkey = $this->request->query("root_ids");
     	$this->autoRender = FALSE;
-    	$Trilink = new Trilink();
-    	$root = self::nodeFinder(null, Configure::read('tagID.reply'), $id);//ノードを取得したら、子供でassosiationしない。
+    	$roots = self::rootFinder(null, Configure::read('tagID.reply'), $root_ids);//ノードを取得したら、子供でassosiationしない。
     	//$rootを取得した時に
-    	self::findItarator($roots, $parents, $trikey);
-    	$parents = $root;
+    	$parents = $roots;
     	self::findItarator($roots, $parents,$trikey);
     	return json_encode($parents);
     }

@@ -445,15 +445,23 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	$id = json_decode($this->request->query("id"));
     	$this->autoRender = FALSE;
     	$Trilink = new Trilink();
-    	$root = self::nodeFinder(null, Configure::read('tagID.reply'), $Trilink_model,$id);//ノードを取得したら、子供でassosiationしない。
+    	$root = self::nodeFinder(null, Configure::read('tagID.reply'), $id);//ノードを取得したら、子供でassosiationしない。
     	//$rootを取得した時に
-    	self::findItarator($roots, $parents, $unbindTrilink, $trikey);
-    	$unbindTrilink = new Trilink();
-    	$unbindTrilink->unbindModel(array('hasMany' => array('Tag','Article','Search')),false);
+    	self::findItarator($roots, $parents, $trikey);
     	$parents = $root;
-    	return json_encode(self::findItarator($roots, $parents,$unbindTrilink,$trikey));
+    	self::findItarator($roots, $parents,$trikey);
+    	return json_encode($parents);
     }
-    private function findItarator(&$roots,&$parents,&$unbindTrilink,$trikey,$quantize = 0,$option =null){
+    /**
+     *
+     * @param unknown $roots
+     * @param unknown $parents　ここに結果を蓄積
+     * @param unknown $trikey
+     * @param number $quantize
+     * @param string $option
+     * @return multitype:multitype:
+     */
+    private function findItarator(&$roots,&$parents,$trikey,$quantize = 0,$option =null){
 		$indexHashes = array();
 		$children = array();
 		foreach ($parents as $parent_idx =>$parent){
@@ -464,7 +472,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 		foreach ($parents as $parent_idx =>$parent){
 			foreach ($roots as $root_idx =>$root){
 				$is_child = false;
-				$this_nodes  = self::nodeFinder($root_idx,$parent_id, $trikey, $unbindTrilink);
+				$this_nodes  = self::nodeFinder($root_idx,$parent_id, $trikey);
 				//indexHash generator
 				foreach ($this->Common->allTrikeyFinder($parent["Link"]["ID"]) as $key =>$index){
 					if ($indexHashes[$key]== null){
@@ -481,6 +489,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 							//TODO:配列を詰めるところを削除したせいで　結果に空欄ができていることに気づかなかった
 							//follow キーを追加すると空と認識されないから詰まない　ステップ実行とかで　早くそれを認識する方法を考える
 							//モジュール化して整理しないとまた同じ間違いをするのではないか？考えよう
+
 							//追加フェーズ
 							array_push($root["follow"],$this_node["Link"]["LFrom"]);
 							array_push($roots[$parent_idx]["follow"],$parent["Link"]["LFrom"]);
@@ -488,20 +497,29 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 							if (is_null($parents[$parent_idx]['leaf'])){
 								$parents[$parent_idx]['leaf'] = array(
 										"nodes" => array(),
-										"index" => array(),
-										'trikeys' => array(),
-										"taghash" => array(),
+// 										"index" => array(),
+// 										'trikeys' => array(),
+// 										"taghash" => array(),
 								);
 							}
 							array_push($parents[$parent_idx]['leaf']["nodes"]
 									,$root);
+							//参照で返すから　return しない。
+							self::findItarator($roots, $parents[$parent_idx]['leaf']["nodes"], $trikey);
+
 						}
 					}
 				}
 			}
 		}
-		return $parents;
     }
+    /**
+     *
+     * @param unknown $parent_ids
+     * @param unknown $root_ids
+     * @param unknown $trikey
+     * @return multitype:multitype:unknown
+     */
     private function SETnodeFinderOptins($parent_ids,$root_ids,$trikey){
 		return array("conditions" =>
     			array(
@@ -519,10 +537,10 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
  * @param unknown $Trilink_model
  * @param unknown $parent_ids
  */
-    private function nodeFinder($root_ids= null,$trikey,$Trilink_model,$parent_ids){
-    	//TODO:ここでネストして子供を取ってくる
+    private function nodeFinder($root_ids= null,$trikey,$parent_ids){
     	$options = self::SETnodeFinderOptins($parent_ids, $root_ids, $trikey);
-    	return $Trilink_model->find("all",$options);
+    	$Trilink = new Trilink();
+    	return $Trilink->find("all",$options);
     }
     /**
      *
@@ -574,19 +592,19 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 		)
 	),
      */
-    private function rootFinder($root_ids= null,$trikey,$Trilink_model,$parent_ids){
-    	$options = self::SETnodeFinderOptins($parent_ids, $root_ids, $trikey);
+    private function rootFinder($trikey,$parent_ids){
+    	$options = self::SETnodeFinderOptins($parent_ids, null, $trikey);
     	//関連付け取得
     	array_merge($options,
     			array(
     					'contain' => array("Tag","Article",
-    							"Search" =>array("fields" => array("Link_LTo"),"Stag")
+    							"Search" =>array("fields" => array("Link_LTo"),"Stag"),
+    							"Parallel"=>array("fields" => array("Link_LTo","Link_LFrom","name"),),
     					),
     			)
     	);
-    	//並列情報の取得
-    	//
-    	return $Trilink_model->find("all",$options);
+    	$Trilink = new Trilink();
+    	return $Trilink->find("all",$options);
     }
 	public function tagSRAdd(){
 		$options['key'] = Configure::read('tagID.search');

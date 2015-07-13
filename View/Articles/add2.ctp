@@ -3,9 +3,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
 
     <?php 	echo $this->Html->script(array('addArticle'));?>
-    <script>
-
-    </script>
   <article>
       <h2>Todo</h2>
     <div ng-app ng-controller="ArticleCtrl">

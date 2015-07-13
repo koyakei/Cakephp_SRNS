@@ -59,10 +59,10 @@ function toggleShow(obj) {
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
-    $(document).ready(function()
-    	    {
-    	        $(".myTable").tablesorter();
-    	    });
+//     $(document).ready(function()
+//     	    {
+//     	        $(".myTable").tablesorter();
+//     	    });
     </script>
 </head>
 <body>

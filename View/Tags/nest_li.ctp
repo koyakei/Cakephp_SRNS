@@ -12,19 +12,15 @@ echo $this->Html->script(array('jquery-sortable','nest_li'));
 </div>
 <div ng-app >
 <script type="text/ng-template" id="tree.html">
-<li ng-repeat="leafs in roots">
          {{leafs}}
          <ol>
-			<div ng-if="leafs.leaf.nodes" ng-repeat="leaf in leafs.leaf.nodes" ng-include="'tree.html'">
-
-			</div>
+			<li ng-if="leafs.leaf.nodes" ng-repeat="leafs in leafs.leaf.nodes" ng-include="'tree.html'">
      	</ol>
-</li>
-
 </script>
       {{tree}}
-<ol class="default vertical" ng-controller="NestCtrl" ng-repeat=" leafs in roots" ng-include="'tree.html'">
-
+<ol class="default vertical" ng-controller="NestCtrl" >
+<li ng-repeat="leafs in roots" ng-include="'tree.html'">
+</li>
  </ol>
             <script>
             function GETarray(obj){

@@ -8,7 +8,7 @@ echo $this->Html->script(array('jquery-sortable','nest_li'));
 ?>
   <div id="data_store">
   	<input type="hidden" id= "root_ids" value="<?php echo $this->params['pass'][0]; ?>">
-  	<input type="hidden" id= "root_ids" value="<?php echo Configure::read("tagID.reply"); ?>">
+  	<input type="hidden" id= "trikey" value="<?php echo Configure::read("tagID.reply"); ?>">
 </div>
 <div ng-app >
 <script type="text/ng-template" id="tree.html">
@@ -17,7 +17,7 @@ echo $this->Html->script(array('jquery-sortable','nest_li'));
 			<li ng-if="leafs.leaf.nodes" ng-repeat="leafs in leafs.leaf.nodes" ng-include="'tree.html'">
      	</ol>
 </script>
-      {{tree}}
+
 <ol class="default vertical" ng-controller="NestCtrl" >
 <li ng-repeat="leafs in roots" ng-include="'tree.html'">
 </li>

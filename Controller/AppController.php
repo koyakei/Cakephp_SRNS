@@ -440,9 +440,9 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     }
     public function ajaxList(){
     	$root_ids = $this->request->query("root_ids");
-    	$trilkey = $this->request->query("root_ids");
+    	$trikey = $this->request->query("trikey");
     	$this->autoRender = FALSE;
-    	$roots = self::rootFinder(null, Configure::read('tagID.reply'), $root_ids);//ノードを取得したら、子供でassosiationしない。
+    	$roots = self::rootFinder(Configure::read('tagID.reply'), $root_ids);//ノードを取得したら、子供でassosiationしない。
     	//$rootを取得した時に
     	$parents = $roots;
     	self::findItarator($roots, $parents,$trikey);

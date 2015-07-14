@@ -446,6 +446,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	//$rootを取得した時に
     	$parents = $roots;
     	self::findItarator($roots, $parents,$trikey);
+//     	debug($parents);
     	return json_encode($parents);
     }
     /**
@@ -460,53 +461,44 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     private function findItarator(&$roots,&$parents,$trikey,$quantize = 0,$option =null){
 		$indexHashes = array();
 		$children = array();
-		foreach ($parents as $parent_idx =>$parent){
-			$parents[$parent_idx]['trikeys']
-			= $this->Common->allTrikeyFinderWithLinkId($parent["TriLink"]["ID"]);
-		}
 		$from_id = $to_id = array();
 		foreach ($parents as $parent_idx =>$parent){
-			foreach ($roots as $root_idx =>$root){
+// 			foreach ($roots as $root_idx =>$root){
 				$is_child = false;
-				$this_nodes  = self::nodeFinder($root_idx,$parent_id, $trikey);
+				$this_nodes  = self::nodeFinder(Hash::extract($roots,"{n}.Trilink.Link_LTo"), $trikey,$parent["Trilink"]['Link_LTo']);
 				//indexHash generator
-				foreach ($this->Common->allTrikeyFinder($parent["Link"]["ID"]) as $key =>$index){
-					if ($indexHashes[$key]== null){
-						$indexHashes[$key] = $index;
-					}
-				}
-				foreach ($this_nodes as $this_node){
-					foreach ($parents as $iparent_idx =>$iparent){
-						if (($root["Taglink"]['ID'] == $this_node["Taglink"]['ID'] && //ルートノードに存在し、かつ
-								$iparent["Taglink"]['ID'] == $this_node["Taglink"]['ID'])){ // 親に含まれているなら
+// 				foreach ($this->Common->allTrikeyFinder($parent["Link"]["ID"]) as $key =>$index){
+// 					if ($indexHashes[$key]== null){
+// 						$indexHashes[$key] = $index;
+// 					}
+// 				}
+				$child_node_ids =Hash::extract($this_nodes,"{n}.Trilink.Link_LTo");
+					if (!empty($child_node_ids)){ // 親に含まれているなら
+						$parents[$parent_idx]['leaf'] = array();
+						foreach ($parents as $iparent_idx =>$iparent){
+							if (in_array($iparent["Trilink"]["Link_LTo"],$child_node_ids)){
+								array_push($parents[$parent_idx]['leaf'],
+								$parents[$iparent_idx]);
 							//削除フェーズ
-							unset($parents[$iparent_idx]);
+								unset($parents[$iparent_idx]);//削除するべき親
+							}
+						}
 							array_merge($parents);
 							//TODO:配列を詰めるところを削除したせいで　結果に空欄ができていることに気づかなかった
 							//follow キーを追加すると空と認識されないから詰まない　ステップ実行とかで　早くそれを認識する方法を考える
 							//モジュール化して整理しないとまた同じ間違いをするのではないか？考えよう
-
-							//追加フェーズ
-							array_push($root["follow"],$this_node["Link"]["LFrom"]);
-							array_push($roots[$parent_idx]["follow"],$parent["Link"]["LFrom"]);
 							//leaf 追加
-							if (is_null($parents[$parent_idx]['leaf'])){
-								$parents[$parent_idx]['leaf'] = array(
-										"nodes" => array(),
-// 										"index" => array(),
-// 										'trikeys' => array(),
-// 										"taghash" => array(),
-								);
-							}
-							array_push($parents[$parent_idx]['leaf']["nodes"]
-									,$root);
-							//参照で返すから　return しない。
-							self::findItarator($roots, $parents[$parent_idx]['leaf']["nodes"], $trikey);
 
-						}
+// 							array(
+// 									"nodes" => $this_nodes,
+// 							);
+// 							array_push($parents[$parent_idx]['leaf']["nodes"]
+// 									,$this_nodes);
+							//参照で返すから　return しない。
+							self::findItarator($roots, $parents[$parent_idx]['leaf'], $trikey);
 					}
-				}
-			}
+// 				}
+// 			}
 		}
     }
     /**
@@ -516,7 +508,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
      * @param unknown $trikey
      * @return multitype:multitype:unknown
      */
-    private function SETnodeFinderOptins($parent_ids,$root_ids,$trikey){
+    private function SETnodeFinderOptins($root_ids, $parent_ids,$trikey){
 		return array("conditions" =>
     			array(
     					"Trilink.Link_LFrom" => $parent_ids,
@@ -527,15 +519,20 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     }
 /**
  *
- * @param string $root_ids
- *   null の場合は無条件
- * @param  $trikey tagID.search
- * @param unknown $Trilink_model
- * @param unknown $parent_ids
+ * @param int $root_ids ID
+ * @param int $trikey　ID
+ * @param int $parent_ids　ID
+ * @return Ambigous <multitype:, NULL>
  */
-    private function nodeFinder($root_ids= null,$trikey,$parent_ids){
-    	$options = self::SETnodeFinderOptins($parent_ids, $root_ids, $trikey);
+    private function nodeFinder($root_ids,$trikey,$parent_ids){
+    	$options = self::SETnodeFinderOptins($root_ids,$parent_ids, $trikey);
+    	array_merge($options,
+    			array(
+    					'contain' => null
+    			)
+    	);
     	$Trilink = new Trilink();
+    	$Trilink->unbindModel(array("hasOne"=>array("Article","Tag")));
     	return $Trilink->find("all",$options);
     }
     /**
@@ -589,7 +586,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 	),
      */
     private function rootFinder($trikey,$parent_ids){
-    	$options = self::SETnodeFinderOptins($parent_ids, null, $trikey);
+    	$options = self::SETnodeFinderOptins( null, $parent_ids, $trikey);
     	//関連付け取得
     	array_merge($options,
     			array(

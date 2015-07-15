@@ -12,7 +12,6 @@ echo $this->Html->script(array('jquery-sortable','nest_li'));
 </div>
 <div ng-app >
 <script type="text/ng-template" id="tree.html">
-
 	<ol>
 		<ng-if="leafs.Article.name">
         {{leafs.Article.name}}
@@ -27,16 +26,34 @@ echo $this->Html->script(array('jquery-sortable','nest_li'));
 	</ol>
 </script>
 
-<ol class="default vertical" ng-controller="NestCtrl" >
-<li ng-repeat="leafs in roots" ng-include="'tree.html'">
-
-</li>
- </ol>
+<!-- <ol class="default vertical" ng-controller="NestCtrl" > -->
+<!-- 	<li ng-repeat="leafs in roots" ng-include="'tree.html'"></li> -->
+<!-- </ol> -->
             <script>
             function GETarray(obj){
             	console.log($('.default').sortable("toArray").get());
             }
             </script>
+<!--             headdingのアイディアでも考えよう -->
+<ol class="default vertical">
+            <li>
+					title
+				<ol>
+					<li>
+						headding(trikey) reply === trikey の場合これを省略しているのと　trikey がL_LToとしてあるかwれて処理が面倒
+						偶数ネストと奇数ネストの移動の自由を制限するのが面倒くさい
+						<ol>
+						<li>
+							contents
+						</li>
+						<li>
+							contents2
+						</li>
+						</ol>
+					</li>
+				</ol>
+			</li>
+</ol>
     <?php
 echo $this->Html->script(array('application'));
 echo $this->Form->input("Get_array",array("type" => "button" ,"onClick" => "GETarray(this)"));

@@ -447,7 +447,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	$parents = $roots;
     	self::findItarator($roots, $parents,$trikey);
 //     	debug($parents);
-    	return json_encode($parents);
+//     	return json_encode($parents);
     }
     /**
      *
@@ -458,20 +458,24 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
      * @param string $option
      * @return multitype:multitype:
      */
+public function allTrikeyFinderWithLinkId($link_id){
+		$Taglink = new Taglink();
+		return $Taglink->find("all", array("fields"=> array("Taglink.ID","Taglink.LFrom","Taglink.name"),"conditions" =>
+				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
+	}
     private function findItarator(&$roots,&$parents,$trikey,$quantize = 0,$option =null){
 		$indexHashes = array();
 		$children = array();
 		$from_id = $to_id = array();
 		foreach ($parents as $parent_idx =>$parent){
-// 			foreach ($roots as $root_idx =>$root){
+			$parents[$parent_idx]['trikeys']
+			= self::allTrikeyFinderWithLinkId($parent["Trilink"]["Link_ID"]);
+			//link ID も　trilink ID も両方返すべきだ
+		}
+		foreach ($parents as $parent_idx =>$parent){
 				$is_child = false;
 				$this_nodes  = self::nodeFinder(Hash::extract($roots,"{n}.Trilink.Link_LTo"), $trikey,$parent["Trilink"]['Link_LTo']);
-				//indexHash generator
-// 				foreach ($this->Common->allTrikeyFinder($parent["Link"]["ID"]) as $key =>$index){
-// 					if ($indexHashes[$key]== null){
-// 						$indexHashes[$key] = $index;
-// 					}
-// 				}
+
 				$child_node_ids =Hash::extract($this_nodes,"{n}.Trilink.Link_LTo");
 					if (!empty($child_node_ids)){ // 親に含まれているなら
 						$parents[$parent_idx]['leaf'] = array();
@@ -484,21 +488,13 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
 							}
 						}
 							array_merge($parents);
-							//TODO:配列を詰めるところを削除したせいで　結果に空欄ができていることに気づかなかった
-							//follow キーを追加すると空と認識されないから詰まない　ステップ実行とかで　早くそれを認識する方法を考える
-							//モジュール化して整理しないとまた同じ間違いをするのではないか？考えよう
-							//leaf 追加
-
-// 							array(
-// 									"nodes" => $this_nodes,
-// 							);
-// 							array_push($parents[$parent_idx]['leaf']["nodes"]
-// 									,$this_nodes);
-							//参照で返すから　return しない。
+							$parents["indexHashes"] = Hash::combine(
+									$parents,
+									'{n}.trikeys.{n}.Taglink.LFrom',
+									'{n}.trikeys.{n}.Taglink.name'
+							);
 							self::findItarator($roots, $parents[$parent_idx]['leaf'], $trikey);
 					}
-// 				}
-// 			}
 		}
     }
     /**

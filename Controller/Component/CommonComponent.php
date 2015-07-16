@@ -642,6 +642,7 @@ public function allTrikeyFinder($link_id){
 		return $Taglink->find("list", array("fields"=> array("Taglink.LFrom","Taglink.name"),"conditions" =>
 				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
 	}
+
 	/**
 	 *
 	 * @param unknown $to

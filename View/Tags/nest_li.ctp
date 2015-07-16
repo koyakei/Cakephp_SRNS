@@ -12,10 +12,10 @@ echo $this->Html->script(array('jquery-sortable','nest_li'));
 </div>
 <div ng-app >
 <script type="text/ng-template" id="tree.html">
-	<ol　ng-if "既にトライキーが有るか判定" id="{{leafs.Trilink.LFrom}}">//既存のtrikey 判定　
-	{{leafs.Trilink.name}}　//なかったら描写トライキーノード追加
-									//あったら既存のノードを探す
-
+<div ng-if="index_key == leafs.Trilink.LFrom" id=”leafs.Trilink.LFrom”>
+{{leafs.Trilink.LFrom}}
+	{{leafs.Trilink.name}}
+	<ol id="{{leafs.Trilink.LFrom}}">
 		<li>
 			<ol>
 				<ng-if="leafs.Article.name">
@@ -27,14 +27,22 @@ echo $this->Html->script(array('jquery-sortable','nest_li'));
 			</ol>
 		</li>
          <ol>
+			<div ng-repeat="(index_key, index) in leafs.indexHashes" >
 			<li ng-if="leafs" ng-repeat="leafs in leafs.leaf" ng-include="'tree.html'">
+
 			</li>
+			</div>
      	</ol>
+		</li>
 	</ol>
+</div>　
+
 </script>
 
 <ol class="default vertical" ng-controller="NestCtrl" >
-	<li ng-repeat="leafs in roots" ng-include="'tree.html'"></li>
+	<div ng-repeat="(index_key, index) in roots.indexHashes" >
+		<li ng-repeat="leafs in roots" ng-include="'tree.html'"></li>
+	</div>
 </ol>
             <script>
             function GETarray(obj){

@@ -446,8 +446,9 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
     	//$rootを取得した時に
     	$parents = $roots;
     	self::findItarator($roots, $parents,$trikey);
+    	$parents = self::SETindexHash($parents);
 //     	debug($parents);
-//     	return json_encode($parents);
+    	return json_encode($parents);
     }
     /**
      *
@@ -458,7 +459,7 @@ function taghashes_cutter(&$taghashes,$sorting_tags){
      * @param string $option
      * @return multitype:multitype:
      */
-public function allTrikeyFinderWithLinkId($link_id){
+	public function allTrikeyFinderWithLinkId($link_id){
 		$Taglink = new Taglink();
 		return $Taglink->find("all", array("fields"=> array("Taglink.ID","Taglink.LFrom","Taglink.name"),"conditions" =>
 				array("Taglink.LTo" =>  $link_id,"Taglink.LFrom <".Configure::read("tagID.End"))));
@@ -474,29 +475,38 @@ public function allTrikeyFinderWithLinkId($link_id){
 		}
 		foreach ($parents as $parent_idx =>$parent){
 				$is_child = false;
-				$this_nodes  = self::nodeFinder(Hash::extract($roots,"{n}.Trilink.Link_LTo"), $trikey,$parent["Trilink"]['Link_LTo']);
-
+				$this_nodes  = self::nodeFinder(Hash::extract($roots,"{n}.Trilink.Link_LTo"),
+						 $trikey,$parent["Trilink"]['Link_LTo']);
 				$child_node_ids =Hash::extract($this_nodes,"{n}.Trilink.Link_LTo");
-					if (!empty($child_node_ids)){ // 親に含まれているなら
-						$parents[$parent_idx]['leaf'] = array();
-						foreach ($parents as $iparent_idx =>$iparent){
-							if (in_array($iparent["Trilink"]["Link_LTo"],$child_node_ids)){
-								array_push($parents[$parent_idx]['leaf'],
-								$parents[$iparent_idx]);
-							//削除フェーズ
-								unset($parents[$iparent_idx]);//削除するべき親
-							}
+				if (!empty($child_node_ids)){ // 親に含まれているなら
+					$parents[$parent_idx]['leaf'] = array();
+					foreach ($parents as $iparent_idx =>$iparent){
+						if (in_array($iparent["Trilink"]["Link_LTo"],$child_node_ids)){
+							array_push($parents[$parent_idx]['leaf'],
+							$parents[$iparent_idx]);
+						//削除フェーズ
+							unset($parents[$iparent_idx]);//削除するべき親
 						}
-							array_merge($parents);
-							$parents["indexHashes"] = Hash::combine(
-									$parents,
-									'{n}.trikeys.{n}.Taglink.LFrom',
-									'{n}.trikeys.{n}.Taglink.name'
-							);
-							self::findItarator($roots, $parents[$parent_idx]['leaf'], $trikey);
 					}
-		}
-    }
+					array_merge($parents);
+					self::findItarator($roots, $parents[$parent_idx]['leaf'], $trikey);
+				}
+			}
+    	}
+    	private function SETindexHash($parents){
+    		foreach ($parents as $parent_idx =>$parent){
+    			if(!is_null($parent["leaf"])){
+    				$SETindexHash  = new AppController();
+    				$parents[$parent_idx]["leaf"] = $SETindexHash->SETindexHash($parent["leaf"]);
+    			}
+    		}
+    		$parents["indexHashes"] = Hash::combine(
+    				$parents,
+    				'{n}.trikeys.{n}.Taglink.LFrom',
+    				'{n}.trikeys.{n}.Taglink.name'
+    		);
+    		return $parents;
+    	}
     /**
      *
      * @param unknown $parent_ids

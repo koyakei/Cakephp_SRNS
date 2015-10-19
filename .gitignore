@@ -221,3 +221,9 @@ app/Config/core.php
 app/Config/database.php
 !empty
 
+.idea/.name
+.idea/misc.xml
+.idea/modules.xml
+.idea/srns.iml
+.idea/vcs.xml
+.idea/workspace.xml
